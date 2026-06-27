@@ -166,6 +166,8 @@ footer a { color: var(--accent-2); }
   <div class="controls-inner">
     <input id="search" class="search" type="search" placeholder="search any dashboard…" autocomplete="off" spellcheck="false">
     <div class="chips" id="chips"></div>
+    <button id="editToggle" class="chip" type="button" style="cursor:pointer">✎ Edit</button>
+    <button id="hiddenToggle" class="chip" type="button" style="cursor:pointer;display:none"></button>
   </div>
 </nav>
 
@@ -185,6 +187,8 @@ const ITEMS = [
   { slug: "townes-atlas", title: "Townes Family Expenses & Atlas", cat: "Family / Move", kind: "local", url: "./local/townes-atlas/", path: "Downloads/townes-atlas.html", size: 70550, date: "2026-05-20", pin: true, note: "Your full family expenses + budget — type 'expenses' to find this" },
 
   // ── CUT CREATERS ──
+  { slug: "townes-salon-suites", title: "Townes Salon Suites · Operations Command", cat: "Cut Creaters", kind: "live", url: "https://townes-salon-suites.surge.sh", date: "live", pin: true, status: "active" },
+  { slug: "cutcreaters-pop", title: "Cut Creaters — Vacancy Analytics (for Pop)", cat: "Cut Creaters", kind: "live", url: "https://cutcreaters-pop.surge.sh", date: "2026-05-26", status: "active", note: "Already shared with Omar" },
 
   // ── KHYREE CITY ──
   { slug: "book-khyreecity", title: "Khyree City — Booking App", cat: "Khyree City", kind: "live", url: "https://book.khyreecity.com", date: "live", pin: true, status: "active", note: "Where clients actually book you" },
@@ -271,6 +275,10 @@ function bytes(n) {
 }
 function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
+var KC_HIDDEN_KEY = "kc_hidden_slugs";
+var hidden = new Set(JSON.parse(localStorage.getItem(KC_HIDDEN_KEY) || "[]"));
+var editMode = false, showHidden = false;
+function saveHidden(){ localStorage.setItem(KC_HIDDEN_KEY, JSON.stringify([...hidden])); }
 function render() {
   const activeChip = chipsEl.querySelector(".chip.active").dataset.id;
   const q = document.getElementById("search").value.trim().toLowerCase();
@@ -280,6 +288,8 @@ function render() {
     if (activeChip === "local" && i.kind !== "local") return false;
     if (activeChip.startsWith("cat:") && i.cat !== activeChip.slice(4)) return false;
     if (q && !((i.title + " " + i.cat + " " + (i.url || "") + " " + (i.path || "") + " " + (i.note || "")).toLowerCase().includes(q))) return false;
+    if (showHidden) { if (!hidden.has(i.slug)) return false; }
+    else if (hidden.has(i.slug)) return false;
     return true;
   });
   grid.innerHTML = "";
@@ -333,6 +343,7 @@ function render() {
           ${noteLine}
           <div class="meta">${metaBits}</div>
         </div>
+        ${(editMode||showHidden) ? `<button class="card-act" data-slug="${i.slug}" data-act="${showHidden?'restore':'hide'}" title="${showHidden?'Restore to vault':'Remove from vault'}" style="position:absolute;top:10px;left:10px;z-index:6;width:36px;height:36px;border-radius:10px;border:0;cursor:pointer;font-size:17px;font-weight:800;background:${showHidden?'#22c55e':'#ef4444'};color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.45)">${showHidden?'↩':'✕'}</button>` : ''}
         <a class="full" href="${i.url}" target="_blank" rel="noopener" aria-label="Open ${escapeHtml(i.title)}"></a>
       `;
       grid.appendChild(card);
@@ -340,7 +351,21 @@ function render() {
   });
 }
 document.getElementById("search").addEventListener("input", render);
-render();
+function updateBtns(){
+  var et=document.getElementById("editToggle"), ht=document.getElementById("hiddenToggle");
+  et.textContent = editMode ? "✓ Done" : "✎ Edit"; et.classList.toggle("active", editMode);
+  if (hidden.size>0){ ht.style.display=""; ht.textContent = showHidden ? "← Back" : ("Hidden ("+hidden.size+")"); ht.classList.toggle("active", showHidden); }
+  else { ht.style.display="none"; showHidden=false; }
+}
+document.getElementById("editToggle").addEventListener("click", function(){ editMode=!editMode; if(!editMode) showHidden=false; updateBtns(); render(); });
+document.getElementById("hiddenToggle").addEventListener("click", function(){ if(hidden.size===0) return; showHidden=!showHidden; updateBtns(); render(); });
+grid.addEventListener("click", function(e){
+  var b=e.target.closest(".card-act"); if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  if(b.dataset.act==="hide") hidden.add(b.dataset.slug); else hidden.delete(b.dataset.slug);
+  saveHidden(); updateBtns(); render();
+});
+updateBtns(); render();
 </script>
 </body>
 </html>
