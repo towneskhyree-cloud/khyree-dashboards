@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carnegie — The Operator's Translation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #111111;
+    --bg-elevated: #161616;
+    --border: #1f1f1f;
+    --border-light: #2a2a2a;
+    --text: #f5f5f5;
+    --text-dim: #a3a3a3;
+    --text-faint: #6b6b6b;
+    --accent: #3b82f6;
+    --accent-dim: #1e3a8a;
+    --warn: #f97316;
+    --danger: #ef4444;
+    --ok: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* Header */
+  .header { margin-bottom: 48px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 48px;
+    line-height: 1.05;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .subhead {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    max-width: 560px;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin: 40px 0;
+  }
+
+  /* Sections */
+  section { margin-bottom: 56px; }
+  h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+    letter-spacing: 0.15em;
+  }
+  .lead {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  p { margin-bottom: 16px; color: var(--text-dim); }
+  p strong { color: var(--text); font-weight: 600; }
+
+  /* The frame */
+  .frame {
+    background: var(--bg-card);
+    border-left: 3px solid var(--accent);
+    padding: 24px 24px 24px 28px;
+    margin: 24px 0;
+    border-radius: 4px;
+  }
+  .frame p { color: var(--text); margin-bottom: 12px; }
+  .frame p:last-child { margin-bottom: 0; }
+  .frame .quote {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    line-height: 1.35;
+    font-style: italic;
+    color: var(--text);
+  }
+
+  /* Principle cards */
+  .principles {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .principle {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .principle::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+  .principle-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+  }
+  .principle h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+  .principle .means {
+    font-size: 14px;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .principle .apply {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .principle .apply::before {
+    content: '→ ';
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Day 1 sequence */
+  .sequence {
+    margin-top: 24px;
+    position: relative;
+  }
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 60px;
+  }
+  .step-num {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .step-title {
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-size: 16px;
+  }
+  .step-detail {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* Script box */
+  .script {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin: 20px 0;
+    position: relative;
+  }
+  .script-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .script-text {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  /* Don't do list */
+  .dont-list {
+    background: rgba(239, 68, 68, 0.04);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin: 20px 0;
+  }
+  .dont-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--danger);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .dont-list ul { list-style: none; }
+  .dont-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(239, 68, 68, 0.1);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .dont-list li:last-child { border-bottom: none; }
+  .dont-list li::before {
+    content: '✗ ';
+    color: var(--danger);
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  /* Do list */
+  .do-list {
+    background: rgba(34, 197, 94, 0.04);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin: 20px 0;
+  }
+  .do-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--ok);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .do-list ul { list-style: none; }
+  .do-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(34, 197, 94, 0.1);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .do-list li:last-child { border-bottom: none; }
+  .do-list li::before {
+    content: '✓ ';
+    color: var(--ok);
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  /* Numbered application list */
+  .applications {
+    counter-reset: app;
+    margin-top: 16px;
+  }
+  .app-item {
+    counter-increment: app;
+    padding: 18px 0 18px 50px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-item:last-child { border-bottom: none; }
+  .app-item::before {
+    content: counter(app);
+    position: absolute;
+    left: 0;
+    top: 16px;
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    color: var(--accent);
+    line-height: 1;
+    font-style: italic;
+  }
+  .app-item h4 {
+    font-size: 16px;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .app-item p {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+
+  /* Trap callout */
+  .trap {
+    background: linear-gradient(135deg, #1a0f00, #0a0a0a);
+    border: 1px solid var(--warn);
+    border-radius: 8px;
+    padding: 28px;
+    margin: 24px 0;
+  }
+  .trap .label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--warn);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .trap h3 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    margin-bottom: 14px;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  .trap p { color: var(--text); }
+
+  /* This week */
+  .week {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid var(--border);
+  }
+  .week h2 { margin-bottom: 20px; }
+  .week-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .week-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .week-check {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--accent);
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .week-text {
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* Closing */
+  .closing {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .closing p {
+    font-family: 'Instrument Serif', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--text);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 16px 60px; }
+    h1 { font-size: 38px; }
+    h2 { font-size: 26px; }
+    .principle { padding: 18px; }
+    .step { padding-left: 52px; padding-right: 16px; }
+    .step-num { left: 12px; }
+    .frame { padding: 20px; }
+    .frame .quote { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="header">
+    <div class="eyebrow">For Khyree · May 2026 · ATL inbound</div>
+    <h1>Carnegie, <em>translated</em>.</h1>
+    <p class="subhead">"How to Win Friends and Influence People" applied to the next 60 days — Day 1 with Dad, 100 empty suites, an Atlanta brand to rebuild.</p>
+  </header>
+
+  <!-- WHAT THIS BOOK ACTUALLY IS -->
+  <section>
+    <div class="section-num">01 / THE FRAME</div>
+    <h2>What this book actually is for you.</h2>
+    <p class="lead">Carnegie wrote a friendliness book that's actually a power book.</p>
+    <div class="frame">
+      <p class="quote">The real subject is how to move people who don't have to follow you.</p>
+    </div>
+    <p>That's your whole next chapter. Dad doesn't have to share Cut Creaters. Barbers don't have to fill suites. Atlanta doesn't have to forgive a reputation. Every win ahead of you is <strong>voluntary on the other side.</strong></p>
+    <p>This is the book for that. Most people read it as charm. You need to read it as leverage — the only kind that works without force.</p>
+  </section>
+
+  <!-- THE 8 MOVES -->
+  <section>
+    <div class="section-num">02 / THE EIGHT MOVES</div>
+    <h2>The principles that matter for you, ranked by what you're walking into.</h2>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 01</div>
+        <h3>Don't criticize, condemn, or complain.</h3>
+        <div class="means">Critique closes doors. People defend themselves before they hear you.</div>
+        <div class="apply">Day 1 at Cut Creaters: you'll see what's broken in 90 seconds. Don't lead with any of it. Not the website. Not the suites. Not the pricing. Not the empty floors. Carry the list silently for a month.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 02</div>
+        <h3>Become genuinely interested in others.</h3>
+        <div class="means">Not "act interested." Be interested. People can smell the difference.</div>
+        <div class="apply">When you sit with Dad, ask about HIS journey through the last 4 years. When you sit with barbers in their suites, ask about THEIR clients, THEIR craft, THEIR pain. Not your pitch. Not yet.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 03</div>
+        <h3>Be a good listener. Encourage them to talk about themselves.</h3>
+        <div class="means">80/20 listen-to-talk in every first conversation. Silence is the move.</div>
+        <div class="apply">Dad has been alone with this for 4 years. Let him talk for an hour straight before you say a single solution out loud. The fixes will reveal themselves while he's talking.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 04</div>
+        <h3>Make the other person feel important — sincerely.</h3>
+        <div class="means">People will work harder for someone who sees them than someone who pays them.</div>
+        <div class="apply">Acknowledge the 24,000 sq ft your father built. Out loud. Specifically. The barbers in the suites are artists — treat them like artists, not like tenants paying rent.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 05</div>
+        <h3>The only way to win an argument is to avoid it.</h3>
+        <div class="means">You don't win an argument. You lose the relationship.</div>
+        <div class="apply">Your parents are separated. Never pick a side. Never relitigate what happened. If Mom says something about Dad or vice versa, listen — don't agree, don't argue, redirect.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 06</div>
+        <h3>Let the other person feel the idea is theirs.</h3>
+        <div class="means">Plant a seed. Let them grow it. Harvest together.</div>
+        <div class="apply">When you have ideas for the suites (and you will), ask "what if..." instead of "we should..." Frame your operator plays as <em>questions about his business</em>, not pitches.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 07</div>
+        <h3>Begin with praise and honest appreciation.</h3>
+        <div class="means">When you do need to give input, lead with what's working.</div>
+        <div class="apply">Before you ever say "the website needs work" — say "the lineage you've built is the most undervalued asset Atlanta has, and most people are missing it." Then earn the right to the next sentence.</div>
+      </div>
+
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 08</div>
+        <h3>Give the other person a fine reputation to live up to.</h3>
+        <div class="means">Tell people who you believe they are; they become it.</div>
+        <div class="apply">Cut Creaters isn't broken. It's a sleeping legacy. Frame it that way to every barber, every visitor, every camera. Barbers don't rent suites — they join a collective. People rise to the frame you give them.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 1 WITH DAD -->
+  <section>
+    <div class="section-num">03 / DAY 1 WITH DAD</div>
+    <h2>The sequence.</h2>
+    <p class="lead">This is the most loaded conversation of your year. Carnegie's whole book is built for it. Run the sequence.</p>
+
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; margin: 32px 0 16px;">Pre-flight (before you land)</h3>
+    <div class="do-list">
+      <div class="do-label">Set Up</div>
+      <ul>
+        <li>No deck. No slides. No "Khyree City vision document." Leave it in Cairo.</li>
+        <li>Frame your own intention privately: "I'm here to listen first, work second, lead later."</li>
+        <li>Write your apology sentence on paper. Practice it until it's not awkward.</li>
+      </ul>
+    </div>
+
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; margin: 32px 0 16px;">The first 90 minutes</h3>
+    <div class="sequence">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Walk the building. Let him show you.</div>
+        <div class="step-detail">Don't lead the tour. Follow. Notice what he stops at. That's what he's proud of. That's where you reinforce later.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Ask one question: "What's been the hardest part?"</div>
+        <div class="step-detail">Don't follow up with a fix. Don't validate too quickly. Let the answer breathe.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Shut up. For real.</div>
+        <div class="step-detail">If silence stretches, hold it. He's been carrying this without anyone in his corner. Be the first person who didn't try to solve it in the first 30 seconds.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Acknowledge what he built. Specifically.</div>
+        <div class="step-detail">Not "you've done a lot." Try: "You built 24,000 sq ft of space dedicated to the craft our family came from. There's nothing like it in Atlanta." Specific praise is the only kind that lands.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; margin: 32px 0 16px;">The sentence that changes everything</h3>
+    <div class="script">
+      <div class="script-label">Your apology — early in the conversation</div>
+      <div class="script-text">"You offered me 50/50 in 2015. I didn't earn it then. I'm here to earn it now. Whatever that looks like — I want you to tell me, not me to tell you."</div>
+    </div>
+    <p>This costs you nothing. It changes the entire dynamic. Carnegie Principle #3 — admit you were wrong, quickly and emphatically. The frame flips: you stop being the prodigal son trying to claim equity. You become the son honoring his father by asking how to earn his way in.</p>
+
+    <h3 style="font-family: 'Instrument Serif', serif; font-size: 22px; font-weight: 400; margin: 32px 0 16px;">What NOT to do on Day 1</h3>
+    <div class="dont-list">
+      <div class="dont-label">Hard No's</div>
+      <ul>
+        <li>Don't pitch your operator playbook</li>
+        <li>Don't critique the website, the branding, the pricing, the suites</li>
+        <li>Don't bring up Mom unless he does</li>
+        <li>Don't try to "fix" the family dynamic in one sitting</li>
+        <li>Don't say "I have ideas" — say "show me everything"</li>
+        <li>Don't take notes in front of him. It'll feel clinical. Use voice memos in the car later.</li>
+      </ul>
+    </div>
+
+    <p><strong>The hidden move:</strong> ask questions you already know the answers to. Let him be the expert in his own building. He earned that.</p>
+  </section>
+
+  <!-- RECRUITING BARBERS -->
+  <section>
+    <div class="section-num">04 / FILLING 100 SUITES</div>
+    <h2>Carnegie applied to barber recruitment.</h2>
+    <p class="lead">Cold leasing won't work — Cut Creaters has a rep problem. Warm Carnegie play, run it like this:</p>
+
+    <div class="applications">
+      <div class="app-item">
+        <h4>Lead with genuine interest, not the suite.</h4>
+        <p>Visit every Atlanta barber you respect. Ask about their business. Their clients. Their growth plan. Don't mention Cut Creaters until they ask what you're doing back. Then mention it once, casually. Let them lean in.</p>
+      </div>
+      <div class="app-item">
+        <h4>Make them feel important.</h4>
+        <p>Don't position Cut Creaters as "available space." Position it as a curated collective where artists work next to artists. They're being <em>invited</em>, not sold. The frame changes everything.</p>
+      </div>
+      <div class="app-item">
+        <h4>Give them a fine reputation to live up to.</h4>
+        <p>"I'm building the only barber suite in Atlanta where the standard is craft, not just chair rental." Now they have to walk in like that's true. The frame becomes their reality.</p>
+      </div>
+      <div class="app-item">
+        <h4>Make it their idea.</h4>
+        <p>"What would make a suite worth $X/week for you?" Build their answers into the offer. They'll feel ownership before they sign anything.</p>
+      </div>
+      <div class="app-item">
+        <h4>Never argue price.</h4>
+        <p>If they say it's too much, don't defend. "What would make sense?" Let them tell you. You learn the market. They feel heard. The negotiation becomes collaborative, not adversarial.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND REHAB -->
+  <section>
+    <div class="section-num">05 / ATLANTA BRAND REHAB</div>
+    <h2>You can't argue Atlanta into liking you again.</h2>
+    <p class="lead">Carnegie's whole book is about how <strong>behavior changes perception</strong>. Apply that to the rep problem:</p>
+
+    <div class="applications">
+      <div class="app-item">
+        <h4>Don't defend the old brand publicly.</h4>
+        <p>Don't post about "what happened." Don't relitigate. Don't subtweet anyone who took shots. Carnegie #5 at brand scale — you can't win the argument, only lose the relationship with the city.</p>
+      </div>
+      <div class="app-item">
+        <h4>Show, don't tell.</h4>
+        <p>Every barber you place. Every suite you fill. Every reel you put out. That's the proof. No press releases. No "we're back" posts. The work IS the message.</p>
+      </div>
+      <div class="app-item">
+        <h4>Give the brand a fine reputation to live up to.</h4>
+        <p>Position Cut Creaters as Atlanta's <em>barber legacy</em> — not a comeback, a continuation. The city had a place where the craft lived. It's still here. That's the frame.</p>
+      </div>
+      <div class="app-item">
+        <h4>Acknowledge briefly, once, then move on.</h4>
+        <p>Tylenol 1982 — one clear acknowledgment of the past, then 100% forward motion. Don't keep dragging the apology. Carnegie #3 done at brand scale.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE TRAP -->
+  <section>
+    <div class="section-num">06 / THE TRAP</div>
+    <div class="trap">
+      <div class="label">Where this book breaks down</div>
+      <h3>Carnegie fails when you fake it.</h3>
+      <p>The book is not "techniques to manipulate people." It's "be the kind of person people want to follow." If you sit with your father pretending to be interested, he'll feel it. He raised you. He'll know.</p>
+      <p style="margin-top: 14px;">The play is: actually be interested. Actually let him be right. Actually make him feel important — because he <em>is</em> your father, and that 24,000 sq ft is <em>his</em>, and his hardest decade happened while you were elsewhere.</p>
+      <p style="margin-top: 14px;"><strong>That's not technique. That's truth Carnegie just gave you the words for.</strong></p>
+    </div>
+  </section>
+
+  <!-- THIS WEEK -->
+  <section>
+    <div class="week">
+      <div class="section-num">07 / THIS WEEK</div>
+      <h2>Before you fly.</h2>
+      <div class="week-items">
+        <div class="week-item">
+          <div class="week-check"></div>
+          <div class="week-text"><strong>Re-read Part 4 of the book</strong> — "Be a Leader." That's the section for someone walking into a building they want to lead without being the founder.</div>
+        </div>
+        <div class="week-item">
+          <div class="week-check"></div>
+          <div class="week-text"><strong>Practice on low-stakes targets first.</strong> Every barber DM, every 6FB conversation, every IG comment — run the moves. Build the muscle before Day 1 with Dad.</div>
+        </div>
+        <div class="week-item">
+          <div class="week-check"></div>
+          <div class="week-text"><strong>Write your "I'm here to earn it" sentence to Dad.</strong> On paper. Get the wording right before you say it out loud.</div>
+        </div>
+        <div class="week-item">
+          <div class="week-check"></div>
+          <div class="week-text"><strong>Identify 10 Atlanta barbers</strong> you'd want in suites. Start the warm DM cycle now — just genuine interest in their work. By the time you land, the relationships are 60 days warm.</div>
+        </div>
+        <div class="week-item">
+          <div class="week-check"></div>
+          <div class="week-text"><strong>Leave the deck at home.</strong> Whatever vision document you've drafted — Khyree City Track A, the operator playbook, the brand rehab strategy — none of it travels with you. It comes out in week 3, not week 1.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <p>The book is a thousand variations on one idea: "Relationships are way more important than money." You already wrote that thesis. Now Carnegie just handed you the playbook for the next 60 days.</p>
+  </div>
+
+</div>
+</body>
+</html>

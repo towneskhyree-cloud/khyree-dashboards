@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pre-Move">
+<meta name="theme-color" content="#F4EEE1">
+<title>Going In Legit — Pre-Move Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    background: #F4EEE1; color: #1B1916;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+  .font-body { font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-optical-sizing: auto; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+  .grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(27,25,22,0.05) 1px, transparent 0);
+    background-size: 14px 14px;
+  }
+  .card-shadow { box-shadow: 0 1px 3px rgba(27,25,22,0.04), 0 0 0 1px #E5DBC4; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+  button { font-family: inherit; }
+  #root { min-height: 100vh; }
+  .loading {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #F4EEE1; z-index: 9999;
+    flex-direction: column; gap: 16px;
+  }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #E5DBC4; border-top-color: #2C5A3D;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'Fraunces', serif; font-style: italic;
+    color: #7A6F5F; font-size: 14px;
+  }
+  .checkbox {
+    width: 22px; height: 22px;
+    border: 2px solid #E5DBC4; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; flex-shrink: 0;
+    cursor: pointer; transition: all 0.15s;
+  }
+</style>
+</head>
+<body>
+  <div id="root">
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading the kit&hellip;</div>
+    </div>
+  </div>
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+const C = {
+  cream: "#F4EEE1", paper: "#FBF7EC", card: "#FFFFFF",
+  ink: "#1B1916", inkSoft: "#403A33", muted: "#7A6F5F", mutedLt: "#A89B86",
+  line: "#E5DBC4", lineSoft: "#EFE7D2",
+  green: "#2C5A3D", greenDk: "#1F4029", greenLt: "#E7EFE6",
+  gold: "#B58A3D", goldDk: "#8A6824", goldLt: "#F4EAD0",
+  rust: "#A24E36", rustLt: "#F3E0D8", sage: "#7A9A82", navy: "#1F2D44",
+};
+
+const ICON_PATHS = {
+  Compass: 'C:12,12,10|M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z',
+  Users: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2|C:9,7,4|M22 21v-2a4 4 0 0 0-3-3.87|M16 3.13a4 4 0 0 1 0 7.75',
+  Building2: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z|M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2|M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2|M10 6h4|M10 10h4|M10 14h4|M10 18h4',
+  Heart: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z',
+  FileText: 'M15 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-4-4Z|M14 2v4a2 2 0 0 0 2 2h4|M10 9H8|M16 13H8|M16 17H8',
+  MessageCircle: 'M7.9 20A9 9 0 1 0 4 16.1L2 22Z',
+  Eye: 'M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7|C:12,12,3',
+  Plane: 'M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z',
+  ChevronDown: 'm6 9 6 6 6-6',
+  ChevronRight: 'm9 18 6-6-6-6',
+  Send: 'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z|M22 2 11 13',
+  Copy: 'R:8,8,14,14,2,2|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
+  Check: 'M20 6 9 17l-5-5',
+  X: 'M18 6 6 18|M6 6l12 12',
+  AlertTriangle: 'M21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z|M12 9v4|M12 17h.01',
+  Star: 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z',
+  Mic: 'R:9,2,6,12,3,3|M19 10v2a7 7 0 0 1-14 0v-2|M12 19v3',
+  Ear: 'M6 8.5a6.5 6.5 0 1 1 13 0c0 6-6 6-6 10a3.5 3.5 0 1 1-7 0|M15 8.5a2.5 2.5 0 0 0-5 0v1a2 2 0 0 1-2 2',
+  Hand: 'M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0|M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2|M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8|M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15',
+  ChevronUp: 'm18 15-6-6-6 6',
+  Sun: 'C:12,12,4|M12 2v2|M12 20v2|m4.93 4.93 1.41 1.41|m17.66 17.66 1.41 1.41|M2 12h2|M20 12h2|m6.34 17.66-1.41 1.41|m19.07 4.93-1.41 1.41',
+  Clock: 'C:12,12,10|M12 6v6l4 2',
+  Briefcase: 'M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16|R:2,7,20,14,2,4',
+  Home: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z|M9 22V12h6v10',
+  ShieldCheck: 'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z|M9 12l2 2 4-4',
+  ListChecks: 'm3 17 2 2 4-4|m3 7 2 2 4-4|M13 6h8|M13 12h8|M13 18h8',
+  Banknote: 'R:2,6,20,12,2,2|C:12,12,2|M6 12h.01|M18 12h.01',
+};
+
+function Icon({ name, size = 20, color = "currentColor", strokeWidth = 2, style }) {
+  const data = ICON_PATHS[name];
+  if (!data) return null;
+  const parts = data.split('|').map((p, i) => {
+    if (p.startsWith('C:')) {
+      const [cx, cy, r] = p.slice(2).split(',').map(Number);
+      return <circle key={i} cx={cx} cy={cy} r={r}/>;
+    }
+    if (p.startsWith('R:')) {
+      const [x, y, w, h, rx, ry] = p.slice(2).split(',').map(Number);
+      return <rect key={i} x={x} y={y} width={w} height={h} rx={rx || 0} ry={ry || 0}/>;
+    }
+    return <path key={i} d={p}/>;
+  });
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+      viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+      style={style}>
+      {parts}
+    </svg>
+  );
+}
+
+const STORAGE_KEY = "townes-premove-v1";
+const storage = {
+  get: () => { try { const v = localStorage.getItem(STORAGE_KEY); return v ? JSON.parse(v) : null; } catch { return null; } },
+  set: (obj) => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
+};
+
+// ─── DATA: The Three Stances ────────────────────────────────
+const STANCES = [
+  {
+    id: "father",
+    title: "With Your Father",
+    icon: "Heart",
+    color: C.green,
+    stance: "Son first. Operator second. Partner third.",
+    posture: "Birrul walidayn — you owe him this. You haven't earned the 50/50 yet, by your own admission. So you earn it visibly through operator results, not on Day 1 paperwork.",
+    move: "Day 1: pure listening. Week 2: operator agreement (not partnership). Month 12: revisit partnership with receipts in hand.",
+    nogo: "Don't pitch ideas Day 1. Don't claim equity Day 1. Don't bring a deck. Don't fix what hasn't been audited.",
+    stakes: "The relationship. The 50/50 offer that's been sitting since 2015. The family legacy across four generations of barbers."
+  },
+  {
+    id: "landlord",
+    title: "With the Building Owner",
+    icon: "Building2",
+    color: C.navy,
+    stance: "Observer first. Operator second. Negotiator third.",
+    posture: "Don't engage early. Omar holds that relationship. You read the lease, audit the suite-fill math, learn the leverage — quietly.",
+    move: "Month 1: read every word of the lease. Month 2–3: when turnaround is showing signs, bring father a renegotiation case backed by data — not pitches.",
+    nogo: "Don't introduce yourself as the new operator before you've earned the room. Don't try to renegotiate without numbers. Don't go around Omar.",
+    stakes: "The lease is probably the largest fixed cost — and the biggest single lever in the turnaround. 24K sqft with 40–44 of 140 suites filled means the landlord is also bleeding. You have more leverage than it feels right now."
+  },
+  {
+    id: "wife",
+    title: "With Your Wife",
+    icon: "Users",
+    color: C.rust,
+    stance: "Partner. Equal voice. Veto power.",
+    posture: "This affects her life as much as yours. She left Egypt with you. She raises the four kids. She has the right to read the same plan you read.",
+    move: "Pre-move: walk her through the Atlas, the Plan, this kit. Get her input. Make changes. Get her real buy-in before booking the flight.",
+    nogo: "Don't move first and brief her later. Don't decide alone and ask her to support. Don't assume what's fine for her.",
+    stakes: "Her sanity. The kids' transition. The family rhythm. If she's not aligned, the whole move shakes."
+  },
+];
+
+// ─── DATA: Document tiers ───────────────────────────────────
+const DOC_TIERS = [
+  {
+    id: "tier1", title: "Tier 1 — Your Personal Legitimacy",
+    color: C.navy, icon: "Briefcase",
+    desc: "What lets you contract, invoice, and operate as a businessman in GA the moment you land.",
+    items: [
+      "Khyree City LLC filed at sos.ga.gov ($100 + registered agent)",
+      "Operating Agreement for KC LLC (single-member, simple template)",
+      "EIN obtained from IRS (free, 5 min online at irs.gov)",
+      "Business bank account opened at Mercury or Relay (fully remote)",
+      "US business address established (PO Box, virtual office, or family address)",
+      "US phone number active (Google Voice + Mint Mobile family plan)",
+      "Business email tied to a domain you own (khyree@khyreecity.com or similar)",
+      "Updated LinkedIn for the operator phase (not agency-pitch phase)",
+      "IG bio aligned with operator return narrative",
+      "Professional headshot ready (for press, legitimacy, attorney bio)",
+    ]
+  },
+  {
+    id: "tier2", title: "Tier 2 — Family & Estate Documents",
+    color: C.green, icon: "ShieldCheck",
+    desc: "Wasiyyah obligation. Family paperwork that has to exist before you arrive.",
+    items: [
+      "Wasiyyah draft prepared (so ATL attorney just executes it Week 1)",
+      "POA drafts (financial + healthcare) — wife primary, father secondary",
+      "Guardians for the 4 kids identified, asked, confirmed (Muslim couple)",
+      "Executor identified, asked, confirmed (trustworthy Muslim adult)",
+      "All family US passports — check expiration dates",
+      "Kids' birth certificates apostilled (for Egyptian-born kids)",
+      "Marriage certificate in US-recognized form",
+      "Kids' immunization records translated to English",
+      "Educational records for kids (if going into Islamic school)",
+    ]
+  },
+  {
+    id: "tier3", title: "Tier 3 — The Cut Creaters Conversation Stack",
+    color: C.gold, icon: "FileText",
+    desc: "Documents that give Day 1 structure without pitching. You don't show these Day 1 — but they're ready.",
+    items: [
+      "Day 1 question list — 50+ questions to ASK your father (not tell)",
+      "Information request list — books, lease, contracts, suite agreements, insurance, legal",
+      "Draft Operator Agreement template (names blank — filled after Day 1 listening)",
+      "Operator resume one-pager — Khyree City wins, content metrics, frameworks, problems solved",
+      "Cut Creaters turnaround case template (numbers blank — filled after Week 2 audit)",
+      "Brand rehab study notes (Apple '97, Domino's '09, Old Spice, LEGO '04, Tylenol '82)",
+      "Suite-fill mechanics model — what's the math at 100 / 80 / 60 suites",
+      "Quiet ATL barber competitive map — who else has suites in 30 mins of Decatur",
+    ]
+  },
+  {
+    id: "tier4", title: "Tier 4 — Financial Infrastructure",
+    color: C.gold, icon: "Banknote",
+    desc: "The accounts and relationships that hold the income when it starts flowing.",
+    items: [
+      "Wahed Invest IRA opened from Cairo (they accept US-bound expats)",
+      "Personal US bank confirmed accessible from abroad",
+      "Muslim CPA / tax preparer identified, intro email sent (relationships pre-built save weeks)",
+      "Quarterly tax savings account designated (separate sub-account)",
+      "Halal financing relationship initiated (Guidance Residential, UIF, Ameen) — informational only",
+      "Sadaqah deployment method decided (which masjid, which causes, automated?)",
+      "Zakat hawl date noted on calendar",
+    ]
+  },
+  {
+    id: "tier5", title: "Tier 5 — Cairo Wind-Down",
+    color: C.rust, icon: "Plane",
+    desc: "What you handle BEFORE the flight so you don't leave loose ends bleeding from across the Atlantic.",
+    items: [
+      "USPS international forwarding set up (limited but exists)",
+      "Egyptian residency / exit paperwork handled",
+      "Egyptian bank accounts settled or maintained with US access",
+      "Egyptian school notified of departure, transcripts secured",
+      "Final masjid khutbah / goodbye + reference letter from your Imam",
+      "Egyptian cell carrier — keep number for 6 months or terminate?",
+      "Cairo apartment — lease end / sublet / sell decisions made",
+      "Sell / store / ship matrix for possessions completed",
+      "Egypt → US flights booked, family of 6",
+    ]
+  },
+];
+
+// ─── DATA: Day 1 Framework ──────────────────────────────────
+const DAY1_FRAMEWORK = {
+  setting: [
+    "Just you and your father. No agenda doc visible. No phone out.",
+    "Pick a setting he's comfortable in — his home, the building after hours, his favorite spot",
+    "Bring nothing but yourself. Maybe his preferred drink.",
+    "Block at least 2–3 hours. Don't schedule anything after.",
+  ],
+  opening: [
+    "Acknowledge: 'I've been away. You've been carrying it.'",
+    "Frame: 'I'm not here with a plan. I'm here to listen.'",
+    "Question: 'Tell me how it's been.'",
+    "Then stop talking. Let silence work.",
+  ],
+  posture: [
+    "Listen 80%. Ask follow-ups 20%. Advise 0%.",
+    "'Tell me more about that.'",
+    "'When did that shift?'",
+    "'What's the hardest part been?'",
+    "'What would you do over if you could?'",
+    "'Who's been there with you through this?'",
+  ],
+  nogo: [
+    "'I think we should...' — NO",
+    "'Here's what I'd do...' — NO",
+    "'The agency would handle this by...' — NO",
+    "'I have an idea for...' — NO",
+    "Any sentence that starts with 'we' before you've earned 'we' — NO",
+  ],
+  closing: [
+    "'Thank you for trusting me with all of this.'",
+    "'I'm going to spend the next week walking the building, meeting the barbers, going through the books with you.'",
+    "'I'll come back to you with what I see — not with what I'd do.'",
+    "'We'll talk about structure later. Right now I'm just here as your son.'",
+  ],
+};
+
+// ─── DATA: Information Audit ────────────────────────────────
+const AUDIT_CATEGORIES = [
+  {
+    name: "The Books",
+    items: [
+      "P&L for last 3 years",
+      "Current cashflow statement",
+      "Accounts receivable / payable",
+      "Any business debt (riba audit important)",
+      "Bank statements last 12 months",
+    ]
+  },
+  {
+    name: "The Lease",
+    items: [
+      "Full lease document — read every word",
+      "Term remaining + renewal options",
+      "Rent escalators (when does it climb?)",
+      "Personal guarantees — is Omar personally on it?",
+      "Modification / sublease clauses",
+    ]
+  },
+  {
+    name: "Suite Contracts",
+    items: [
+      "Standard barber rental agreement template",
+      "Signed agreements with current 40–44 tenants",
+      "Rent rates — uniform or negotiated case-by-case?",
+      "Renewal cycles and deposits",
+      "Any disputes or non-payers",
+    ]
+  },
+  {
+    name: "Brand & Reputation",
+    items: [
+      "Current marketing channels and spend",
+      "Social media: handles, followers, engagement",
+      "Google reviews + Yelp — read every word",
+      "Specific reputational challenges (what are they exactly?)",
+      "Local press coverage — last 5 years",
+    ]
+  },
+  {
+    name: "Team & Compliance",
+    items: [
+      "W-2 employees vs 1099 contractors vs suite renters — classification clear?",
+      "Workers comp insurance status",
+      "Professional liability / general liability insurance",
+      "IRS standing — any back taxes, liens, issues",
+      "GA state compliance — sales tax, business license",
+    ]
+  },
+];
+
+// ─── COMPONENTS ─────────────────────────────────────────────
+
+function Hero() {
+  return (
+    <div style={{
+      background: "linear-gradient(135deg, " + C.ink + " 0%, " + C.greenDk + " 100%)",
+      color: C.cream, borderRadius: 20, padding: "32px 26px",
+      position: "relative", overflow: "hidden", marginBottom: 22,
+    }}>
+      <div style={{
+        position: "absolute", top: -60, right: -60, width: 220, height: 220,
+        background: "radial-gradient(circle, " + C.gold + "28 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+      <div style={{
+        position: "absolute", bottom: -40, left: -40, width: 160, height: 160,
+        background: "radial-gradient(circle, " + C.sage + "20 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+
+      <div className="font-body" style={{
+        fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase",
+        color: C.gold, fontWeight: 600, marginBottom: 10,
+        display: "flex", alignItems: "center", gap: 8, position: "relative"
+      }}>
+        <Icon name="Compass" size={13}/> Pre-Move Operator Kit · v1
+      </div>
+
+      <div className="font-display" style={{
+        fontSize: "clamp(30px, 6.5vw, 42px)", fontWeight: 500,
+        color: C.cream, letterSpacing: "-0.02em",
+        lineHeight: 1.1, marginBottom: 14, position: "relative"
+      }}>
+        Paperwork before words.
+        <br/>
+        <span style={{ fontStyle: "italic", color: C.gold }}>Structure before stakes.</span>
+      </div>
+
+      <div className="font-body" style={{
+        fontSize: 13, lineHeight: 1.65,
+        color: "#D9CFB6", position: "relative", marginTop: 10
+      }}>
+        Everything you set up before the flight. The stance for your father, the building owner, your wife. The documents that make you a legitimate operator the day you land — not three months later.
+      </div>
+    </div>
+  );
+}
+
+function Section({ id, title, sub, icon, accent, defaultOpen = false, children, openState, setOpenState }) {
+  const open = openState[id] !== undefined ? openState[id] : defaultOpen;
+  const toggle = () => setOpenState({ ...openState, [id]: !open });
+
+  return (
+    <div className="card-shadow" style={{
+      background: C.card, borderRadius: 16, overflow: "hidden", marginBottom: 14,
+    }}>
+      <button onClick={toggle} style={{
+        width: "100%", textAlign: "left", background: "transparent",
+        border: "none", padding: "20px 20px", cursor: "pointer",
+        display: "flex", alignItems: "center", gap: 14
+      }}>
+        <div style={{
+          width: 42, height: 42, flexShrink: 0, borderRadius: 11,
+          background: accent + "18", color: accent,
+          display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <Icon name={icon} size={20} strokeWidth={1.8}/>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="font-display" style={{
+            fontSize: 19, fontWeight: 500, color: C.ink,
+            letterSpacing: "-0.01em", lineHeight: 1.2, marginBottom: 2
+          }}>
+            {title}
+          </div>
+          <div className="font-body" style={{ fontSize: 12, color: C.muted, lineHeight: 1.3 }}>
+            {sub}
+          </div>
+        </div>
+        <Icon name="ChevronDown" size={18} color={C.mutedLt} style={{
+          flexShrink: 0,
+          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.25s"
+        }}/>
+      </button>
+
+      {open && (
+        <div className="fade-in" style={{
+          padding: "4px 20px 22px",
+          borderTop: "1px solid " + C.lineSoft
+        }}>
+          <div style={{ paddingTop: 16 }}>
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Three Stances ──────────────────────────────────────────
+function ThreeStances() {
+  const [open, setOpen] = useState("father");
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 16, lineHeight: 1.6
+      }}>
+        Three relationships shape the whole move. Each has a different stance, posture, and what to avoid. Tap to expand.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {STANCES.map(s => {
+          const isOpen = open === s.id;
+          return (
+            <div key={s.id} style={{
+              background: C.card,
+              border: "1px solid " + (isOpen ? s.color + "55" : C.line),
+              borderRadius: 12, overflow: "hidden"
+            }}>
+              <button onClick={() => setOpen(isOpen ? null : s.id)} style={{
+                width: "100%", textAlign: "left", background: "transparent",
+                border: "none", padding: "14px 16px", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 12
+              }}>
+                <div style={{
+                  width: 36, height: 36, flexShrink: 0, borderRadius: 9,
+                  background: s.color + "1A", color: s.color,
+                  display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  <Icon name={s.icon} size={18}/>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="font-display" style={{
+                    fontSize: 16, fontWeight: 600, color: C.ink, lineHeight: 1.3
+                  }}>
+                    {s.title}
+                  </div>
+                  <div className="font-body" style={{
+                    fontSize: 11.5, color: s.color, fontWeight: 600,
+                    fontStyle: "italic", marginTop: 2
+                  }}>
+                    {s.stance}
+                  </div>
+                </div>
+                <Icon name="ChevronDown" size={16} color={C.mutedLt} style={{
+                  flexShrink: 0,
+                  transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.25s"
+                }}/>
+              </button>
+
+              {isOpen && (
+                <div className="fade-in" style={{
+                  padding: "12px 16px 18px",
+                  borderTop: "1px solid " + C.lineSoft,
+                  background: C.paper
+                }}>
+                  <StanceField label="Posture" value={s.posture} color={s.color}/>
+                  <StanceField label="The Move" value={s.move} color={s.color}/>
+                  <StanceField label="What NOT to Do" value={s.nogo} color={C.rust}/>
+                  <StanceField label="What's At Stake" value={s.stakes} color={s.color} last={true}/>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function StanceField({ label, value, color, last = false }) {
+  return (
+    <div style={{ marginBottom: last ? 0 : 14 }}>
+      <div className="font-body" style={{
+        fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
+        color: color, fontWeight: 700, marginBottom: 5
+      }}>
+        {label}
+      </div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.ink, lineHeight: 1.6
+      }}>
+        {value}
+      </div>
+    </div>
+  );
+}
+
+// ─── Documents Section ──────────────────────────────────────
+function DocumentTiers({ checked, setChecked }) {
+  const allItems = DOC_TIERS.flatMap(t => t.items.map((item, i) => t.id + "_" + i));
+  const totalChecked = allItems.filter(k => checked[k]).length;
+  const total = allItems.length;
+  const pct = total > 0 ? Math.round((totalChecked / total) * 100) : 0;
+
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 14, lineHeight: 1.6
+      }}>
+        Five tiers. Don't fly until Tier 1 + Tier 2 are 100%. Tier 3 is what makes Day 1 land. Tier 4 lets income flow. Tier 5 closes Cairo cleanly.
+      </div>
+
+      <div style={{
+        background: C.paper, borderRadius: 12, padding: "12px 14px",
+        marginBottom: 16, border: "1px solid " + C.line
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+          <div className="font-body" style={{
+            fontSize: 11, color: C.muted, letterSpacing: "0.08em",
+            textTransform: "uppercase", fontWeight: 600
+          }}>
+            Pre-Flight Progress
+          </div>
+          <div className="font-display num" style={{
+            fontSize: 17, fontWeight: 600, color: C.green
+          }}>
+            {totalChecked} / {total} · {pct}%
+          </div>
+        </div>
+        <div style={{
+          height: 6, background: C.lineSoft, borderRadius: 999, overflow: "hidden"
+        }}>
+          <div style={{
+            height: "100%", width: pct + "%",
+            background: "linear-gradient(90deg, " + C.green + " 0%, " + C.gold + " 100%)",
+            transition: "width 0.3s"
+          }}/>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {DOC_TIERS.map(tier => {
+          const tierChecked = tier.items.filter((_, i) => checked[tier.id + "_" + i]).length;
+          return (
+            <div key={tier.id}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10, marginBottom: 8, paddingLeft: 2
+              }}>
+                <div style={{
+                  width: 30, height: 30, borderRadius: 8,
+                  background: tier.color + "1A", color: tier.color,
+                  display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  <Icon name={tier.icon} size={15}/>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div className="font-display" style={{
+                    fontSize: 14.5, fontWeight: 600, color: C.ink
+                  }}>
+                    {tier.title}
+                  </div>
+                  <div className="font-body" style={{
+                    fontSize: 11, color: C.muted, marginTop: 1
+                  }}>
+                    {tier.desc}
+                  </div>
+                </div>
+                <div className="font-body num" style={{
+                  fontSize: 11.5, color: C.muted, fontWeight: 600
+                }}>
+                  {tierChecked}/{tier.items.length}
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {tier.items.map((item, i) => {
+                  const key = tier.id + "_" + i;
+                  const isChecked = !!checked[key];
+                  return (
+                    <button key={i} onClick={() => setChecked({ ...checked, [key]: !isChecked })} style={{
+                      background: isChecked ? tier.color + "0E" : C.card,
+                      border: "1px solid " + (isChecked ? tier.color + "44" : C.line),
+                      borderRadius: 10, padding: "10px 12px",
+                      cursor: "pointer", textAlign: "left",
+                      display: "flex", gap: 11, alignItems: "flex-start",
+                      transition: "all 0.15s"
+                    }}>
+                      <div className="checkbox" style={{
+                        background: isChecked ? tier.color : "#fff",
+                        borderColor: isChecked ? tier.color : C.line
+                      }}>
+                        {isChecked && <Icon name="Check" size={14} color="#fff"/>}
+                      </div>
+                      <div className="font-body" style={{
+                        fontSize: 12.5, color: isChecked ? C.muted : C.ink,
+                        lineHeight: 1.5,
+                        textDecoration: isChecked ? "line-through" : "none",
+                        paddingTop: 2
+                      }}>
+                        {item}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Day 1 Framework ────────────────────────────────────────
+function Day1Framework() {
+  const blocks = [
+    { label: "Setting", icon: "Sun", color: C.gold, items: DAY1_FRAMEWORK.setting },
+    { label: "Opening", icon: "MessageCircle", color: C.green, items: DAY1_FRAMEWORK.opening },
+    { label: "Posture During", icon: "Ear", color: C.green, items: DAY1_FRAMEWORK.posture },
+    { label: "Do NOT Say", icon: "X", color: C.rust, items: DAY1_FRAMEWORK.nogo },
+    { label: "Closing", icon: "Hand", color: C.navy, items: DAY1_FRAMEWORK.closing },
+  ];
+
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 16, lineHeight: 1.6
+      }}>
+        Day 1 is the most important conversation of the next 10 years. Get it right and the partnership conversation 12 months later writes itself. Get it wrong and you'll be repairing for the rest of the year.
+      </div>
+
+      <div style={{
+        background: C.greenLt, borderRadius: 12, padding: "14px 16px",
+        marginBottom: 18, border: "1px solid " + C.green + "33"
+      }}>
+        <div className="font-body" style={{
+          fontSize: 12.5, color: C.greenDk, lineHeight: 1.6
+        }}>
+          <strong>The whole thing in one line:</strong> You came home. You're listening. You'll come back next week with what you observed — not with a plan.
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {blocks.map((b, idx) => (
+          <div key={idx} style={{
+            background: C.paper,
+            border: "1px solid " + b.color + "33",
+            borderLeft: "4px solid " + b.color,
+            borderRadius: 12, padding: "14px 16px"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <div style={{
+                width: 28, height: 28, borderRadius: 7,
+                background: b.color, color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}>
+                <Icon name={b.icon} size={14}/>
+              </div>
+              <div className="font-display" style={{
+                fontSize: 15.5, fontWeight: 600, color: C.ink
+              }}>
+                {b.label}
+              </div>
+            </div>
+            <ul style={{
+              margin: 0, paddingLeft: 0, listStyle: "none",
+              display: "flex", flexDirection: "column", gap: 6
+            }}>
+              {b.items.map((item, i) => (
+                <li key={i} className="font-body" style={{
+                  fontSize: 12.5, color: C.ink, lineHeight: 1.55,
+                  display: "flex", gap: 9, alignItems: "flex-start"
+                }}>
+                  <Icon name="ChevronRight" size={13} color={b.color} style={{
+                    flexShrink: 0, marginTop: 3
+                  }}/>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        marginTop: 18, padding: "14px 16px",
+        background: C.goldLt, borderRadius: 10,
+        border: "1px solid " + C.gold + "33"
+      }}>
+        <div className="font-body" style={{
+          fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase",
+          fontWeight: 700, color: C.goldDk, marginBottom: 6
+        }}>
+          Week 2 Move
+        </div>
+        <div className="font-body" style={{
+          fontSize: 12.5, color: C.ink, lineHeight: 1.6
+        }}>
+          After 7–14 days of listening, walking the building, going through books, meeting barbers — THEN you propose. And what you propose is an <strong>Operator Agreement</strong>, not a partnership. Specific scope, specific compensation, specific 6–12 month milestones. The partnership conversation lives at the 12-month mark, with receipts. This honors your stated principle — you haven't earned the 50/50 yet — and it sets up the partnership to happen from strength.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Information Audit ──────────────────────────────────────
+function InformationAudit() {
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 16, lineHeight: 1.6
+      }}>
+        What you need to LEARN before you propose anything structural. Week 1–2 is your audit window. Don't propose until you've seen all five categories.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {AUDIT_CATEGORIES.map((cat, idx) => (
+          <div key={idx} style={{
+            background: C.paper, borderRadius: 12,
+            border: "1px solid " + C.line,
+            padding: "14px 16px"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <Icon name="Eye" size={16} color={C.navy}/>
+              <div className="font-display" style={{
+                fontSize: 15, fontWeight: 600, color: C.ink
+              }}>
+                {cat.name}
+              </div>
+            </div>
+            <ul style={{
+              margin: 0, paddingLeft: 0, listStyle: "none",
+              display: "flex", flexDirection: "column", gap: 5
+            }}>
+              {cat.items.map((item, i) => (
+                <li key={i} className="font-body" style={{
+                  fontSize: 12.5, color: C.ink, lineHeight: 1.55,
+                  display: "flex", gap: 9, alignItems: "flex-start"
+                }}>
+                  <span style={{
+                    flexShrink: 0, color: C.navy, marginTop: 5,
+                    width: 4, height: 4, borderRadius: "50%",
+                    background: C.navy, display: "inline-block"
+                  }}/>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Share Modal ────────────────────────────────────────────
+function ShareModal({ checked, onClose }) {
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  const exportText = useMemo(() => {
+    let out = "════════════════════════════════════\n";
+    out += "TOWNES PRE-MOVE OPERATOR KIT\n";
+    out += "Snapshot " + new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) + "\n";
+    out += "════════════════════════════════════\n\n";
+    out += "THE ANGLE:\n";
+    out += "  • With father:  Son first. Operator second. Partner third.\n";
+    out += "  • With landlord: Observer first. Negotiator later.\n";
+    out += "  • With wife:    Partner. Equal voice. Veto power.\n\n";
+    out += "DAY 1 RULE: Listen 80%. Follow-ups 20%. Advise 0%.\n";
+    out += "WEEK 2 MOVE: Operator agreement (not partnership). Revisit partnership at month 12 with receipts.\n\n";
+
+    let allItems = 0, allChecked = 0;
+    DOC_TIERS.forEach(tier => {
+      const tierChecked = tier.items.filter((_, i) => checked[tier.id + "_" + i]).length;
+      allItems += tier.items.length;
+      allChecked += tierChecked;
+      out += "━━━ " + tier.title.toUpperCase() + " — " + tierChecked + "/" + tier.items.length + " ━━━\n";
+      tier.items.forEach((item, i) => {
+        const isChecked = !!checked[tier.id + "_" + i];
+        out += "  " + (isChecked ? "[x]" : "[ ]") + " " + item + "\n";
+      });
+      out += "\n";
+    });
+
+    const pct = allItems > 0 ? Math.round((allChecked / allItems) * 100) : 0;
+    out += "════════════════════════════════════\n";
+    out += "PRE-FLIGHT READINESS: " + allChecked + "/" + allItems + " (" + pct + "%)\n";
+    out += "════════════════════════════════════\n";
+    return out;
+  }, [checked]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(exportText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      const ta = document.getElementById("export-ta");
+      if (ta) { ta.select(); document.execCommand("copy"); setCopied(true); setTimeout(() => setCopied(false), 2200); }
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Townes Pre-Move Operator Kit", text: exportText });
+        setShared(true);
+        setTimeout(() => setShared(false), 2200);
+      } catch {}
+    }
+  };
+
+  const canShare = typeof navigator !== 'undefined' && !!navigator.share;
+
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0,
+      background: "rgba(27,25,22,0.65)", backdropFilter: "blur(6px)",
+      zIndex: 1000, display: "flex",
+      alignItems: "center", justifyContent: "center", padding: 16
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: C.cream, borderRadius: 18,
+        maxWidth: 720, width: "100%", maxHeight: "90vh",
+        display: "flex", flexDirection: "column", overflow: "hidden",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.45)"
+      }}>
+        <div style={{
+          padding: "20px 24px", borderBottom: "1px solid " + C.line,
+          display: "flex", alignItems: "center", justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase",
+              color: C.gold, fontWeight: 600, marginBottom: 4
+            }}>
+              Pre-Flight Snapshot
+            </div>
+            <div className="font-display" style={{
+              fontSize: 22, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+            }}>
+              Share with your wife
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            width: 36, height: 36, borderRadius: 9,
+            background: "transparent", border: "1px solid " + C.line,
+            cursor: "pointer", display: "flex",
+            alignItems: "center", justifyContent: "center", color: C.muted
+          }}>
+            <Icon name="X" size={16}/>
+          </button>
+        </div>
+
+        <div style={{ padding: "14px 24px", background: C.greenLt, borderBottom: "1px solid " + C.line }}>
+          <div className="font-body" style={{ fontSize: 13, color: C.greenDk, lineHeight: 1.55 }}>
+            Tap <strong>Share</strong> for iMessage/AirDrop/Mail. Or <strong>Copy</strong> to paste anywhere.
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflow: "auto", padding: "16px 24px" }}>
+          <textarea id="export-ta" readOnly value={exportText}
+            onClick={e => e.target.select()} style={{
+              width: "100%", minHeight: 220, maxHeight: "40vh",
+              padding: "14px 16px", background: C.paper,
+              border: "1px solid " + C.line, borderRadius: 10,
+              fontFamily: "ui-monospace, Menlo, monospace",
+              fontSize: 11.5, lineHeight: 1.6,
+              color: C.ink, resize: "vertical"
+            }}/>
+        </div>
+
+        <div style={{ padding: "16px 24px 20px", borderTop: "1px solid " + C.line,
+          display: "flex", flexDirection: "column", gap: 10 }}>
+          {canShare && (
+            <button onClick={handleShare} className="font-body" style={{
+              width: "100%", padding: "14px 20px",
+              background: C.green, color: "#fff",
+              border: "none", borderRadius: 11,
+              fontSize: 15, fontWeight: 600, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+            }}>
+              {shared ? <><Icon name="Check" size={18}/> Shared</> : <><Icon name="Send" size={18}/> Share — iMessage, AirDrop, Mail</>}
+            </button>
+          )}
+          <button onClick={handleCopy} className="font-body" style={{
+            width: "100%", padding: "14px 20px",
+            background: copied ? C.green : C.ink,
+            color: copied ? "#fff" : C.cream,
+            border: "none", borderRadius: 11,
+            fontSize: 15, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+          }}>
+            {copied ? <><Icon name="Check" size={18}/> Copied</> : <><Icon name="Copy" size={18}/> Copy snapshot</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN APP ───────────────────────────────────────────────
+function App() {
+  const saved = storage.get() || {};
+  const [openState, setOpenState] = useState(saved.openState || { stances: true });
+  const [checked, setChecked] = useState(saved.checked || {});
+  const [showShare, setShowShare] = useState(false);
+  const saveRef = useRef(null);
+
+  useEffect(() => {
+    if (saveRef.current) clearTimeout(saveRef.current);
+    saveRef.current = setTimeout(() => {
+      storage.set({ openState, checked });
+    }, 300);
+    return () => saveRef.current && clearTimeout(saveRef.current);
+  }, [openState, checked]);
+
+  const docKeys = DOC_TIERS.flatMap(t => t.items.map((_, i) => t.id + "_" + i));
+  const totalChecked = docKeys.filter(k => checked[k]).length;
+  const totalDocs = docKeys.length;
+
+  return (
+    <div className="font-body grain" style={{
+      minHeight: "100vh", background: C.cream,
+      color: C.ink, paddingBottom: 110
+    }}>
+      <header style={{
+        maxWidth: 880, margin: "0 auto",
+        padding: "30px 16px 12px", textAlign: "center"
+      }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          padding: "6px 14px", background: C.goldLt,
+          border: "1px solid " + C.gold + "44", borderRadius: 999,
+          fontSize: 10.5, letterSpacing: "0.16em",
+          textTransform: "uppercase", fontWeight: 700,
+          color: C.goldDk, marginBottom: 12
+        }}>
+          <Icon name="Plane" size={11}/> Cairo to Atlanta · Operator Path
+        </div>
+
+        <h1 className="font-display" style={{
+          fontSize: "clamp(32px, 7vw, 48px)", fontWeight: 400, color: C.ink,
+          margin: 0, letterSpacing: "-0.03em", lineHeight: 1.0, fontStyle: "italic"
+        }}>
+          Going in
+        </h1>
+        <h1 className="font-display" style={{
+          fontSize: "clamp(32px, 7vw, 48px)", fontWeight: 500, color: C.green,
+          margin: "2px 0 0", letterSpacing: "-0.03em", lineHeight: 1.0
+        }}>
+          legit.
+        </h1>
+
+        <p className="font-body" style={{
+          fontSize: 14, color: C.inkSoft, maxWidth: 520,
+          margin: "14px auto 0", lineHeight: 1.55
+        }}>
+          The angle, the documents, and the Day 1 framework — locked before the plane lands.
+        </p>
+      </header>
+
+      <main style={{ maxWidth: 880, margin: "0 auto", padding: "0 14px" }}>
+
+        <Hero/>
+
+        <Section id="stances" title="The Three Stances" sub="How you show up with father, landlord, wife"
+          icon="Compass" accent={C.green}
+          openState={openState} setOpenState={setOpenState}>
+          <ThreeStances/>
+        </Section>
+
+        <Section id="docs" title="The Pre-Flight Document Stack" sub="Five tiers · checkable · save automatically"
+          icon="FileText" accent={C.navy}
+          openState={openState} setOpenState={setOpenState}>
+          <DocumentTiers checked={checked} setChecked={setChecked}/>
+        </Section>
+
+        <Section id="day1" title="The Day 1 Framework" sub="Setting · opening · posture · what NOT to say · closing"
+          icon="MessageCircle" accent={C.gold}
+          openState={openState} setOpenState={setOpenState}>
+          <Day1Framework/>
+        </Section>
+
+        <Section id="audit" title="The Information Audit" sub="What to learn Week 1–2 before proposing anything"
+          icon="Eye" accent={C.rust}
+          openState={openState} setOpenState={setOpenState}>
+          <InformationAudit/>
+        </Section>
+
+        {/* Closing card */}
+        <div style={{
+          background: C.ink, color: C.cream, borderRadius: 18,
+          padding: "26px 22px", textAlign: "center",
+          marginTop: 22, position: "relative", overflow: "hidden"
+        }}>
+          <div style={{
+            position: "absolute", top: -30, right: -30,
+            width: 160, height: 160,
+            background: "radial-gradient(circle, " + C.gold + "26 0%, transparent 70%)",
+            borderRadius: "50%", pointerEvents: "none"
+          }}/>
+          <div className="font-display" style={{
+            fontSize: 21, fontWeight: 500,
+            letterSpacing: "-0.01em", lineHeight: 1.3,
+            marginBottom: 10, position: "relative"
+          }}>
+            You don't earn 50/50 by claiming it.<br/>
+            You earn it by running it.
+          </div>
+          <div className="font-body" style={{
+            fontSize: 12.5, color: "#A89B86",
+            letterSpacing: "0.04em", position: "relative", lineHeight: 1.6
+          }}>
+            Day 1: listen.<br/>
+            Week 2: propose the operator role.<br/>
+            Month 12: the partnership conversation, with receipts.
+          </div>
+        </div>
+      </main>
+
+      {/* Sticky share bar */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: "rgba(244, 238, 225, 0.94)",
+        backdropFilter: "blur(12px)",
+        borderTop: "1px solid " + C.line,
+        padding: "12px 14px",
+        paddingBottom: "calc(12px + env(safe-area-inset-bottom))",
+        zIndex: 100
+      }}>
+        <div style={{
+          maxWidth: 880, margin: "0 auto",
+          display: "flex", alignItems: "center", gap: 12,
+          justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 10, color: C.muted, letterSpacing: "0.08em",
+              textTransform: "uppercase", fontWeight: 600
+            }}>
+              Pre-Flight Readiness
+            </div>
+            <div className="font-display num" style={{
+              fontSize: 21, fontWeight: 600, color: C.green,
+              letterSpacing: "-0.02em", lineHeight: 1.1
+            }}>
+              {totalChecked}/{totalDocs}
+            </div>
+          </div>
+          <button onClick={() => setShowShare(true)} className="font-body" style={{
+            padding: "12px 18px", background: C.ink,
+            color: C.cream, border: "none", borderRadius: 999,
+            fontSize: 13, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 8,
+            boxShadow: "0 4px 12px " + C.ink + "33", whiteSpace: "nowrap"
+          }}>
+            <Icon name="Send" size={14}/> Share
+          </button>
+        </div>
+      </div>
+
+      {showShare && <ShareModal checked={checked} onClose={() => setShowShare(false)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

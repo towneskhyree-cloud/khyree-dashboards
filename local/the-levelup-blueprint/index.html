@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Level-Up · A Blueprint for the Independent Barber · K. TOWNES · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@300;400;600;700&family=Architects+Daughter&family=JetBrains+Mono:wght@400;500;600;700&family=Special+Elite&family=Stardos+Stencil:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#0e3a52;
+  --paper-2:#0a2e42;
+  --paper-3:#072539;
+  --ink:#f5f1e8;
+  --ink-soft:rgba(245,241,232,0.7);
+  --ink-dim:rgba(245,241,232,0.45);
+  --ink-faint:rgba(245,241,232,0.18);
+  --line:rgba(245,241,232,0.22);
+  --line-strong:rgba(245,241,232,0.4);
+  --grid:rgba(245,241,232,0.06);
+  --grid-major:rgba(245,241,232,0.12);
+  --red:#e84a3a;
+  --red-stamp:#a01b1b;
+  --yellow:#f4d35e;
+  --yellow-tape:rgba(244,211,94,0.92);
+  --cyan-glow:#8ed4f5;
+  --display:'Antonio',Impact,sans-serif;
+  --hand:'Architects Daughter',cursive;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --type:'Special Elite',serif;
+  --stamp:'Stardos Stencil',Impact,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--mono);overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:0.01em;line-height:1.6;cursor:crosshair}
+body{
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    radial-gradient(ellipse 1200px 800px at 30% 20%, rgba(142,212,245,0.06), transparent 60%),
+    radial-gradient(ellipse 1000px 600px at 80% 80%, rgba(244,211,94,0.04), transparent 60%);
+  background-size:20px 20px, 20px 20px, 120px 120px, 120px 120px, 100% 100%, 100% 100%;
+  background-attachment:fixed;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.15 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:0.18;mix-blend-mode:overlay;pointer-events:none;z-index:1;
+}
+.app{position:relative;z-index:2}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:crosshair}
+
+/* SVG filter for sketch effect */
+.sketch{filter:url(#sketch)}
+
+/* ===== Layout ===== */
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px;position:relative}
+@media(max-width:640px){.wrap{padding:0 20px}}
+.sheet{padding:80px 0;position:relative;border-bottom:1px dashed var(--line)}
+.sheet:last-child{border-bottom:none}
+@media(max-width:640px){.sheet{padding:56px 0}}
+
+/* ===== TOP META BAR ===== */
+.metabar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,30,46,0.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase}
+.metabar-inner{max-width:1280px;margin:0 auto;padding:10px 32px;display:flex;justify-content:space-between;align-items:center;gap:24px;color:var(--ink-soft)}
+.metabar .group{display:flex;gap:18px;align-items:center}
+.metabar b{color:var(--ink);font-weight:600;letter-spacing:0.14em}
+.metabar .blink{display:inline-block;width:7px;height:7px;background:var(--red);border-radius:50%;animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@media(max-width:780px){.metabar-inner{font-size:9px;padding:8px 16px}.metabar .desk{display:none}}
+
+/* ===== TITLE BLOCK (architectural drawing corner) ===== */
+.titleblock{
+  position:absolute;top:32px;right:32px;
+  width:280px;
+  border:1px solid var(--line-strong);
+  background:rgba(7,30,46,0.6);
+  font-family:var(--mono);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  z-index:5;
+}
+.titleblock-row{display:grid;grid-template-columns:80px 1fr;border-bottom:1px solid var(--line);padding:6px 8px;gap:8px;align-items:center}
+.titleblock-row:last-child{border-bottom:none}
+.titleblock-row .l{color:var(--ink-dim);font-size:8px}
+.titleblock-row .v{color:var(--ink);font-weight:600;font-size:10px;letter-spacing:0.06em}
+.titleblock-row .v.acc{color:var(--red)}
+.titleblock-row .v.signature{font-family:var(--hand);letter-spacing:0;text-transform:none;font-size:13px}
+@media(max-width:980px){.titleblock{position:relative;top:0;right:auto;width:100%;margin-bottom:32px}}
+
+/* ===== COVER SHEET ===== */
+.cover{padding-top:140px;padding-bottom:120px;position:relative;min-height:100vh;display:flex;align-items:center}
+.cover-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:24px;display:flex;align-items:center;gap:16px}
+.cover-eyebrow::before,.cover-eyebrow::after{content:"";flex:0 0 60px;height:1px;background:var(--line-strong)}
+.cover-eyebrow::after{flex:1}
+.cover h1{
+  font-family:var(--display);
+  font-weight:300;
+  font-size:clamp(64px,15vw,220px);
+  line-height:0.82;
+  letter-spacing:-0.045em;
+  margin-bottom:36px;
+  text-transform:uppercase;
+  position:relative;
+}
+.cover h1 .strong{font-weight:700}
+.cover h1 .red{color:var(--red)}
+.cover h1 .outline{
+  -webkit-text-stroke:1px var(--ink);
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  font-weight:300;
+}
+.cover h1 .hand{
+  font-family:var(--hand);
+  font-weight:400;
+  font-size:0.55em;
+  color:var(--yellow);
+  text-transform:none;
+  letter-spacing:0;
+  display:inline-block;
+  transform:rotate(-2deg);
+  margin:0 0.2em;
+}
+.cover-sub{
+  font-family:var(--type);
+  font-size:clamp(18px,2.4vw,26px);
+  line-height:1.45;
+  max-width:760px;
+  color:var(--ink);
+  margin-bottom:40px;
+  letter-spacing:0.005em;
+}
+.cover-sub .red{color:var(--red)}
+.cover-attr{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:24px;padding-top:24px;border-top:1px solid var(--line)}
+.cover-attr span b{color:var(--ink);letter-spacing:0.14em}
+
+/* DRAFTING TAPE */
+.tape{
+  position:absolute;
+  background:var(--yellow-tape);
+  height:36px;width:140px;
+  font-family:var(--hand);
+  font-size:13px;
+  color:#3a2f00;
+  display:flex;align-items:center;justify-content:center;
+  letter-spacing:0;
+  z-index:6;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+  background-image:linear-gradient(90deg, rgba(0,0,0,0.05) 0%, transparent 8%, transparent 92%, rgba(0,0,0,0.05) 100%);
+  border-top:1px dashed rgba(0,0,0,0.15);
+  border-bottom:1px dashed rgba(0,0,0,0.15);
+}
+.tape::before,.tape::after{
+  content:"";position:absolute;top:0;bottom:0;width:8px;
+  background-image:linear-gradient(90deg, transparent 0, transparent 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1) 60%, transparent 60%, transparent 80%, rgba(0,0,0,0.08) 80%, rgba(0,0,0,0.08) 90%, transparent 90%);
+}
+.tape::before{left:-1px}
+.tape::after{right:-1px}
+.tape.r{transform:rotate(-3.5deg)}
+.tape.l{transform:rotate(2deg)}
+
+/* STAMP */
+.stamp{
+  position:absolute;
+  font-family:var(--stamp);
+  font-weight:700;
+  color:var(--red-stamp);
+  border:3px solid var(--red-stamp);
+  padding:8px 16px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  transform:rotate(-12deg);
+  font-size:18px;
+  background:transparent;
+  z-index:7;
+  opacity:0.85;
+  filter:url(#sketch);
+}
+.stamp.lg{font-size:28px;padding:14px 24px;border-width:4px}
+.stamp .sub{display:block;font-size:0.5em;letter-spacing:0.2em;font-weight:400;margin-top:2px}
+
+/* ===== Section header ===== */
+.sec-head{margin-bottom:64px;position:relative;padding-right:300px}
+@media(max-width:980px){.sec-head{padding-right:0}}
+.sheet-code{font-family:var(--mono);font-size:11px;letter-spacing:0.28em;color:var(--ink-dim);margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.sheet-code::after{content:"";flex:1;height:1px;background:var(--line);max-width:200px}
+.sheet-code .red{color:var(--red)}
+.sec-title{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(40px,7vw,96px);
+  line-height:0.88;
+  letter-spacing:-0.035em;
+  margin-bottom:24px;
+  text-transform:uppercase;
+}
+.sec-title .light{font-weight:300}
+.sec-title .red{color:var(--red)}
+.sec-title .hand{font-family:var(--hand);font-weight:400;text-transform:none;font-size:0.7em;color:var(--yellow);letter-spacing:0}
+.sec-kicker{font-family:var(--type);font-size:18px;line-height:1.55;max-width:720px;color:var(--ink);letter-spacing:0.005em}
+
+/* ===== DIMENSION LINE (architectural) ===== */
+.dim{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);margin:8px 0}
+.dim-line{flex:1;height:1px;background:var(--line-strong);position:relative}
+.dim-line::before,.dim-line::after{content:"";position:absolute;width:1px;height:8px;background:var(--line-strong);top:-4px}
+.dim-line::before{left:0}
+.dim-line::after{right:0}
+.dim-num{font-family:var(--display);font-weight:600;font-size:14px;color:var(--ink);letter-spacing:0.02em;padding:0 4px}
+.dim-num.red{color:var(--red)}
+
+/* ===== TRAP ZONES ===== */
+.traps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;border:1px solid var(--line-strong);position:relative}
+@media(max-width:900px){.traps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.traps{grid-template-columns:1fr}}
+.trap{padding:32px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative;min-height:240px;display:flex;flex-direction:column}
+.trap:last-child{border-right:none}
+.trap-id{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--ink-dim);margin-bottom:12px}
+.trap-name{font-family:var(--display);font-weight:700;font-size:22px;text-transform:uppercase;line-height:1;margin-bottom:14px;letter-spacing:-0.01em}
+.trap-desc{font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--ink-soft);flex:1}
+.trap-dim{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--red);margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+
+/* ===== EXPLODED VIEW (5 layers diagram) ===== */
+.exploded{margin:64px 0;display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:stretch;border:1px solid var(--line-strong);padding:32px;position:relative}
+@media(max-width:900px){.exploded{grid-template-columns:1fr;gap:24px}}
+.exploded-label{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim)}
+.exploded-svg{width:100%}
+.exploded-layers{display:flex;flex-direction:column;gap:0}
+.layer{display:grid;grid-template-columns:60px 1fr 80px;gap:16px;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line);position:relative}
+.layer:last-child{border-bottom:none}
+.layer-num{font-family:var(--display);font-weight:300;font-size:36px;color:var(--ink-faint);letter-spacing:-0.04em;line-height:1}
+.layer-body h4{font-family:var(--display);font-weight:600;text-transform:uppercase;font-size:18px;letter-spacing:0.01em;margin-bottom:4px}
+.layer-body p{font-family:var(--mono);font-size:12px;color:var(--ink-soft);line-height:1.5}
+.layer-time{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--red);text-align:right}
+
+/* ===== CURRICULUM TABLE ===== */
+.curriculum{margin-top:48px;border:1px solid var(--line-strong);position:relative}
+.curr-head{display:grid;grid-template-columns:60px 1fr 1fr 100px 100px;background:rgba(7,30,46,0.7);padding:14px 20px;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line-strong);font-weight:600}
+.curr-row{display:grid;grid-template-columns:60px 1fr 1fr 100px 100px;padding:18px 20px;border-bottom:1px solid var(--line);transition:background .2s;align-items:start;gap:16px}
+.curr-row:hover{background:rgba(245,241,232,0.04)}
+.curr-row:last-child{border-bottom:none}
+.curr-num{font-family:var(--display);font-weight:300;color:var(--ink-dim);font-size:22px;letter-spacing:-0.02em}
+.curr-name{font-family:var(--display);font-weight:600;font-size:18px;text-transform:uppercase;letter-spacing:0.005em;line-height:1.2}
+.curr-desc{font-family:var(--mono);font-size:12px;color:var(--ink-soft);line-height:1.5}
+.curr-meta{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-dim)}
+.curr-meta.red{color:var(--red)}
+@media(max-width:900px){
+  .curr-head{display:none}
+  .curr-row{grid-template-columns:40px 1fr;gap:8px 14px}
+  .curr-row .curr-desc{grid-column:2}
+  .curr-row .curr-meta{grid-column:2;font-size:9px}
+}
+
+/* ===== PROGRAM TIERS ===== */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:48px;border:1px solid var(--line-strong);position:relative}
+@media(max-width:900px){.tiers{grid-template-columns:1fr}}
+.tier{padding:40px 32px;border-right:1px solid var(--line);position:relative;display:flex;flex-direction:column;min-height:520px}
+.tier:last-child{border-right:none}
+.tier.featured{background:rgba(244,211,94,0.05)}
+.tier-id{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px}
+.tier-name{font-family:var(--display);font-weight:700;font-size:32px;letter-spacing:-0.01em;text-transform:uppercase;line-height:1;margin-bottom:8px}
+.tier-name .red{color:var(--red)}
+.tier-tag{font-family:var(--hand);color:var(--yellow);font-size:15px;margin-bottom:24px;transform:rotate(-1deg);display:inline-block}
+.tier-price{font-family:var(--display);font-weight:300;font-size:64px;line-height:1;letter-spacing:-0.04em;margin-bottom:4px}
+.tier-price .unit{font-size:0.35em;color:var(--ink-soft);font-weight:400;letter-spacing:0;text-transform:uppercase;display:inline-block;margin-left:4px}
+.tier-positioning{font-family:var(--type);font-size:14px;line-height:1.5;color:var(--ink-soft);margin:20px 0 24px;padding-bottom:20px;border-bottom:1px dashed var(--line)}
+.tier-list{flex:1;display:flex;flex-direction:column;gap:10px}
+.tier-list li{list-style:none;display:grid;grid-template-columns:18px 1fr;gap:10px;font-family:var(--mono);font-size:12px;line-height:1.55;color:var(--ink);align-items:start}
+.tier-list li::before{content:"+";color:var(--red);font-family:var(--display);font-weight:700;font-size:16px;line-height:1.4}
+.tier-list li.no::before{content:"−";color:var(--ink-faint)}
+.tier-list li.no{color:var(--ink-faint);text-decoration:line-through}
+.tier-cta{margin-top:24px;padding:14px 20px;border:1.5px solid var(--ink);text-align:center;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;background:transparent;transition:all .2s}
+.tier-cta:hover{background:var(--ink);color:var(--paper)}
+.tier.featured .tier-cta{background:var(--red);border-color:var(--red);color:var(--ink)}
+.tier.featured .tier-cta:hover{background:var(--ink);color:var(--red)}
+
+/* ===== INDEX / TOC ===== */
+.index{margin-top:48px;border:1px solid var(--line-strong)}
+.index-row{display:grid;grid-template-columns:80px 1fr 200px 80px;padding:14px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;letter-spacing:0.04em;align-items:baseline;cursor:crosshair;transition:background .2s}
+.index-row:hover{background:rgba(245,241,232,0.04)}
+.index-row:last-child{border-bottom:none}
+.index-row.head{background:rgba(7,30,46,0.7);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+.idx-code{color:var(--ink-dim);font-weight:600}
+.idx-name{font-family:var(--display);font-weight:600;text-transform:uppercase;font-size:14px;letter-spacing:0.01em}
+.idx-cat{color:var(--ink-soft);font-size:10px;letter-spacing:0.14em;text-transform:uppercase}
+.idx-page{text-align:right;color:var(--red);font-weight:600}
+@media(max-width:780px){.index-row{grid-template-columns:60px 1fr 50px}.index-row .idx-cat{display:none}}
+
+/* ===== CALLOUT (sketch annotation) ===== */
+.callout{position:relative;padding:24px 28px;border:1px dashed var(--red);margin:32px 0;background:rgba(232,74,58,0.04)}
+.callout::before{
+  content:attr(data-num);
+  position:absolute;top:-14px;left:24px;
+  background:var(--paper);
+  padding:0 10px;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);font-weight:600;
+}
+.callout p{font-family:var(--type);font-size:15px;line-height:1.55;color:var(--ink)}
+.callout p+p{margin-top:12px}
+.callout em{font-family:var(--hand);font-style:normal;color:var(--yellow);font-size:1.05em}
+
+/* ===== ECONOMICS / COMPOUND CHART ===== */
+.economics{margin-top:48px;border:1px solid var(--line-strong);padding:40px;position:relative}
+.econ-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.econ-head h3{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:0.01em;text-transform:uppercase}
+.econ-head .scale{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim)}
+.econ-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:24px}
+@media(max-width:780px){.econ-grid{grid-template-columns:repeat(2,1fr)}}
+.econ-cell{background:var(--paper);padding:24px 20px}
+.econ-month{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:8px}
+.econ-val{font-family:var(--display);font-weight:300;font-size:36px;letter-spacing:-0.03em;line-height:1;color:var(--ink)}
+.econ-val.red{color:var(--red)}
+.econ-val.yellow{color:var(--yellow)}
+.econ-detail{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-top:8px;line-height:1.4}
+
+/* ===== CONTENT CALENDAR ===== */
+.calendar{margin-top:48px;display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);border:1px solid var(--line-strong)}
+.cal-head{background:rgba(7,30,46,0.8);padding:10px 8px;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+.cal-cell{background:var(--paper);padding:14px 10px;min-height:120px;display:flex;flex-direction:column;gap:6px;font-size:10px;position:relative}
+.cal-day{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:4px}
+.cal-tag{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;padding:3px 6px;border:1px solid var(--ink-faint);background:rgba(245,241,232,0.04);line-height:1.3}
+.cal-tag.reel{border-color:var(--red);color:var(--red)}
+.cal-tag.carousel{border-color:var(--yellow);color:var(--yellow)}
+.cal-tag.story{border-color:var(--cyan-glow);color:var(--cyan-glow)}
+.cal-tag.email{border-color:var(--ink-soft);color:var(--ink-soft)}
+.cal-note{font-family:var(--hand);color:var(--ink-soft);font-size:11px;line-height:1.3;margin-top:auto}
+@media(max-width:780px){.calendar{grid-template-columns:repeat(3,1fr)}.cal-head:nth-child(n+8){display:none}.cal-cell{min-height:100px}}
+
+/* ===== SVG ILLUSTRATIONS ===== */
+.illustration{margin:48px 0;display:flex;justify-content:center;align-items:center;border:1px solid var(--line);padding:40px 24px;position:relative;background:rgba(7,30,46,0.4)}
+.illustration::before{
+  content:"FIG.";
+  position:absolute;top:8px;left:12px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--ink-dim);
+}
+.illustration::after{
+  content:attr(data-cap);
+  position:absolute;bottom:8px;left:12px;right:12px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft);text-align:center;
+}
+
+/* ===== HAND-DRAWN NOTE ===== */
+.note{
+  font-family:var(--hand);
+  color:var(--yellow);
+  font-size:18px;
+  line-height:1.4;
+  transform:rotate(-1.5deg);
+  display:inline-block;
+  position:relative;
+  padding:8px 0;
+}
+.note::before{content:"→ ";color:var(--red)}
+
+/* ===== LARGE-NUMBER STAT BLOCK ===== */
+.stats{margin-top:48px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line-strong)}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:32px 24px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+.stat-label{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:14px}
+.stat-num{font-family:var(--display);font-weight:300;font-size:64px;line-height:0.9;letter-spacing:-0.04em;color:var(--ink)}
+.stat-num.red{color:var(--red)}
+.stat-num.yellow{color:var(--yellow)}
+.stat-note{font-family:var(--mono);font-size:10px;color:var(--ink-soft);margin-top:10px;letter-spacing:0.02em}
+
+/* ===== INTERACTIVE COMPASS (the offer architecture) ===== */
+.compass-wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-top:48px}
+@media(max-width:900px){.compass-wrap{grid-template-columns:1fr}}
+.compass{aspect-ratio:1;max-width:480px;margin:auto;position:relative}
+.compass-svg{width:100%;height:100%}
+.compass-readout{font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--ink-soft)}
+.compass-readout h4{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:0.01em;text-transform:uppercase;color:var(--ink);margin-bottom:14px}
+.compass-readout li{list-style:none;padding:8px 0;border-bottom:1px dashed var(--line);display:flex;justify-content:space-between;gap:12px}
+.compass-readout li:last-child{border-bottom:none}
+.compass-readout li span:last-child{color:var(--red);font-weight:600;font-family:var(--display);font-size:16px}
+
+/* ===== BUILD SPEC ===== */
+.spec{margin-top:48px;border:1px solid var(--line-strong);background:rgba(7,30,46,0.5)}
+.spec-head{padding:20px 28px;border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;align-items:center;background:rgba(7,30,46,0.7);gap:16px;flex-wrap:wrap}
+.spec-head h4{font-family:var(--display);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:0.01em}
+.spec-copy{padding:8px 16px;background:var(--red);color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;cursor:crosshair;transition:all .2s;border:1px solid var(--red)}
+.spec-copy:hover{background:var(--ink);color:var(--red)}
+.spec-copy.ok{background:var(--yellow);color:var(--paper);border-color:var(--yellow)}
+.spec-body{padding:32px;font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--ink);white-space:pre-wrap;max-height:600px;overflow-y:auto}
+
+/* ===== Footer / signature ===== */
+.signoff{padding:80px 0 56px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end}
+@media(max-width:780px){.signoff{grid-template-columns:1fr;gap:32px}}
+.signoff-left h3{font-family:var(--display);font-weight:300;font-size:48px;letter-spacing:-0.03em;line-height:0.95;text-transform:uppercase;margin-bottom:20px}
+.signoff-left h3 .red{color:var(--red)}
+.signoff-left h3 .hand{font-family:var(--hand);font-weight:400;text-transform:none;font-size:0.7em;color:var(--yellow)}
+.signoff-left p{font-family:var(--type);font-size:15px;line-height:1.6;color:var(--ink-soft);max-width:480px}
+.signoff-right{text-align:right}
+.signature{font-family:var(--hand);font-size:42px;color:var(--ink);letter-spacing:-0.01em;line-height:1;margin-bottom:8px;transform:rotate(-3deg);display:inline-block}
+.signature-meta{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);margin-top:24px}
+
+/* ===== Scroll-driven dimension lines ===== */
+.draw-line{stroke-dasharray:var(--len,100);stroke-dashoffset:var(--len,100);animation:draw .8s ease-out forwards;animation-timeline:view();animation-range:entry 20% cover 30%}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ===== Floating page indicator ===== */
+.page-indicator{position:fixed;bottom:24px;right:24px;z-index:50;background:rgba(7,30,46,0.85);backdrop-filter:blur(12px);border:1px solid var(--line-strong);padding:10px 14px;font-family:var(--mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-soft)}
+.page-indicator .num{font-family:var(--display);font-size:22px;font-weight:700;color:var(--red);line-height:1;display:block;margin-bottom:2px;letter-spacing:-0.02em}
+@media(max-width:640px){.page-indicator{bottom:16px;right:16px;font-size:9px;padding:8px 10px}.page-indicator .num{font-size:18px}}
+
+/* ===== Reveal animation ===== */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .9s ease-out, transform .9s ease-out}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ===== Misc ===== */
+.spacer{height:120px}
+.pull-quote{margin:80px auto;padding:48px 32px;max-width:880px;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+.pull-quote q{font-family:var(--type);font-size:clamp(22px,3.4vw,36px);line-height:1.3;color:var(--ink);letter-spacing:0.005em;quotes:none}
+.pull-quote q::before{content:open-quote;color:var(--red);font-size:1.4em;font-family:var(--display);font-weight:700;display:inline}
+.pull-quote q::after{content:close-quote;color:var(--red);font-size:1.4em;font-family:var(--display);font-weight:700}
+.pull-quote .attr{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--ink-dim);margin-top:24px}
+
+</style>
+</head>
+<body>
+
+<!-- ===== SVG DEFS — filters and reusable bits ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="sketch" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="2.2"/>
+    </filter>
+    <filter id="sketchSoft" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="7"/>
+      <feDisplacementMap in="SourceGraphic" scale="1.2"/>
+    </filter>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#f5f1e8" stroke-width="1" opacity="0.3"/>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- ============== APP ============== -->
+<div class="app">
+
+<!-- ============== META BAR ============== -->
+<nav class="metabar">
+  <div class="metabar-inner">
+    <div class="group"><span class="blink"></span><b>DOC · BP-001</b><span class="desk">CLASSIFIED · OPERATOR ONLY</span></div>
+    <div class="group desk"><span>REV 01</span><span>2026.05.14</span><b>K. TOWNES</b></div>
+    <div class="group"><span class="desk">SHEET</span><span id="sheetIndicator"><b>00 / 12</b></span></div>
+  </div>
+</nav>
+
+<!-- ============== COVER SHEET ============== -->
+<section class="sheet cover" id="cover">
+  <div class="wrap">
+
+    <!-- Title block top-right -->
+    <div class="titleblock">
+      <div class="titleblock-row"><span class="l">Project</span><span class="v">Khyree City</span></div>
+      <div class="titleblock-row"><span class="l">Document</span><span class="v">The Level-Up</span></div>
+      <div class="titleblock-row"><span class="l">Type</span><span class="v acc">Operating Blueprint</span></div>
+      <div class="titleblock-row"><span class="l">Drawn by</span><span class="v signature">K. Townes</span></div>
+      <div class="titleblock-row"><span class="l">Reviewed</span><span class="v">O. Townes</span></div>
+      <div class="titleblock-row"><span class="l">Date</span><span class="v">2026 / 05 / 14</span></div>
+      <div class="titleblock-row"><span class="l">Scale</span><span class="v">1 : 1 LIFE</span></div>
+      <div class="titleblock-row"><span class="l">Sheet</span><span class="v">01 of 12</span></div>
+      <div class="titleblock-row"><span class="l">Revision</span><span class="v acc">A · Initial</span></div>
+    </div>
+
+    <!-- Drafting tape decoration -->
+    <div class="tape r" style="top:60px;left:-40px">REV A — KT</div>
+    <div class="tape l" style="bottom:120px;right:60px">"build it" — Khyree</div>
+
+    <!-- Stamp -->
+    <div class="stamp lg" style="top:140px;right:330px">For Operators<span class="sub">Not Beginners</span></div>
+
+    <div class="cover-eyebrow">Document BP-001 · Khyree City · Cut Creaters Salon Suites</div>
+
+    <h1>
+      <span class="light">The</span><br/>
+      <span class="strong red">Level-Up</span><br/>
+      <span class="outline">Blueprint</span><br/>
+      <span class="hand">for barbers who want their own four walls</span>
+    </h1>
+
+    <p class="cover-sub">
+      A working document. 12 sheets. Drawn by a 4th-generation barber for the operator who's done renting somebody else's chair. <span class="red">The exit ramp out of booth purgatory</span>, with the math, the systems, the suite, and the runway laid out at scale.
+    </p>
+
+    <div class="cover-attr">
+      <span><b>Author</b> · K. TOWNES</span>
+      <span><b>Lineage</b> · Cut Creaters · 1996—</span>
+      <span><b>Tagline</b> · "I level up barbers"</span>
+      <span><b>Reach</b> · 111K · @khyree_city</span>
+      <span><b>Status</b> · v1 Draft</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============== INDEX (TOC as drawing index) ============== -->
+<section class="sheet" id="index">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET A-00</span> · DRAWING INDEX</div>
+      <h2 class="sec-title">The <span class="red">index.</span></h2>
+      <p class="sec-kicker">Twelve sheets. Each one a piece of the system. Read in order or jump — the blueprint stands on its own. Codes follow architectural convention: A = Architectural · S = Structural · M = Mechanical · E = Electrical · O = Operations.</p>
+    </div>
+
+    <div class="index">
+      <div class="index-row head"><span>Code</span><span>Sheet</span><span>Category</span><span>Page</span></div>
+      <a href="#sheet-1" class="index-row"><span class="idx-code">A-01</span><span class="idx-name">The Site Plan · where most barbers are stuck</span><span class="idx-cat">Diagnostic</span><span class="idx-page">P.01</span></a>
+      <a href="#sheet-2" class="index-row"><span class="idx-code">S-02</span><span class="idx-name">The Foundation · mindset, money, identity</span><span class="idx-cat">Structural</span><span class="idx-page">P.02</span></a>
+      <a href="#sheet-3" class="index-row"><span class="idx-code">S-03</span><span class="idx-name">The Framing · craft + skill curriculum</span><span class="idx-cat">Structural</span><span class="idx-page">P.03</span></a>
+      <a href="#sheet-4" class="index-row"><span class="idx-code">M-04</span><span class="idx-name">The Wiring · systems, booking, reminders, retention</span><span class="idx-cat">Mechanical</span><span class="idx-page">P.04</span></a>
+      <a href="#sheet-5" class="index-row"><span class="idx-code">A-05</span><span class="idx-name">The Facade · brand, IG, photo, positioning</span><span class="idx-cat">Architectural</span><span class="idx-page">P.05</span></a>
+      <a href="#sheet-6" class="index-row"><span class="idx-code">A-06</span><span class="idx-name">The Interior · in-chair experience, re-book, memory</span><span class="idx-cat">Architectural</span><span class="idx-page">P.06</span></a>
+      <a href="#sheet-7" class="index-row"><span class="idx-code">E-07</span><span class="idx-name">The Wiring II · numbers that matter, dashboards</span><span class="idx-cat">Electrical</span><span class="idx-page">P.07</span></a>
+      <a href="#sheet-8" class="index-row"><span class="idx-code">A-08</span><span class="idx-name">The Exit · suite rental, the jump, the math</span><span class="idx-cat">Architectural</span><span class="idx-page">P.08</span></a>
+      <a href="#sheet-9" class="index-row"><span class="idx-code">O-09</span><span class="idx-name">The Program · three tiers, the offer</span><span class="idx-cat">Operations</span><span class="idx-page">P.09</span></a>
+      <a href="#sheet-10" class="index-row"><span class="idx-code">O-10</span><span class="idx-name">The Runway · 90-day content + launch sequence</span><span class="idx-cat">Operations</span><span class="idx-page">P.10</span></a>
+      <a href="#sheet-11" class="index-row"><span class="idx-code">O-11</span><span class="idx-name">The Compound · long-game economics + flywheel</span><span class="idx-cat">Operations</span><span class="idx-page">P.11</span></a>
+      <a href="#sheet-12" class="index-row"><span class="idx-code">O-12</span><span class="idx-name">The Permits · build spec for the next chat</span><span class="idx-cat">Handoff</span><span class="idx-page">P.12</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============== A-01 SITE PLAN ============== -->
+<section class="sheet" id="sheet-1">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET A-01</span> · DIAGNOSTIC · SITE PLAN</div>
+      <h2 class="sec-title">Where <span class="hand">most barbers</span><br/>get <span class="red">stuck.</span></h2>
+      <p class="sec-kicker">Before you build, look at the lot. Four traps account for 95% of barber career stagnation. Most operators die inside one of them and never see the road out. The blueprint begins with locating yours.</p>
+    </div>
+
+    <div class="dim">
+      <div class="dim-line"></div>
+      <div class="dim-num red">YOU ARE HERE</div>
+      <div class="dim-line"></div>
+    </div>
+
+    <div class="traps">
+      <div class="trap">
+        <div class="trap-id">ZONE 01</div>
+        <div class="trap-name">Booth Purgatory</div>
+        <div class="trap-desc">You rent a chair from someone whose name is on the door. You pay $200–400/wk for the privilege. They take walk-ins on slow days. Every Friday feels like rent day.</div>
+        <div class="trap-dim">Avg time stuck · 3–7 yrs</div>
+      </div>
+      <div class="trap">
+        <div class="trap-id">ZONE 02</div>
+        <div class="trap-name">The 60/40 Split</div>
+        <div class="trap-desc">You give the shop 40% of every ticket. They keep your clients on their system. The day you leave, the calendar leaves with them. Equity in someone else's brand.</div>
+        <div class="trap-dim">Avg time stuck · 4–10 yrs</div>
+      </div>
+      <div class="trap">
+        <div class="trap-id">ZONE 03</div>
+        <div class="trap-name">The Side Hustle Trap</div>
+        <div class="trap-desc">Cutting nights and weekends from your kitchen. No tax structure. No reviews. No upgrade ladder. The ceiling is hard and the income is grey.</div>
+        <div class="trap-dim">Avg time stuck · 2–5 yrs</div>
+      </div>
+      <div class="trap">
+        <div class="trap-id">ZONE 04</div>
+        <div class="trap-name">The Burnout Shop</div>
+        <div class="trap-desc">You bought into the volume game. 60 cuts a week at $35. No tier, no upsell, no Reserve service. The body breaks before the books do.</div>
+        <div class="trap-dim">Avg time stuck · 5–15 yrs</div>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 01">
+      <p>The exit out of every zone is the same gate: <strong>own your book, own your time, own your tier</strong>. The blueprint takes you to the gate. <em>You walk through it.</em></p>
+    </div>
+
+    <!-- Architectural illustration: 4-zone site plan -->
+    <div class="illustration" data-cap="Fig 01 · The four zones. Your current location marked in red. Exit gate, south face.">
+      <svg viewBox="0 0 800 380" class="sketch" style="max-width:760px">
+        <!-- outer site boundary -->
+        <rect x="20" y="20" width="760" height="340" fill="none" stroke="#f5f1e8" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+        <!-- 4 quadrants -->
+        <line x1="400" y1="20" x2="400" y2="360" stroke="#f5f1e8" stroke-width="1" opacity="0.6"/>
+        <line x1="20" y1="190" x2="780" y2="190" stroke="#f5f1e8" stroke-width="1" opacity="0.6"/>
+
+        <!-- Zone labels -->
+        <text x="210" y="60" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="22" letter-spacing="2" text-anchor="middle">ZONE 01</text>
+        <text x="210" y="80" fill="rgba(245,241,232,0.6)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle">BOOTH PURGATORY</text>
+
+        <text x="590" y="60" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="22" letter-spacing="2" text-anchor="middle">ZONE 02</text>
+        <text x="590" y="80" fill="rgba(245,241,232,0.6)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle">THE 60/40 SPLIT</text>
+
+        <text x="210" y="230" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="22" letter-spacing="2" text-anchor="middle">ZONE 03</text>
+        <text x="210" y="250" fill="rgba(245,241,232,0.6)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle">SIDE HUSTLE</text>
+
+        <text x="590" y="230" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="22" letter-spacing="2" text-anchor="middle">ZONE 04</text>
+        <text x="590" y="250" fill="rgba(245,241,232,0.6)" font-family="JetBrains Mono" font-size="10" letter-spacing="2" text-anchor="middle">BURNOUT</text>
+
+        <!-- chairs in each zone -->
+        <g stroke="#f5f1e8" stroke-width="1" fill="none" opacity="0.5">
+          <rect x="160" y="110" width="36" height="50" rx="4"/>
+          <rect x="220" y="110" width="36" height="50" rx="4"/>
+          <rect x="540" y="110" width="36" height="50" rx="4"/>
+          <rect x="600" y="110" width="36" height="50" rx="4"/>
+          <rect x="190" y="280" width="36" height="50" rx="4"/>
+          <rect x="570" y="280" width="36" height="50" rx="4"/>
+          <rect x="510" y="280" width="36" height="50" rx="4"/>
+          <rect x="630" y="280" width="36" height="50" rx="4"/>
+        </g>
+
+        <!-- "YOU ARE HERE" marker -->
+        <g>
+          <circle cx="240" cy="135" r="14" fill="none" stroke="#e84a3a" stroke-width="2"/>
+          <circle cx="240" cy="135" r="5" fill="#e84a3a"/>
+          <text x="240" y="100" fill="#e84a3a" font-family="Architects Daughter" font-size="14" text-anchor="middle">you are here</text>
+          <path d="M 240 105 L 240 119" stroke="#e84a3a" stroke-width="1.5" marker-end="url(#arrow)"/>
+        </g>
+
+        <!-- exit gate -->
+        <g>
+          <line x1="400" y1="360" x2="400" y2="375" stroke="#f4d35e" stroke-width="2" stroke-dasharray="2 2"/>
+          <polygon points="380,370 420,370 410,375 390,375" fill="#f4d35e"/>
+          <text x="400" y="378" fill="#f4d35e" font-family="JetBrains Mono" font-size="9" letter-spacing="2" text-anchor="middle" dy="14">EXIT GATE — OWN YOUR BOOK</text>
+        </g>
+
+        <!-- compass rose -->
+        <g transform="translate(740,330)">
+          <circle r="22" fill="none" stroke="#f5f1e8" stroke-width="1" opacity="0.5"/>
+          <line x1="0" y1="-22" x2="0" y2="22" stroke="#f5f1e8" stroke-width="0.5" opacity="0.5"/>
+          <line x1="-22" y1="0" x2="22" y2="0" stroke="#f5f1e8" stroke-width="0.5" opacity="0.5"/>
+          <text y="-12" fill="#f5f1e8" font-family="JetBrains Mono" font-size="9" text-anchor="middle" opacity="0.7">N</text>
+        </g>
+      </svg>
+    </div>
+
+    <span class="note">Most barbers don't realize they're in Zone 01. They think Zone 01 is the industry.</span>
+  </div>
+</section>
+
+<!-- ============== S-02 FOUNDATION ============== -->
+<section class="sheet" id="sheet-2">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET S-02</span> · STRUCTURAL · FOUNDATION</div>
+      <h2 class="sec-title">The <span class="red">foundation.</span><br/><span class="light">Mindset.</span> <span class="hand">Money. Identity.</span></h2>
+      <p class="sec-kicker">Skip this sheet and the whole building leans. The barbers who collapse at month 6 don't fail because the cuts got worse — they fail because the foundation was never poured. Three loads bear on this slab.</p>
+    </div>
+
+    <div class="exploded">
+      <div class="exploded-svg">
+        <svg viewBox="0 0 240 340" class="sketch" style="width:100%;height:auto">
+          <!-- Ground line -->
+          <line x1="0" y1="320" x2="240" y2="320" stroke="#f5f1e8" stroke-width="1.5"/>
+          <!-- Hatch under ground -->
+          <rect x="0" y="320" width="240" height="20" fill="url(#hatch)"/>
+          <!-- Foundation slab -->
+          <rect x="20" y="280" width="200" height="40" fill="none" stroke="#f5f1e8" stroke-width="1.5"/>
+          <line x1="20" y1="285" x2="220" y2="285" stroke="#f5f1e8" stroke-width="0.5" opacity="0.6"/>
+          <line x1="20" y1="290" x2="220" y2="290" stroke="#f5f1e8" stroke-width="0.5" opacity="0.4"/>
+          <!-- Walls -->
+          <rect x="40" y="180" width="160" height="100" fill="none" stroke="#f5f1e8" stroke-width="1.5"/>
+          <!-- Roof -->
+          <polygon points="40,180 120,120 200,180" fill="none" stroke="#f5f1e8" stroke-width="1.5"/>
+          <!-- Labels right -->
+          <text x="225" y="160" fill="#e84a3a" font-family="JetBrains Mono" font-size="9" letter-spacing="2">CRAFT</text>
+          <text x="225" y="235" fill="#f4d35e" font-family="JetBrains Mono" font-size="9" letter-spacing="2">SYSTEMS</text>
+          <text x="225" y="305" fill="#f5f1e8" font-family="JetBrains Mono" font-size="9" letter-spacing="2">FOUNDATION</text>
+          <!-- Arrows -->
+          <line x1="200" y1="240" x2="222" y2="232" stroke="#f4d35e" stroke-width="1"/>
+          <line x1="200" y1="160" x2="222" y2="157" stroke="#e84a3a" stroke-width="1"/>
+          <line x1="220" y1="300" x2="222" y2="302" stroke="#f5f1e8" stroke-width="1"/>
+          <!-- Foundation triple-layer detail -->
+          <text x="120" y="335" fill="#e84a3a" font-family="Architects Daughter" font-size="13" text-anchor="middle">3 load-bearing slabs</text>
+        </svg>
+        <div class="exploded-label" style="margin-top:14px;text-align:center">FIG. 02 · STRUCTURE — ELEVATION</div>
+      </div>
+      <div class="exploded-layers">
+        <div class="layer">
+          <div class="layer-num">01</div>
+          <div class="layer-body"><h4>The Money Identity</h4><p>You're a small business, not a service worker. Day 1 forms an LLC. Day 2 opens a business checking. Day 3 every dollar moves through it. CPA on retainer by month 3.</p></div>
+          <div class="layer-time">SLAB · BASE</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">02</div>
+          <div class="layer-body"><h4>The Two Ledgers</h4><p>Client book = the asset that travels with you. Business book = the asset that buys you out. Most barbers track neither. You'll track both, weekly, with one A4 sheet.</p></div>
+          <div class="layer-time">SLAB · MID</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">03</div>
+          <div class="layer-body"><h4>The Hourly Truth</h4><p>What you charge per cut means nothing without what you earn per hour. Real math: ticket × cuts per day × days per week ÷ working hours = your real wage. Floor: $80/hr. Goal: $150/hr.</p></div>
+          <div class="layer-time">SLAB · TOP</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">04</div>
+          <div class="layer-body"><h4>The Time Block</h4><p>A booked chair is a profit center. An empty chair is rent. Calendars are the difference. Default cadence: 45-min Authentic, 60-min Hero, 75-min Reserve. Buffer: 10 min.</p></div>
+          <div class="layer-time">FOOTING</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">05</div>
+          <div class="layer-body"><h4>The Identity Lock</h4><p>You don't sell haircuts. You sell what someone feels walking out the door. Decide the feeling first. The rest of the blueprint is in service of it.</p></div>
+          <div class="layer-time">REBAR · WHOLE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 02">
+      <p>This sheet is non-negotiable. <em>You can have the sharpest line in the city and still go broke at the end of the month</em> if the foundation cracks. Money identity → ledger discipline → hourly truth → time block → identity lock. In that order.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== S-03 FRAMING ============== -->
+<section class="sheet" id="sheet-3">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET S-03</span> · STRUCTURAL · FRAMING</div>
+      <h2 class="sec-title">The <span class="red">framing.</span><br/>Craft is the <span class="hand">load-bearing wall.</span></h2>
+      <p class="sec-kicker">If the foundation is identity, the framing is craft. Eight skill stations every Level-Up operator practices weekly. This isn't a beginner curriculum — it's the deliberate-practice protocol that separates a $65 cut from a $200 one.</p>
+    </div>
+
+    <div class="curriculum">
+      <div class="curr-head"><span>Code</span><span>Station</span><span>What you build</span><span>Weekly</span><span>Mastery</span></div>
+      <div class="curr-row">
+        <div class="curr-num">01</div>
+        <div class="curr-name">The Lineup Drill</div>
+        <div class="curr-desc">Trace + freehand lines on 5 different head shapes. Measured straightness, parallel ear-to-ear, fade-up symmetry.</div>
+        <div class="curr-meta">120 MIN</div>
+        <div class="curr-meta red">90 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">02</div>
+        <div class="curr-name">Mid-Skin Fade</div>
+        <div class="curr-desc">Blade-over-comb to skin without trenches. 5 textures: coarse, fine, mixed, gray, thinning.</div>
+        <div class="curr-meta">90 MIN</div>
+        <div class="curr-meta red">120 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">03</div>
+        <div class="curr-name">Beard Sculpt</div>
+        <div class="curr-desc">Jaw symmetry, neckline, cheek line. 3 face shapes drilled per session. Hot-towel sequencing.</div>
+        <div class="curr-meta">90 MIN</div>
+        <div class="curr-meta red">90 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">04</div>
+        <div class="curr-name">Scissor-Over-Comb</div>
+        <div class="curr-desc">The premium-tier upgrade lever. Top work that justifies the $100+ ticket. Tension, finger angle, blunt vs point.</div>
+        <div class="curr-meta">120 MIN</div>
+        <div class="curr-meta red">180 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">05</div>
+        <div class="curr-name">Texture Read</div>
+        <div class="curr-desc">In 90 seconds at the shampoo bowl, name density, porosity, growth pattern, scalp condition. Diagnoses the cut.</div>
+        <div class="curr-meta">60 MIN</div>
+        <div class="curr-meta red">240 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">06</div>
+        <div class="curr-name">Chair Conversation</div>
+        <div class="curr-desc">Five-question consultation that earns the upcharge before the cape goes on. Reads situation, mood, goal, anchor, return.</div>
+        <div class="curr-meta">30 MIN</div>
+        <div class="curr-meta red">90 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">07</div>
+        <div class="curr-name">Product Application</div>
+        <div class="curr-desc">3 finishes for 3 hair types. Pomade, cream, oil. The 30-second take-home product pitch that doesn't feel like one.</div>
+        <div class="curr-meta">45 MIN</div>
+        <div class="curr-meta red">60 DAYS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">08</div>
+        <div class="curr-name">The Photo</div>
+        <div class="curr-desc">3 angles, consistent light, branded backdrop. Sent to client in 60 sec. Posted by Sunday. Auto-pipeline into IG.</div>
+        <div class="curr-meta">15 MIN</div>
+        <div class="curr-meta red">30 DAYS</div>
+      </div>
+    </div>
+
+    <span class="note">8 stations × 9 weeks = the operator-tier barber. Not a 10-year apprenticeship — a 90-day deliberate-practice sprint with a checklist.</span>
+  </div>
+</section>
+
+<!-- ============== Pull Quote ============== -->
+<div class="wrap">
+  <div class="pull-quote">
+    <q>The barbers who break out aren't the ones with the cleanest fade. They're the ones who treat the chair like a small business — and the small business like a system.</q>
+    <div class="attr">— Thesis · The Level-Up · K. Townes · 2026</div>
+  </div>
+</div>
+
+<!-- ============== M-04 WIRING ============== -->
+<section class="sheet" id="sheet-4">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET M-04</span> · MECHANICAL · WIRING</div>
+      <h2 class="sec-title">The <span class="red">wiring.</span><br/>Systems that run while <span class="hand">you sleep.</span></h2>
+      <p class="sec-kicker">Six automation circuits every Level-Up chair runs. Set up once. They earn the upcharge, fill the slot, recover the no-show, ask for the review. The barber who has these doesn't work harder — they work later in the funnel.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Circuit 01 · BOOK</div>
+        <div class="stat-num">24/7</div>
+        <div class="stat-note">Online booking — kills the "text me to book" friction. Lifts conversion 40%.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 02 · CONFIRM</div>
+        <div class="stat-num">T-24h</div>
+        <div class="stat-note">Auto SMS + email at T-24h. No-shows drop from ~25% to &lt;5%.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 03 · ARRIVE</div>
+        <div class="stat-num">T-1h</div>
+        <div class="stat-note">Day-of SMS with parking, door code, beverage prompt. Premium signal.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 04 · REBOOK</div>
+        <div class="stat-num red">IN-CHAIR</div>
+        <div class="stat-note">Next slot offered before the cape comes off. Loyalty becomes habit, not hope.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 05 · REVIEW</div>
+        <div class="stat-num">T+24h</div>
+        <div class="stat-note">Auto review request 24h after the cut. One-tap Google link. The flywheel starts here.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 06 · RE-ENGAGE</div>
+        <div class="stat-num yellow">D+35</div>
+        <div class="stat-note">Lapsed-client SMS when 35 days pass without a booking. Recovers ~20% of drift.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 07 · REFER</div>
+        <div class="stat-num">3×</div>
+        <div class="stat-note">Each new client = referral code worth $20/$40/free at 1/2/3 referrals. Viral coefficient &gt; 1.</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Circuit 08 · MEMORY</div>
+        <div class="stat-num red">∞</div>
+        <div class="stat-note">Profile note per client. "Two on top, faded sides, no oil." The memory IS the luxury.</div>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 04">
+      <p>The Khyree City booking app at <strong>book.khyreecity.com</strong> already has Circuits 01, 02, 04, 05, 08 live as of v13. Circuit 06 + 07 ship in v14. <em>This is the platform we open up to Level-Up Tier 1 members in Phase 2 — branded sub-pages, same circuits, $50/mo.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== A-05 FACADE ============== -->
+<section class="sheet" id="sheet-5">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET A-05</span> · ARCHITECTURAL · FACADE</div>
+      <h2 class="sec-title">The <span class="red">facade.</span><br/><span class="light">What the world</span> <span class="hand">sees first.</span></h2>
+      <p class="sec-kicker">90% of barbers post their work. 5% post strategically. The 5% are the ones with full calendars. Below: the 7-post weekly content frame, the 3-photo grid system, and the positioning ladder that gets a stranger to book before the conversation starts.</p>
+    </div>
+
+    <div class="calendar">
+      <div class="cal-head">MON</div>
+      <div class="cal-head">TUE</div>
+      <div class="cal-head">WED</div>
+      <div class="cal-head">THU</div>
+      <div class="cal-head">FRI</div>
+      <div class="cal-head">SAT</div>
+      <div class="cal-head">SUN</div>
+
+      <div class="cal-cell">
+        <div class="cal-day">MONDAY</div>
+        <div class="cal-tag reel">REEL · Transformation</div>
+        <div class="cal-tag story">3× Stories</div>
+        <div class="cal-note">Before/after with hook in first 1.2s</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">TUESDAY</div>
+        <div class="cal-tag story">5× Stories</div>
+        <div class="cal-note">Behind chair · client mid-cut · ask a Q</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">WEDNESDAY</div>
+        <div class="cal-tag carousel">Carousel · Tip</div>
+        <div class="cal-tag story">3× Stories</div>
+        <div class="cal-note">Educational. "3 things every fade should have."</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">THURSDAY</div>
+        <div class="cal-tag reel">REEL · Talking head</div>
+        <div class="cal-tag story">5× Stories</div>
+        <div class="cal-note">Story + lesson. 30s max. Hook + payoff.</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">FRIDAY</div>
+        <div class="cal-tag carousel">Carousel · Portfolio</div>
+        <div class="cal-tag email">Email blast</div>
+        <div class="cal-note">3 of this week's best cuts. Slot openings.</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">SATURDAY</div>
+        <div class="cal-tag story">8× Stories</div>
+        <div class="cal-note">Live-day energy. Polls. Booked clients showcased.</div>
+      </div>
+      <div class="cal-cell">
+        <div class="cal-day">SUNDAY</div>
+        <div class="cal-tag reel">REEL · Reflection</div>
+        <div class="cal-tag email">Newsletter</div>
+        <div class="cal-note">Long-form. The week, the lesson, the offer.</div>
+      </div>
+    </div>
+
+    <span class="note">7 posts/week. 3 reels. 2 carousels. 30+ stories. Auto-pipeline from in-chair photos → Buffer → IG. The chair feeds the feed feeds the chair.</span>
+
+    <div class="exploded" style="margin-top:64px">
+      <div class="exploded-svg">
+        <svg viewBox="0 0 240 240" class="sketch" style="width:100%;height:auto">
+          <!-- 3x3 grid of IG posts -->
+          <g stroke="#f5f1e8" stroke-width="1" fill="rgba(245,241,232,0.05)">
+            <rect x="20" y="20" width="60" height="60"/>
+            <rect x="90" y="20" width="60" height="60"/>
+            <rect x="160" y="20" width="60" height="60"/>
+            <rect x="20" y="90" width="60" height="60"/>
+            <rect x="90" y="90" width="60" height="60"/>
+            <rect x="160" y="90" width="60" height="60"/>
+            <rect x="20" y="160" width="60" height="60"/>
+            <rect x="90" y="160" width="60" height="60"/>
+            <rect x="160" y="160" width="60" height="60"/>
+          </g>
+          <!-- A pattern: A=cut, B=lesson, C=story -->
+          <g font-family="Antonio" font-weight="700" font-size="22" text-anchor="middle" fill="#e84a3a">
+            <text x="50" y="58">A</text>
+            <text x="180" y="58">A</text>
+            <text x="120" y="128">A</text>
+          </g>
+          <g font-family="Antonio" font-weight="700" font-size="22" text-anchor="middle" fill="#f4d35e">
+            <text x="120" y="58">B</text>
+            <text x="50" y="128">B</text>
+            <text x="180" y="128">B</text>
+          </g>
+          <g font-family="Antonio" font-weight="700" font-size="22" text-anchor="middle" fill="#f5f1e8">
+            <text x="50" y="198">C</text>
+            <text x="120" y="198">C</text>
+            <text x="180" y="198">C</text>
+          </g>
+        </svg>
+        <div class="exploded-label" style="margin-top:14px;text-align:center">FIG. 05 · THE 3-A / 3-B / 3-C GRID</div>
+      </div>
+      <div class="exploded-layers">
+        <div class="layer">
+          <div class="layer-num">A</div>
+          <div class="layer-body"><h4>Work · Cut Photography</h4><p>Same backdrop. Same light. Same angle. Three positions per cut. The portfolio reads as one body of work, not a scrapbook.</p></div>
+          <div class="layer-time">3 / 9 TILES</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">B</div>
+          <div class="layer-body"><h4>Lesson · Authority Content</h4><p>One frame, three slides max. "How to tell a barber knows what they're doing." Educates the audience that ISN'T a barber yet.</p></div>
+          <div class="layer-time">3 / 9 TILES</div>
+        </div>
+        <div class="layer">
+          <div class="layer-num">C</div>
+          <div class="layer-body"><h4>Character · Story</h4><p>You in motion. Behind the chair. With the kids. With the family. The 4-gen lineage. The thing competitors can't copy.</p></div>
+          <div class="layer-time">3 / 9 TILES</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== A-06 INTERIOR ============== -->
+<section class="sheet" id="sheet-6">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET A-06</span> · ARCHITECTURAL · INTERIOR</div>
+      <h2 class="sec-title">The <span class="red">interior.</span><br/><span class="light">What happens</span> <span class="hand">in the chair.</span></h2>
+      <p class="sec-kicker">The cut takes 45 minutes. The experience defines whether they tell three people or thirty. Below: the 7-stage chair ceremony, mapped minute-by-minute. This is the manufacturing process for word-of-mouth.</p>
+    </div>
+
+    <div class="curriculum">
+      <div class="curr-head"><span>T</span><span>Stage</span><span>What you do</span><span>Cost</span><span>Lift</span></div>
+      <div class="curr-row">
+        <div class="curr-num">−5</div>
+        <div class="curr-name">The Arrival</div>
+        <div class="curr-desc">Client walks in. Greeted by name. Water + cold towel offered before they sit. Pattern interrupt vs every other shop.</div>
+        <div class="curr-meta">$0.30</div>
+        <div class="curr-meta red">REFERRAL +1</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+0</div>
+        <div class="curr-name">The Consultation</div>
+        <div class="curr-desc">5 questions before the cape. Goal, anchor, return date, hair concern, mood. Earns the upcharge.</div>
+        <div class="curr-meta">5 MIN</div>
+        <div class="curr-meta red">+$15 AVG</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+5</div>
+        <div class="curr-name">The Cut</div>
+        <div class="curr-desc">Music dialed. Phone face-down. The craft. No interruptions. They feel the focus.</div>
+        <div class="curr-meta">30 MIN</div>
+        <div class="curr-meta red">CRAFT</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+35</div>
+        <div class="curr-name">The Finish</div>
+        <div class="curr-desc">Hot towel + facial massage + scalp finish. 90 seconds. Costs nothing extra. Feels like $50.</div>
+        <div class="curr-meta">$0.20</div>
+        <div class="curr-meta red">+$15 TIP</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+38</div>
+        <div class="curr-name">The Photo</div>
+        <div class="curr-desc">3 angles, branded backdrop. Texted to client within 60 sec. They post it. Free marketing forever.</div>
+        <div class="curr-meta">2 MIN</div>
+        <div class="curr-meta red">FREE REACH</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+40</div>
+        <div class="curr-name">The Re-book</div>
+        <div class="curr-desc">"Same time, 4 weeks?" Phone open to your calendar. One tap. Locked. Don't let them leave the chair without it.</div>
+        <div class="curr-meta">90 SEC</div>
+        <div class="curr-meta red">RETENTION +60%</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">+42</div>
+        <div class="curr-name">The Send-off</div>
+        <div class="curr-desc">Walk them to the door. Hand them a card with the photo + their next appointment. Branded mint. Final touch.</div>
+        <div class="curr-meta">$0.50</div>
+        <div class="curr-meta red">WOM</div>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 06">
+      <p>Total added cost per cut: under <strong>$1.50</strong>. Total added time: under <strong>5 minutes</strong>. Net effect on tip, re-book rate, and word-of-mouth referral: <em>3× over 12 months</em>. The interior is the cheapest revenue lever you'll ever pull.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== O-09 PROGRAM ============== -->
+<section class="sheet" id="sheet-9">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET O-09</span> · OPERATIONS · THE PROGRAM</div>
+      <h2 class="sec-title">The <span class="red">offer.</span><br/>Three doors, <span class="hand">one building.</span></h2>
+      <p class="sec-kicker">The Level-Up is a three-tier ladder. Free at the top of the funnel. Paid community in the middle. Suite at Cut Creaters at the top. Each tier is a real product with real value — not a tease, not a wait-list. Built to compound.</p>
+    </div>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-id">TIER 00 · ENTRY</div>
+        <div class="tier-name">The <span class="red">Field Notes</span></div>
+        <div class="tier-tag">free · the funnel mouth</div>
+        <div class="tier-price">$0<span class="unit">/mo</span></div>
+        <p class="tier-positioning">For barbers stuck in Zone 01–04 who want to see what a real operator's playbook looks like. The blueprint, in public.</p>
+        <ul class="tier-list">
+          <li>Weekly newsletter · 1 lesson, 1 number, 1 story</li>
+          <li>Daily IG content @khyree_city · 7 posts/wk</li>
+          <li>Open Sunday reflection reel · long-form</li>
+          <li>Free PDF · "The 8-Station Drill"</li>
+          <li class="no">Private community access</li>
+          <li class="no">Monthly Zoom coaching</li>
+          <li class="no">Suite priority list</li>
+        </ul>
+        <button class="tier-cta">SUBSCRIBE FREE</button>
+      </div>
+
+      <div class="tier featured">
+        <div class="tier-id">TIER 01 · OPERATOR</div>
+        <div class="tier-name">The <span class="red">Level-Up</span></div>
+        <div class="tier-tag">recurring · the core product</div>
+        <div class="tier-price">$47<span class="unit">/mo</span></div>
+        <p class="tier-positioning">For working barbers ready to systematize. Full 12-sheet curriculum, the booking platform, a private community of operators, monthly Zoom.</p>
+        <ul class="tier-list">
+          <li>Full 12-sheet blueprint · video + PDF</li>
+          <li><b>White-label booking page</b> · cuts.khyreecity.com/[handle]</li>
+          <li>All 8 automation circuits ready-to-deploy</li>
+          <li>Private community · 200 operators max per cohort</li>
+          <li>Monthly Zoom · 90 min · Khyree-led, recorded</li>
+          <li>Quarterly portfolio review · 1 cut critiqued</li>
+          <li class="no">Cut Creaters suite priority</li>
+        </ul>
+        <button class="tier-cta">JOIN THE LEVEL-UP</button>
+      </div>
+
+      <div class="tier">
+        <div class="tier-id">TIER 02 · TENANT</div>
+        <div class="tier-name">The <span class="red">Suite</span></div>
+        <div class="tier-tag">flagship · the empire seat</div>
+        <div class="tier-price">$1,475<span class="unit">/mo starting</span></div>
+        <p class="tier-positioning">For Level-Up members ready to leave booth rental for good. A real suite at Cut Creaters in Decatur. The blueprint becomes the building.</p>
+        <ul class="tier-list">
+          <li>Private suite · 200–280 sq ft · your keys</li>
+          <li>Everything in Tier 01, included</li>
+          <li>Tour priority · skip the public list</li>
+          <li>First-month rent free · Level-Up members only</li>
+          <li>Onboarding cohort · 3 tenants/quarter</li>
+          <li>Co-marketing with @khyree_city · feature reel</li>
+          <li>30-year-old building · 4-gen barber lineage</li>
+        </ul>
+        <button class="tier-cta">BOOK A TOUR</button>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 09">
+      <p>Tier 01 is the engine. It's the recurring-revenue base AND the qualified pipeline for Tier 02 (suites). Every Operator member is a future suite tenant — and the ones who never move to Atlanta are still paying $47/mo for the platform. <em>The math compounds either way.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== O-11 ECONOMICS ============== -->
+<section class="sheet" id="sheet-11">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET O-11</span> · OPERATIONS · THE COMPOUND</div>
+      <h2 class="sec-title">The <span class="red">compound.</span><br/><span class="light">12 months</span> <span class="hand">of math.</span></h2>
+      <p class="sec-kicker">Conservative model. 111K IG audience. 0.5% conversion to free Tier 00 over 12 months = 555 emails. 8% of those upgrade to Tier 01 ($47/mo) = 44 paying members. 6% of Tier 01 convert to a Cut Creaters suite = 3 new tenants. Plus haircut revenue from Khyree's chair. The numbers below are the floor, not the ceiling.</p>
+    </div>
+
+    <div class="economics">
+      <div class="econ-head">
+        <h3>Revenue model · Year 1</h3>
+        <div class="scale">Conservative assumptions · No paid ads · IG organic only</div>
+      </div>
+      <div class="econ-grid">
+        <div class="econ-cell">
+          <div class="econ-month">Month 03</div>
+          <div class="econ-val">$1.4K</div>
+          <div class="econ-detail">30 Tier 01 members<br/>0 new suites · ramp phase</div>
+        </div>
+        <div class="econ-cell">
+          <div class="econ-month">Month 06</div>
+          <div class="econ-val yellow">$5.6K</div>
+          <div class="econ-detail">80 Tier 01 + 1 new suite<br/>Cohort 1 onboarded</div>
+        </div>
+        <div class="econ-cell">
+          <div class="econ-month">Month 09</div>
+          <div class="econ-val yellow">$11.8K</div>
+          <div class="econ-detail">160 Tier 01 + 3 new suites<br/>Word-of-mouth flywheel active</div>
+        </div>
+        <div class="econ-cell">
+          <div class="econ-month">Month 12</div>
+          <div class="econ-val red">$22.4K</div>
+          <div class="econ-detail">280 Tier 01 + 6 new suites<br/>Yearly run-rate · $269K</div>
+        </div>
+      </div>
+
+      <div class="dim" style="margin-top:32px">
+        <div class="dim-line"></div>
+        <div class="dim-num red">+ $269K ARR FROM THE PROGRAM ALONE</div>
+        <div class="dim-line"></div>
+      </div>
+
+      <div class="callout" data-num="NOTE 11" style="margin-top:32px">
+        <p>This <strong>does not include</strong> Khyree's haircut revenue (~$23K/mo at full chair). It <strong>does not include</strong> suite-rental revenue from non-program tenants (~$108K/mo at Phase 1 target). It <strong>does not include</strong> Phase 2 platform SaaS to other operator buildings.</p>
+        <p><em>This is just The Level-Up's revenue. The program is the moat, the magnet, and the meaning. Everything else is upside.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== Compass (Offer architecture) ============== -->
+<section class="sheet" id="sheet-flywheel">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET O-11.5</span> · OPERATIONS · THE FLYWHEEL</div>
+      <h2 class="sec-title">The <span class="red">flywheel.</span><br/><span class="light">Every door</span> <span class="hand">feeds the next.</span></h2>
+      <p class="sec-kicker">The Level-Up isn't four businesses — it's one system where every component compounds the others. Free content feeds the program. Program feeds the suites. Suites feed the content. Content fills the chair. The chair builds the brand. Brand grows the audience. Repeat.</p>
+    </div>
+
+    <div class="compass-wrap">
+      <div class="compass">
+        <svg viewBox="0 0 400 400" class="compass-svg sketch">
+          <!-- outer ring -->
+          <circle cx="200" cy="200" r="180" fill="none" stroke="#f5f1e8" stroke-width="1" opacity="0.4"/>
+          <circle cx="200" cy="200" r="150" fill="none" stroke="#f5f1e8" stroke-width="1" stroke-dasharray="4 4" opacity="0.3"/>
+          <circle cx="200" cy="200" r="120" fill="none" stroke="#f5f1e8" stroke-width="0.5" opacity="0.25"/>
+
+          <!-- cardinal labels -->
+          <text x="200" y="40" fill="#e84a3a" font-family="Antonio" font-weight="700" font-size="14" text-anchor="middle" letter-spacing="3">CONTENT</text>
+          <text x="365" y="206" fill="#f4d35e" font-family="Antonio" font-weight="700" font-size="14" text-anchor="start" letter-spacing="3">PROGRAM</text>
+          <text x="200" y="380" fill="#e84a3a" font-family="Antonio" font-weight="700" font-size="14" text-anchor="middle" letter-spacing="3">SUITES</text>
+          <text x="35" y="206" fill="#f4d35e" font-family="Antonio" font-weight="700" font-size="14" text-anchor="end" letter-spacing="3">CHAIR</text>
+
+          <!-- arrows around the wheel -->
+          <path d="M 280 80 A 160 160 0 0 1 320 280" fill="none" stroke="#f4d35e" stroke-width="2" marker-end="url(#a1)" opacity="0.7"/>
+          <path d="M 280 320 A 160 160 0 0 1 80 280" fill="none" stroke="#e84a3a" stroke-width="2" marker-end="url(#a1)" opacity="0.7"/>
+          <path d="M 120 320 A 160 160 0 0 1 80 120" fill="none" stroke="#f4d35e" stroke-width="2" marker-end="url(#a1)" opacity="0.7"/>
+          <path d="M 120 80 A 160 160 0 0 1 320 120" fill="none" stroke="#e84a3a" stroke-width="2" marker-end="url(#a1)" opacity="0.7"/>
+
+          <defs>
+            <marker id="a1" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker>
+          </defs>
+
+          <!-- center -->
+          <circle cx="200" cy="200" r="40" fill="none" stroke="#f5f1e8" stroke-width="1.5"/>
+          <text x="200" y="195" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="14" text-anchor="middle" letter-spacing="2">LEVEL-</text>
+          <text x="200" y="213" fill="#f5f1e8" font-family="Antonio" font-weight="700" font-size="14" text-anchor="middle" letter-spacing="2">UP</text>
+
+          <!-- inner ticks -->
+          <g stroke="#f5f1e8" stroke-width="1" opacity="0.5">
+            <line x1="200" y1="20" x2="200" y2="35"/>
+            <line x1="200" y1="365" x2="200" y2="380"/>
+            <line x1="20" y1="200" x2="35" y2="200"/>
+            <line x1="365" y1="200" x2="380" y2="200"/>
+          </g>
+
+          <!-- numbers -->
+          <text x="280" y="95" fill="#f5f1e8" font-family="Architects Daughter" font-size="11" opacity="0.8">+audience</text>
+          <text x="290" y="305" fill="#f5f1e8" font-family="Architects Daughter" font-size="11" opacity="0.8">+tenants</text>
+          <text x="80" y="305" fill="#f5f1e8" font-family="Architects Daughter" font-size="11" opacity="0.8">+content</text>
+          <text x="100" y="100" fill="#f5f1e8" font-family="Architects Daughter" font-size="11" opacity="0.8">+revenue</text>
+        </svg>
+      </div>
+
+      <div class="compass-readout">
+        <h4>Read the wheel ↻</h4>
+        <ul>
+          <li><span>CONTENT → PROGRAM</span><span>+44 paid/yr</span></li>
+          <li><span>PROGRAM → SUITES</span><span>+6 tenants/yr</span></li>
+          <li><span>SUITES → CHAIR</span><span>+30% spillover</span></li>
+          <li><span>CHAIR → CONTENT</span><span>+7 posts/wk</span></li>
+          <li><span>CONTENT → CHAIR</span><span>+12 cuts/wk</span></li>
+          <li><span>SUITES → CONTENT</span><span>+12 tenant features</span></li>
+          <li><span>CHAIR → PROGRAM</span><span>+8 referrals/yr</span></li>
+          <li><span>PROGRAM → CONTENT</span><span>+50 testimonials</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== O-10 RUNWAY ============== -->
+<section class="sheet" id="sheet-10">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET O-10</span> · OPERATIONS · RUNWAY</div>
+      <h2 class="sec-title">The <span class="red">runway.</span><br/><span class="light">90 days</span> <span class="hand">to ignition.</span></h2>
+      <p class="sec-kicker">Three 30-day phases. Each ends with a measurable proof point. No shipping the program until the audience is warmed. No charging until the value is shown. The runway is the patience tax that every barber-mentor program skips — and pays for in churn.</p>
+    </div>
+
+    <div class="curriculum">
+      <div class="curr-head"><span>Phase</span><span>Sprint</span><span>Goal</span><span>Outcome</span><span>Proof</span></div>
+      <div class="curr-row">
+        <div class="curr-num">01</div>
+        <div class="curr-name">Days 1–30 · The Beacon</div>
+        <div class="curr-desc">7 posts/wk on @khyree_city. 4 free PDFs released weekly. Sunday newsletter starts. Tier 00 list-building only — no Tier 01 pitch yet.</div>
+        <div class="curr-meta">SIGNAL</div>
+        <div class="curr-meta red">1,500 EMAILS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">02</div>
+        <div class="curr-name">Days 31–60 · The Build</div>
+        <div class="curr-desc">Tier 01 platform built (white-label booking page + community + Zoom infrastructure). 4 deep-dive reels per week showing the curriculum. Soft-launch to email list at $37/mo founding rate.</div>
+        <div class="curr-meta">PRODUCT</div>
+        <div class="curr-meta red">50 PAID MEMBERS</div>
+      </div>
+      <div class="curr-row">
+        <div class="curr-num">03</div>
+        <div class="curr-name">Days 61–90 · The Open</div>
+        <div class="curr-desc">Public launch at $47/mo. Founding members get permanent $37 rate. First Cohort closes at 100 members. Suite-tour pipeline opens to all Tier 01 members.</div>
+        <div class="curr-meta">REVENUE</div>
+        <div class="curr-meta red">$4.7K MRR</div>
+      </div>
+    </div>
+
+    <div class="callout" data-num="NOTE 10">
+      <p>This sequencing protects the brand. <em>Most barber-mentor programs launch before they have authority</em>. They charge before they teach. They pitch before they earn the right to. The 90-day runway flips it: teach in public for 30 days, build for 30, charge in 30. By day 90 you have a product, an audience, and a tenant pipeline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== O-12 BUILD SPEC ============== -->
+<section class="sheet" id="sheet-12">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sheet-code"><span class="red">SHEET O-12</span> · OPERATIONS · HANDOFF</div>
+      <h2 class="sec-title">The <span class="red">permits.</span><br/><span class="light">Hand this</span> <span class="hand">to the build chat.</span></h2>
+      <p class="sec-kicker">Copy the block below into your build chat. Self-contained brief — entity schemas, routes, automations, copy frames, acceptance criteria. Phase 1 (Tier 00 funnel + Tier 01 MVP) ships from this spec.</p>
+    </div>
+
+    <div class="spec">
+      <div class="spec-head">
+        <h4>The Level-Up · Phase 1 Build Spec</h4>
+        <button class="spec-copy" id="copyBtn" onclick="copySpec()">Copy Spec</button>
+      </div>
+      <div class="spec-body" id="specBody">PROJECT
+The Level-Up — Khyree's barber mentorship + community + suite-pipeline program. Three tiers (Tier 00 free, Tier 01 $47/mo, Tier 02 = Cut Creaters suite). This spec covers Tier 00 + Tier 01 MVP. Tier 02 is the existing Suite Tour funnel (see suite-funnel-strategy.html, separate doc).
+
+STRATEGIC FRAME
+- The Level-Up is the magnet AND the moat. Free content feeds Tier 00 list. Tier 00 converts ~8% to Tier 01 over 90 days. Tier 01 converts ~6% to Cut Creaters suites.
+- DO NOT bundle this build with the suite-tour funnel. The suite-tour funnel ships first (1 week). This program ships second (3 weeks).
+- ONE active build at a time. Confirm suite-tour funnel is shipped before starting this.
+
+NEW ROUTES (on book.khyreecity.com or new subdomain levelup.khyreecity.com)
+- /level-up — landing page. Three tiers. CTA per tier.
+- /level-up/join — Tier 01 checkout. Stripe via locked stack OR Square subscriptions.
+- /level-up/member — gated member area. Auth via existing Khyree City account system.
+- /level-up/admin — Khyree's program dashboard (gated under existing admin PIN).
+
+NEW BASE44 ENTITIES
+1. ProgramMember
+   - user_id (link to existing User entity)
+   - tier (enum: free, operator, tenant)
+   - founding (boolean, true for first 50 paid)
+   - subscribed_at (datetime)
+   - cohort (string, e.g. "Q3-2026")
+   - status (enum: active, paused, cancelled)
+   - portfolio_url (string, optional)
+   - current_shop (string)
+   - weekly_clients (number)
+
+2. Lesson
+   - sheet_code (string, e.g. "S-02")
+   - title (string)
+   - body (markdown)
+   - video_url (string, optional)
+   - pdf_url (string, optional)
+   - tier_required (enum: free, operator)
+   - published_at (datetime)
+   - order (number)
+
+3. CommunityPost (Tier 01 only)
+   - member_id (ref ProgramMember)
+   - body (text)
+   - photo_url (string, optional, e.g. portfolio review)
+   - kind (enum: question, wins, review_request, intro)
+   - created_at (datetime)
+   - reply_count (number)
+
+4. CommunityReply
+   - post_id (ref CommunityPost)
+   - member_id (ref ProgramMember)
+   - body (text)
+   - created_at (datetime)
+
+5. ZoomEvent (monthly call)
+   - title (string)
+   - scheduled_at (datetime)
+   - zoom_url (string)
+   - recording_url (string, post-event)
+   - tier_required (enum: operator)
+
+PAGES — /level-up landing
+- Hero: "The Level-Up — A Blueprint for the Independent Barber"
+- Subhead: "12 sheets. Built by a 4th-gen barber. For operators who want their own four walls."
+- 3-tier comparison grid (matches the artifact above)
+- Free signup form at top of funnel: email + IG handle + current shop
+- Authority block: lineage, 111K IG, Cut Creaters legacy
+- Sample lesson preview (1 free PDF gated by email)
+- Testimonial slot: empty for now. Fill as Tier 01 grows.
+- Founding 50 counter: "X of 50 founding spots remaining"
+
+PAGES — /level-up/member (gated)
+- Curriculum hub: all 12 sheets accessible if tier=operator
+- Community feed (Tier 01 only): list of CommunityPost, sortable by recent/wins/questions
+- Upcoming Zoom card (next ZoomEvent)
+- Profile: portfolio URL, intake, cohort badge
+- Logout
+
+PAGES — /level-up/admin
+- Member list with tier, subscribed_at, status, churn risk score
+- MRR / member count / cohort tracker
+- Lesson publish queue (new Lesson)
+- Zoom event scheduler
+- Cohort cohort_q3_2026 view: progress on each member
+
+AUTOMATIONS (Zoho Campaigns workflows)
+1. Tier 00 signup → "Welcome to The Field Notes" email + drip:
+   - Day 0: Welcome + first lesson PDF
+   - Day 3: Sheet A-01 (The Site Plan) preview
+   - Day 7: Sheet S-02 (The Foundation) preview
+   - Day 14: Soft pitch — "Ready for the full blueprint?"
+   - Day 21: Founding 50 urgency
+   - Day 30: Last call — founding rate ending
+
+2. Tier 01 signup → "Welcome to The Level-Up" + onboarding:
+   - Day 0: Welcome + community access link + Zoom calendar
+   - Day 1: Sheet A-01 full video drop
+   - Day 7: Cohort intro thread in community
+   - Day 14: Monthly Zoom reminder
+   - Day 30: Portfolio review opens
+
+3. Tier 01 → Tier 02 nurture (suite interest):
+   - Trigger: member portfolio review hits "ready to leave booth" tag
+   - Action: Khyree gets manual prompt + lead handed to existing Suite Tour funnel
+
+COPY (locked)
+Hero H1: "The Level-Up"
+Hero subhead: "A Blueprint for the Independent Barber. 12 sheets, drawn by a 4th-gen barber for the operator who's done renting somebody else's chair."
+Tier 00 CTA: "Subscribe Free"
+Tier 01 CTA: "Join The Level-Up · $47/mo"
+Tier 01 founding rate CTA: "Lock $37/mo · Founding 50"
+Tier 02 CTA: "Book a Suite Tour"
+
+ACCEPTANCE CRITERIA
+- A new visitor can join Tier 00 in under 30 seconds
+- A Tier 00 member can upgrade to Tier 01 in one checkout flow
+- Tier 01 member sees the gated curriculum immediately after payment
+- Community feed renders for Tier 01 members only
+- Monthly Zoom event auto-syncs to member calendars (.ics)
+- Admin can see MRR, member count, churn risk in one dashboard
+- All payments via locked Square subscription product (no new tools)
+- Cancellation: one-click in member area, no email gymnastics
+
+OUT OF SCOPE — Phase 2 (do later)
+- White-label booking page for each Tier 01 member at cuts.khyreecity.com/[handle]
+- Course-style video player with progress tracking
+- Cohort-based onboarding waves (Q3, Q4 etc.)
+- Affiliate program for members who refer
+- Mobile app version (Capacitor wrap)
+
+CONFIRM SCOPE. THEN BUILD PHASE 1 ONLY (landing + checkout + member area + admin). STOP AT THE ACCEPTANCE CRITERIA ABOVE.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SIGN-OFF ============== -->
+<section class="sheet" id="signoff">
+  <div class="wrap">
+    <div class="signoff">
+      <div class="signoff-left">
+        <h3>End of <span class="red">drawing set.</span><br/><span class="hand">build it.</span></h3>
+        <p>This blueprint is a living document. Revisions tracked at the title block. The Level-Up ships in three sheets: A-00 (Index), O-09 (Program), O-12 (Permits). Everything else is depth.</p>
+      </div>
+      <div class="signoff-right">
+        <div class="signature">K. Townes</div>
+        <div class="signature-meta">DRAWN BY · KHYREE TOWNES · OPERATOR<br/>REVIEWED BY · OMAR TOWNES · CUT CREATERS<br/>DOC BP-001 · REV A · 2026.05.14</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+<!-- end .app -->
+
+<!-- floating page indicator -->
+<div class="page-indicator">
+  <span class="num" id="pgNum">01</span>
+  <span>SHEET</span>
+</div>
+
+<script>
+// ===== Copy spec =====
+function copySpec(){
+  const t = document.getElementById('specBody').innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const b = document.getElementById('copyBtn');
+    b.textContent = 'Copied ✓';
+    b.classList.add('ok');
+    setTimeout(()=>{b.textContent='Copy Spec';b.classList.remove('ok')},2200);
+  });
+}
+
+// ===== Page indicator + scrollspy =====
+const sheets = ['cover','index','sheet-1','sheet-2','sheet-3','sheet-4','sheet-5','sheet-6','sheet-9','sheet-flywheel','sheet-10','sheet-12','signoff'];
+const codes = ['00','A-00','A-01','S-02','S-03','M-04','A-05','A-06','O-09','O-11','O-10','O-12','✓'];
+function updatePage(){
+  const y = window.scrollY + window.innerHeight*0.35;
+  let cur = 0;
+  sheets.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    if(el && el.offsetTop <= y) cur = i;
+  });
+  document.getElementById('pgNum').textContent = codes[cur];
+  document.getElementById('sheetIndicator').innerHTML = '<b>'+codes[cur]+' / '+codes[codes.length-2]+'</b>';
+}
+window.addEventListener('scroll', updatePage, {passive:true});
+updatePage();
+
+// ===== Reveal-on-scroll =====
+const ro = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') });
+},{threshold:0.08});
+document.querySelectorAll('.trap, .layer, .curr-row, .tier, .stat, .econ-cell, .cal-cell, .index-row, .callout').forEach(el=>{
+  el.classList.add('reveal'); ro.observe(el);
+});
+
+// ===== Custom cursor enhancement =====
+// On hover over interactive elements, swap cursor visual to feel like architect's compass tip
+document.querySelectorAll('a, button, .index-row, .tier-cta, .spec-copy').forEach(el=>{
+  el.addEventListener('mouseenter', ()=>{ document.body.style.cursor='pointer' });
+  el.addEventListener('mouseleave', ()=>{ document.body.style.cursor='crosshair' });
+});
+</script>
+</body>
+</html>

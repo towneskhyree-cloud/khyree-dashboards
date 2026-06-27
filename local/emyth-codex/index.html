@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The E-Myth Revisited — The Operator's Codex</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=boska@400i,500i,700i&f[]=jetbrains-mono@400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06070a;
+    --bg-elev: #0e1015;
+    --bg-card: #11141a;
+    --acid: #b8ff00;
+    --blue: #3b82f6;
+    --orange: #ff8c5d;
+    --cream: #f5e6c8;
+    --gold: #d4a76a;
+    --text: #ededed;
+    --muted: #6b7280;
+    --line: #1c2028;
+    --red: #ff5d5d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Satoshi', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  .orb { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.2; pointer-events: none; z-index: 0; animation: drift 24s ease-in-out infinite; }
+  .orb-1 { width: 500px; height: 500px; background: var(--acid); top: -100px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--orange); top: 50%; right: -100px; animation-delay: -8s; opacity: 0.12; }
+  .orb-3 { width: 350px; height: 350px; background: var(--blue); bottom: -100px; left: 30%; animation-delay: -16s; opacity: 0.15; }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(80px,-50px) scale(1.1); } 66% { transform: translate(-50px,80px) scale(0.95); } }
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--acid), var(--orange), var(--blue)); width: 0; z-index: 100; box-shadow: 0 0 10px var(--acid); }
+
+  main { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  .display { font-family: 'Clash Display', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+  .serif-i { font-family: 'Boska', serif; font-style: italic; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  ::selection { background: var(--acid); color: var(--bg); }
+
+  /* HERO */
+  .hero { padding: 60px 0 80px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; background: rgba(184,255,0,0.04); margin-bottom: 28px; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px var(--acid); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  .hero h1 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(48px, 9vw, 120px); letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 32px; }
+  .hero h1 .grad { background: linear-gradient(135deg, var(--acid) 0%, var(--orange) 100%); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradShift 8s ease-in-out infinite; }
+  @keyframes gradShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .hero h1 .italic { font-family: 'Boska', serif; font-style: italic; font-weight: 500; }
+  .hero p.lede { font-size: 19px; color: var(--muted); max-width: 660px; line-height: 1.55; margin-bottom: 40px; }
+
+  /* Listening companion bar */
+  .companion {
+    background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: 20px; padding: 28px 32px;
+    display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center;
+  }
+  @media (max-width: 720px) { .companion { grid-template-columns: 1fr; } }
+  .companion .icon-circle {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--acid), var(--orange));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 30px rgba(184,255,0,0.3);
+    flex-shrink: 0;
+  }
+  .companion .icon-circle::before {
+    content: '';
+    width: 0; height: 0;
+    border-left: 16px solid var(--bg);
+    border-top: 11px solid transparent; border-bottom: 11px solid transparent;
+    margin-left: 4px;
+  }
+  .companion .label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 6px; }
+  .companion .title { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; margin-bottom: 4px; }
+  .companion .meta { font-size: 13px; color: var(--muted); }
+  .companion .duration { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 28px; color: var(--acid); letter-spacing: -0.01em; }
+  .companion .duration-lbl { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 4px; text-align: right; }
+
+  /* Tracker */
+  .tracker {
+    background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: 20px; padding: 24px 28px; margin-top: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .tracker-label { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+  .tracker-num { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 36px; letter-spacing: -0.02em; color: var(--acid); text-shadow: 0 0 30px rgba(184,255,0,0.3); }
+  .tracker-num .of { color: var(--muted); font-size: 18px; }
+  .tracker-bar { flex: 1; min-width: 200px; height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; }
+  .tracker-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--acid)); border-radius: 6px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 15px rgba(184,255,0,0.4); }
+  .tracker-actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font-family: inherit; font-size: 12px; cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em; }
+  .btn-sm:hover { color: var(--acid); border-color: var(--acid); }
+
+  /* Sections */
+  section { margin-top: 100px; }
+  .section-head { margin-bottom: 36px; }
+  .section-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+  .section-head h2 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.03em; line-height: 1; margin-bottom: 12px; }
+  .section-head h2 .italic { font-family: 'Boska', serif; font-style: italic; font-weight: 500; color: var(--acid); }
+  .section-head p { color: var(--muted); font-size: 16px; max-width: 580px; }
+
+  /* THE 3 PERSONALITIES */
+  .three-personas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 820px) { .three-personas { grid-template-columns: 1fr; } }
+  .persona {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px;
+    padding: 32px; position: relative; overflow: hidden; transition: all 0.3s;
+  }
+  .persona:hover { border-color: var(--acid); transform: translateY(-3px); }
+  .persona-num {
+    position: absolute; top: 20px; right: 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.15em;
+  }
+  .persona .pic {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 26px;
+    margin-bottom: 20px;
+  }
+  .persona-e .pic { background: linear-gradient(135deg, var(--orange), var(--gold)); color: var(--bg); box-shadow: 0 0 20px rgba(255,140,93,0.3); }
+  .persona-m .pic { background: linear-gradient(135deg, var(--blue), #6c63ff); color: var(--text); box-shadow: 0 0 20px rgba(59,130,246,0.3); }
+  .persona-t .pic { background: linear-gradient(135deg, var(--acid), var(--acid)); color: var(--bg); box-shadow: 0 0 20px rgba(184,255,0,0.3); }
+  .persona h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 28px; letter-spacing: -0.02em; line-height: 1; margin-bottom: 6px; }
+  .persona .tagline { font-family: 'Boska', serif; font-style: italic; font-size: 15px; color: var(--cream); margin-bottom: 18px; }
+  .persona p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+  .persona .lives-in {
+    margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line);
+    font-size: 13px; color: var(--text); line-height: 1.55;
+  }
+  .persona .lives-in b { color: var(--acid); font-weight: 600; }
+
+  /* RATIO METER */
+  .ratio-meter {
+    margin-top: 24px; padding: 28px;
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px;
+  }
+  .ratio-meter h4 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 18px; margin-bottom: 6px; }
+  .ratio-meter .sub { font-size: 13px; color: var(--muted); margin-bottom: 22px; }
+  .ratio-row { margin-bottom: 18px; }
+  .ratio-row:last-child { margin-bottom: 0; }
+  .ratio-row .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .ratio-row .lbl { font-size: 13px; color: var(--text); }
+  .ratio-row .pct { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--acid); font-weight: 500; }
+  .ratio-row .bar { height: 8px; background: var(--line); border-radius: 8px; overflow: hidden; }
+  .ratio-row .fill { height: 100%; border-radius: 8px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .ratio-row.e .fill { background: linear-gradient(90deg, var(--orange), var(--gold)); box-shadow: 0 0 12px rgba(255,140,93,0.4); }
+  .ratio-row.m .fill { background: linear-gradient(90deg, var(--blue), #6c63ff); box-shadow: 0 0 12px rgba(59,130,246,0.4); }
+  .ratio-row.t .fill { background: linear-gradient(90deg, var(--acid), #87bf00); box-shadow: 0 0 12px rgba(184,255,0,0.4); }
+  .ratio-row input[type=range] { width: 100%; -webkit-appearance: none; height: 4px; background: transparent; outline: none; cursor: pointer; margin-top: 6px; }
+  .ratio-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--acid); cursor: pointer; box-shadow: 0 0 0 3px rgba(184,255,0,0.2); }
+
+  .ratio-readout {
+    margin-top: 20px; padding: 16px 20px; background: var(--bg-card);
+    border-radius: 10px; border-left: 3px solid var(--acid);
+    font-size: 14px; color: var(--cream); line-height: 1.6;
+  }
+  .ratio-readout b { color: var(--acid); }
+
+  /* PHASES OF BUSINESS */
+  .phases { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .phase {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px;
+    padding: 28px 32px; cursor: pointer; transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .phase::before {
+    content: attr(data-num);
+    position: absolute; top: -10px; right: -5px;
+    font-family: 'Clash Display', sans-serif; font-weight: 700;
+    font-size: 180px; line-height: 1; color: var(--bg-card);
+    pointer-events: none; letter-spacing: -0.05em;
+  }
+  .phase:hover { border-color: rgba(184,255,0,0.3); }
+  .phase.expanded { border-color: var(--acid); background: linear-gradient(135deg, rgba(184,255,0,0.03), transparent); }
+  .phase-head { display: flex; justify-content: space-between; align-items: center; gap: 20px; position: relative; z-index: 1; }
+  .phase-head .left { flex: 1; }
+  .phase-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px; }
+  .phase h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(22px, 2.8vw, 28px); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
+  .phase .sumary { color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 720px; }
+  .toggle { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s; color: var(--muted); }
+  .phase.expanded .toggle { background: var(--acid); color: var(--bg); transform: rotate(45deg); border-color: var(--acid); }
+
+  .phase-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, margin-top 0.3s ease; position: relative; z-index: 1; }
+  .phase.expanded .phase-body { max-height: 1800px; margin-top: 24px; }
+  .phase-body .quote { font-family: 'Boska', serif; font-style: italic; font-weight: 500; font-size: clamp(18px, 2.2vw, 24px); line-height: 1.4; color: var(--cream); padding: 18px 22px; background: rgba(184,255,0,0.04); border-left: 3px solid var(--acid); border-radius: 0 12px 12px 0; margin-bottom: 20px; }
+  .phase-body h4 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 12px; color: var(--acid); letter-spacing: 0.15em; text-transform: uppercase; margin: 22px 0 12px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .phase-body h4:first-child { padding-top: 0; border-top: none; margin-top: 0; }
+  .phase-body p { color: var(--text); font-size: 14px; line-height: 1.65; margin-bottom: 12px; max-width: 800px; }
+  .phase-body ul { list-style: none; }
+  .phase-body li { padding: 10px 0 10px 28px; color: var(--text); font-size: 14px; line-height: 1.55; position: relative; border-bottom: 1px dashed var(--line); }
+  .phase-body li:last-child { border-bottom: none; }
+  .phase-body li::before { content: '→'; position: absolute; left: 0; top: 10px; color: var(--acid); font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .phase-body li.warn::before { content: '⚠'; color: var(--red); }
+  .phase-body li b { color: var(--acid); font-weight: 600; }
+
+  .for-you { margin-top: 22px; padding: 22px; background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(184,255,0,0.03)); border: 1px solid rgba(59,130,246,0.3); border-radius: 14px; }
+  .for-you-head { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .for-you-head::before { content: ''; width: 6px; height: 6px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 8px var(--blue); }
+  .for-you p { font-size: 14px; line-height: 1.65; color: var(--cream); margin: 0; }
+
+  /* TURNKEY DIAGRAM */
+  .turnkey-wrap {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 20px;
+    padding: 36px;
+  }
+  .turnkey-stages { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 24px; }
+  .turnkey-stage {
+    display: grid; grid-template-columns: 80px 1fr; gap: 20px; align-items: center;
+    padding: 18px 22px; background: var(--bg-card); border: 1px solid var(--line);
+    border-radius: 12px; transition: all 0.25s;
+  }
+  .turnkey-stage:hover { border-color: var(--acid); transform: translateX(4px); }
+  .turnkey-stage .step {
+    font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 36px;
+    color: var(--acid); letter-spacing: -0.02em; line-height: 1;
+    text-shadow: 0 0 20px rgba(184,255,0,0.3);
+  }
+  .turnkey-stage .info { }
+  .turnkey-stage .ttl { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 18px; margin-bottom: 4px; }
+  .turnkey-stage .desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* 7 KEY DISCIPLINES */
+  .disciplines { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .disciplines { grid-template-columns: 1fr; } }
+  .discipline {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .discipline:hover { border-color: var(--acid); transform: translateY(-2px); }
+  .discipline .num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid); letter-spacing: 0.15em; margin-bottom: 8px; }
+  .discipline h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .discipline p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+  .discipline .question { font-family: 'Boska', serif; font-style: italic; font-size: 14px; color: var(--cream); padding: 12px 14px; background: var(--bg-card); border-radius: 8px; border-left: 2px solid var(--acid); }
+
+  /* BIG QUOTES */
+  .big-quote {
+    padding: 48px;
+    background: linear-gradient(135deg, rgba(184,255,0,0.05), rgba(255,140,93,0.03));
+    border: 1px solid rgba(184,255,0,0.2); border-radius: 20px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .big-quote::before {
+    content: '"'; position: absolute; top: -40px; left: 30px;
+    font-family: 'Boska', serif; font-style: italic; font-size: 200px;
+    color: rgba(184,255,0,0.08); pointer-events: none; line-height: 1;
+  }
+  .big-quote .text {
+    font-family: 'Boska', serif; font-style: italic; font-weight: 500;
+    font-size: clamp(22px, 3vw, 32px); line-height: 1.3; color: var(--cream);
+    max-width: 800px; margin: 0 auto 16px; position: relative; z-index: 1;
+  }
+  .big-quote .text .hl { color: var(--acid); font-style: normal; font-family: 'Clash Display', sans-serif; font-weight: 600; }
+  .big-quote .attr { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; position: relative; z-index: 1; }
+
+  /* CHECKLIST */
+  .check-list { list-style: none; }
+  .check-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-bottom: 1px dashed var(--line); cursor: pointer; transition: all 0.2s; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { padding-left: 8px; }
+  .check-item .box { width: 22px; height: 22px; border: 2px solid var(--line); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-top: 2px; background: var(--bg-card); }
+  .check-item.done .box { background: var(--acid); border-color: var(--acid); box-shadow: 0 0 12px rgba(184,255,0,0.4); }
+  .check-item .box svg { opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+  .check-item.done .box svg { opacity: 1; transform: scale(1); }
+  .check-item .text { flex: 1; }
+  .check-item .text .t { font-size: 14px; color: var(--text); transition: all 0.2s; line-height: 1.5; }
+  .check-item.done .text .t { color: var(--muted); text-decoration: line-through; }
+  .check-item .text .why { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; padding: 6px; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 12px; width: fit-content; }
+  .filter-btn { padding: 10px 18px; background: transparent; border: none; cursor: pointer; color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 500; border-radius: 8px; transition: all 0.2s; }
+  .filter-btn:hover { color: var(--text); }
+  .filter-btn.active { background: var(--bg-card); color: var(--acid); }
+
+  /* FRANCHISE PROTOTYPE */
+  .prototype-test {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 20px;
+    padding: 36px;
+  }
+  .prototype-q {
+    padding: 22px 24px; background: var(--bg-card); border: 1px solid var(--line);
+    border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;
+  }
+  .prototype-q:hover { border-color: var(--acid); }
+  .prototype-q .q-text {
+    font-family: 'Clash Display', sans-serif; font-weight: 500; font-size: 16px;
+    color: var(--text); margin-bottom: 8px; letter-spacing: -0.01em;
+  }
+  .prototype-q .q-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid);
+    letter-spacing: 0.15em; margin-right: 10px;
+  }
+  .prototype-q .q-why { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* CTA */
+  .cta-final {
+    background: linear-gradient(135deg, rgba(184,255,0,0.06), rgba(255,140,93,0.04));
+    border: 1px solid rgba(184,255,0,0.2); border-radius: 24px; padding: 56px;
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .cta-final::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(184,255,0,0.1), transparent 70%); pointer-events: none; }
+  .cta-final h2 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.03em; line-height: 1; margin-bottom: 20px; position: relative; z-index: 1; }
+  .cta-final h2 .italic { font-family: 'Boska', serif; font-style: italic; color: var(--acid); }
+  .cta-final p { color: var(--muted); font-size: 17px; max-width: 640px; margin: 0 auto 32px; line-height: 1.6; position: relative; z-index: 1; }
+  .cta-stamps { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .stamp-pill { padding: 10px 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--acid); letter-spacing: 0.05em; }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  footer { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--line); }
+  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer .src { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+  footer .stamp { font-family: 'Boska', serif; font-style: italic; color: var(--acid); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> THE OPERATOR'S CODEX · E-MYTH REVISITED</div>
+    <h1>
+      Stop working <span class="italic">in</span><br>
+      your business. <span class="grad">Start</span><br>
+      working <span class="italic">on</span> it.
+    </h1>
+    <p class="lede">
+      Michael Gerber's complete framework, mapped to Khyree City and Cut Creaters. Listen to the audiobook. Come back here. Mark the actions complete. Build the system that runs without you.
+    </p>
+
+    <div class="companion">
+      <div class="icon-circle"></div>
+      <div>
+        <div class="label">Listening Companion</div>
+        <div class="title">The E-Myth Revisited — Michael E. Gerber</div>
+        <div class="meta">Why most small businesses don't work · And what to do about it</div>
+      </div>
+      <div>
+        <div class="duration">~8h 5m</div>
+        <div class="duration-lbl">Audiobook</div>
+      </div>
+    </div>
+
+    <div class="tracker">
+      <div>
+        <div class="tracker-label">Action items completed</div>
+        <div class="tracker-num"><span id="done-count">0</span><span class="of"> / 24</span></div>
+      </div>
+      <div class="tracker-bar"><div class="tracker-fill" id="tracker-fill"></div></div>
+      <div class="tracker-actions">
+        <button class="btn-sm" onclick="resetAll()">Reset</button>
+        <button class="btn-sm" onclick="expandAll()">Expand all</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE BIG IDEA -->
+  <section class="reveal">
+    <div class="big-quote">
+      <div class="text">
+        Most small businesses fail because they're started by <span class="hl">Technicians</span> who suffered an <span class="hl">Entrepreneurial Seizure</span> — and now own a <span class="hl">job</span>, not a business.
+      </div>
+      <div class="attr">— The Core Premise</div>
+    </div>
+  </section>
+
+  <!-- THE THREE PERSONALITIES -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 01 — The Three Personalities</span>
+      <h2>Three people <span class="italic">live in</span> every owner.</h2>
+      <p>Inside every small business owner there are three roles fighting for control. Most owners are 70% one personality and 30% the other two combined. That imbalance is why the business is broken.</p>
+    </div>
+
+    <div class="three-personas">
+
+      <div class="persona persona-e">
+        <div class="persona-num">// 01</div>
+        <div class="pic">E</div>
+        <h3>The Entrepreneur</h3>
+        <div class="tagline">"Lives in the future."</div>
+        <p>The visionary. The dreamer. Sees what could be — new markets, new products, scale, possibility. Loves change. Hates the status quo.</p>
+        <p>Without the E, the business never grows beyond the founder's labor.</p>
+        <div class="lives-in"><b>Strength:</b> creativity, vision, ambition.<br><b>Weakness:</b> doesn't finish, scattered, abandons reality.</div>
+      </div>
+
+      <div class="persona persona-m">
+        <div class="persona-num">// 02</div>
+        <div class="pic">M</div>
+        <h3>The Manager</h3>
+        <div class="tagline">"Lives in the past."</div>
+        <p>The pragmatist. The order-keeper. Loves systems, plans, predictability. Cleans up after the Entrepreneur. Holds the present together.</p>
+        <p>Without the M, the business is chaos — vision without execution.</p>
+        <div class="lives-in"><b>Strength:</b> organization, discipline, structure.<br><b>Weakness:</b> resists change, kills creativity if unchecked.</div>
+      </div>
+
+      <div class="persona persona-t">
+        <div class="persona-num">// 03</div>
+        <div class="pic">T</div>
+        <h3>The Technician</h3>
+        <div class="tagline">"Lives in the present."</div>
+        <p>The doer. The craftsman. Just wants to do the work — cut hair, build the website, fix the HVAC. Sees thinking as wasting time.</p>
+        <p>Without the T, nothing actually gets made. But TOO much T = a job, not a business.</p>
+        <div class="lives-in"><b>Strength:</b> craft, output, execution.<br><b>Weakness:</b> "if you want it done right, do it yourself" — the trap that kills scale.</div>
+      </div>
+
+    </div>
+
+    <div class="ratio-meter">
+      <h4>Your personality blend right now</h4>
+      <div class="sub">Drag the sliders. Most struggling small business owners are 70% Technician. The healthy ratio Gerber recommends is 33/33/33.</div>
+
+      <div class="ratio-row e">
+        <div class="top"><span class="lbl">Entrepreneur</span><span class="pct"><span id="v-e">25</span>%</span></div>
+        <div class="bar"><div class="fill" id="f-e" style="width:25%"></div></div>
+        <input type="range" id="i-e" min="0" max="100" value="25">
+      </div>
+
+      <div class="ratio-row m">
+        <div class="top"><span class="lbl">Manager</span><span class="pct"><span id="v-m">15</span>%</span></div>
+        <div class="bar"><div class="fill" id="f-m" style="width:15%"></div></div>
+        <input type="range" id="i-m" min="0" max="100" value="15">
+      </div>
+
+      <div class="ratio-row t">
+        <div class="top"><span class="lbl">Technician</span><span class="pct"><span id="v-t">60</span>%</span></div>
+        <div class="bar"><div class="fill" id="f-t" style="width:60%"></div></div>
+        <input type="range" id="i-t" min="0" max="100" value="60">
+      </div>
+
+      <div class="ratio-readout" id="ratio-out">
+        At <b>60% Technician</b>, you're still doing too much of the work yourself. You'll know you're winning when the Manager and Entrepreneur shares grow. Goal: <b>33/33/33</b>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ENTREPRENEURIAL SEIZURE -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 02 — The Fatal Assumption</span>
+      <h2>The <span class="italic">Entrepreneurial Seizure.</span></h2>
+      <p>Gerber's most famous diagnosis. Watch for the symptoms in yourself.</p>
+    </div>
+    <div style="background: var(--bg-elev); border: 1px solid var(--line); border-radius: 20px; padding: 40px;">
+      <h4 style="font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 12px; color: var(--acid); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px;">The Fatal Assumption</h4>
+      <p style="font-family: 'Boska', serif; font-style: italic; font-size: clamp(20px, 2.5vw, 28px); line-height: 1.4; color: var(--cream); margin-bottom: 28px;">"If you understand the technical work of a business, you understand a business that does that technical work."</p>
+
+      <p style="color: var(--text); font-size: 15px; line-height: 1.7; margin-bottom: 18px;">A great barber thinks he can run a barbershop. A great web designer thinks he can run a web agency. A great mechanic thinks he can run an auto shop. <strong style="color: var(--acid);">But the work of a business and a business that does that work are completely different things.</strong></p>
+
+      <p style="color: var(--text); font-size: 15px; line-height: 1.7; margin-bottom: 18px;">The Technician, fed up with working for someone else, has a moment of inspiration: "Why am I working for these idiots? I could do this myself." That moment is the Entrepreneurial Seizure. He quits, opens his shop — and now does the same job he had before, except he ALSO has to do the books, marketing, hiring, taxes, and customer service. He's working twice as hard for half the pay.</p>
+
+      <p style="color: var(--text); font-size: 15px; line-height: 1.7;">The technical work of a business and the business that does that technical work are <strong style="color: var(--acid);">two totally different things.</strong> The seizure happens when we forget that.</p>
+
+      <div class="for-you" style="margin-top: 28px;">
+        <div class="for-you-head">For Khyree</div>
+        <p>You had this seizure twice — first leaving the chair to start a UCO business, now leaving recruiting to start Khyree City. Different from most: you SAW the trap. The $97/mo recurring is the antidote — it forces system-thinking from day one. Your dad had the seizure 30 years ago opening Cut Creaters. He's still living it. Lesson 1 + Lesson 2 of this book = your whole strategy for helping him.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 PHASES -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 03 — The Three Stages of Business Growth</span>
+      <h2>Three <span class="italic">stages</span> every business goes through.</h2>
+      <p>Most never make it past the second. Click each phase to expand.</p>
+    </div>
+
+    <div class="phases">
+
+      <div class="phase" data-num="01" onclick="togglePhase(this, event)">
+        <div class="phase-head">
+          <div class="left">
+            <div class="phase-tag">// Phase 01 — Infancy</div>
+            <h3>The Technician's Phase</h3>
+            <p class="sumary">You ARE the business. You answer the phone, do the work, send the invoices, sweep the floor. It feels alive because YOU are alive — but the business has no existence outside of you.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="phase-body">
+          <div class="quote">"Owning your own business is a lot like owning your own job. Until you change it."</div>
+
+          <h4>The Defining Feature</h4>
+          <p>Every problem is a YOU problem. Every win is a YOU win. The business cannot operate for a single day without your direct involvement.</p>
+
+          <h4>How It Ends</h4>
+          <ul>
+            <li>The Technician collapses from exhaustion (most common)</li>
+            <li class="warn">The owner sells / closes the business — "this isn't worth it"</li>
+            <li>Or — the owner decides to grow up. Moves to Phase 2.</li>
+          </ul>
+
+          <h4>The Trap To Watch For</h4>
+          <ul>
+            <li>Pride in being indispensable. "Nobody can do it like I can."</li>
+            <li>Confusing busyness with progress. 80 hours a week ≠ a real business.</li>
+            <li>Refusing to delegate because "training is too slow."</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>Your father is HERE. 30 years in, still in Infancy because the business doesn't run without him. Khyree City was here in Month 1 — every cold call was you. The $97/mo MRR + Cowork agents are dragging you out. Don't let helping dad pull you back IN to Infancy on his side of the operation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase" data-num="02" onclick="togglePhase(this, event)">
+        <div class="phase-head">
+          <div class="left">
+            <div class="phase-tag">// Phase 02 — Adolescence</div>
+            <h3>Getting Some Help</h3>
+            <p class="sumary">You hire someone. Usually a Technician — a barber, an HVAC tech, a designer. You think you can finally relax. Then they screw up the way YOU would never screw up. Now you're managing AND working AND fixing their mistakes.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="phase-body">
+          <div class="quote">"Adolescence begins at the moment in your business life when you decide to get some help."</div>
+
+          <h4>The Comfort Zone Trap</h4>
+          <p>Every business has a comfort zone — the size where the owner can still personally control everything. When demand pushes past that zone, the owner has three choices:</p>
+          <ul>
+            <li><b>Get small again.</b> Cut customers, scale down, retreat to Infancy. Most pick this. Comfortable, broke.</li>
+            <li class="warn"><b>Go for broke.</b> Hire fast, grow fast, no system. Burns out spectacularly. Lawsuits, bad reviews, bankruptcy.</li>
+            <li><b>Adolescent growth.</b> Plan the system BEFORE growing. Build the franchise prototype. Move toward Maturity.</li>
+          </ul>
+
+          <h4>How To Spot You're Stuck Here</h4>
+          <ul>
+            <li>You hired help but you're working MORE not less</li>
+            <li>"If you want it done right, do it yourself" plays in your head daily</li>
+            <li>Customer complaints when you're not personally on it</li>
+            <li>Quality drops as soon as you step away</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>Hassan calling HVAC. Cowork agents. This is Adolescence. The Cowork relay protocol you set up (problem → Chrome → Claude chat → response → continue) is exactly the documentation Phase 2 demands. Cut Creaters at 40 of 140 suites is in Adolescent collapse — too big to run as a one-man Technician shop, no system to scale further. That's the rescue mission.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase" data-num="03" onclick="togglePhase(this, event)">
+        <div class="phase-head">
+          <div class="left">
+            <div class="phase-tag">// Phase 03 — Maturity</div>
+            <h3>The Entrepreneurial Perspective</h3>
+            <p class="sumary">The business runs as a system, not as a person. The owner now works ON the business, not IN it. Decisions are made based on what serves the system, not what the Technician feels like doing today.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="phase-body">
+          <div class="quote">"Mature companies are started by people with an Entrepreneurial Perspective from the very beginning."</div>
+
+          <h4>The Big Shift</h4>
+          <p>The Mature business owner doesn't ask "What work do I love to do?" — he asks "What kind of business should I build to serve a specific kind of customer?" The work serves the business, not the other way around.</p>
+
+          <h4>Maturity = These Six Things</h4>
+          <ul>
+            <li>The business runs without the owner doing the technical work</li>
+            <li>Anyone could be hired and trained to run it within weeks (not years)</li>
+            <li>Quality is consistent — every customer gets the same experience</li>
+            <li>The owner has time to think, plan, and grow</li>
+            <li>The business has a clear identity separate from the owner's</li>
+            <li>The business could be sold tomorrow for real money</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>This is the prize. Khyree City at scale = signed 200+ barbers on $97/mo, served by an automated stack (Base44, Make, Telnyx, Cowork) with you doing only sales calls and content. Cut Creaters at scale = 130 of 140 suites filled, two-person team running operations, your father teaching/mentoring instead of cleaning toilets. Both businesses sellable, transferable, replicable.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- THE TURNKEY REVOLUTION -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 04 — The Turnkey Revolution</span>
+      <h2>Build it like a <span class="italic">franchise.</span></h2>
+      <p>Even if you'll never franchise. Why? Because the franchise model forces you to design a system that works.</p>
+    </div>
+    <div class="turnkey-wrap">
+      <h4 style="font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 18px; margin-bottom: 18px;">The McDonald's Lesson</h4>
+      <p style="color: var(--text); font-size: 15px; line-height: 1.65; margin-bottom: 28px;">When Ray Kroc bought McDonald's, he wasn't buying burgers. He was buying a SYSTEM. Every McDonald's worldwide makes the same fries because someone documented exactly how to make them — temperature, time, oil, salt, hold-time before discard. The result: a 16-year-old can run a $2M location. <strong style="color: var(--acid);">Build YOUR business the same way — even if you'll never sell franchises.</strong></p>
+
+      <div class="turnkey-stages">
+        <div class="turnkey-stage">
+          <div class="step">01</div>
+          <div class="info">
+            <div class="ttl">The model is more important than the product</div>
+            <div class="desc">A great product run by a bad system fails. A mediocre product run by a great system scales forever.</div>
+          </div>
+        </div>
+        <div class="turnkey-stage">
+          <div class="step">02</div>
+          <div class="info">
+            <div class="ttl">It must be operated by people with the lowest possible skill</div>
+            <div class="desc">If your business requires a genius to run it, you've built a job for that genius. Build for the average operator.</div>
+          </div>
+        </div>
+        <div class="turnkey-stage">
+          <div class="step">03</div>
+          <div class="info">
+            <div class="ttl">Every standard is documented in an Operations Manual</div>
+            <div class="desc">No oral tradition. If a process matters, it gets written down with steps, photos, video, scripts.</div>
+          </div>
+        </div>
+        <div class="turnkey-stage">
+          <div class="step">04</div>
+          <div class="info">
+            <div class="ttl">Predictable service is delivered to the customer every time</div>
+            <div class="desc">Every customer gets the same experience whether you're there or in Cairo praying.</div>
+          </div>
+        </div>
+        <div class="turnkey-stage">
+          <div class="step">05</div>
+          <div class="info">
+            <div class="ttl">Color, dress, and facilities conform to a uniform code</div>
+            <div class="desc">Brand consistency = trust. Trust = repeat purchases = MRR.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="for-you">
+        <div class="for-you-head">For Khyree</div>
+        <p>This is why your locked tools list and approved-exceptions rule exists. Base44 + Telnyx + Make.com + Square = your stack. Every Khyree City delivery follows the same template. Every Cowork dispatch uses the same relay protocol. You're already running a turnkey model — formalize it. The Operations Manual is the next milestone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 KEY DISCIPLINES -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 05 — The 7 Key Disciplines</span>
+      <h2>The seven <span class="italic">questions</span> you must answer.</h2>
+      <p>Gerber's framework for building the prototype. Treat each as a separate discipline. Master one at a time.</p>
+    </div>
+    <div class="disciplines">
+
+      <div class="discipline">
+        <div class="num">// 01</div>
+        <h3>Primary Aim</h3>
+        <p>What kind of LIFE do you want? Most owners build a business that consumes them. Start with the life — then design the business to serve it.</p>
+        <div class="question">"If I died tomorrow, would my business still serve the life I imagined?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 02</div>
+        <h3>Strategic Objective</h3>
+        <p>The business's job is to deliver YOUR Primary Aim. What size, market position, financials, and timeline does that require?</p>
+        <div class="question">"How big does this business need to be to fund the life I want?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 03</div>
+        <h3>Organizational Strategy</h3>
+        <p>Build the org chart BEFORE you have the people. Each box = a role with documented responsibilities, even if YOU fill it for now.</p>
+        <div class="question">"What seats need filling before I hire? What does each seat actually do?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 04</div>
+        <h3>Management Strategy</h3>
+        <p>Don't hire managers. Build a management SYSTEM. Documented standards, scripts, checklists. The system manages — not the manager.</p>
+        <div class="question">"How would a 16-year-old run this business if I handed them the manual?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 05</div>
+        <h3>People Strategy</h3>
+        <p>Hire for the GAME, not the task. Communicate the game, the rules, the scoreboard. People work harder for purpose than for pay.</p>
+        <div class="question">"Why would the right person LOVE working here, beyond the salary?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 06</div>
+        <h3>Marketing Strategy</h3>
+        <p>The customer doesn't care about your product. They care about the feeling your product gives them. Marketing = science of the customer's mind.</p>
+        <div class="question">"What is my customer's deepest emotional reason for buying?"</div>
+      </div>
+
+      <div class="discipline">
+        <div class="num">// 07</div>
+        <h3>Systems Strategy</h3>
+        <p>Three systems run every business: Hard (things — equipment, software), Soft (ideas, scripts, training), Information (data, dashboards, KPIs).</p>
+        <div class="question">"What single decision can I systematize this week so I never make it manually again?"</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WORK ON, NOT IN -->
+  <section class="reveal">
+    <div class="big-quote">
+      <div class="text">
+        Your business is <span class="hl">not your life.</span> Your business is something separate from you, with its own rules and its own purposes — and its job is to <span class="hl">serve your life</span>, not consume it.
+      </div>
+      <div class="attr">— Gerber's Closing Argument</div>
+    </div>
+  </section>
+
+  <!-- FRANCHISE PROTOTYPE TEST -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 06 — The Prototype Test</span>
+      <h2>Could you <span class="italic">franchise</span> what you've built?</h2>
+      <p>Eight questions to ask of Khyree City and Cut Creaters today. Honest answers reveal where the system is broken.</p>
+    </div>
+    <div class="prototype-test">
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q1.</span>If you got hit by a bus tomorrow, would your business survive 30 days?</div>
+        <div class="q-why">If no — you ARE the business. That's a job, not an asset.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q2.</span>Could a brand new hire run your operation with only your written documentation?</div>
+        <div class="q-why">If no — your knowledge is locked in your head. That's the bottleneck.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q3.</span>Does every customer get the same experience whether you're there or not?</div>
+        <div class="q-why">If no — your brand is "Khyree" not "Khyree City." Quality lives in you, not the system.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q4.</span>Can you take 30 days off without business income dropping?</div>
+        <div class="q-why">If no — you've built a treadmill. Real businesses don't pause when the founder rests.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q5.</span>If a competitor copied your product tomorrow, what's left that's defensible?</div>
+        <div class="q-why">The system, the brand, the relationships, the IP. Not the product itself.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q6.</span>Could you sell this business in 12 months for 3–5x annual profit?</div>
+        <div class="q-why">If no — it's not transferable. Documentation = transferability = valuation.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q7.</span>Are you spending 70% of your time as Technician — doing the actual work?</div>
+        <div class="q-why">If yes — Phase 2 trapped. You need to delegate before you can grow.</div>
+      </div>
+
+      <div class="prototype-q">
+        <div class="q-text"><span class="q-num">Q8.</span>Do you know your numbers cold — CAC, LTV, churn, conversion at every step?</div>
+        <div class="q-why">If no — you're flying blind. You can't optimize what you don't measure.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ACTION CHECKLIST -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 07 — Action Checklist</span>
+      <h2>What to <span class="italic">do</span> after you finish the audiobook.</h2>
+      <p>24 specific moves. Click each box as you complete it. Saves to the tracker at the top.</p>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All (24)</button>
+      <button class="filter-btn" data-filter="this-week">This Week</button>
+      <button class="filter-btn" data-filter="30-days">30 Days</button>
+      <button class="filter-btn" data-filter="90-days">90 Days</button>
+    </div>
+
+    <div style="background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px; padding: 32px;">
+      <ul class="check-list" id="action-list">
+
+        <!-- THIS WEEK -->
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Write your Primary Aim. What does life look like in 5 years if everything goes right?</div>
+            <div class="why">Discipline 01 — every business decision flows from this. One page, written by hand.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Honestly rate your E/M/T blend right now using the slider above.</div>
+            <div class="why">Self-awareness is the start. Most operators are 70% Technician.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Run the 8-question Prototype Test on Khyree City. Then on Cut Creaters.</div>
+            <div class="why">Each "no" is a project. Most early-stage businesses fail 6+ questions. Honest answers = real roadmap.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">List every task you do in a week. Mark each: T (technical), M (manage), E (entrepreneur).</div>
+            <div class="why">The honest tally tells you where the time leak is. Goal: shift T tasks to systems and people.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Block 90 minutes/week on the calendar — labeled "Work ON the business."</div>
+            <div class="why">No client work, no responding, no fixing. Strategy and system-building only. Sacred time.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Write the org chart for Khyree City as if you had 10 employees.</div>
+            <div class="why">Discipline 03 — 10 boxes, each with a role. Most you'll fill yourself for now. Doesn't matter. Map the seats first.</div>
+          </div>
+        </li>
+
+        <!-- 30 DAYS -->
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Document your cold-call script. Word for word. Including objection handlers.</div>
+            <div class="why">Soft system — anyone should be able to read this and run a call at 70% of your skill on day one.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Document your website-build process for Track B (Base44). Step-by-step SOP with screenshots.</div>
+            <div class="why">If Hassan (or a hire) had to deliver a site without you, could they? The doc is the answer.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Document the IG content workflow. The 4-phase Sunday batch in writing.</div>
+            <div class="why">Research → Script → Film → Edit. Each phase = a checklist. Future hire can run this for you.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Identify the 3 most repetitive tasks you do. Build a system for ONE this month.</div>
+            <div class="why">Discipline 07 — start small. One task automated/delegated = real progress.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Set up your KPI dashboard — Khyree City and Cut Creaters on one screen.</div>
+            <div class="why">Information system. You can't manage what you can't see. Match the dashboard you already built for Townes.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Write the customer's emotional reason for buying. (Not features — feelings.)</div>
+            <div class="why">Discipline 06 — barbers don't buy websites. They buy "I look professional online." Start there.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Define the Khyree City customer experience standard — every touchpoint mapped.</div>
+            <div class="why">First DM → call → onboarding → site delivery → first month → MRR retention. Each step has a script.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Calculate Strategic Objective: revenue/profit needed to fund your Primary Aim.</div>
+            <div class="why">Discipline 02 — you said freedom number is $12K/mo. Reverse-engineer the business size that delivers it.</div>
+          </div>
+        </li>
+
+        <!-- 90 DAYS -->
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Build the Khyree City Operations Manual v1. Even if it's just 20 pages.</div>
+            <div class="why">Living document. Every SOP gets added. By month 12 it's the franchise prototype.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Build the Cut Creaters Operations Manual v1 with your father's input.</div>
+            <div class="why">Honor him by capturing 30 years of his knowledge before it's lost. Most powerful gift you can give.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Hire your first non-Cowork team member. Even 10 hrs/week. Customer service or admin.</div>
+            <div class="why">Phase 2 transition. You can't move past Adolescence alone. Hire BEFORE you're drowning.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Standardize the Cut Creaters tour script. Same words, same order, every time.</div>
+            <div class="why">Tour-to-lease conversion is the #1 lever. Document it, train to it, measure it.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Run a "innovate, quantify, orchestrate" cycle on one Khyree City process.</div>
+            <div class="why">Innovate (try a new way) → Quantify (measure result) → Orchestrate (lock the winning version).</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Test: take 7 days off. See what breaks. That's your highest-priority system to fix.</div>
+            <div class="why">Stress test. Don't actually disappear — but block the calendar and watch what burns. The breaks ARE the roadmap.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Define the brand uniform: colors, fonts, voice. Every output looks like Khyree City.</div>
+            <div class="why">Discipline 06 — brand consistency = trust. You already started this with v2 brand guidelines.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Set your CEO time: 3 hours/week minimum, working ON the business only.</div>
+            <div class="why">Once 90 minutes feels easy, double it. Eventually it's the only work you do.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Read "E-Myth Mastery" by Gerber. The deeper, more practical follow-up book.</div>
+            <div class="why">Gerber's actual workbook for building the prototype. The Revisited version is theory. Mastery is application.</div>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- KEY VOCAB -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 08 — Vocabulary</span>
+      <h2>Six terms to <span class="italic">internalize.</span></h2>
+      <p>Use these in conversations and in your own thinking. They reshape how you see your business.</p>
+    </div>
+    <div class="three-personas">
+
+      <div class="persona persona-e" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 01</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--orange), var(--gold));">!</div>
+        <h3>Entrepreneurial Seizure</h3>
+        <div class="tagline">"The fatal moment."</div>
+        <p>The moment a Technician decides to go off and start their own business — without realizing the technical work and the BUSINESS that does the work are different.</p>
+      </div>
+
+      <div class="persona persona-m" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 02</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--blue), #6c63ff);">F</div>
+        <h3>Fatal Assumption</h3>
+        <div class="tagline">"The lie inside the seizure."</div>
+        <p>"If you understand the technical work of a business, you understand a business that does that technical work." Wrong. They're separate skills.</p>
+      </div>
+
+      <div class="persona persona-t" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 03</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--acid), #87bf00);">P</div>
+        <h3>Franchise Prototype</h3>
+        <div class="tagline">"The model."</div>
+        <p>The template you build for ONE location/customer that's so well-systematized it could be replicated 1,000 times by anyone.</p>
+      </div>
+
+      <div class="persona persona-e" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 04</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--orange), var(--gold));">W</div>
+        <h3>Work ON, not IN</h3>
+        <div class="tagline">"The shift."</div>
+        <p>Working IN = doing the technical work. Working ON = building systems, strategy, brand. Most owners only work IN. The shift is the whole game.</p>
+      </div>
+
+      <div class="persona persona-m" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 05</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--blue), #6c63ff);">I</div>
+        <h3>Innovate · Quantify · Orchestrate</h3>
+        <div class="tagline">"The continuous loop."</div>
+        <p>Try a new way (innovate) → measure if it works (quantify) → if yes, lock it as the standard (orchestrate). The growth engine.</p>
+      </div>
+
+      <div class="persona persona-t" style="background: var(--bg-elev); border-color: var(--line);">
+        <div class="persona-num">// 06</div>
+        <div class="pic" style="background: linear-gradient(135deg, var(--acid), #87bf00);">P</div>
+        <h3>Primary Aim</h3>
+        <div class="tagline">"The why before the what."</div>
+        <p>The life you want OUTSIDE the business. The business is built to serve that life. Most owners reverse this and let the business eat their life.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="reveal">
+    <div class="cta-final">
+      <h2>The book in <span class="italic">one sentence.</span></h2>
+      <p>Stop being the Technician who owns a job. Become the Entrepreneur who owns a system — built like a franchise prototype, run by people, documented in writing, scaled by replication.</p>
+      <div class="cta-stamps">
+        <div class="stamp-pill">// work ON not IN</div>
+        <div class="stamp-pill">// system &gt; talent</div>
+        <div class="stamp-pill">// document everything</div>
+        <div class="stamp-pill">// franchise mindset</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <div class="src">SOURCE // Michael E. Gerber — "The E-Myth Revisited" (1995, revised) + "E-Myth Mastery" (2005)</div>
+      <div class="stamp">Khyree City · Operator's Codex</div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+window.addEventListener('scroll', () => {
+  const s = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progress').style.width = s + '%';
+});
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+function togglePhase(el, ev) {
+  if (ev.target.closest('.phase-body')) return;
+  el.classList.toggle('expanded');
+}
+
+function expandAll() {
+  document.querySelectorAll('.phase').forEach(l => l.classList.add('expanded'));
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('tracker-fill').style.width = (done/total)*100 + '%';
+}
+
+function resetAll() {
+  document.querySelectorAll('.check-item.done').forEach(el => el.classList.remove('done'));
+  updateProgress();
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.check-item').forEach(item => {
+      item.style.display = (f === 'all' || item.dataset.cat === f) ? 'flex' : 'none';
+    });
+  });
+});
+
+// E/M/T ratio sliders
+function updateRatio() {
+  const e = +document.getElementById('i-e').value;
+  const m = +document.getElementById('i-m').value;
+  const t = +document.getElementById('i-t').value;
+  const total = e + m + t;
+  const eN = total > 0 ? Math.round((e/total)*100) : 0;
+  const mN = total > 0 ? Math.round((m/total)*100) : 0;
+  const tN = 100 - eN - mN;
+
+  document.getElementById('v-e').textContent = eN;
+  document.getElementById('v-m').textContent = mN;
+  document.getElementById('v-t').textContent = tN;
+  document.getElementById('f-e').style.width = eN + '%';
+  document.getElementById('f-m').style.width = mN + '%';
+  document.getElementById('f-t').style.width = tN + '%';
+
+  let msg = '';
+  if (tN >= 60) {
+    msg = `At <b>${tN}% Technician</b>, you're still doing too much of the work yourself. Goal: shift toward <b>33/33/33</b>.`;
+  } else if (tN < 30 && eN >= 40) {
+    msg = `Heavy <b>Entrepreneur</b> mode. Vision is strong. Risk: nothing gets finished. Need more Manager.`;
+  } else if (mN >= 50) {
+    msg = `Strong <b>Manager</b>. Operations are tight. Risk: vision stalls. Make space for Entrepreneur energy.`;
+  } else if (eN >= 30 && mN >= 25 && tN >= 25) {
+    msg = `<b>Balanced.</b> This is the rare zone where businesses scale. Keep the ratio. Defend it.`;
+  } else {
+    msg = `Working toward balance. Target: <b>33/33/33</b>. Move slowly — one personality at a time.`;
+  }
+  document.getElementById('ratio-out').innerHTML = msg;
+}
+['i-e','i-m','i-t'].forEach(id => document.getElementById(id).addEventListener('input', updateRatio));
+
+updateProgress();
+updateRatio();
+</script>
+</body>
+</html>

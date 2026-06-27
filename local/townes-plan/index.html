@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Plan">
+<meta name="theme-color" content="#F4EEE1">
+<title>Townes Master Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    background: #F4EEE1; color: #1B1916;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+  .font-body { font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-optical-sizing: auto; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+  .grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(27,25,22,0.05) 1px, transparent 0);
+    background-size: 14px 14px;
+  }
+  .card-shadow { box-shadow: 0 1px 3px rgba(27,25,22,0.04), 0 0 0 1px #E5DBC4; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+  .scroll-snap { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .scroll-snap > * { scroll-snap-align: start; }
+  button { font-family: inherit; }
+  #root { min-height: 100vh; }
+
+  .loading {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #F4EEE1; z-index: 9999;
+    flex-direction: column; gap: 16px;
+  }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #E5DBC4;
+    border-top-color: #2C5A3D;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'Fraunces', serif; font-style: italic;
+    color: #7A6F5F; font-size: 14px;
+  }
+
+  /* Checkbox custom */
+  .checkbox {
+    width: 22px; height: 22px;
+    border: 2px solid #E5DBC4;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; flex-shrink: 0;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .checkbox.checked {
+    background: #2C5A3D;
+    border-color: #2C5A3D;
+  }
+</style>
+</head>
+<body>
+  <div id="root">
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading the plan&hellip;</div>
+    </div>
+  </div>
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+const C = {
+  cream: "#F4EEE1", paper: "#FBF7EC", card: "#FFFFFF",
+  ink: "#1B1916", inkSoft: "#403A33", muted: "#7A6F5F", mutedLt: "#A89B86",
+  line: "#E5DBC4", lineSoft: "#EFE7D2",
+  green: "#2C5A3D", greenDk: "#1F4029", greenLt: "#E7EFE6",
+  gold: "#B58A3D", goldDk: "#8A6824", goldLt: "#F4EAD0",
+  rust: "#A24E36", rustLt: "#F3E0D8", sage: "#7A9A82", navy: "#1F2D44",
+};
+
+// ─── Icon system ───────────────────────────────────────────
+const ICON_PATHS = {
+  Compass: 'C:12,12,10|M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z',
+  BookOpen: 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z|M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z',
+  ShieldCheck: 'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z|M9 12l2 2 4-4',
+  Building2: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z|M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2|M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2|M10 6h4|M10 10h4|M10 14h4|M10 18h4',
+  Car: 'M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2|M14 17H9|C:6.5,17,2.5|C:16.5,17,2.5',
+  HeartPulse: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z|M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27',
+  Anchor: 'M22 16.5h-4|M6 16.5H2|C:12,7,3|M12 22V10|M20 16.5a8 8 0 0 1-16 0',
+  TreePine: 'M17 14V2|M9 6h6|M6 14h12|M5 22h14l-3-8H8l-3 8z',
+  Users: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2|C:9,7,4|M22 21v-2a4 4 0 0 0-3-3.87|M16 3.13a4 4 0 0 1 0 7.75',
+  Wallet: 'M21 12V7H5a2 2 0 0 1 0-4h14v4|M3 5v14a2 2 0 0 0 2 2h16v-5|R:18,12,4,6,1,1',
+  TrendingUp: 'M22 7l-8.5 8.5-5-5L2 17|M16 7h6v6',
+  Calendar: 'R:3,4,18,18,2,2|M16 2v4|M8 2v4|M3 10h18',
+  CheckCircle: 'C:12,12,10|M9 12l2 2 4-4',
+  Circle: 'C:12,12,10',
+  ChevronDown: 'm6 9 6 6 6-6',
+  ChevronRight: 'm9 18 6-6-6-6',
+  Send: 'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z|M22 2 11 13',
+  Copy: 'R:8,8,14,14,2,2|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
+  Check: 'M20 6 9 17l-5-5',
+  X: 'M18 6 6 18|M6 6l12 12',
+  AlertTriangle: 'M21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z|M12 9v4|M12 17h.01',
+  Star: 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z',
+  Sparkles: 'M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z',
+  Plane: 'M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z',
+  Home: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z|M9 22V12h6v10',
+  Briefcase: 'M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16|R:2,7,20,14,2,4',
+  ListChecks: 'm3 17 2 2 4-4|m3 7 2 2 4-4|M13 6h8|M13 12h8|M13 18h8',
+  CircleDollar: 'C:12,12,10|M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8|M12 18V6',
+  Zap: 'M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z',
+  PiggyBank: 'M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z|M2 9v1c0 1.1.9 2 2 2h1|C:16,11,.5',
+  Coins: 'C:8,8,6|M19 3 22 6 19 9|M22 6h-4.5a2.5 2.5 0 0 0 0 5h4.5|C:8,8,2|M2 8h.01',
+  Moon: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
+};
+
+function Icon({ name, size = 20, color = "currentColor", strokeWidth = 2, style }) {
+  const data = ICON_PATHS[name];
+  if (!data) return null;
+  const parts = data.split('|').map((p, i) => {
+    if (p.startsWith('C:')) {
+      const [cx, cy, r] = p.slice(2).split(',').map(Number);
+      return <circle key={i} cx={cx} cy={cy} r={r}/>;
+    }
+    if (p.startsWith('R:')) {
+      const [x, y, w, h, rx, ry] = p.slice(2).split(',').map(Number);
+      return <rect key={i} x={x} y={y} width={w} height={h} rx={rx || 0} ry={ry || 0}/>;
+    }
+    return <path key={i} d={p}/>;
+  });
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+      viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+      style={style}>
+      {parts}
+    </svg>
+  );
+}
+
+// ─── Storage ───────────────────────────────────────────────
+const STORAGE_KEY = "townes-plan-v1";
+const storage = {
+  get: () => { try { const v = localStorage.getItem(STORAGE_KEY); return v ? JSON.parse(v) : null; } catch { return null; } },
+  set: (obj) => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(obj)); } catch {} }
+};
+
+// ─── DATA: Team scenarios ──────────────────────────────────
+const TEAM_SCENARIOS = [
+  {
+    id: "diy",
+    name: "DIY Year One",
+    badge: "RECOMMENDED",
+    badgeColor: C.green,
+    sm: 0,
+    editor: 0,
+    leftover: 1800,
+    note: "Editor + SM stays Khyree. You shoot. You post. You sell. Builds operator muscle. The founder always sells — always. Hire only when KC is consistent $5K+/mo for 3 months straight.",
+  },
+  {
+    id: "editor",
+    name: "Editor First",
+    badge: "WHEN KC HITS $5K/MO",
+    badgeColor: C.gold,
+    sm: 0,
+    editor: 600,
+    leftover: 1200,
+    note: "Hire video editor first ($400–800/mo). Frees you to film 3× per week + handle DMs. SM stays you. Editor scales output without you touching social.",
+  },
+  {
+    id: "both",
+    name: "Full Team",
+    badge: "YEAR 2 OR CC OPERATOR >$7K",
+    badgeColor: C.rust,
+    sm: 2000,
+    editor: 800,
+    leftover: -1000,
+    note: "Both contractors at $2,800/mo combined puts you $1,000 underwater unless income climbs. Don't do this in Year One unless Cut Creaters operator pay confirms above $7K/mo.",
+  },
+];
+
+// ─── DATA: Investment ladder ───────────────────────────────
+const INVESTMENT_LADDER = [
+  {
+    rung: 1, name: "Emergency Cash Reserve",
+    note: "Pure savings — NOT investment. 6 months expenses liquid in a high-yield account. With variable agency income, target 12 months. This is your floor.",
+    target: "$45K (6 mo) → $90K (12 mo)",
+    vehicle: "Savings account at any FDIC bank. No interest needed.",
+    color: C.muted
+  },
+  {
+    rung: 2, name: "Halal Retirement",
+    note: "Wahed Invest (Sharia-screened robo) OR Amana Mutual Funds via brokerage. Auto-monthly deposits. This compounds for 30 years.",
+    target: "$400/mo minimum → $800/mo by Year 2",
+    vehicle: "Wahed Invest IRA, or Amana Mutual Funds in Vanguard/Fidelity IRA",
+    color: C.green
+  },
+  {
+    rung: 3, name: "Kids' Future Fund",
+    note: "Halal alternatives to 529. Open Wahed kids accounts OR systematic gold purchases in trust for the 4 kids. The compound time horizon is 15+ years.",
+    target: "$200/mo per kid = $800/mo",
+    vehicle: "Wahed Invest custodial, or allocated gold in their name",
+    color: C.gold
+  },
+  {
+    rung: 4, name: "Physical Gold",
+    note: "The Ummah's halal store of value for 1,400 years. Hedges fiat. Sovereign coins (American Eagles, Canadian Maples) or allocated storage. Zakat applies above nisab annually.",
+    target: "10% of liquid wealth as floor",
+    vehicle: "JM Bullion, APMEX, or allocated storage (Goldmoney)",
+    color: C.gold
+  },
+  {
+    rung: 5, name: "Business Equity",
+    note: "Operator equity in Cut Creaters (50/50 path). Khyree City as a growing asset. This is your highest-leverage compounding — you control the rate.",
+    target: "Build, don't extract",
+    vehicle: "Reinvest 10–20% of business income, build equity",
+    color: C.navy
+  },
+  {
+    rung: 6, name: "Halal Real Estate",
+    note: "Year 2+. Halal-financed (Guidance Residential, UIF) for primary, cash for rentals. Real estate compounds slow but durable. Income property = halal cashflow.",
+    target: "After $50K liquid reserves",
+    vehicle: "Guidance Residential ijara, UIF musharakah",
+    color: C.green
+  },
+];
+
+// ─── DATA: Protection layers ───────────────────────────────
+const PROTECTION_LAYERS = [
+  {
+    id: "wasiyyah",
+    title: "Wasiyyah — Islamic Will",
+    icon: "BookOpen",
+    badge: "OBLIGATION",
+    badgeColor: C.green,
+    cost: "$300–600 one-time",
+    when: "Within 90 days of arrival",
+    tldr: "Without it, GA probate court will distribute your estate per state law — which violates Sharia inheritance. The Prophet (ﷺ) said no Muslim should sleep two nights without his will written (Bukhari, Muslim).",
+    halal: "Salafi obligation. Non-negotiable. Required by the Sunnah.",
+    steps: [
+      "List all assets — US accounts, Egypt accounts, business equity, gold, property, digital",
+      "Choose executor — trustworthy Muslim adult willing to act",
+      "Identify guardians for the 4 kids — Muslim couple able to raise them upon the deen",
+      "Find a Muslim estate attorney in ATL — Muslim Bar of Georgia referrals, ISNA network, masjid lawyer recommendations",
+      "Schedule 60–90 min consultation",
+      "Execute three documents together: Wasiyyah + Healthcare Directive + Muslim Burial Directive",
+      "Store original in fireproof safe. Copies to executor + masjid Imam + trusted family.",
+    ],
+  },
+  {
+    id: "poa",
+    title: "Power of Attorney — Financial + Healthcare",
+    icon: "ShieldCheck",
+    badge: "BUNDLE WITH WASIYYAH",
+    badgeColor: C.green,
+    cost: "$100–300 (often included)",
+    when: "Same attorney visit as Wasiyyah",
+    tldr: "If you're incapacitated, someone has to act for you. Wife primary. Father Omar secondary. Without POA, family fights probate court for control of YOUR life decisions.",
+    halal: "Permissible — it's a delegation, not a contract of riba or gharar.",
+    steps: [
+      "Designate financial POA — wife primary, father Omar secondary",
+      "Designate healthcare POA — wife primary",
+      "Make both 'durable' — continues if you become incapacitated",
+      "Sign with notary present (Muslim attorney handles this)",
+      "Distribute copies to designees + executor + wife's secure storage",
+    ],
+  },
+  {
+    id: "llc",
+    title: "LLC for Khyree City",
+    icon: "Building2",
+    badge: "DO FIRST",
+    badgeColor: C.navy,
+    cost: "$100 GA filing + free EIN + ~$200/yr registered agent",
+    when: "Before any GA-based KC income hits",
+    tldr: "Separates business liability from personal assets. Without it, every Khyree City client interaction puts your Conyers home at risk.",
+    halal: "Permissible — corporate structures are property arrangements, not riba.",
+    steps: [
+      "Choose LLC name — 'Khyree City LLC' or similar (check GA SOS availability)",
+      "File Articles of Organization at sos.ga.gov — $100",
+      "Get EIN from IRS — free, 5 min online at irs.gov",
+      "Open business bank account — Mercury (digital, no fees) or Relay Banking",
+      "Draft Operating Agreement — single-member is fine to start",
+      "Separate everything from Day 1 — separate card, email, invoicing, bookkeeping",
+      "S-Corp election when net income tops $50K (saves on self-employment tax)",
+    ],
+  },
+  {
+    id: "mandated",
+    title: "Mandated Insurance (Auto + Home)",
+    icon: "Car",
+    badge: "DARURA — REQUIRED",
+    badgeColor: C.gold,
+    cost: "$280–380/mo combined",
+    when: "Before driving in GA / before closing on home",
+    tldr: "Auto liability is GA state law. Home insurance is required by mortgage. Permanent Committee permitted both under darura — necessity overrides the gharar.",
+    halal: "Per Ibn Baz, Ibn Uthaymeen, Permanent Committee: take the legal minimum, decline optional add-ons.",
+    steps: [
+      "Get 3–4 carrier quotes — bundle home + auto for discount (State Farm, Allstate, Geico, Progressive)",
+      "Auto: GA minimum is 25/50/25. Go higher (100/300/100) for asset protection — more coverage, same darura logic",
+      "Home: insurer-required replacement-cost coverage on the home itself",
+      "Decline optional add-ons where possible (extended warranties, accident forgiveness, etc.)",
+      "Annual review at renewal — shop rates, never auto-renew",
+    ],
+  },
+  {
+    id: "health",
+    title: "Health Coverage",
+    icon: "HeartPulse",
+    badge: "TIME-SENSITIVE",
+    badgeColor: C.rust,
+    cost: "$1,400–2,000/mo family of 6 with ACA subsidies",
+    when: "Month 1 — moving from out-of-country = qualifying life event year-round",
+    tldr: "Medical emergency for a family of 6 without coverage = bankruptcy. Strict Salafi position prohibits insurance; practical reality applies darura.",
+    halal: "Debated. Strict position prohibits. Practical position permits as darura. Bronze plan + HSA-eligible if possible. Christian healthshare programs (Samaritan, Liberty) are structurally halal-aligned co-ops, but Muslim sharing options are limited.",
+    steps: [
+      "Visit healthcare.gov as soon as arrival is confirmed",
+      "Use 'qualifying life event' — moving from out-of-country lets you enroll any time",
+      "Calculate subsidy based on projected AGI (probably under $140K = significant subsidy)",
+      "Bronze plan = high deductible, lowest premium. Pairs with HSA for tax savings",
+      "Silver plan = mid-deductible if you want more predictable costs",
+      "Establish family doctor + pediatrician + dentist in Rockdale County within 30 days",
+      "Alternative: Christian healthshare (Samaritan Ministries, Liberty HealthShare) — non-insurance cost-sharing, structurally similar to takaful",
+    ],
+  },
+  {
+    id: "selffund",
+    title: "Self-Fund — The Salaf's Protection",
+    icon: "Anchor",
+    badge: "REPLACES LIFE + DISABILITY + UMBRELLA",
+    badgeColor: C.green,
+    cost: "$0 in premiums — money goes to investments instead",
+    when: "Build over 5 years",
+    tldr: "The Salaf had no insurance. They had wealth, family, and ummah. The strict Salafi position prohibits term life, disability, and umbrella as gharar. Build assets to be your own protection instead.",
+    halal: "This IS the Salafi-strict path. Insurance premiums for non-mandated coverage are scattered into a haram contract. Same dollars invested halal compound into real protection.",
+    steps: [
+      "Build 12-month liquid emergency fund — cash + gold mix",
+      "Halal investments compounding monthly — Wahed Invest, Amana Funds",
+      "Strong family network — wife, parents, in-laws, siblings as backup",
+      "Embedded community — primary masjid relationship, Imam knows you",
+      "Sadaqah firewall — your standing 10% pledge brings Allah's barakah and protection",
+      "Goal: $300K–500K halal investments within 5 years = full self-fund",
+      "LLC + good business structure = liability shield without buying umbrella insurance",
+    ],
+  },
+  {
+    id: "trust",
+    title: "Revocable Living Trust",
+    icon: "TreePine",
+    badge: "YEAR 1–2",
+    badgeColor: C.gold,
+    cost: "$1,500–3,500 to set up",
+    when: "When assets cross $100K liquid OR you own real estate",
+    tldr: "Avoids probate, keeps things private, simplifies estate transfer. Pour-over will catches anything outside the trust. The wasiyyah and Sharia inheritance rules still govern.",
+    halal: "Permissible — it's a property arrangement, not a riba contract. Must align with Sharia inheritance.",
+    steps: [
+      "Wait until assets justify — real estate ownership or $100K+ liquid is the trigger",
+      "Same Muslim attorney who did wasiyyah can structure",
+      "Fund the trust — transfer property + accounts INTO the trust's name",
+      "Pour-over will catches anything not transferred",
+      "Update beneficiaries on all accounts to align (e.g., Wahed Invest, business accounts)",
+      "Review every 2–3 years or after major life events (new kid, new property)",
+    ],
+  },
+];
+
+// ─── DATA: Arrival playbook ────────────────────────────────
+const ARRIVAL_PHASES = [
+  {
+    id: "premove", title: "Pre-Move (Cairo, Final Weeks)",
+    icon: "Plane", color: C.gold,
+    tasks: [
+      "Wasiyyah draft prepared — so ATL attorney just executes Week 1",
+      "USPS international forwarding setup",
+      "Cell carrier plan locked in (Mint family, T-Mobile, Cricket)",
+      "US bank account access confirmed from abroad",
+      "Kids' immunization records translated + apostilled",
+      "Cairo masjid goodbye + reference letter from your Imam",
+      "Cut Creaters Day-1 prep: questions for father Omar (LISTENING, not pitch)",
+      "Sell / store / ship decision matrix for Cairo possessions",
+      "Egypt → US flights booked",
+    ]
+  },
+  {
+    id: "week1", title: "Week 1 — Boots Down",
+    icon: "Home", color: C.green,
+    tasks: [
+      "Land at Conyers home",
+      "Cut Creaters Day 1: LISTEN with father Omar. No pitch. Bring questions, not slides.",
+      "First Jumu'ah at chosen primary masjid",
+      "First halal grocery run — Madinah Market, Halalco, ATL Halal Market mapped",
+      "Wife's network — sister introductions at masjid",
+      "Kids' neighborhood walk + park (no school pressure yet)",
+      "Quran teacher continuity confirmed (online from Cairo or new local)",
+      "GA driver's license appointment scheduled",
+      "Wasiyyah attorney consultation scheduled",
+    ]
+  },
+  {
+    id: "month1", title: "Month 1 — The Paperwork Wave",
+    icon: "ListChecks", color: C.navy,
+    tasks: [
+      "GA driver's license + plates + emissions",
+      "Voter registration (if relevant)",
+      "Khyree City LLC filed at sos.ga.gov",
+      "EIN obtained from IRS (free, online, 5 min)",
+      "Business bank account — Mercury or Relay Banking",
+      "Wahed Invest account opened, auto-monthly $400 set",
+      "Wasiyyah + POA executed with Muslim attorney",
+      "ACA marketplace health insurance enrolled (qualifying life event)",
+      "Kids enrolled in school (Islamic or Rockdale public)",
+      "Family doctor + pediatrician + dentist identified",
+      "Muslim CPA relationship initiated for quarterly check-ins",
+      "First quarterly tax savings deposit",
+    ]
+  },
+  {
+    id: "month23", title: "Month 2–3 — Rhythm Locking",
+    icon: "TrendingUp", color: C.gold,
+    tasks: [
+      "Cut Creaters operator role formalized (verbal → written agreement)",
+      "Khyree City pipeline rebuilt for warm ATL sales",
+      "6FB Mentorship continuation — insights into KC build",
+      "Content batch filming rhythm locked — 3 reels/week to @Khyree_city",
+      "Quarterly tax filing (whichever Q lands first)",
+      "Atlas review — actuals vs forecast, adjust sliders",
+      "Family rhythm: prayer times, school routine, work block, masjid days",
+      "Wife's lane confirmed — what she's running, what she needs",
+      "90-day reflection: what's working, what's bleeding, what's next",
+    ]
+  },
+];
+
+// ─── DATA: Questions checklist ─────────────────────────────
+const QUESTION_GROUPS = [
+  {
+    id: "biz", name: "Business Setup", color: C.navy, icon: "Briefcase",
+    questions: [
+      "Khyree City LLC filed with GA Secretary of State?",
+      "EIN obtained from IRS?",
+      "Business bank account separate from personal (Mercury / Relay)?",
+      "W-9s collected for editor + SM strategist when hired?",
+      "Quarterly tax savings account funded with 25–30% of business net?",
+      "S-Corp election filed when net income exceeds $50K?",
+      "Khyree City + Cut Creaters financial separation crystal clear?",
+    ]
+  },
+  {
+    id: "family", name: "Family & Faith", color: C.green, icon: "Users",
+    questions: [
+      "Primary masjid chosen for Jumu'ah?",
+      "Kids' school enrolled (Islamic or public)?",
+      "Quran teacher continuity confirmed (Cairo online or ATL local)?",
+      "Wife's local sisters' network introduced?",
+      "Halal grocery routes mapped (Madinah Market, Halalco, etc.)?",
+      "Family doctor + pediatrician + dentist locked in Rockdale?",
+      "Sunday school option researched for the 4 kids?",
+    ]
+  },
+  {
+    id: "legal", name: "Legal & Estate", color: C.rust, icon: "ShieldCheck",
+    questions: [
+      "Wasiyyah drafted (Cairo prep) and executed (ATL Week 1)?",
+      "Muslim attorney for ongoing legal counsel identified?",
+      "Financial POA + Healthcare POA both signed?",
+      "Executor designated, informed, and willing?",
+      "Guardians for 4 kids identified, asked, and confirmed?",
+      "Living trust evaluated for when assets warrant?",
+      "Beneficiary designations aligned across ALL accounts?",
+    ]
+  },
+  {
+    id: "money", name: "Financial Architecture", color: C.gold, icon: "Coins",
+    questions: [
+      "Wahed Invest auto-monthly contributions live?",
+      "Amana Funds added to retirement vehicle?",
+      "Physical gold storage plan (home safe + bank vault?)",
+      "12-month emergency fund target set + tracked?",
+      "Sadaqah 10% calculation locked + automated?",
+      "Zakat hawl date noted on the calendar?",
+      "Halal financing relationship started (Guidance / UIF / Ameen)?",
+    ]
+  },
+  {
+    id: "hidden", name: "The Quiet Atlanta Lines", color: C.muted, icon: "AlertTriangle",
+    questions: [
+      "Property tax homestead exemption claimed in Rockdale?",
+      "Vehicle emissions test scheduled annually?",
+      "Identity theft monitoring active (Aura / LifeLock)?",
+      "Subscription audit quarterly (cut the bleed)?",
+      "Insurance renewal calendar locked (shop every year)?",
+      "Annual passport check for the family of 6?",
+      "Federal + GA quarterly tax estimates on calendar?",
+    ]
+  },
+];
+
+const TOTAL_QUESTIONS = QUESTION_GROUPS.reduce((sum, g) => sum + g.questions.length, 0);
+
+// ═══════════════════════════════════════════════════════════
+//  COMPONENTS
+// ═══════════════════════════════════════════════════════════
+
+function Hero({ income, expense, leftover }) {
+  const surplus = leftover >= 0;
+  return (
+    <div style={{
+      background: "linear-gradient(135deg, " + C.ink + " 0%, " + C.greenDk + " 100%)",
+      color: C.cream, borderRadius: 20, padding: "32px 26px",
+      position: "relative", overflow: "hidden", marginBottom: 22,
+    }}>
+      <div style={{
+        position: "absolute", top: -60, right: -60, width: 220, height: 220,
+        background: "radial-gradient(circle, " + C.gold + "28 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+      <div style={{
+        position: "absolute", bottom: -40, left: -40, width: 160, height: 160,
+        background: "radial-gradient(circle, " + C.sage + "20 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+
+      <div className="font-body" style={{
+        fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase",
+        color: C.gold, fontWeight: 600, marginBottom: 10,
+        display: "flex", alignItems: "center", gap: 8, position: "relative"
+      }}>
+        <Icon name="Compass" size={13}/> Townes Master Plan · v1
+      </div>
+
+      <div className="font-display" style={{
+        fontSize: "clamp(28px, 6vw, 38px)", fontWeight: 500,
+        color: C.cream, letterSpacing: "-0.02em",
+        lineHeight: 1.1, marginBottom: 16, position: "relative"
+      }}>
+        The path is the rhythm,
+        <br/>
+        <span style={{ fontStyle: "italic", color: C.gold }}>not the magnitude.</span>
+      </div>
+
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr 1fr",
+        gap: 8, position: "relative", marginTop: 6
+      }}>
+        <StatBox label="Income" value={income} color={C.sage} prefix="+"/>
+        <StatBox label="Expense" value={expense} color="#E8B4A4" prefix="−"/>
+        <StatBox label="Leftover" value={leftover} color={surplus ? C.gold : "#E8B4A4"} prefix={surplus ? "+" : ""}/>
+      </div>
+
+      <div className="font-body" style={{
+        marginTop: 16, fontSize: 12.5, lineHeight: 1.6,
+        color: "#D9CFB6", position: "relative"
+      }}>
+        $1,800 leftover is tight but real. Year One is about rhythm-locking, not maximizing.
+        Build the system. Income grows. Expenses stay disciplined. Leftover compounds.
+      </div>
+    </div>
+  );
+}
+
+function StatBox({ label, value, color, prefix }) {
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.06)", borderRadius: 12,
+      padding: "10px 12px", backdropFilter: "blur(4px)"
+    }}>
+      <div className="font-body" style={{
+        fontSize: 9.5, color: "#A89B86",
+        letterSpacing: "0.08em", textTransform: "uppercase",
+        fontWeight: 600, marginBottom: 4
+      }}>
+        {label}
+      </div>
+      <div className="font-display num" style={{
+        fontSize: 18, color: color, fontWeight: 600,
+        letterSpacing: "-0.01em", lineHeight: 1
+      }}>
+        {prefix}${(Math.abs(value) / 1000).toFixed(1)}K
+      </div>
+    </div>
+  );
+}
+
+// ─── Section wrapper with expand/collapse ──────────────────
+function Section({ id, title, sub, icon, accent, defaultOpen = false, children, openState, setOpenState }) {
+  const open = openState[id] !== undefined ? openState[id] : defaultOpen;
+  const toggle = () => setOpenState({ ...openState, [id]: !open });
+
+  return (
+    <div className="card-shadow" style={{
+      background: C.card, borderRadius: 16, overflow: "hidden", marginBottom: 14,
+    }}>
+      <button onClick={toggle} style={{
+        width: "100%", textAlign: "left", background: "transparent",
+        border: "none", padding: "20px 20px", cursor: "pointer",
+        display: "flex", alignItems: "center", gap: 14
+      }}>
+        <div style={{
+          width: 42, height: 42, flexShrink: 0, borderRadius: 11,
+          background: accent + "18", color: accent,
+          display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <Icon name={icon} size={20} strokeWidth={1.8}/>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="font-display" style={{
+            fontSize: 19, fontWeight: 500, color: C.ink,
+            letterSpacing: "-0.01em", lineHeight: 1.2, marginBottom: 2
+          }}>
+            {title}
+          </div>
+          <div className="font-body" style={{ fontSize: 12, color: C.muted, lineHeight: 1.3 }}>
+            {sub}
+          </div>
+        </div>
+        <Icon name="ChevronDown" size={18} color={C.mutedLt} style={{
+          flexShrink: 0,
+          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.25s"
+        }}/>
+      </button>
+
+      {open && (
+        <div className="fade-in" style={{
+          padding: "4px 20px 22px",
+          borderTop: "1px solid " + C.lineSoft
+        }}>
+          <div style={{ paddingTop: 16 }}>
+            {children}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Team Build section ────────────────────────────────────
+function TeamBuild() {
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 18, lineHeight: 1.6
+      }}>
+        Right now you're at $1,800 leftover. Adding both contractors swings you underwater. Three paths, three math outcomes. The founder always sells — always. So SM stays you until the rest is solid.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {TEAM_SCENARIOS.map(s => {
+          const totalAdded = s.sm + s.editor;
+          const underwater = s.leftover < 0;
+          return (
+            <div key={s.id} style={{
+              background: C.paper,
+              border: "1px solid " + (underwater ? C.rust + "44" : C.line),
+              borderRadius: 12,
+              padding: "16px 16px"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8, gap: 10 }}>
+                <div>
+                  <div className="font-display" style={{
+                    fontSize: 17, fontWeight: 600, color: C.ink, marginBottom: 4
+                  }}>
+                    {s.name}
+                  </div>
+                  <span className="font-body" style={{
+                    fontSize: 9.5, letterSpacing: "0.1em", textTransform: "uppercase",
+                    fontWeight: 700, color: s.badgeColor,
+                    background: s.badgeColor + "1A",
+                    padding: "3px 8px", borderRadius: 999,
+                  }}>
+                    {s.badge}
+                  </span>
+                </div>
+                <div className="font-display num" style={{
+                  fontSize: 22, fontWeight: 600,
+                  color: underwater ? C.rust : C.green,
+                  letterSpacing: "-0.02em"
+                }}>
+                  {s.leftover >= 0 ? "+" : ""}${(s.leftover / 1000).toFixed(1)}K
+                </div>
+              </div>
+
+              <div className="font-body" style={{ display: "flex", gap: 14, fontSize: 11.5, color: C.muted, marginBottom: 8 }}>
+                <span>SM strategist: <strong style={{ color: C.ink }}>${s.sm}/mo</strong></span>
+                <span>Video editor: <strong style={{ color: C.ink }}>${s.editor}/mo</strong></span>
+              </div>
+
+              <div className="font-body" style={{
+                fontSize: 12.5, color: C.inkSoft, lineHeight: 1.55
+              }}>
+                {s.note}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{
+        marginTop: 18, padding: "14px 16px",
+        background: C.greenLt, borderRadius: 10,
+        border: "1px solid " + C.green + "33"
+      }}>
+        <div className="font-body" style={{
+          fontSize: 12, color: C.greenDk, lineHeight: 1.6
+        }}>
+          <strong>Decision rule:</strong> Editor enters when Khyree City clears $5K/mo consistently for 3 months. SM strategist enters when KC clears $8K/mo OR Cut Creaters operator pay confirms $7K+/mo. Don't hire on hope — hire on proven cashflow.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Investment Ladder section ─────────────────────────────
+function InvestmentLadder() {
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 8, lineHeight: 1.6
+      }}>
+        You're right — "saving" alone is losing money to inflation. Of the 5 lines in the Atlas's Savings section, only ONE is true savings (emergency fund). The other four are investment.
+      </div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 18, lineHeight: 1.6,
+        fontStyle: "italic", padding: "10px 12px", background: C.goldLt, borderRadius: 8,
+        border: "1px solid " + C.gold + "33"
+      }}>
+        Reframe: savings = capital preservation (emergency cash). Investment = capital growth (everything else). Both halal, both critical, very different mental models.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {INVESTMENT_LADDER.map((rung) => (
+          <div key={rung.rung} style={{
+            background: C.paper,
+            border: "1px solid " + rung.color + "33",
+            borderLeft: "4px solid " + rung.color,
+            borderRadius: 12, padding: "14px 16px",
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10, marginBottom: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div className="font-display" style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: rung.color, color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 14, fontWeight: 600
+                }}>
+                  {rung.rung}
+                </div>
+                <div className="font-display" style={{
+                  fontSize: 16, fontWeight: 600, color: C.ink
+                }}>
+                  {rung.name}
+                </div>
+              </div>
+            </div>
+
+            <div className="font-body" style={{ fontSize: 12.5, color: C.inkSoft, lineHeight: 1.55, marginBottom: 8 }}>
+              {rung.note}
+            </div>
+
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
+              <div style={{
+                fontSize: 10.5, color: C.muted, fontWeight: 600,
+                letterSpacing: "0.06em", textTransform: "uppercase"
+              }}>
+                <span style={{ color: rung.color }}>Target:</span>{" "}
+                <span style={{ color: C.ink, textTransform: "none", letterSpacing: 0 }}>{rung.target}</span>
+              </div>
+            </div>
+            <div style={{
+              fontSize: 11, color: C.muted, marginTop: 4
+            }}>
+              <em>Vehicle:</em> {rung.vehicle}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Protection Layers section ─────────────────────────────
+function ProtectionStack() {
+  const [openLayer, setOpenLayer] = useState(null);
+
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 18, lineHeight: 1.6
+      }}>
+        Seven layers. Three are Salafi obligations (Wasiyyah, POA, LLC). Two are darura-permitted (auto/home insurance, health coverage). Two replace conventional insurance with the Salaf's path (self-fund, trust).
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {PROTECTION_LAYERS.map((layer) => {
+          const open = openLayer === layer.id;
+          return (
+            <div key={layer.id} className="card-shadow" style={{
+              background: C.card, borderRadius: 12, overflow: "hidden",
+              border: "1px solid " + (open ? layer.badgeColor + "55" : "transparent"),
+            }}>
+              <button
+                onClick={() => setOpenLayer(open ? null : layer.id)}
+                style={{
+                  width: "100%", textAlign: "left", background: "transparent",
+                  border: "none", padding: "14px 16px", cursor: "pointer",
+                  display: "flex", alignItems: "flex-start", gap: 12
+                }}
+              >
+                <div style={{
+                  width: 36, height: 36, flexShrink: 0, borderRadius: 9,
+                  background: layer.badgeColor + "1A",
+                  color: layer.badgeColor,
+                  display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  <Icon name={layer.icon} size={18}/>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
+                    <div className="font-display" style={{
+                      fontSize: 15.5, fontWeight: 600, color: C.ink,
+                      lineHeight: 1.3
+                    }}>
+                      {layer.title}
+                    </div>
+                    <span className="font-body" style={{
+                      fontSize: 8.5, letterSpacing: "0.08em", textTransform: "uppercase",
+                      fontWeight: 700, color: layer.badgeColor,
+                      background: layer.badgeColor + "12",
+                      padding: "2px 7px", borderRadius: 999,
+                    }}>
+                      {layer.badge}
+                    </span>
+                  </div>
+                  <div className="font-body" style={{
+                    fontSize: 11.5, color: C.muted, lineHeight: 1.45,
+                    display: "flex", gap: 10, flexWrap: "wrap"
+                  }}>
+                    <span><strong style={{ color: C.ink }}>Cost:</strong> {layer.cost}</span>
+                    <span><strong style={{ color: C.ink }}>When:</strong> {layer.when}</span>
+                  </div>
+                </div>
+                <Icon name="ChevronDown" size={16} color={C.mutedLt} style={{
+                  flexShrink: 0,
+                  transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.25s",
+                  marginTop: 8
+                }}/>
+              </button>
+
+              {open && (
+                <div className="fade-in" style={{
+                  padding: "12px 16px 18px",
+                  borderTop: "1px solid " + C.lineSoft,
+                  background: C.paper
+                }}>
+                  <div className="font-body" style={{
+                    fontSize: 12.5, color: C.inkSoft, lineHeight: 1.6, marginBottom: 12
+                  }}>
+                    {layer.tldr}
+                  </div>
+
+                  <div style={{
+                    background: C.greenLt,
+                    border: "1px solid " + C.green + "33",
+                    borderRadius: 8,
+                    padding: "10px 12px",
+                    marginBottom: 14
+                  }}>
+                    <div className="font-body" style={{
+                      fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
+                      color: C.greenDk, fontWeight: 700, marginBottom: 4
+                    }}>
+                      Halal Status
+                    </div>
+                    <div className="font-body" style={{
+                      fontSize: 12, color: C.greenDk, lineHeight: 1.55
+                    }}>
+                      {layer.halal}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="font-body" style={{
+                      fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase",
+                      color: C.muted, fontWeight: 700, marginBottom: 8
+                    }}>
+                      Setup Steps
+                    </div>
+                    <ol style={{
+                      margin: 0, paddingLeft: 0, listStyle: "none",
+                      display: "flex", flexDirection: "column", gap: 6
+                    }}>
+                      {layer.steps.map((s, i) => (
+                        <li key={i} className="font-body" style={{
+                          fontSize: 12.5, color: C.ink, lineHeight: 1.55,
+                          display: "flex", gap: 10, alignItems: "flex-start"
+                        }}>
+                          <span style={{
+                            flexShrink: 0,
+                            width: 20, height: 20, borderRadius: 6,
+                            background: layer.badgeColor, color: "#fff",
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 11, fontWeight: 600,
+                            fontFamily: "'Fraunces', serif"
+                          }}>
+                            {i + 1}
+                          </span>
+                          <span style={{ paddingTop: 2 }}>{s}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Arrival Playbook section ──────────────────────────────
+function ArrivalPlaybook() {
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 18, lineHeight: 1.6
+      }}>
+        June/July landing. The 90 days that lock the rest of the year. Day 1 is listen, not pitch — that's already in your bones. The rest is paperwork rhythm.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {ARRIVAL_PHASES.map((phase, idx) => (
+          <div key={phase.id} style={{
+            background: C.paper,
+            border: "1px solid " + phase.color + "33",
+            borderLeft: "4px solid " + phase.color,
+            borderRadius: 12,
+            padding: "16px 16px"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+              <div style={{
+                width: 32, height: 32, borderRadius: 9,
+                background: phase.color, color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}>
+                <Icon name={phase.icon} size={16}/>
+              </div>
+              <div className="font-display" style={{
+                fontSize: 17, fontWeight: 600, color: C.ink,
+                letterSpacing: "-0.01em"
+              }}>
+                {phase.title}
+              </div>
+            </div>
+
+            <ul style={{
+              margin: 0, paddingLeft: 0, listStyle: "none",
+              display: "flex", flexDirection: "column", gap: 8
+            }}>
+              {phase.tasks.map((t, i) => (
+                <li key={i} className="font-body" style={{
+                  fontSize: 12.5, color: C.ink, lineHeight: 1.55,
+                  display: "flex", gap: 10, alignItems: "flex-start"
+                }}>
+                  <Icon name="ChevronRight" size={14} color={phase.color} style={{
+                    flexShrink: 0, marginTop: 3
+                  }}/>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Questions Checklist section ───────────────────────────
+function QuestionsChecklist({ checked, setChecked }) {
+  const totalChecked = Object.values(checked).filter(Boolean).length;
+  const pct = TOTAL_QUESTIONS > 0 ? Math.round((totalChecked / TOTAL_QUESTIONS) * 100) : 0;
+
+  const toggle = (key) => {
+    setChecked({ ...checked, [key]: !checked[key] });
+  };
+
+  return (
+    <div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.inkSoft, marginBottom: 12, lineHeight: 1.6
+      }}>
+        The questions you didn't know to ask yet. 35 items across 5 lanes. Check them off as you go — state saves to your phone. Share progress with your wife.
+      </div>
+
+      <div style={{
+        background: C.paper, borderRadius: 12, padding: "12px 14px",
+        marginBottom: 18, border: "1px solid " + C.line
+      }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+          <div className="font-body" style={{
+            fontSize: 11, color: C.muted, letterSpacing: "0.08em",
+            textTransform: "uppercase", fontWeight: 600
+          }}>
+            Progress
+          </div>
+          <div className="font-display num" style={{
+            fontSize: 17, fontWeight: 600, color: C.green
+          }}>
+            {totalChecked} / {TOTAL_QUESTIONS} · {pct}%
+          </div>
+        </div>
+        <div style={{
+          height: 6, background: C.lineSoft, borderRadius: 999, overflow: "hidden"
+        }}>
+          <div style={{
+            height: "100%", width: pct + "%",
+            background: "linear-gradient(90deg, " + C.green + " 0%, " + C.gold + " 100%)",
+            transition: "width 0.3s"
+          }}/>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        {QUESTION_GROUPS.map(group => {
+          const groupChecked = group.questions.filter((_, i) => checked[group.id + "_" + i]).length;
+          return (
+            <div key={group.id}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10, marginBottom: 10, paddingLeft: 2
+              }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: 8,
+                  background: group.color + "1A", color: group.color,
+                  display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  <Icon name={group.icon} size={14}/>
+                </div>
+                <div className="font-display" style={{
+                  fontSize: 15, fontWeight: 600, color: C.ink, flex: 1
+                }}>
+                  {group.name}
+                </div>
+                <div className="font-body num" style={{
+                  fontSize: 11.5, color: C.muted, fontWeight: 600
+                }}>
+                  {groupChecked}/{group.questions.length}
+                </div>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {group.questions.map((q, i) => {
+                  const key = group.id + "_" + i;
+                  const isChecked = !!checked[key];
+                  return (
+                    <button key={i} onClick={() => toggle(key)} style={{
+                      background: isChecked ? group.color + "0E" : C.card,
+                      border: "1px solid " + (isChecked ? group.color + "44" : C.line),
+                      borderRadius: 10,
+                      padding: "11px 12px",
+                      cursor: "pointer", textAlign: "left",
+                      display: "flex", gap: 11, alignItems: "flex-start",
+                      transition: "all 0.15s"
+                    }}>
+                      <div className={isChecked ? "checkbox checked" : "checkbox"} style={{
+                        background: isChecked ? group.color : "#fff",
+                        borderColor: isChecked ? group.color : C.line
+                      }}>
+                        {isChecked && <Icon name="Check" size={14} color="#fff"/>}
+                      </div>
+                      <div className="font-body" style={{
+                        fontSize: 12.5, color: isChecked ? C.muted : C.ink,
+                        lineHeight: 1.5,
+                        textDecoration: isChecked ? "line-through" : "none",
+                        paddingTop: 2
+                      }}>
+                        {q}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Share Modal ───────────────────────────────────────────
+function ShareModal({ checked, onClose }) {
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+  const totalChecked = Object.values(checked).filter(Boolean).length;
+  const pct = TOTAL_QUESTIONS > 0 ? Math.round((totalChecked / TOTAL_QUESTIONS) * 100) : 0;
+
+  const exportText = useMemo(() => {
+    let out = "════════════════════════════════════\n";
+    out += "TOWNES MASTER PLAN · PROGRESS\n";
+    out += "Snapshot " + new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) + "\n";
+    out += "════════════════════════════════════\n\n";
+    out += "MONTHLY MATH:\n";
+    out += "  Income:   +$9,000\n";
+    out += "  Expense:  -$7,200\n";
+    out += "  Leftover: +$1,800\n\n";
+
+    out += "TEAM PLAN: DIY Year One until KC clears $5K/mo for 3 months.\n\n";
+
+    out += "CHECKLIST PROGRESS: " + totalChecked + "/" + TOTAL_QUESTIONS + " (" + pct + "%)\n\n";
+
+    QUESTION_GROUPS.forEach(group => {
+      const groupChecked = group.questions.filter((_, i) => checked[group.id + "_" + i]).length;
+      out += "━━━ " + group.name.toUpperCase() + " — " + groupChecked + "/" + group.questions.length + " ━━━\n";
+      group.questions.forEach((q, i) => {
+        const isChecked = !!checked[group.id + "_" + i];
+        out += "  " + (isChecked ? "[x]" : "[ ]") + " " + q + "\n";
+      });
+      out += "\n";
+    });
+
+    out += "════════════════════════════════════\n";
+    return out;
+  }, [checked, totalChecked, pct]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(exportText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      const ta = document.getElementById("export-ta");
+      if (ta) { ta.select(); document.execCommand("copy"); setCopied(true); setTimeout(() => setCopied(false), 2200); }
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Townes Master Plan",
+          text: exportText
+        });
+        setShared(true);
+        setTimeout(() => setShared(false), 2200);
+      } catch {}
+    }
+  };
+
+  const canShare = typeof navigator !== 'undefined' && !!navigator.share;
+
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0,
+      background: "rgba(27,25,22,0.65)", backdropFilter: "blur(6px)",
+      zIndex: 1000, display: "flex",
+      alignItems: "center", justifyContent: "center", padding: 16
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: C.cream, borderRadius: 18,
+        maxWidth: 720, width: "100%", maxHeight: "90vh",
+        display: "flex", flexDirection: "column", overflow: "hidden",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.45)"
+      }}>
+        <div style={{
+          padding: "20px 24px", borderBottom: "1px solid " + C.line,
+          display: "flex", alignItems: "center", justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase",
+              color: C.gold, fontWeight: 600, marginBottom: 4
+            }}>
+              Plan Snapshot
+            </div>
+            <div className="font-display" style={{
+              fontSize: 22, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+            }}>
+              Share with your wife
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            width: 36, height: 36, borderRadius: 9,
+            background: "transparent", border: "1px solid " + C.line,
+            cursor: "pointer", display: "flex",
+            alignItems: "center", justifyContent: "center", color: C.muted
+          }}>
+            <Icon name="X" size={16}/>
+          </button>
+        </div>
+
+        <div style={{ padding: "14px 24px", background: C.greenLt, borderBottom: "1px solid " + C.line }}>
+          <div className="font-body" style={{ fontSize: 13, color: C.greenDk, lineHeight: 1.55 }}>
+            Tap <strong>Share</strong> for iMessage/AirDrop/Mail. Or <strong>Copy</strong> to paste anywhere.
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflow: "auto", padding: "16px 24px" }}>
+          <textarea id="export-ta" readOnly value={exportText}
+            onClick={e => e.target.select()} style={{
+              width: "100%", minHeight: 220, maxHeight: "40vh",
+              padding: "14px 16px", background: C.paper,
+              border: "1px solid " + C.line, borderRadius: 10,
+              fontFamily: "ui-monospace, Menlo, monospace",
+              fontSize: 11.5, lineHeight: 1.6,
+              color: C.ink, resize: "vertical"
+            }}/>
+        </div>
+
+        <div style={{ padding: "16px 24px 20px", borderTop: "1px solid " + C.line,
+          display: "flex", flexDirection: "column", gap: 10 }}>
+          {canShare && (
+            <button onClick={handleShare} className="font-body" style={{
+              width: "100%", padding: "14px 20px",
+              background: C.green, color: "#fff",
+              border: "none", borderRadius: 11,
+              fontSize: 15, fontWeight: 600, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+            }}>
+              {shared ? <><Icon name="Check" size={18}/> Shared</> : <><Icon name="Send" size={18}/> Share — iMessage, AirDrop, Mail</>}
+            </button>
+          )}
+          <button onClick={handleCopy} className="font-body" style={{
+            width: "100%", padding: "14px 20px",
+            background: copied ? C.green : C.ink,
+            color: copied ? "#fff" : C.cream,
+            border: "none", borderRadius: 11,
+            fontSize: 15, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+          }}>
+            {copied ? <><Icon name="Check" size={18}/> Copied</> : <><Icon name="Copy" size={18}/> Copy snapshot</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+//  MAIN APP
+// ═══════════════════════════════════════════════════════════
+function App() {
+  const saved = storage.get() || {};
+  const [openState, setOpenState] = useState(saved.openState || { team: true });
+  const [checked, setChecked] = useState(saved.checked || {});
+  const [showShare, setShowShare] = useState(false);
+  const saveRef = useRef(null);
+
+  useEffect(() => {
+    if (saveRef.current) clearTimeout(saveRef.current);
+    saveRef.current = setTimeout(() => {
+      storage.set({ openState, checked });
+    }, 300);
+    return () => saveRef.current && clearTimeout(saveRef.current);
+  }, [openState, checked]);
+
+  const totalChecked = Object.values(checked).filter(Boolean).length;
+
+  return (
+    <div className="font-body grain" style={{
+      minHeight: "100vh", background: C.cream,
+      color: C.ink, paddingBottom: 110
+    }}>
+      <header style={{
+        maxWidth: 880, margin: "0 auto",
+        padding: "30px 16px 12px", textAlign: "center"
+      }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          padding: "6px 14px", background: C.goldLt,
+          border: "1px solid " + C.gold + "44", borderRadius: 999,
+          fontSize: 10.5, letterSpacing: "0.16em",
+          textTransform: "uppercase", fontWeight: 700,
+          color: C.goldDk, marginBottom: 12
+        }}>
+          <Icon name="Star" size={11}/> Master Plan · Year One
+        </div>
+
+        <h1 className="font-display" style={{
+          fontSize: "clamp(32px, 7vw, 48px)", fontWeight: 400, color: C.ink,
+          margin: 0, letterSpacing: "-0.03em", lineHeight: 1.0, fontStyle: "italic"
+        }}>
+          One path.
+        </h1>
+        <h1 className="font-display" style={{
+          fontSize: "clamp(32px, 7vw, 48px)", fontWeight: 500, color: C.green,
+          margin: "2px 0 0", letterSpacing: "-0.03em", lineHeight: 1.0
+        }}>
+          Not scattered moves.
+        </h1>
+
+        <p className="font-body" style={{
+          fontSize: 14, color: C.inkSoft, maxWidth: 520,
+          margin: "14px auto 0", lineHeight: 1.55
+        }}>
+          Built from your Atlas numbers. Six sections. Tap to expand. Check off questions as you finish them — saves automatically.
+        </p>
+      </header>
+
+      <main style={{ maxWidth: 880, margin: "0 auto", padding: "0 14px" }}>
+
+        <Hero income={9000} expense={7200} leftover={1800}/>
+
+        <Section id="team" title="The Team Math" sub="SM strategist + video editor — three paths"
+          icon="Users" accent={C.navy}
+          openState={openState} setOpenState={setOpenState}>
+          <TeamBuild/>
+        </Section>
+
+        <Section id="invest" title="Investment First" sub="Why most of 'savings' is actually investment"
+          icon="TrendingUp" accent={C.green}
+          openState={openState} setOpenState={setOpenState}>
+          <InvestmentLadder/>
+        </Section>
+
+        <Section id="protect" title="The Protection Stack" sub="Seven layers · Salafi-aligned · halal-first"
+          icon="ShieldCheck" accent={C.rust}
+          openState={openState} setOpenState={setOpenState}>
+          <ProtectionStack/>
+        </Section>
+
+        <Section id="arrival" title="The 90-Day Arrival Playbook" sub="Pre-move · Week 1 · Month 1 · Month 2–3"
+          icon="Plane" accent={C.gold}
+          openState={openState} setOpenState={setOpenState}>
+          <ArrivalPlaybook/>
+        </Section>
+
+        <Section id="questions" title="Questions You Didn't Know To Ask" sub="35 items · 5 lanes · saves to your phone"
+          icon="ListChecks" accent={C.green}
+          openState={openState} setOpenState={setOpenState}>
+          <QuestionsChecklist checked={checked} setChecked={setChecked}/>
+        </Section>
+
+        {/* Closing card */}
+        <div style={{
+          background: C.ink, color: C.cream, borderRadius: 18,
+          padding: "26px 22px", textAlign: "center",
+          marginTop: 22, position: "relative", overflow: "hidden"
+        }}>
+          <div style={{
+            position: "absolute", top: -30, right: -30,
+            width: 160, height: 160,
+            background: "radial-gradient(circle, " + C.gold + "26 0%, transparent 70%)",
+            borderRadius: "50%", pointerEvents: "none"
+          }}/>
+          <div className="font-display" style={{
+            fontSize: 21, fontWeight: 500,
+            letterSpacing: "-0.01em", lineHeight: 1.3,
+            marginBottom: 10, position: "relative"
+          }}>
+            Birrul walidayn first. Wealth second. Both halal.
+          </div>
+          <div className="font-body" style={{
+            fontSize: 12.5, color: "#A89B86",
+            letterSpacing: "0.04em", position: "relative", lineHeight: 1.6
+          }}>
+            Your operator seat at Cut Creaters is the spine.<br/>
+            Khyree City is the growth engine.<br/>
+            The deen is the compass. The family is the why.
+          </div>
+        </div>
+      </main>
+
+      {/* Sticky share bar */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: "rgba(244, 238, 225, 0.94)",
+        backdropFilter: "blur(12px)",
+        borderTop: "1px solid " + C.line,
+        padding: "12px 14px",
+        paddingBottom: "calc(12px + env(safe-area-inset-bottom))",
+        zIndex: 100
+      }}>
+        <div style={{
+          maxWidth: 880, margin: "0 auto",
+          display: "flex", alignItems: "center", gap: 12,
+          justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 10, color: C.muted, letterSpacing: "0.08em",
+              textTransform: "uppercase", fontWeight: 600
+            }}>
+              Checklist Progress
+            </div>
+            <div className="font-display num" style={{
+              fontSize: 21, fontWeight: 600, color: C.green,
+              letterSpacing: "-0.02em", lineHeight: 1.1
+            }}>
+              {totalChecked}/{TOTAL_QUESTIONS}
+            </div>
+          </div>
+          <button onClick={() => setShowShare(true)} className="font-body" style={{
+            padding: "12px 18px", background: C.ink,
+            color: C.cream, border: "none", borderRadius: 999,
+            fontSize: 13, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 8,
+            boxShadow: "0 4px 12px " + C.ink + "33", whiteSpace: "nowrap"
+          }}>
+            <Icon name="Send" size={14}/> Share
+          </button>
+        </div>
+      </div>
+
+      {showShare && <ShareModal checked={checked} onClose={() => setShowShare(false)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>

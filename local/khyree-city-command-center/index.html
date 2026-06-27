@@ -1,0 +1,3988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khyree City · Operator Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; padding: 0; background: #0a0a0c; color: #fafafa; font-family: 'Geist', system-ui, sans-serif; min-height: 100vh; }
+    * { box-sizing: border-box; }
+    #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 24px; background: #0a0a0c; z-index: 9999; transition: opacity 0.4s; }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    .loading-bar { width: 280px; height: 2px; background: #27272d; border-radius: 2px; overflow: hidden; position: relative; }
+    .loading-bar::after { content: ''; position: absolute; left: 0; top: 0; width: 40%; height: 100%; background: #b8ff00; animation: load 1.4s ease-in-out infinite; }
+    @keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+    #loading .label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6b6b73; letter-spacing: 0.2em; text-align: center; max-width: 600px; }
+    #loading h2 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 26px; font-weight: 800; margin: 0; color: #fafafa; letter-spacing: -0.03em; }
+    #loading h2 .accent { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: #f5e6c8; }
+    #loading h2 .kc { color: #b8ff00; }
+    #error-display { display: none; position: fixed; inset: 0; padding: 40px; background: #0a0a0c; z-index: 10000; overflow: auto; }
+    #error-display.visible { display: block; }
+    #error-display h1 { color: #ef4444; font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; margin: 0 0 16px; }
+    #error-display p { color: #a1a1a8; font-size: 14px; line-height: 1.6; margin: 8px 0; max-width: 700px; }
+    #error-display strong { color: #fafafa; }
+    #error-display pre { background: #111114; border: 1px solid #27272d; border-radius: 4px; padding: 16px; color: #fafafa; font-family: 'JetBrains Mono', monospace; font-size: 12px; overflow: auto; white-space: pre-wrap; word-wrap: break-word; line-height: 1.5; max-width: 1000px; }
+    #error-display .error-section { margin-top: 16px; }
+    #error-display .error-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #6b6b73; letter-spacing: 0.15em; margin-bottom: 6px; }
+    .mobile-warning { display: none; padding: 12px 16px; background: #16161b; border-bottom: 1px solid #27272d; font-size: 11px; color: #f59e0b; text-align: center; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+    @media (max-width: 900px) { .mobile-warning { display: block; } }
+    .display-font { font-family: 'Bricolage Grotesque', sans-serif; letter-spacing: -0.02em; }
+    .mono-font { font-family: 'JetBrains Mono', monospace; }
+    .serif-italic { font-family: 'Instrument Serif', serif; font-style: italic; }
+    .grain { background-image: radial-gradient(circle at 1px 1px, rgba(184,255,0,0.018) 1px, transparent 0); background-size: 24px 24px; }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: #3a3a42; border-radius: 2px; outline: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; background: #b8ff00; border-radius: 50%; cursor: pointer; border: 2px solid #0a0a0c; box-shadow: 0 0 0 1px #b8ff00, 0 0 12px rgba(184,255,0,0.5); transition: transform 0.15s; }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: #b8ff00; border-radius: 50%; cursor: pointer; border: 2px solid #0a0a0c; }
+    .tab-btn { transition: all 0.2s; }
+    .tab-btn:hover { background: #1c1c22; color: #fafafa; }
+    .stat-card { transition: transform 0.2s, border-color 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); border-color: #3a3a42; }
+    @media (max-width: 1100px) {
+      .main-grid { grid-template-columns: 1fr !important; }
+      .hero-strip { grid-template-columns: repeat(3, 1fr) !important; }
+    }
+    @media (max-width: 700px) {
+      .hero-strip { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <h2><span class="kc">Khyree City</span> <span class="accent">Command</span></h2>
+    <div class="loading-bar"></div>
+    <div class="label" id="loading-label">LOADING…</div>
+  </div>
+  <div id="error-display">
+    <h1>Dashboard failed to load</h1>
+    <p>Something went wrong while initializing. Details below.</p>
+    <p><strong>Most common fixes:</strong> refresh · check internet · try Chrome</p>
+    <div class="error-section">
+      <div class="error-label">ERROR MESSAGE</div>
+      <pre id="error-message">—</pre>
+    </div>
+    <div class="error-section">
+      <div class="error-label">DIAGNOSTIC</div>
+      <pre id="error-diagnostic">—</pre>
+    </div>
+    <div class="error-section">
+      <div class="error-label">STACK TRACE</div>
+      <pre id="error-stack">—</pre>
+    </div>
+  </div>
+  <div class="mobile-warning">⚠ FOR FULL EXPERIENCE, OPEN ON A LAPTOP OR IPAD</div>
+  <div id="root"></div>
+
+  <script>
+    function showError(title, message, stack, diagnostic) {
+      try {
+        var loader = document.getElementById('loading');
+        if (loader) loader.style.display = 'none';
+        var err = document.getElementById('error-display');
+        var msgEl = document.getElementById('error-message');
+        var stackEl = document.getElementById('error-stack');
+        var diagEl = document.getElementById('error-diagnostic');
+        if (msgEl) msgEl.textContent = message || '(no message)';
+        if (stackEl) stackEl.textContent = stack || '(no stack)';
+        if (diagEl) diagEl.textContent = diagnostic || '(no diagnostic)';
+        if (err) err.classList.add('visible');
+      } catch(_) {
+        document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:monospace"><h1 style="color:#ef4444">Error</h1><pre>' + 
+          (message || '') + '\n\n' + (stack || '') + '\n\n' + (diagnostic || '') + '</pre></div>';
+      }
+    }
+    function getDiagnostic() {
+      return [
+        'React loaded: ' + (typeof React !== 'undefined' ? 'YES (v' + (React.version || '?') + ')' : 'NO'),
+        'ReactDOM loaded: ' + (typeof ReactDOM !== 'undefined' ? 'YES' : 'NO'),
+        'PropTypes loaded: ' + (typeof PropTypes !== 'undefined' ? 'YES' : 'NO'),
+        'Recharts loaded: ' + (typeof Recharts !== 'undefined' ? 'YES' : 'NO'),
+        'createRoot available: ' + (typeof ReactDOM !== 'undefined' && typeof ReactDOM.createRoot === 'function' ? 'YES' : 'NO'),
+        'User Agent: ' + navigator.userAgent,
+        'URL: ' + location.href,
+      ].join('\n');
+    }
+    function updateLoadingLabel(text) {
+      var l = document.getElementById('loading-label');
+      if (l) l.textContent = text;
+    }
+    window.addEventListener('error', function(e) {
+      var msg = (e.error && e.error.message) || e.message || 'Unknown error';
+      var stack = (e.error && e.error.stack) || '(no stack)';
+      showError('Error', msg, stack, getDiagnostic());
+    });
+    var cdnsLoaded = 0;
+    var totalCdns = 4;
+    function onCdnLoad(name) {
+      cdnsLoaded++;
+      updateLoadingLabel('LOADING LIBRARIES… ' + cdnsLoaded + '/' + totalCdns + ' (' + name + ')');
+      if (cdnsLoaded === totalCdns) {
+        updateLoadingLabel('STARTING COMMAND CENTER…');
+        setTimeout(startApp, 50);
+      }
+    }
+    function onCdnFail(name, url) {
+      showError('CDN load failed', 'Failed to load ' + name + ' from ' + url, '', getDiagnostic());
+    }
+    function startApp() {
+      try {
+        if (typeof React === 'undefined') { showError('Library missing', 'React did not load', '', getDiagnostic()); return; }
+        if (typeof ReactDOM === 'undefined') { showError('Library missing', 'ReactDOM did not load', '', getDiagnostic()); return; }
+        if (typeof Recharts === 'undefined') { showError('Library missing', 'Recharts did not load', '', getDiagnostic()); return; }
+        if (typeof ReactDOM.createRoot !== 'function') { showError('Wrong React version', 'createRoot not available', '', getDiagnostic()); return; }
+        runApp();
+      } catch(e) {
+        showError(e.name || 'Error', e.message || String(e), e.stack || '(no stack)', getDiagnostic());
+      }
+    }
+  </script>
+
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"
+    onload="onCdnLoad('React')" onerror="onCdnFail('React', this.src)"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"
+    onload="onCdnLoad('ReactDOM')" onerror="onCdnFail('ReactDOM', this.src)"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/prop-types@15.8.1/prop-types.min.js"
+    onload="onCdnLoad('PropTypes')" onerror="onCdnFail('PropTypes', this.src)"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/recharts@2.12.7/umd/Recharts.js"
+    onload="onCdnLoad('Recharts')" onerror="onCdnFail('Recharts', this.src)"></script>
+
+  <script>
+    function runApp() {
+      function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+      const {
+        useState,
+        useMemo,
+        useEffect,
+        useRef
+      } = React;
+      const {
+        LineChart,
+        Line,
+        BarChart,
+        Bar,
+        AreaChart,
+        Area,
+        PieChart,
+        Pie,
+        Cell,
+        XAxis,
+        YAxis,
+        CartesianGrid,
+        Tooltip,
+        ResponsiveContainer,
+        Legend,
+        ReferenceLine
+      } = Recharts;
+      const ICON_PATHS = {
+        truck: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M15 18H9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "17",
+          cy: "18",
+          r: "2"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "7",
+          cy: "18",
+          r: "2"
+        })),
+        'dollar-sign': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          x2: "12",
+          y1: "2",
+          y2: "22"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+        })),
+        'trending-up': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("polyline", {
+          points: "22 7 13.5 15.5 8.5 10.5 2 17"
+        }), /*#__PURE__*/React.createElement("polyline", {
+          points: "16 7 22 7 22 13"
+        })),
+        'trending-down': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("polyline", {
+          points: "22 17 13.5 8.5 8.5 13.5 2 7"
+        }), /*#__PURE__*/React.createElement("polyline", {
+          points: "16 17 22 17 22 11"
+        })),
+        activity: /*#__PURE__*/React.createElement("path", {
+          d: "M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.5.5 0 0 1-.96 0L9.24 2.18a.5.5 0 0 0-.96 0l-2.35 8.36A2 2 0 0 1 4 12H2"
+        }),
+        wrench: /*#__PURE__*/React.createElement("path", {
+          d: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
+        }),
+        calendar: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("rect", {
+          width: "18",
+          height: "18",
+          x: "3",
+          y: "4",
+          rx: "2",
+          ry: "2"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "16",
+          x2: "16",
+          y1: "2",
+          y2: "6"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "8",
+          x2: "8",
+          y1: "2",
+          y2: "6"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "3",
+          x2: "21",
+          y1: "10",
+          y2: "10"
+        })),
+        'alert-triangle': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          x2: "12",
+          y1: "9",
+          y2: "13"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "12",
+          x2: "12.01",
+          y1: "17",
+          y2: "17"
+        })),
+        target: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "10"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "6"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "2"
+        })),
+        layers: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m6.08 9.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m6.08 14.5-3.5 1.6a1 1 0 0 0 0 1.81l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9a1 1 0 0 0 0-1.83l-3.5-1.59"
+        })),
+        'chevron-up': /*#__PURE__*/React.createElement("path", {
+          d: "m18 15-6-6-6 6"
+        }),
+        'chevron-down': /*#__PURE__*/React.createElement("path", {
+          d: "m6 9 6 6 6-6"
+        }),
+        plus: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M5 12h14"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M12 5v14"
+        })),
+        minus: /*#__PURE__*/React.createElement("path", {
+          d: "M5 12h14"
+        }),
+        save: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+        }), /*#__PURE__*/React.createElement("polyline", {
+          points: "17 21 17 13 7 13 7 21"
+        }), /*#__PURE__*/React.createElement("polyline", {
+          points: "7 3 7 8 15 8"
+        })),
+        zap: /*#__PURE__*/React.createElement("polygon", {
+          points: "13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+        }),
+        'bar-chart-3': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M3 3v18h18"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M18 17V9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M13 17V5"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M8 17v-3"
+        })),
+        gauge: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "m12 14 4-4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M3.34 19a10 10 0 1 1 17.32 0"
+        })),
+        route: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+          cx: "6",
+          cy: "19",
+          r: "3"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "18",
+          cy: "5",
+          r: "3"
+        })),
+        'building-2': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M10 6h4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M10 10h4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M10 14h4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M10 18h4"
+        })),
+        'hand-coins': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M11 15h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 17"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m7 21 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m2 16 6 6"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "16",
+          cy: "9",
+          r: "2.9"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "6",
+          cy: "5",
+          r: "3"
+        })),
+        'circle-dot': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "10"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "1"
+        })),
+        flame: /*#__PURE__*/React.createElement("path", {
+          d: "M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"
+        }),
+        'check-circle-2': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m9 12 2 2 4-4"
+        })),
+        'x-circle': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "10"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m15 9-6 6"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m9 9 6 6"
+        })),
+        'settings-2': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M20 7h-9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M14 17H5"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "17",
+          cy: "17",
+          r: "3"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "7",
+          cy: "7",
+          r: "3"
+        })),
+        info: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "12",
+          r: "10"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M12 16v-4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M12 8h.01"
+        })),
+        shield: /*#__PURE__*/React.createElement("path", {
+          d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+        }),
+        users: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "9",
+          cy: "7",
+          r: "4"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M22 21v-2a4 4 0 0 0-3-3.87"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M16 3.13a4 4 0 0 1 0 7.75"
+        })),
+        fuel: /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("line", {
+          x1: "3",
+          x2: "15",
+          y1: "22",
+          y2: "22"
+        }), /*#__PURE__*/React.createElement("line", {
+          x1: "4",
+          x2: "14",
+          y1: "9",
+          y2: "9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"
+        })),
+        'map-pin': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0Z"
+        }), /*#__PURE__*/React.createElement("circle", {
+          cx: "12",
+          cy: "10",
+          r: "3"
+        })),
+        'arrow-right': /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("path", {
+          d: "M5 12h14"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "m12 5 7 7-7 7"
+        }))
+      };
+      function Icon({
+        name,
+        size = 16,
+        color = 'currentColor',
+        strokeWidth = 2,
+        style
+      }) {
+        return /*#__PURE__*/React.createElement("svg", {
+          width: size,
+          height: size,
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: color,
+          strokeWidth: strokeWidth,
+          strokeLinecap: "round",
+          strokeLinejoin: "round",
+          style: {
+            display: 'inline-block',
+            verticalAlign: 'middle',
+            flexShrink: 0,
+            ...style
+          }
+        }, ICON_PATHS[name]);
+      }
+      const Truck = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "truck"
+      }, p));
+      const DollarSign = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "dollar-sign"
+      }, p));
+      const TrendingUp = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "trending-up"
+      }, p));
+      const TrendingDown = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "trending-down"
+      }, p));
+      const Activity = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "activity"
+      }, p));
+      const Fuel = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "fuel"
+      }, p));
+      const Wrench = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "wrench"
+      }, p));
+      const Shield = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "shield"
+      }, p));
+      const Users = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "users"
+      }, p));
+      const Calendar = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "calendar"
+      }, p));
+      const MapPin = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "map-pin"
+      }, p));
+      const AlertTriangle = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "alert-triangle"
+      }, p));
+      const Target = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "target"
+      }, p));
+      const Layers = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "layers"
+      }, p));
+      const ChevronUp = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "chevron-up"
+      }, p));
+      const ChevronDown = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "chevron-down"
+      }, p));
+      const Plus = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "plus"
+      }, p));
+      const Minus = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "minus"
+      }, p));
+      const Save = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "save"
+      }, p));
+      const Zap = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "zap"
+      }, p));
+      const BarChart3 = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "bar-chart-3"
+      }, p));
+      const Gauge = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "gauge"
+      }, p));
+      const Route = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "route"
+      }, p));
+      const Building2 = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "building-2"
+      }, p));
+      const HandCoins = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "hand-coins"
+      }, p));
+      const ArrowRight = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "arrow-right"
+      }, p));
+      const CircleDot = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "circle-dot"
+      }, p));
+      const Flame = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "flame"
+      }, p));
+      const CheckCircle2 = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "check-circle-2"
+      }, p));
+      const XCircle = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "x-circle"
+      }, p));
+      const Info = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "info"
+      }, p));
+      const Settings2 = p => /*#__PURE__*/React.createElement(Icon, _extends({
+        name: "settings-2"
+      }, p));
+
+      // KHYREE CITY · OPERATOR COMMAND CENTER
+      // "I level up barbers" · Newark raised · Cairo based
+      // Premium plan dashboard — full operator suite
+
+      const KC = {
+        bg: '#0a0a0c',
+        bgSurface: '#111114',
+        bgElevated: '#16161b',
+        bgInset: '#1c1c22',
+        border: '#27272d',
+        borderBright: '#3a3a42',
+        text: '#fafafa',
+        textDim: '#a1a1a8',
+        textMuted: '#6b6b73',
+        acid: '#b8ff00',
+        // primary brand · cyber/matrix
+        acidDim: '#8ab800',
+        cream: '#f5e6c8',
+        // warm secondary
+        electric: '#3b82f6',
+        // ops blue
+        emerald: '#10b981',
+        amber: '#f59e0b',
+        rose: '#ef4444',
+        violet: '#8b5cf6'
+      };
+      const fmtKC = n => {
+        if (n === 0) return '$0';
+        if (Math.abs(n) >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`;
+        if (Math.abs(n) >= 1000) return `$${(n / 1000).toFixed(1)}K`;
+        return `$${Math.round(n).toLocaleString()}`;
+      };
+      const fmtKCFull = n => `$${Math.round(n).toLocaleString()}`;
+      const fmtKCPct = n => `${n.toFixed(1)}%`;
+      function KhyreeCityDashboard() {
+        // ============================================================
+        // STATE — operator config
+        // ============================================================
+        const [activeClients, setActiveClients] = useState(0);
+        const [warmLeads, setWarmLeads] = useState(3);
+        const [coldLeads, setColdLeads] = useState(127);
+        const [setupFee, setSetupFee] = useState(500);
+        const [retainerFee, setRetainerFee] = useState(97);
+        const [safetyNumber, setSafetyNumber] = useState(1500);
+        const [freedomNumber, setFreedomNumber] = useState(3000); // per week
+        const [cashOnHand, setCashOnHand] = useState(4200);
+        const [monthlyExpenses, setMonthlyExpenses] = useState(1200);
+
+        // Cold ops weekly
+        const [weekDials, setWeekDials] = useState(247);
+        const [weekContacts, setWeekContacts] = useState(89);
+        const [weekConversations, setWeekConversations] = useState(23);
+        const [weekDemos, setWeekDemos] = useState(4);
+
+        // Content this week
+        const [reelsResearched, setReelsResearched] = useState(3);
+        const [reelsScripted, setReelsScripted] = useState(2);
+        const [reelsFilmed, setReelsFilmed] = useState(1);
+        const [reelsEdited, setReelsEdited] = useState(1);
+        const [reelsPosted, setReelsPosted] = useState(0);
+
+        // IG metrics
+        const [igFollowers, setIgFollowers] = useState(111200);
+        const [igDmsThisWeek, setIgDmsThisWeek] = useState(12);
+
+        // Niyyah
+        const [salahToday, setSalahToday] = useState(3);
+        const [juzProgress, setJuzProgress] = useState(60); // % of Juz 30 memorized
+        const [sadaqahPaidYTD, setSadaqahPaidYTD] = useState(0);
+
+        // UI
+        const [activeTab, setActiveTab] = useState('command');
+        const [pulse, setPulse] = useState(true);
+        const [now, setNow] = useState(new Date());
+        useEffect(() => {
+          const id = setInterval(() => {
+            setPulse(p => !p);
+            setNow(new Date());
+          }, 1400);
+          return () => clearInterval(id);
+        }, []);
+
+        // ============================================================
+        // CALCULATIONS
+        // ============================================================
+        const k = useMemo(() => {
+          const mrr = activeClients * retainerFee;
+          const annualMrr = mrr * 12;
+          const runwayMonths = monthlyExpenses > 0 ? cashOnHand / monthlyExpenses : 999;
+          const runwayWeeks = cashOnHand / (monthlyExpenses / 4.33);
+
+          // Pipeline value calculations
+          const warmValue = warmLeads * (setupFee + retainerFee * 12); // assume 1yr retention
+          const warmCloseRate = 0.65; // warm = high close rate
+          const expectedWarmRevenue = warmValue * warmCloseRate;
+          const coldValue = coldLeads * (setupFee + retainerFee * 12);
+          const coldCloseRate = 0.04; // cold = ~4% close rate
+          const expectedColdRevenue = coldValue * coldCloseRate;
+          const totalPipeline = expectedWarmRevenue + expectedColdRevenue;
+
+          // Sadaqah due (10% of all income)
+          // Assuming pre-launch = $0 income this month
+          const monthIncome = mrr; // simplified
+          const sadaqahDueThisMonth = monthIncome * 0.10;
+
+          // Days to freedom: target $3K/week = $13K/mo
+          const freedomMonthly = freedomNumber * 4.33;
+          const monthsToFreedom = mrr > 0 ? Math.ceil((freedomMonthly - mrr) / (retainerFee * 4)) : 999; // assume 4 new clients/mo
+          const daysToFreedom = monthsToFreedom * 30;
+
+          // Conversion rates
+          const dialToContact = weekDials > 0 ? weekContacts / weekDials * 100 : 0;
+          const contactToConversation = weekContacts > 0 ? weekConversations / weekContacts * 100 : 0;
+          const conversationToDemo = weekConversations > 0 ? weekDemos / weekConversations * 100 : 0;
+
+          // Content velocity
+          const reelsOnTrack = reelsPosted >= 3;
+          const reelsThisWeek = reelsPosted;
+          const reelsTarget = 3;
+
+          // Cairo time (UTC+2 typically, +3 in summer)
+          const cairoOffset = 3 * 60;
+          const cairoTime = new Date(now.getTime() + (cairoOffset + now.getTimezoneOffset()) * 60000);
+          return {
+            mrr,
+            annualMrr,
+            runwayMonths,
+            runwayWeeks,
+            warmValue,
+            expectedWarmRevenue,
+            coldValue,
+            expectedColdRevenue,
+            totalPipeline,
+            monthIncome,
+            sadaqahDueThisMonth,
+            daysToFreedom,
+            monthsToFreedom,
+            dialToContact,
+            contactToConversation,
+            conversationToDemo,
+            reelsOnTrack,
+            reelsThisWeek,
+            reelsTarget,
+            cairoTime,
+            freedomMonthlyTarget: freedomMonthly
+          };
+        }, [activeClients, retainerFee, setupFee, cashOnHand, monthlyExpenses, warmLeads, coldLeads, freedomNumber, weekDials, weekContacts, weekConversations, weekDemos, reelsPosted, now]);
+
+        // ============================================================
+        // SEED DATA
+        // ============================================================
+        const pipelineLeads = useMemo(() => [
+        // Track A — warm (cousin Marcus, family friend, childhood friend)
+        {
+          id: 1,
+          name: 'Marcus T.',
+          business: 'Newark Cuts',
+          track: 'A',
+          stage: 'demo',
+          value: 500 + 97 * 12,
+          daysInStage: 2,
+          lastTouch: '2d',
+          notes: 'Cousin · Demo Friday 6pm Cairo / 12pm EST',
+          priority: 'high'
+        }, {
+          id: 2,
+          name: 'Brother Yusuf',
+          business: 'House of Fades · ATL',
+          track: 'A',
+          stage: 'interested',
+          value: 500 + 97 * 12,
+          daysInStage: 5,
+          lastTouch: '5d',
+          notes: 'Family · Reviewing intake form, niyyah aligned',
+          priority: 'high'
+        }, {
+          id: 3,
+          name: 'D. Hayes',
+          business: 'Hayes Barber Co · Newark',
+          track: 'A',
+          stage: 'contacted',
+          value: 500 + 97 * 12,
+          daysInStage: 8,
+          lastTouch: '8d',
+          notes: 'Childhood friend · DM sent, awaiting reply',
+          priority: 'med'
+        },
+        // Track B — cold (sample from Outscraper Georgia barbers)
+        {
+          id: 4,
+          name: 'James W.',
+          business: 'Atlanta Lineup',
+          track: 'B',
+          stage: 'interested',
+          value: 500 + 97 * 12,
+          daysInStage: 1,
+          lastTouch: '1d',
+          notes: 'Cold call Tue · agreed to demo',
+          priority: 'high'
+        }, {
+          id: 5,
+          name: 'Tre R.',
+          business: 'Trim Lab · Augusta',
+          track: 'B',
+          stage: 'contacted',
+          value: 500 + 97 * 12,
+          daysInStage: 3,
+          lastTouch: '3d',
+          notes: 'Voicemail left · callback Thu 2pm EST',
+          priority: 'med'
+        }, {
+          id: 6,
+          name: 'O. Mitchell',
+          business: 'Mitchell\'s Cuts',
+          track: 'B',
+          stage: 'contacted',
+          value: 500 + 97 * 12,
+          daysInStage: 4,
+          lastTouch: '4d',
+          notes: 'Said "send info" — info sent, in SENT INFO tab',
+          priority: 'med'
+        }, {
+          id: 7,
+          name: 'K. Foster',
+          business: 'Foster Fades · Macon',
+          track: 'B',
+          stage: 'cold',
+          value: 500 + 97 * 12,
+          daysInStage: 0,
+          lastTouch: '—',
+          notes: 'On Monday call list',
+          priority: 'low'
+        }, {
+          id: 8,
+          name: 'B. Anderson',
+          business: 'Sharp by B',
+          track: 'B',
+          stage: 'cold',
+          value: 500 + 97 * 12,
+          daysInStage: 0,
+          lastTouch: '—',
+          notes: 'Highly active IG · prime fit',
+          priority: 'med'
+        }, {
+          id: 9,
+          name: 'Q. Davis',
+          business: 'Royal Cuts · Savannah',
+          track: 'B',
+          stage: 'declined',
+          value: 0,
+          daysInStage: 6,
+          lastTouch: '6d',
+          notes: 'CC NOT INTERESTED · "got a guy"',
+          priority: 'low'
+        }, {
+          id: 10,
+          name: 'M. Rivera',
+          business: 'Rivera Barbers',
+          track: 'B',
+          stage: 'demo',
+          value: 500 + 97 * 12,
+          daysInStage: 1,
+          lastTouch: '1d',
+          notes: 'Demo Sat morning · ready to close',
+          priority: 'high'
+        }], []);
+        const todayPriorities = [{
+          id: 1,
+          time: '14:00 Cairo',
+          task: 'Demo call · Marcus T. (cousin) — Newark Cuts',
+          tag: 'pipeline',
+          urgent: true
+        }, {
+          id: 2,
+          time: '16:00 Cairo',
+          task: 'Batch call block · 30 dials Track B Georgia list',
+          tag: 'cold'
+        }, {
+          id: 3,
+          time: '18:00 Cairo',
+          task: 'Edit Reel 2 of 3 · "Newark raised me" hook',
+          tag: 'content'
+        }, {
+          id: 4,
+          time: '20:00 Cairo',
+          task: 'Follow up: D. Hayes · DM check',
+          tag: 'pipeline'
+        }, {
+          id: 5,
+          time: 'Anytime',
+          task: 'Memorize: Surah Al-Mursalat verses 21-25',
+          tag: 'niyyah'
+        }];
+        const recentActivity = [{
+          id: 1,
+          time: '12m ago',
+          text: 'Outscraper export ready · 47 new GA barbers · ready for PhoneBurner',
+          tag: 'cold',
+          icon: 'route'
+        }, {
+          id: 2,
+          time: '1h ago',
+          text: 'Marcus T. confirmed demo · niyyah aligned, intake form sent',
+          tag: 'pipeline',
+          icon: 'check-circle-2'
+        }, {
+          id: 3,
+          time: '3h ago',
+          text: 'Reel 1 batch recorded · Cairo b-roll · Submagic queue',
+          tag: 'content',
+          icon: 'zap'
+        }, {
+          id: 4,
+          time: '5h ago',
+          text: 'Subhi prayer · Quran practice 20min',
+          tag: 'niyyah',
+          icon: 'circle-dot'
+        }, {
+          id: 5,
+          time: 'Yesterday',
+          text: '$0 income · sadaqah ledger steady',
+          tag: 'runway',
+          icon: 'hand-coins'
+        }];
+
+        // 12-week forecast
+        const trajectoryData = useMemo(() => {
+          const data = [];
+          let clients = activeClients;
+          let mrr = clients * retainerFee;
+          let cumulative = 0;
+          for (let week = 0; week < 26; week++) {
+            // Growth model: 1 new client per week from week 2-12, then 2/wk after
+            if (week >= 2 && week < 12) clients += 1;else if (week >= 12) clients += 2;
+            mrr = clients * retainerFee;
+            const setupRevenue = week >= 2 ? setupFee * (week >= 12 ? 2 : 1) : 0;
+            const weekIncome = mrr / 4.33 + setupRevenue;
+            cumulative += weekIncome;
+            data.push({
+              week: `W${week + 1}`,
+              mrr: Math.round(mrr),
+              weekIncome: Math.round(weekIncome),
+              cumulative: Math.round(cumulative),
+              target: freedomNumber,
+              // per week target
+              clients
+            });
+          }
+          return data;
+        }, [activeClients, retainerFee, setupFee, freedomNumber]);
+
+        // Format date
+        const dayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][k.cairoTime.getDay()];
+        const dateStr = k.cairoTime.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const timeStr = k.cairoTime.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        });
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: KC.bg,
+            color: KC.text,
+            minHeight: '100vh',
+            fontFamily: '"Geist", system-ui, sans-serif'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "grain",
+          style: {
+            minHeight: '100vh'
+          }
+        }, /*#__PURE__*/React.createElement("header", {
+          style: {
+            borderBottom: `1px solid ${KC.border}`,
+            background: KC.bgSurface,
+            position: 'relative',
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 2,
+            background: `linear-gradient(90deg, transparent, ${KC.acid}, transparent)`
+          }
+        }), /*#__PURE__*/React.createElement("div", {
+          style: {
+            maxWidth: 1440,
+            margin: '0 auto',
+            padding: '20px 32px'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 24,
+            flexWrap: 'wrap'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 48,
+            height: 48,
+            background: KC.bg,
+            border: `1px solid ${KC.acid}40`,
+            borderRadius: 4,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            boxShadow: `0 0 24px ${KC.acid}15`
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "display-font",
+          style: {
+            fontSize: 20,
+            fontWeight: 800,
+            color: KC.acid,
+            letterSpacing: '-0.05em'
+          }
+        }, "KC"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            bottom: 4,
+            right: 4,
+            width: 6,
+            height: 6,
+            background: pulse ? KC.acid : KC.acid + '40',
+            borderRadius: '50%',
+            boxShadow: `0 0 8px ${KC.acid}`
+          }
+        })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.textMuted,
+            letterSpacing: '0.15em'
+          }
+        }, "OPERATOR \xB7 KHYREE TOWNES \xB7 CAIRO"), /*#__PURE__*/React.createElement("span", {
+          style: {
+            padding: '2px 6px',
+            borderRadius: 2,
+            fontSize: 9,
+            fontWeight: 600,
+            background: KC.acid + '15',
+            color: KC.acid,
+            letterSpacing: '0.1em'
+          }
+        }, "\u25CF LIVE")), /*#__PURE__*/React.createElement("h1", {
+          className: "display-font",
+          style: {
+            fontSize: 28,
+            fontWeight: 800,
+            margin: '2px 0 0',
+            letterSpacing: '-0.03em'
+          }
+        }, "Khyree City ", /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream,
+            fontWeight: 400,
+            fontSize: 26
+          }
+        }, "Command")), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            margin: '4px 0 0',
+            fontStyle: 'italic'
+          }
+        }, "\"I level up barbers\" \u2014 Newark raised, Cairo based"))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            textAlign: 'right'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em'
+          }
+        }, "CAIRO LOCAL"), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 22,
+            fontWeight: 700,
+            color: KC.text,
+            lineHeight: 1,
+            marginTop: 2
+          }
+        }, timeStr), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 4
+          }
+        }, dayName, " \xB7 ", dateStr)), /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 1,
+            height: 48,
+            background: KC.border
+          }
+        }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em'
+          }
+        }, "NEXT SALAH"), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 18,
+            fontWeight: 700,
+            color: KC.cream,
+            lineHeight: 1,
+            marginTop: 2
+          }
+        }, "Asr \xB7 15:32"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 4
+          }
+        }, salahToday, "/5 today")))))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            maxWidth: 1440,
+            margin: '0 auto',
+            padding: '32px 32px 0'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "hero-strip",
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            gap: 0,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 6,
+            overflow: 'hidden',
+            background: KC.bgSurface
+          }
+        }, /*#__PURE__*/React.createElement(KCHero, {
+          label: "MRR",
+          value: fmtKC(k.mrr),
+          sub: `${activeClients} active · target $1.5K`,
+          accent: k.mrr > 0 ? KC.acid : KC.textMuted,
+          icon: /*#__PURE__*/React.createElement(DollarSign, {
+            size: 14
+          }),
+          primary: true
+        }), /*#__PURE__*/React.createElement(KCHero, {
+          label: "CASH ON HAND",
+          value: fmtKC(cashOnHand),
+          sub: `${k.runwayMonths.toFixed(1)}mo of safety`,
+          accent: k.runwayMonths >= 3 ? KC.emerald : k.runwayMonths >= 1.5 ? KC.amber : KC.rose,
+          icon: /*#__PURE__*/React.createElement(Shield, {
+            size: 14
+          })
+        }), /*#__PURE__*/React.createElement(KCHero, {
+          label: "PIPELINE VALUE",
+          value: fmtKC(k.totalPipeline),
+          sub: `${warmLeads + coldLeads} leads · weighted`,
+          accent: KC.cream,
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 14
+          })
+        }), /*#__PURE__*/React.createElement(KCHero, {
+          label: "THIS WEEK",
+          value: fmtKC(0),
+          sub: "setup fees collected",
+          icon: /*#__PURE__*/React.createElement(TrendingUp, {
+            size: 14
+          })
+        }), /*#__PURE__*/React.createElement(KCHero, {
+          label: "SADAQAH DUE",
+          value: fmtKC(k.sadaqahDueThisMonth),
+          sub: "10% of income \xB7 auto",
+          accent: KC.cream,
+          icon: /*#__PURE__*/React.createElement(HandCoins, {
+            size: 14
+          })
+        }), /*#__PURE__*/React.createElement(KCHero, {
+          label: "DAYS TO FREEDOM",
+          value: k.monthsToFreedom < 99 ? `${k.daysToFreedom}` : '—',
+          sub: `$${freedomNumber}/wk target · niyyah`,
+          accent: KC.acid,
+          icon: /*#__PURE__*/React.createElement(Flame, {
+            size: 14
+          })
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            maxWidth: 1440,
+            margin: '0 auto',
+            padding: '24px 32px 0'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 0,
+            borderBottom: `1px solid ${KC.border}`,
+            overflowX: 'auto'
+          }
+        }, [{
+          id: 'command',
+          label: 'COMMAND',
+          icon: /*#__PURE__*/React.createElement(Activity, {
+            size: 13
+          })
+        }, {
+          id: 'pipeline',
+          label: 'PIPELINE',
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 13
+          })
+        }, {
+          id: 'clients',
+          label: 'CLIENTS',
+          icon: /*#__PURE__*/React.createElement(Users, {
+            size: 13
+          })
+        }, {
+          id: 'cold',
+          label: 'COLD OPS',
+          icon: /*#__PURE__*/React.createElement(Route, {
+            size: 13
+          })
+        }, {
+          id: 'content',
+          label: 'CONTENT',
+          icon: /*#__PURE__*/React.createElement(Zap, {
+            size: 13
+          })
+        }, {
+          id: 'runway',
+          label: 'RUNWAY',
+          icon: /*#__PURE__*/React.createElement(BarChart3, {
+            size: 13
+          })
+        }, {
+          id: 'niyyah',
+          label: 'NIYYAH',
+          icon: /*#__PURE__*/React.createElement(CircleDot, {
+            size: 13
+          })
+        }].map(t => /*#__PURE__*/React.createElement("button", {
+          key: t.id,
+          onClick: () => setActiveTab(t.id),
+          className: `tab-btn ${activeTab === t.id ? 'active' : ''}`,
+          style: {
+            padding: '14px 18px',
+            background: 'transparent',
+            color: activeTab === t.id ? KC.text : KC.textMuted,
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: 11,
+            fontWeight: 600,
+            letterSpacing: '0.12em',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            whiteSpace: 'nowrap',
+            borderBottom: activeTab === t.id ? `2px solid ${KC.acid}` : '2px solid transparent',
+            marginBottom: -1
+          }
+        }, t.icon, " ", t.label)))), /*#__PURE__*/React.createElement("div", {
+          className: "main-grid",
+          style: {
+            maxWidth: 1440,
+            margin: '0 auto',
+            padding: '24px 32px 80px',
+            display: 'grid',
+            gridTemplateColumns: '320px 1fr',
+            gap: 24
+          }
+        }, /*#__PURE__*/React.createElement("aside", null, /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'sticky',
+            top: 16,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "TODAY \xB7 CAIRO",
+          icon: /*#__PURE__*/React.createElement(Calendar, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }, todayPriorities.map(p => /*#__PURE__*/React.createElement(PriorityRow, {
+          key: p.id,
+          item: p
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 12,
+            padding: '10px 12px',
+            background: KC.bgInset,
+            border: `1px dashed ${KC.acid}40`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          className: "serif-italic",
+          style: {
+            fontSize: 11,
+            color: KC.cream,
+            margin: 0,
+            lineHeight: 1.5
+          }
+        }, "\"Niyyah-driven decisions only. Ship over polish.\""))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "QUICK ACTIONS",
+          icon: /*#__PURE__*/React.createElement(Zap, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6
+          }
+        }, /*#__PURE__*/React.createElement(QuickAction, {
+          label: "Add lead",
+          icon: /*#__PURE__*/React.createElement(Plus, {
+            size: 12
+          })
+        }), /*#__PURE__*/React.createElement(QuickAction, {
+          label: "Log call",
+          icon: /*#__PURE__*/React.createElement(Activity, {
+            size: 12
+          })
+        }), /*#__PURE__*/React.createElement(QuickAction, {
+          label: "Schedule reel",
+          icon: /*#__PURE__*/React.createElement(Calendar, {
+            size: 12
+          })
+        }), /*#__PURE__*/React.createElement(QuickAction, {
+          label: "Send DM template",
+          icon: /*#__PURE__*/React.createElement(ArrowRight, {
+            size: 12
+          })
+        }))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "OPERATOR INPUTS",
+          icon: /*#__PURE__*/React.createElement(Settings2, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement(Slider, {
+          label: "Active clients",
+          value: activeClients,
+          setValue: setActiveClients,
+          min: 0,
+          max: 50,
+          step: 1
+        }), /*#__PURE__*/React.createElement(Slider, {
+          label: "Setup fee",
+          value: setupFee,
+          setValue: setSetupFee,
+          min: 250,
+          max: 2000,
+          step: 50,
+          format: v => `$${v}`
+        }), /*#__PURE__*/React.createElement(Slider, {
+          label: "Retainer fee/mo",
+          value: retainerFee,
+          setValue: setRetainerFee,
+          min: 47,
+          max: 297,
+          step: 10,
+          format: v => `$${v}`
+        }), /*#__PURE__*/React.createElement(Slider, {
+          label: "Cash on hand",
+          value: cashOnHand,
+          setValue: setCashOnHand,
+          min: 0,
+          max: 20000,
+          step: 100,
+          format: v => `$${v}`
+        }), /*#__PURE__*/React.createElement(Slider, {
+          label: "Monthly burn",
+          value: monthlyExpenses,
+          setValue: setMonthlyExpenses,
+          min: 500,
+          max: 5000,
+          step: 50,
+          format: v => `$${v}`
+        })))), /*#__PURE__*/React.createElement("main", null, activeTab === 'command' && /*#__PURE__*/React.createElement(CommandTab, {
+          k: k,
+          recentActivity: recentActivity,
+          pipelineLeads: pipelineLeads,
+          trajectoryData: trajectoryData,
+          freedomNumber: freedomNumber,
+          activeClients: activeClients
+        }), activeTab === 'pipeline' && /*#__PURE__*/React.createElement(PipelineTab, {
+          leads: pipelineLeads,
+          k: k
+        }), activeTab === 'clients' && /*#__PURE__*/React.createElement(ClientsTab, {
+          activeClients: activeClients,
+          k: k
+        }), activeTab === 'cold' && /*#__PURE__*/React.createElement(ColdOpsTab, {
+          k: k,
+          weekDials: weekDials,
+          weekContacts: weekContacts,
+          weekConversations: weekConversations,
+          weekDemos: weekDemos,
+          setWeekDials: setWeekDials,
+          coldLeads: coldLeads
+        }), activeTab === 'content' && /*#__PURE__*/React.createElement(ContentTab, {
+          reelsResearched: reelsResearched,
+          reelsScripted: reelsScripted,
+          reelsFilmed: reelsFilmed,
+          reelsEdited: reelsEdited,
+          reelsPosted: reelsPosted,
+          setReelsPosted: setReelsPosted,
+          igFollowers: igFollowers,
+          igDmsThisWeek: igDmsThisWeek
+        }), activeTab === 'runway' && /*#__PURE__*/React.createElement(RunwayTab, {
+          k: k,
+          cashOnHand: cashOnHand,
+          monthlyExpenses: monthlyExpenses,
+          trajectoryData: trajectoryData,
+          safetyNumber: safetyNumber,
+          freedomNumber: freedomNumber,
+          sadaqahPaidYTD: sadaqahPaidYTD
+        }), activeTab === 'niyyah' && /*#__PURE__*/React.createElement(NiyyahTab, {
+          salahToday: salahToday,
+          setSalahToday: setSalahToday,
+          juzProgress: juzProgress,
+          setJuzProgress: setJuzProgress,
+          sadaqahPaidYTD: sadaqahPaidYTD,
+          k: k
+        }))), /*#__PURE__*/React.createElement("footer", {
+          style: {
+            borderTop: `1px solid ${KC.border}`,
+            background: KC.bgSurface,
+            padding: '16px 32px'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            maxWidth: 1440,
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 12
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.textMuted,
+            letterSpacing: '0.1em'
+          }
+        }, "KHYREE CITY \xB7 OPERATOR v1.0 \xB7 90-DAY PLAN ACTIVE \xB7 NO NEW TOOLS"), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.acid,
+            letterSpacing: '0.1em'
+          }
+        }, "SHIP \u2192 LEARN \u2192 ITERATE")))));
+      }
+
+      // ============================================================
+      // SHARED COMPONENTS
+      // ============================================================
+      function KCHero({
+        label,
+        value,
+        sub,
+        icon,
+        accent,
+        primary
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          className: "stat-card",
+          style: {
+            padding: '18px 20px',
+            borderRight: `1px solid ${KC.border}`,
+            background: primary ? `linear-gradient(135deg, ${KC.bgSurface}, ${KC.bgInset})` : KC.bgSurface,
+            position: 'relative'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            marginBottom: 8
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            color: accent || KC.textMuted
+          }
+        }, icon), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em',
+            fontWeight: 600
+          }
+        }, label)), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 26,
+            fontWeight: 700,
+            color: accent || KC.text,
+            lineHeight: 1,
+            letterSpacing: '-0.02em'
+          }
+        }, value), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 6
+          }
+        }, sub));
+      }
+      function KCCard({
+        title,
+        icon,
+        children,
+        accent,
+        action
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            background: KC.bgSurface,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 6,
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: '10px 14px',
+            borderBottom: `1px solid ${KC.border}`,
+            background: KC.bg,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            justifyContent: 'space-between'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            color: accent || KC.acid
+          }
+        }, icon), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: '0.15em',
+            color: KC.textDim
+          }
+        }, title)), action), /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 14
+          }
+        }, children));
+      }
+      function Slider({
+        label,
+        value,
+        setValue,
+        min,
+        max,
+        step,
+        format
+      }) {
+        const display = format ? format(value) : value;
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginBottom: 14
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: 6
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim
+          }
+        }, label), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 12,
+            color: KC.text,
+            fontWeight: 600
+          }
+        }, display)), /*#__PURE__*/React.createElement("input", {
+          type: "range",
+          min: min,
+          max: max,
+          step: step,
+          value: value,
+          onChange: e => setValue(parseFloat(e.target.value)),
+          style: {
+            accentColor: KC.acid
+          }
+        }));
+      }
+      function StatBlock({
+        label,
+        value,
+        sub,
+        accent,
+        large
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 16,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em',
+            marginBottom: 8
+          }
+        }, label), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: large ? 32 : 22,
+            fontWeight: 700,
+            color: accent || KC.text,
+            lineHeight: 1
+          }
+        }, value), sub && /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 6
+          }
+        }, sub));
+      }
+      function PriorityRow({
+        item
+      }) {
+        const tagColors = {
+          pipeline: KC.acid,
+          cold: KC.electric,
+          content: KC.violet,
+          niyyah: KC.cream,
+          runway: KC.emerald
+        };
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 10,
+            padding: '8px 10px',
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `2px solid ${tagColors[item.tag]}`,
+            borderRadius: 4,
+            position: 'relative'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            fontWeight: 600,
+            minWidth: 70,
+            paddingTop: 2
+          }
+        }, item.time), /*#__PURE__*/React.createElement("div", {
+          style: {
+            flex: 1,
+            fontSize: 12,
+            color: KC.text,
+            lineHeight: 1.4
+          }
+        }, item.task), item.urgent && /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 6,
+            height: 6,
+            background: KC.acid,
+            borderRadius: '50%',
+            boxShadow: `0 0 6px ${KC.acid}`,
+            marginTop: 4
+          }
+        }));
+      }
+      function QuickAction({
+        label,
+        icon
+      }) {
+        return /*#__PURE__*/React.createElement("button", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '8px 10px',
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4,
+            color: KC.text,
+            fontSize: 12,
+            cursor: 'pointer',
+            textAlign: 'left',
+            transition: 'all 0.15s'
+          },
+          onMouseEnter: e => {
+            e.currentTarget.style.borderColor = KC.acid + '60';
+            e.currentTarget.style.background = KC.bg;
+          },
+          onMouseLeave: e => {
+            e.currentTarget.style.borderColor = KC.border;
+            e.currentTarget.style.background = KC.bgInset;
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            color: KC.acid
+          }
+        }, icon), label);
+      }
+      const kcTh = {
+        padding: '10px 12px',
+        textAlign: 'left',
+        fontSize: 10,
+        color: KC.textMuted,
+        letterSpacing: '0.1em',
+        fontWeight: 600
+      };
+      const kcTd = {
+        padding: '12px',
+        color: KC.text
+      };
+
+      // ============================================================
+      // TAB · COMMAND
+      // ============================================================
+      function CommandTab({
+        k,
+        recentActivity,
+        pipelineLeads,
+        trajectoryData,
+        freedomNumber,
+        activeClients
+      }) {
+        const hotLeads = pipelineLeads.filter(l => l.priority === 'high' && l.stage !== 'declined').slice(0, 4);
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "TRAJECTORY \xB7 26 WEEKS TO FREEDOM",
+          icon: /*#__PURE__*/React.createElement(Flame, {
+            size: 13
+          }),
+          accent: KC.acid
+        }, /*#__PURE__*/React.createElement(ResponsiveContainer, {
+          width: "100%",
+          height: 260
+        }, /*#__PURE__*/React.createElement(AreaChart, {
+          data: trajectoryData
+        }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+          id: "kc-mrr",
+          x1: "0",
+          y1: "0",
+          x2: "0",
+          y2: "1"
+        }, /*#__PURE__*/React.createElement("stop", {
+          offset: "0%",
+          stopColor: KC.acid,
+          stopOpacity: 0.4
+        }), /*#__PURE__*/React.createElement("stop", {
+          offset: "100%",
+          stopColor: KC.acid,
+          stopOpacity: 0
+        }))), /*#__PURE__*/React.createElement(CartesianGrid, {
+          stroke: KC.border,
+          strokeDasharray: "3 3",
+          vertical: false
+        }), /*#__PURE__*/React.createElement(XAxis, {
+          dataKey: "week",
+          stroke: KC.textMuted,
+          fontSize: 10,
+          interval: 2
+        }), /*#__PURE__*/React.createElement(YAxis, {
+          stroke: KC.textMuted,
+          fontSize: 10,
+          tickFormatter: v => fmtKC(v)
+        }), /*#__PURE__*/React.createElement(Tooltip, {
+          contentStyle: {
+            background: KC.bgInset,
+            border: `1px solid ${KC.borderBright}`,
+            borderRadius: 4,
+            fontSize: 12
+          },
+          formatter: v => fmtKCFull(v)
+        }), /*#__PURE__*/React.createElement(ReferenceLine, {
+          y: freedomNumber * 4.33,
+          stroke: KC.acid,
+          strokeDasharray: "4 4",
+          label: {
+            value: 'FREEDOM · $13K/mo',
+            fill: KC.acid,
+            fontSize: 10
+          }
+        }), /*#__PURE__*/React.createElement(ReferenceLine, {
+          y: 1500,
+          stroke: KC.amber,
+          strokeDasharray: "3 3",
+          label: {
+            value: 'SAFETY · $1.5K',
+            fill: KC.amber,
+            fontSize: 10
+          }
+        }), /*#__PURE__*/React.createElement(Area, {
+          type: "monotone",
+          dataKey: "mrr",
+          stroke: KC.acid,
+          strokeWidth: 2.5,
+          fill: "url(#kc-mrr)",
+          name: "MRR"
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 12,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 10
+          }
+        }, /*#__PURE__*/React.createElement(MiniMilestone, {
+          label: "Week 4",
+          value: fmtKC(trajectoryData[3]?.mrr || 0),
+          sub: `${trajectoryData[3]?.clients || 0} clients`
+        }), /*#__PURE__*/React.createElement(MiniMilestone, {
+          label: "Week 12",
+          value: fmtKC(trajectoryData[11]?.mrr || 0),
+          sub: `${trajectoryData[11]?.clients || 0} clients`,
+          accent: KC.amber
+        }), /*#__PURE__*/React.createElement(MiniMilestone, {
+          label: "Week 20",
+          value: fmtKC(trajectoryData[19]?.mrr || 0),
+          sub: `${trajectoryData[19]?.clients || 0} clients`,
+          accent: KC.cream
+        }), /*#__PURE__*/React.createElement(MiniMilestone, {
+          label: "Week 26",
+          value: fmtKC(trajectoryData[25]?.mrr || 0),
+          sub: `${trajectoryData[25]?.clients || 0} clients`,
+          accent: KC.acid
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "HOT \xB7 NEEDS ATTENTION",
+          icon: /*#__PURE__*/React.createElement(Flame, {
+            size: 13
+          }),
+          accent: KC.rose
+        }, hotLeads.length === 0 ? /*#__PURE__*/React.createElement(EmptyState, {
+          text: "No hot leads yet",
+          sub: "Run the cold list and tag warm contacts",
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 20
+          })
+        }) : /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8
+          }
+        }, hotLeads.map(l => /*#__PURE__*/React.createElement(LeadCard, {
+          key: l.id,
+          lead: l,
+          compact: true
+        })))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "RECENT ACTIVITY",
+          icon: /*#__PURE__*/React.createElement(Activity, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }, recentActivity.map(a => /*#__PURE__*/React.createElement(ActivityRow, {
+          key: a.id,
+          item: a
+        }))))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "OPERATING STATUS",
+          icon: /*#__PURE__*/React.createElement(Gauge, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 12
+          }
+        }, /*#__PURE__*/React.createElement(SystemStatus, {
+          name: "Cold Pipeline",
+          status: k.coldLeads >= 100 ? 'good' : 'warn',
+          value: `${127} leads loaded`,
+          note: "Outscraper GA exports"
+        }), /*#__PURE__*/React.createElement(SystemStatus, {
+          name: "Reel Engine",
+          status: k.reelsThisWeek >= 1 ? 'warn' : 'bad',
+          value: `${k.reelsThisWeek}/3 posted`,
+          note: "3/wk niyyah-driven target"
+        }), /*#__PURE__*/React.createElement(SystemStatus, {
+          name: "Sales Funnel",
+          status: "warn",
+          value: "3 warm \xB7 0 closed",
+          note: "Track A demos in flight"
+        }), /*#__PURE__*/React.createElement(SystemStatus, {
+          name: "Niyyah Discipline",
+          status: "good",
+          value: "Aligned",
+          note: "Sadaqah firewall \xB7 10%"
+        }))));
+      }
+      function MiniMilestone({
+        label,
+        value,
+        sub,
+        accent
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 10,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em'
+          }
+        }, label), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 16,
+            fontWeight: 700,
+            color: accent || KC.text,
+            marginTop: 4
+          }
+        }, value), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textDim,
+            marginTop: 2
+          }
+        }, sub));
+      }
+      function ActivityRow({
+        item
+      }) {
+        const tagColors = {
+          pipeline: KC.acid,
+          cold: KC.electric,
+          content: KC.violet,
+          niyyah: KC.cream,
+          runway: KC.emerald
+        };
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 10,
+            padding: '8px 0',
+            borderBottom: `1px solid ${KC.border}`
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 24,
+            height: 24,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: tagColors[item.tag],
+            flexShrink: 0
+          }
+        }, /*#__PURE__*/React.createElement(Icon, {
+          name: item.icon,
+          size: 12
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            flex: 1
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 12,
+            color: KC.text,
+            lineHeight: 1.4
+          }
+        }, item.text), /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.1em',
+            marginTop: 2
+          }
+        }, item.time)));
+      }
+      function SystemStatus({
+        name,
+        status,
+        value,
+        note
+      }) {
+        const colors = {
+          good: KC.emerald,
+          warn: KC.amber,
+          bad: KC.rose
+        };
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `3px solid ${colors[status]}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            marginBottom: 6
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: 6,
+            height: 6,
+            background: colors[status],
+            borderRadius: '50%'
+          }
+        }), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.textDim,
+            letterSpacing: '0.1em',
+            fontWeight: 600
+          }
+        }, name.toUpperCase())), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 16,
+            fontWeight: 700,
+            color: KC.text
+          }
+        }, value), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textMuted,
+            marginTop: 4
+          }
+        }, note));
+      }
+      function EmptyState({
+        text,
+        sub,
+        icon
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 32,
+            textAlign: 'center',
+            background: KC.bgInset,
+            border: `1px dashed ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            color: KC.textMuted,
+            marginBottom: 10
+          }
+        }, icon), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 13,
+            color: KC.textDim,
+            fontWeight: 500
+          }
+        }, text), sub && /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textMuted,
+            marginTop: 6
+          }
+        }, sub));
+      }
+      function LeadCard({
+        lead,
+        compact
+      }) {
+        const stageColors = {
+          cold: KC.textMuted,
+          contacted: KC.electric,
+          interested: KC.amber,
+          demo: KC.acid,
+          declined: KC.rose
+        };
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 10,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `3px solid ${stageColors[lead.stage]}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 13,
+            color: KC.text,
+            fontWeight: 600
+          }
+        }, lead.name), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginLeft: 8
+          }
+        }, "\xB7 ", lead.business)), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            padding: '2px 6px',
+            background: lead.track === 'A' ? KC.acid + '20' : KC.electric + '20',
+            color: lead.track === 'A' ? KC.acid : KC.electric,
+            borderRadius: 2,
+            letterSpacing: '0.1em',
+            fontWeight: 600
+          }
+        }, "TRACK ", lead.track)), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 6
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: stageColors[lead.stage],
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            fontWeight: 600
+          }
+        }, lead.stage), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 11,
+            color: KC.cream,
+            fontWeight: 600
+          }
+        }, fmtKC(lead.value))), !compact && lead.notes && /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 8,
+            padding: '6px 8px',
+            background: KC.bg,
+            borderRadius: 3,
+            lineHeight: 1.4
+          }
+        }, lead.notes));
+      }
+
+      // ============================================================
+      // TAB · PIPELINE (Kanban)
+      // ============================================================
+      function PipelineTab({
+        leads,
+        k
+      }) {
+        const stages = [{
+          id: 'cold',
+          label: 'COLD',
+          color: KC.textMuted
+        }, {
+          id: 'contacted',
+          label: 'CONTACTED',
+          color: KC.electric
+        }, {
+          id: 'interested',
+          label: 'INTERESTED',
+          color: KC.amber
+        }, {
+          id: 'demo',
+          label: 'DEMO',
+          color: KC.acid
+        }, {
+          id: 'declined',
+          label: 'DECLINED',
+          color: KC.rose
+        }];
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: 12
+          }
+        }, stages.map(s => {
+          const count = leads.filter(l => l.stage === s.id).length;
+          const value = leads.filter(l => l.stage === s.id).reduce((sum, l) => sum + l.value, 0);
+          return /*#__PURE__*/React.createElement("div", {
+            key: s.id,
+            style: {
+              padding: 14,
+              background: KC.bgSurface,
+              border: `1px solid ${KC.border}`,
+              borderTop: `3px solid ${s.color}`,
+              borderRadius: 4
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "mono-font",
+            style: {
+              fontSize: 9,
+              color: s.color,
+              letterSpacing: '0.15em',
+              fontWeight: 600
+            }
+          }, s.label), /*#__PURE__*/React.createElement("div", {
+            className: "display-font",
+            style: {
+              fontSize: 26,
+              fontWeight: 700,
+              color: KC.text,
+              marginTop: 4
+            }
+          }, count), /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 10,
+              color: KC.textMuted,
+              marginTop: 4
+            },
+            className: "mono-font"
+          }, fmtKC(value), " value"));
+        })), /*#__PURE__*/React.createElement(KCCard, {
+          title: "PIPELINE BOARD \xB7 DRAG TO MOVE (LIVE TODO)",
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: 10
+          }
+        }, stages.map(s => {
+          const stageLeads = leads.filter(l => l.stage === s.id);
+          return /*#__PURE__*/React.createElement("div", {
+            key: s.id,
+            style: {
+              background: KC.bgInset,
+              border: `1px solid ${KC.border}`,
+              borderRadius: 4,
+              padding: 10,
+              minHeight: 400
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '4px 6px',
+              borderBottom: `1px solid ${KC.border}`,
+              marginBottom: 8
+            }
+          }, /*#__PURE__*/React.createElement("span", {
+            className: "mono-font",
+            style: {
+              fontSize: 10,
+              color: s.color,
+              letterSpacing: '0.1em',
+              fontWeight: 600
+            }
+          }, s.label), /*#__PURE__*/React.createElement("span", {
+            className: "mono-font",
+            style: {
+              fontSize: 10,
+              color: KC.textMuted
+            }
+          }, stageLeads.length)), /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 6
+            }
+          }, stageLeads.map(l => /*#__PURE__*/React.createElement(KanbanCard, {
+            key: l.id,
+            lead: l,
+            accent: s.color
+          })), stageLeads.length === 0 && /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 10,
+              color: KC.textMuted,
+              textAlign: 'center',
+              padding: 16,
+              fontStyle: 'italic'
+            }
+          }, "empty")));
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "TRACK A \xB7 WARM (FAMILY/NETWORK)",
+          icon: /*#__PURE__*/React.createElement(Users, {
+            size: 13
+          }),
+          accent: KC.acid
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 10,
+            marginBottom: 12
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "LEADS",
+          value: leads.filter(l => l.track === 'A').length,
+          accent: KC.acid
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "CLOSE RATE",
+          value: "65%",
+          sub: "warm baseline"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "WEIGHTED",
+          value: fmtKC(k.expectedWarmRevenue),
+          accent: KC.cream
+        })), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            lineHeight: 1.5,
+            margin: 0
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream
+          }
+        }, "The 3 warm leads. "), "These are family and old friends. Higher trust, faster close, but emotionally harder to ask. Show up like a professional, not a cousin asking for a favor.")), /*#__PURE__*/React.createElement(KCCard, {
+          title: "TRACK B \xB7 COLD (PHONEBURNER)",
+          icon: /*#__PURE__*/React.createElement(Route, {
+            size: 13
+          }),
+          accent: KC.electric
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: 10,
+            marginBottom: 12
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "LEADS",
+          value: leads.filter(l => l.track === 'B').length,
+          accent: KC.electric
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "CLOSE RATE",
+          value: "4%",
+          sub: "cold dial baseline"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "WEIGHTED",
+          value: fmtKC(k.expectedColdRevenue),
+          accent: KC.cream
+        })), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            lineHeight: 1.5,
+            margin: 0
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream
+          }
+        }, "The volume play. "), "Outscraper Georgia barbers with no website. NEPQ-style curious-neutral approach. Discipline beats motivation here."))));
+      }
+      function KanbanCard({
+        lead,
+        accent
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 8,
+            background: KC.bg,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 3,
+            cursor: 'grab'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 6
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 11,
+            color: KC.text,
+            fontWeight: 600,
+            lineHeight: 1.3
+          }
+        }, lead.name), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 8,
+            padding: '1px 4px',
+            background: lead.track === 'A' ? KC.acid + '20' : KC.electric + '20',
+            color: lead.track === 'A' ? KC.acid : KC.electric,
+            borderRadius: 2,
+            fontWeight: 700
+          }
+        }, lead.track)), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textDim,
+            marginTop: 3,
+            lineHeight: 1.3
+          }
+        }, lead.business), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 6
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted
+          }
+        }, lead.lastTouch), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.cream,
+            fontWeight: 600
+          }
+        }, fmtKC(lead.value))));
+      }
+
+      // ============================================================
+      // TAB · CLIENTS
+      // ============================================================
+      function ClientsTab({
+        activeClients,
+        k
+      }) {
+        if (activeClients === 0) {
+          return /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16
+            }
+          }, /*#__PURE__*/React.createElement(KCCard, {
+            title: "ACTIVE CLIENTS",
+            icon: /*#__PURE__*/React.createElement(Users, {
+              size: 13
+            })
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              padding: 60,
+              textAlign: 'center',
+              background: KC.bgInset,
+              border: `1px dashed ${KC.acid}40`,
+              borderRadius: 6
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "display-font",
+            style: {
+              fontSize: 48,
+              fontWeight: 800,
+              color: KC.acid,
+              lineHeight: 1,
+              letterSpacing: '-0.03em'
+            }
+          }, "0"), /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 14,
+              color: KC.cream,
+              marginTop: 16,
+              fontStyle: 'italic',
+              fontFamily: 'Instrument Serif, serif'
+            }
+          }, "\"Your first client lives here.\""), /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 12,
+              color: KC.textDim,
+              marginTop: 12,
+              maxWidth: 500,
+              margin: '12px auto 0',
+              lineHeight: 1.6
+            }
+          }, "Once you close a Track A warm lead, this view becomes your delivery dashboard. Project pipeline, retainer health, support tickets, renewal calendar \u2014 all here."), /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'inline-flex',
+              gap: 12,
+              marginTop: 24
+            }
+          }, /*#__PURE__*/React.createElement(ActionTile, {
+            label: "Close Marcus T.",
+            note: "Demo Friday",
+            accent: KC.acid
+          }), /*#__PURE__*/React.createElement(ActionTile, {
+            label: "Follow up Yusuf",
+            note: "Intake form sent",
+            accent: KC.cream
+          }), /*#__PURE__*/React.createElement(ActionTile, {
+            label: "Reach D. Hayes",
+            note: "DM 8d old",
+            accent: KC.amber
+          })))), /*#__PURE__*/React.createElement(KCCard, {
+            title: "WHAT THIS TAB BECOMES",
+            icon: /*#__PURE__*/React.createElement(Info, {
+              size: 13
+            })
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gap: 12
+            }
+          }, [{
+            name: 'Project pipeline',
+            desc: 'Intake → Wireframe → Design → Build → Live · per client status'
+          }, {
+            name: 'Retainer health',
+            desc: 'Monthly $97 charges · who\'s paid, who\'s overdue, churn risk score'
+          }, {
+            name: 'Renewal calendar',
+            desc: 'Annual reviews · upgrade conversations · upsell windows'
+          }, {
+            name: 'Support tickets',
+            desc: 'Update requests, broken links, design tweaks · turnaround SLA'
+          }, {
+            name: 'Client LTV',
+            desc: 'Lifetime value per client · cohort analysis · best customer profile'
+          }, {
+            name: 'Health score',
+            desc: 'Engagement signals: emails opened, IG tags, referrals given'
+          }].map((f, i) => /*#__PURE__*/React.createElement("div", {
+            key: i,
+            style: {
+              padding: 14,
+              background: KC.bgInset,
+              border: `1px solid ${KC.border}`,
+              borderRadius: 4
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 13,
+              color: KC.text,
+              fontWeight: 600
+            }
+          }, f.name), /*#__PURE__*/React.createElement("div", {
+            style: {
+              fontSize: 11,
+              color: KC.textDim,
+              marginTop: 4,
+              lineHeight: 1.5
+            }
+          }, f.desc))))), /*#__PURE__*/React.createElement(KCCard, {
+            title: "DELIVERY PLAYBOOK \xB7 WHEN CLIENT #1 LANDS",
+            icon: /*#__PURE__*/React.createElement(CheckCircle2, {
+              size: 13
+            })
+          }, /*#__PURE__*/React.createElement("div", {
+            style: {
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 8
+            }
+          }, [{
+            day: 'Day 0',
+            task: 'Square invoice for $250 deposit · Zoho welcome email · intake form sent'
+          }, {
+            day: 'Day 1-2',
+            task: 'Intake review · niyyah call (15 min · why barber, why now) · Framer template selected'
+          }, {
+            day: 'Day 3-5',
+            task: 'Build site · brand colors, photos, services, booking link · live preview'
+          }, {
+            day: 'Day 6-7',
+            task: 'Final review with client · go-live · domain setup · social handoff'
+          }, {
+            day: 'Day 8+',
+            task: 'Retainer kicks in · monthly check-in · 1 update/quarter included'
+          }, {
+            day: 'Day 30',
+            task: 'First retainer charged · feedback request · referral ask'
+          }].map((s, i) => /*#__PURE__*/React.createElement("div", {
+            key: i,
+            style: {
+              display: 'flex',
+              gap: 12,
+              padding: '10px 12px',
+              background: KC.bgInset,
+              border: `1px solid ${KC.border}`,
+              borderRadius: 4
+            }
+          }, /*#__PURE__*/React.createElement("span", {
+            className: "mono-font",
+            style: {
+              fontSize: 10,
+              color: KC.acid,
+              letterSpacing: '0.1em',
+              fontWeight: 600,
+              minWidth: 60
+            }
+          }, s.day), /*#__PURE__*/React.createElement("span", {
+            style: {
+              fontSize: 12,
+              color: KC.text,
+              lineHeight: 1.5
+            }
+          }, s.task))))));
+        }
+
+        // Has active clients view (placeholder for when activeClients > 0)
+        return /*#__PURE__*/React.createElement(KCCard, {
+          title: `${activeClients} ACTIVE CLIENTS`,
+          icon: /*#__PURE__*/React.createElement(Users, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 12,
+            color: KC.textDim
+          }
+        }, "Client roster view appears here once you have active retainers."));
+      }
+      function ActionTile({
+        label,
+        note,
+        accent
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: '10px 14px',
+            background: KC.bg,
+            border: `1px solid ${accent}40`,
+            borderRadius: 4,
+            textAlign: 'left'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 12,
+            color: accent,
+            fontWeight: 600
+          }
+        }, label), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textMuted,
+            marginTop: 3
+          }
+        }, note));
+      }
+
+      // ============================================================
+      // TAB · COLD OPS
+      // ============================================================
+      function ColdOpsTab({
+        k,
+        weekDials,
+        weekContacts,
+        weekConversations,
+        weekDemos,
+        setWeekDials,
+        coldLeads
+      }) {
+        const scriptPerformance = [{
+          name: 'The Real One',
+          dials: 89,
+          conversations: 14,
+          conv: 15.7,
+          color: KC.acid
+        }, {
+          name: 'The Bold One',
+          dials: 64,
+          conversations: 6,
+          conv: 9.4,
+          color: KC.cream
+        }, {
+          name: 'The Curious One',
+          dials: 58,
+          conversations: 2,
+          conv: 3.4,
+          color: KC.amber
+        }, {
+          name: 'The Straight Shooter',
+          dials: 36,
+          conversations: 1,
+          conv: 2.8,
+          color: KC.electric
+        }];
+        const dailyPace = [{
+          day: 'Mon',
+          dials: 52,
+          conversations: 5
+        }, {
+          day: 'Tue',
+          dials: 48,
+          conversations: 4
+        }, {
+          day: 'Wed',
+          dials: 55,
+          conversations: 6
+        }, {
+          day: 'Thu',
+          dials: 41,
+          conversations: 3
+        }, {
+          day: 'Fri',
+          dials: 51,
+          conversations: 5
+        }, {
+          day: 'Sat',
+          dials: 0,
+          conversations: 0
+        }, {
+          day: 'Sun',
+          dials: 0,
+          conversations: 0
+        } // No Sunday calls per his rule
+        ];
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "WEEK FUNNEL \xB7 DIAL \u2192 DEMO",
+          icon: /*#__PURE__*/React.createElement(Route, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 12
+          }
+        }, /*#__PURE__*/React.createElement(FunnelStep, {
+          label: "DIALS",
+          value: weekDials,
+          sub: "this week",
+          accent: KC.electric,
+          pct: 100
+        }), /*#__PURE__*/React.createElement(FunnelStep, {
+          label: "CONTACTS",
+          value: weekContacts,
+          sub: `${k.dialToContact.toFixed(1)}% of dials`,
+          accent: KC.amber,
+          pct: k.dialToContact
+        }), /*#__PURE__*/React.createElement(FunnelStep, {
+          label: "CONVERSATIONS",
+          value: weekConversations,
+          sub: `${k.contactToConversation.toFixed(1)}% of contacts`,
+          accent: KC.cream,
+          pct: k.contactToConversation * 0.5
+        }), /*#__PURE__*/React.createElement(FunnelStep, {
+          label: "DEMOS BOOKED",
+          value: weekDemos,
+          sub: `${k.conversationToDemo.toFixed(1)}% of convs`,
+          accent: KC.acid,
+          pct: k.conversationToDemo * 0.5
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "DAILY PACE \xB7 NO SUNDAY CALLS",
+          icon: /*#__PURE__*/React.createElement(Calendar, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement(ResponsiveContainer, {
+          width: "100%",
+          height: 220
+        }, /*#__PURE__*/React.createElement(BarChart, {
+          data: dailyPace
+        }, /*#__PURE__*/React.createElement(CartesianGrid, {
+          stroke: KC.border,
+          strokeDasharray: "3 3",
+          vertical: false
+        }), /*#__PURE__*/React.createElement(XAxis, {
+          dataKey: "day",
+          stroke: KC.textMuted,
+          fontSize: 11
+        }), /*#__PURE__*/React.createElement(YAxis, {
+          stroke: KC.textMuted,
+          fontSize: 10
+        }), /*#__PURE__*/React.createElement(Tooltip, {
+          contentStyle: {
+            background: KC.bgInset,
+            border: `1px solid ${KC.borderBright}`,
+            borderRadius: 4,
+            fontSize: 12
+          }
+        }), /*#__PURE__*/React.createElement(Legend, {
+          wrapperStyle: {
+            fontSize: 11
+          }
+        }), /*#__PURE__*/React.createElement(Bar, {
+          dataKey: "dials",
+          fill: KC.electric,
+          name: "Dials",
+          radius: [2, 2, 0, 0]
+        }), /*#__PURE__*/React.createElement(Bar, {
+          dataKey: "conversations",
+          fill: KC.acid,
+          name: "Conversations",
+          radius: [2, 2, 0, 0]
+        })))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "SCRIPT PERFORMANCE",
+          icon: /*#__PURE__*/React.createElement(Settings2, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }, scriptPerformance.map((s, i) => /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            padding: 10,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `3px solid ${s.color}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: 4
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 13,
+            color: KC.text,
+            fontWeight: 600
+          }
+        }, s.name), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 14,
+            color: s.color,
+            fontWeight: 700
+          }
+        }, s.conv, "%")), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim
+          }
+        }, s.dials, " dials \xB7 ", s.conversations, " conversations"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            height: 4,
+            background: KC.bg,
+            borderRadius: 2,
+            marginTop: 6,
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: `${s.conv * 5}%`,
+            height: '100%',
+            background: s.color
+          }
+        }))))), /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginTop: 10,
+            lineHeight: 1.5
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream
+          }
+        }, "\"The Real One\" "), "converts at 15.7% \u2014 keep using it. Drop the others until you have data on what's not working."))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "LEAD LIST HEALTH \xB7 OUTSCRAPER",
+          icon: /*#__PURE__*/React.createElement(Layers, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 12
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "TOTAL LOADED",
+          value: coldLeads,
+          sub: "GA barbers \xB7 no website"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "DIALED",
+          value: "247",
+          sub: "started week 1"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "REMAINING",
+          value: coldLeads - 247 > 0 ? coldLeads - 247 : 0,
+          sub: "need refill at <50",
+          accent: KC.amber
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "DNC SCRUB",
+          value: "14d",
+          sub: "next: every 31d (TCPA)",
+          accent: KC.cream
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 14,
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            lineHeight: 1.5,
+            margin: 0
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream
+          }
+        }, "Compliance check: "), "DNC scrubbed 14 days ago. Next required scrub in 17 days. Call records retained for 5 years per TCPA. Power-dial only \u2014 never predictive."))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "EXPANSION TARGET \xB7 ROOFING (GEORGIA, TEXAS, OK)",
+          icon: /*#__PURE__*/React.createElement(TrendingUp, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 12,
+            color: KC.textDim,
+            lineHeight: 1.6,
+            marginTop: 0
+          }
+        }, "Once Khyree City is at 5+ retainer clients, the same model can apply to ", /*#__PURE__*/React.createElement("strong", {
+          style: {
+            color: KC.cream
+          }
+        }, "roofing contractors in storm-restoration markets"), ". Higher ticket size, similar pain (no web presence), insurance-claim driven demand. Brother Hassan's HVAC operation is the parallel proof.")));
+      }
+      function FunnelStep({
+        label,
+        value,
+        sub,
+        accent,
+        pct
+      }) {
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 14,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.textMuted,
+            letterSpacing: '0.15em'
+          }
+        }, label), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 28,
+            fontWeight: 700,
+            color: accent,
+            marginTop: 4,
+            lineHeight: 1
+          }
+        }, value), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textDim,
+            marginTop: 4
+          }
+        }, sub), /*#__PURE__*/React.createElement("div", {
+          style: {
+            height: 4,
+            background: KC.bg,
+            borderRadius: 2,
+            marginTop: 8,
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: `${Math.min(100, pct)}%`,
+            height: '100%',
+            background: accent
+          }
+        })));
+      }
+
+      // ============================================================
+      // TAB · CONTENT
+      // ============================================================
+      function ContentTab({
+        reelsResearched,
+        reelsScripted,
+        reelsFilmed,
+        reelsEdited,
+        reelsPosted,
+        setReelsPosted,
+        igFollowers,
+        igDmsThisWeek
+      }) {
+        const stages = [{
+          id: 'researched',
+          label: 'Research',
+          count: reelsResearched,
+          color: KC.electric
+        }, {
+          id: 'scripted',
+          label: 'Script',
+          count: reelsScripted,
+          color: KC.amber
+        }, {
+          id: 'filmed',
+          label: 'Film',
+          count: reelsFilmed,
+          color: KC.cream
+        }, {
+          id: 'edited',
+          label: 'Edit (Submagic)',
+          count: reelsEdited,
+          color: KC.violet
+        }, {
+          id: 'posted',
+          label: 'Posted',
+          count: reelsPosted,
+          color: KC.acid
+        }];
+        const reelIdeas = [{
+          hook: '"Newark raised me, Cairo built me"',
+          stage: 'edited',
+          niyyah: 'high',
+          face: false
+        }, {
+          hook: 'Faceless: Cairo b-roll · voice over · barber chair empty',
+          stage: 'scripted',
+          niyyah: 'high',
+          face: false
+        }, {
+          hook: 'Childhood me cutting a grown man\'s hair · still photo',
+          stage: 'researched',
+          niyyah: 'med',
+          face: false
+        }, {
+          hook: 'Lakers #8 jersey throwback with Pop · faceless reflection',
+          stage: 'researched',
+          niyyah: 'high',
+          face: false
+        }, {
+          hook: 'How I went from $5 cuts to $50 cuts in ATL',
+          stage: 'researched',
+          niyyah: 'med',
+          face: true
+        }];
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "REEL PIPELINE \xB7 3/WEEK NIYYAH-DRIVEN",
+          icon: /*#__PURE__*/React.createElement(Zap, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: 8
+          }
+        }, stages.map((s, i) => /*#__PURE__*/React.createElement("div", {
+          key: s.id,
+          style: {
+            padding: 14,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderTop: `3px solid ${s.color}`,
+            borderRadius: 4,
+            textAlign: 'center'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: s.color,
+            letterSpacing: '0.15em',
+            fontWeight: 600
+          }
+        }, s.label.toUpperCase()), /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 32,
+            fontWeight: 700,
+            color: KC.text,
+            marginTop: 6
+          }
+        }, s.count), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 10,
+            color: KC.textMuted,
+            marginTop: 2
+          }
+        }, "this week"), i < stages.length - 1 && /*#__PURE__*/React.createElement("div", {
+          style: {
+            position: 'absolute',
+            right: -8,
+            top: '50%',
+            color: KC.textMuted
+          }
+        }, "\u2192")))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 14,
+            padding: 12,
+            background: reelsPosted >= 3 ? KC.emerald + '15' : KC.amber + '15',
+            border: `1px solid ${reelsPosted >= 3 ? KC.emerald : KC.amber}40`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8
+          }
+        }, reelsPosted >= 3 ? /*#__PURE__*/React.createElement(CheckCircle2, {
+          size: 14,
+          color: KC.emerald
+        }) : /*#__PURE__*/React.createElement(AlertTriangle, {
+          size: 14,
+          color: KC.amber
+        }), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            color: reelsPosted >= 3 ? KC.emerald : KC.amber,
+            fontWeight: 600
+          }
+        }, reelsPosted >= 3 ? 'On track this week' : `${3 - reelsPosted} reel${3 - reelsPosted > 1 ? 's' : ''} short of weekly target`)))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "REEL IDEAS \xB7 QUEUE",
+          icon: /*#__PURE__*/React.createElement(Layers, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8
+          }
+        }, reelIdeas.map((r, i) => /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: 12
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            flex: 1
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 13,
+            color: KC.text,
+            fontWeight: 500
+          }
+        }, "\"", r.hook, "\""), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 8,
+            marginTop: 6
+          }
+        }, /*#__PURE__*/React.createElement(Tag, {
+          label: r.stage,
+          color: stages.find(s => s.id === r.stage)?.color || KC.textMuted
+        }), /*#__PURE__*/React.createElement(Tag, {
+          label: `niyyah: ${r.niyyah}`,
+          color: r.niyyah === 'high' ? KC.acid : KC.cream
+        }), /*#__PURE__*/React.createElement(Tag, {
+          label: r.face ? 'on-camera' : 'faceless',
+          color: r.face ? KC.amber : KC.electric
+        })))))))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "INSTAGRAM @KHYREE_CITY",
+          icon: /*#__PURE__*/React.createElement(Activity, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 12,
+            marginBottom: 14
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "FOLLOWERS",
+          value: `${(igFollowers / 1000).toFixed(1)}K`,
+          sub: "dormant ATL audience",
+          accent: KC.cream
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "DMs THIS WEEK",
+          value: igDmsThisWeek,
+          sub: "lead-magnet driven",
+          accent: KC.acid
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px dashed ${KC.acid}40`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            lineHeight: 1.5,
+            margin: 0
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "serif-italic",
+          style: {
+            color: KC.cream
+          }
+        }, "The 111K is dormant gold. "), "Most won't convert directly \u2014 but among them are barbers, shop owners, and connectors. The reactivation play is consistency: 3 reels/week for 90 days reawakens the algorithm + the audience."))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "BATCH FILMING WORKFLOW",
+          icon: /*#__PURE__*/React.createElement(Calendar, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8
+          }
+        }, [{
+          phase: 'Sunday AM',
+          task: 'Research · scroll viral hooks · pull 5-7 ideas'
+        }, {
+          phase: 'Sunday PM',
+          task: 'Script · Authority Framework: Hook → Interest → Value → Promise → CTA'
+        }, {
+          phase: 'Sunday eve',
+          task: 'Film · teleprompter + consistent setup · 3-4 reels in one block'
+        }, {
+          phase: 'Monday',
+          task: 'Submagic edit · brand acid green captions · Khyree Reels preset'
+        }, {
+          phase: 'Mon-Fri',
+          task: 'Schedule via Buffer · stagger Tue/Thu/Sat 6PM EST'
+        }].map((s, i) => /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            display: 'flex',
+            gap: 10,
+            padding: '8px 10px',
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `2px solid ${KC.acid}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            color: KC.acid,
+            letterSpacing: '0.1em',
+            fontWeight: 600,
+            minWidth: 70,
+            paddingTop: 2
+          }
+        }, s.phase.toUpperCase()), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            color: KC.text,
+            lineHeight: 1.4
+          }
+        }, s.task)))))));
+      }
+      function Tag({
+        label,
+        color
+      }) {
+        return /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            padding: '2px 6px',
+            background: color + '20',
+            color: color,
+            borderRadius: 2,
+            letterSpacing: '0.1em',
+            fontWeight: 600,
+            textTransform: 'uppercase'
+          }
+        }, label);
+      }
+
+      // ============================================================
+      // TAB · RUNWAY
+      // ============================================================
+      function RunwayTab({
+        k,
+        cashOnHand,
+        monthlyExpenses,
+        trajectoryData,
+        safetyNumber,
+        freedomNumber,
+        sadaqahPaidYTD
+      }) {
+        const expenses = [{
+          name: 'Rent / housing (Cairo)',
+          amount: 600,
+          cat: 'fixed'
+        }, {
+          name: 'Family essentials (food/utilities)',
+          amount: 350,
+          cat: 'fixed'
+        }, {
+          name: 'PhoneBurner',
+          amount: 149,
+          cat: 'tools'
+        }, {
+          name: 'Outscraper credits',
+          amount: 50,
+          cat: 'tools'
+        }, {
+          name: 'Submagic Starter',
+          amount: 19,
+          cat: 'tools'
+        }, {
+          name: 'Make.com Core',
+          amount: 9,
+          cat: 'tools'
+        }, {
+          name: 'Zoho Mail',
+          amount: 12,
+          cat: 'tools'
+        }, {
+          name: 'Telnyx',
+          amount: 25,
+          cat: 'tools'
+        }, {
+          name: 'Misc (data, transit)',
+          amount: 80,
+          cat: 'fixed'
+        }];
+        const totalFixed = expenses.filter(e => e.cat === 'fixed').reduce((s, e) => s + e.amount, 0);
+        const totalTools = expenses.filter(e => e.cat === 'tools').reduce((s, e) => s + e.amount, 0);
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "PATH FROM SAFETY \u2192 FREEDOM",
+          icon: /*#__PURE__*/React.createElement(Flame, {
+            size: 13
+          }),
+          accent: KC.acid
+        }, /*#__PURE__*/React.createElement(ResponsiveContainer, {
+          width: "100%",
+          height: 300
+        }, /*#__PURE__*/React.createElement(AreaChart, {
+          data: trajectoryData
+        }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("linearGradient", {
+          id: "kc-mrr2",
+          x1: "0",
+          y1: "0",
+          x2: "0",
+          y2: "1"
+        }, /*#__PURE__*/React.createElement("stop", {
+          offset: "0%",
+          stopColor: KC.acid,
+          stopOpacity: 0.5
+        }), /*#__PURE__*/React.createElement("stop", {
+          offset: "100%",
+          stopColor: KC.acid,
+          stopOpacity: 0
+        }))), /*#__PURE__*/React.createElement(CartesianGrid, {
+          stroke: KC.border,
+          strokeDasharray: "3 3",
+          vertical: false
+        }), /*#__PURE__*/React.createElement(XAxis, {
+          dataKey: "week",
+          stroke: KC.textMuted,
+          fontSize: 10,
+          interval: 2
+        }), /*#__PURE__*/React.createElement(YAxis, {
+          stroke: KC.textMuted,
+          fontSize: 10,
+          tickFormatter: v => fmtKC(v)
+        }), /*#__PURE__*/React.createElement(Tooltip, {
+          contentStyle: {
+            background: KC.bgInset,
+            border: `1px solid ${KC.borderBright}`,
+            borderRadius: 4,
+            fontSize: 12
+          },
+          formatter: v => fmtKCFull(v)
+        }), /*#__PURE__*/React.createElement(ReferenceLine, {
+          y: freedomNumber * 4.33,
+          stroke: KC.acid,
+          strokeDasharray: "4 4",
+          label: {
+            value: `FREEDOM · ${fmtKC(freedomNumber * 4.33)}/mo`,
+            fill: KC.acid,
+            fontSize: 10
+          }
+        }), /*#__PURE__*/React.createElement(ReferenceLine, {
+          y: safetyNumber,
+          stroke: KC.amber,
+          strokeDasharray: "3 3",
+          label: {
+            value: `SAFETY · ${fmtKC(safetyNumber)}/mo`,
+            fill: KC.amber,
+            fontSize: 10
+          }
+        }), /*#__PURE__*/React.createElement(Area, {
+          type: "monotone",
+          dataKey: "mrr",
+          stroke: KC.acid,
+          strokeWidth: 2.5,
+          fill: "url(#kc-mrr2)",
+          name: "MRR"
+        })))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "MONTHLY BURN",
+          icon: /*#__PURE__*/React.createElement(Wrench, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 12,
+            marginBottom: 14
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "FIXED COSTS",
+          value: fmtKC(totalFixed),
+          sub: "rent \xB7 family \xB7 misc"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "TOOLS / SAAS",
+          value: fmtKC(totalTools),
+          sub: "approved 90-day stack",
+          accent: KC.electric
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 6
+          }
+        }, expenses.map((e, i) => /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '6px 0',
+            borderBottom: i < expenses.length - 1 ? `1px solid ${KC.border}` : 'none'
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            color: KC.textDim
+          }
+        }, e.name), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 12,
+            color: KC.text,
+            fontWeight: 600
+          }
+        }, fmtKCFull(e.amount)))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '10px 0 0',
+            marginTop: 4,
+            borderTop: `1px solid ${KC.acid}40`
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 13,
+            color: KC.text,
+            fontWeight: 700
+          }
+        }, "TOTAL MONTHLY"), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 14,
+            color: KC.acid,
+            fontWeight: 700
+          }
+        }, fmtKCFull(totalFixed + totalTools))))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "MILESTONE LADDER",
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }, /*#__PURE__*/React.createElement(Milestone, {
+          target: "$1,500/mo",
+          actual: k.mrr,
+          label: "Safety number",
+          desc: "Bills covered. Mind clear to focus on craft & faith.",
+          accent: KC.emerald
+        }), /*#__PURE__*/React.createElement(Milestone, {
+          target: "$3,000/mo",
+          actual: k.mrr,
+          label: "Stability",
+          desc: "Save 25% \xB7 sadaqah comfortable \xB7 run lean still.",
+          accent: KC.amber
+        }), /*#__PURE__*/React.createElement(Milestone, {
+          target: "$13,000/mo",
+          actual: k.mrr,
+          label: "Freedom number ($3K/wk)",
+          desc: "Madrasa back on. Time to study Islam properly.",
+          accent: KC.acid
+        }), /*#__PURE__*/React.createElement(Milestone, {
+          target: "$25,000/mo",
+          actual: k.mrr,
+          label: "Mom's relocation",
+          desc: "Bring her from America. Family vault unlocked.",
+          accent: KC.cream
+        })))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "SADAQAH LEDGER \xB7 10% FIREWALL",
+          icon: /*#__PURE__*/React.createElement(HandCoins, {
+            size: 13
+          }),
+          accent: KC.cream
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 12,
+            marginBottom: 14
+          }
+        }, /*#__PURE__*/React.createElement(StatBlock, {
+          label: "THIS MONTH DUE",
+          value: fmtKC(k.sadaqahDueThisMonth),
+          sub: "10% of monthly income",
+          accent: KC.cream
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "YTD PAID",
+          value: fmtKC(sadaqahPaidYTD),
+          sub: "cumulative this year"
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "ON $13K/MO",
+          value: fmtKC(1300),
+          sub: "future obligation",
+          accent: KC.acid
+        }), /*#__PURE__*/React.createElement(StatBlock, {
+          label: "ON $50K/MO",
+          value: fmtKC(5000),
+          sub: "if Allah wills",
+          accent: KC.cream
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 14,
+            background: KC.bgInset,
+            border: `1px solid ${KC.cream}40`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          className: "serif-italic",
+          style: {
+            fontSize: 13,
+            color: KC.cream,
+            margin: 0,
+            lineHeight: 1.6,
+            fontFamily: 'Instrument Serif, serif'
+          }
+        }, "\"10% off the top is the anti-riya firewall. Money flowing past you, not into you. Protects niyyah when revenue grows.\""))));
+      }
+      function Milestone({
+        target,
+        actual,
+        label,
+        desc,
+        accent
+      }) {
+        // Parse target like "$1,500/mo" to number
+        const targetNum = parseFloat(target.replace(/[^0-9.]/g, ''));
+        const pct = Math.min(100, actual / targetNum * 100);
+        const hit = actual >= targetNum;
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `3px solid ${accent}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+          className: "display-font",
+          style: {
+            fontSize: 16,
+            fontWeight: 700,
+            color: KC.text
+          }
+        }, target), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            color: KC.textDim,
+            marginLeft: 10
+          }
+        }, "\xB7 ", label)), hit && /*#__PURE__*/React.createElement(CheckCircle2, {
+          size: 16,
+          color: KC.emerald
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            marginBottom: 6,
+            lineHeight: 1.5
+          }
+        }, desc), /*#__PURE__*/React.createElement("div", {
+          style: {
+            height: 4,
+            background: KC.bg,
+            borderRadius: 2,
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: `${pct}%`,
+            height: '100%',
+            background: accent
+          }
+        })));
+      }
+
+      // ============================================================
+      // TAB · NIYYAH
+      // ============================================================
+      function NiyyahTab({
+        salahToday,
+        setSalahToday,
+        juzProgress,
+        setJuzProgress,
+        sadaqahPaidYTD,
+        k
+      }) {
+        const salahNames = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "DAILY \xB7 5 PRAYERS",
+          icon: /*#__PURE__*/React.createElement(CircleDot, {
+            size: 13
+          }),
+          accent: KC.cream
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(5, 1fr)',
+            gap: 10
+          }
+        }, salahNames.map((name, i) => {
+          const completed = i < salahToday;
+          return /*#__PURE__*/React.createElement("button", {
+            key: i,
+            onClick: () => setSalahToday(i + 1),
+            style: {
+              padding: 16,
+              background: completed ? KC.cream + '20' : KC.bgInset,
+              border: `1px solid ${completed ? KC.cream + '60' : KC.border}`,
+              borderRadius: 4,
+              cursor: 'pointer',
+              textAlign: 'center',
+              transition: 'all 0.15s'
+            }
+          }, /*#__PURE__*/React.createElement("div", {
+            className: "mono-font",
+            style: {
+              fontSize: 9,
+              color: completed ? KC.cream : KC.textMuted,
+              letterSpacing: '0.15em',
+              fontWeight: 600
+            }
+          }, completed ? '✓' : '○'), /*#__PURE__*/React.createElement("div", {
+            className: "display-font",
+            style: {
+              fontSize: 16,
+              fontWeight: 700,
+              color: completed ? KC.cream : KC.text,
+              marginTop: 6
+            }
+          }, name));
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: 16
+          }
+        }, /*#__PURE__*/React.createElement(KCCard, {
+          title: "JUZ 30 \xB7 MEMORIZATION",
+          icon: /*#__PURE__*/React.createElement(Layers, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            padding: 16,
+            background: KC.bgInset,
+            border: `1px solid ${KC.cream}40`,
+            borderRadius: 4,
+            textAlign: 'center'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          className: "display-font",
+          style: {
+            fontSize: 56,
+            fontWeight: 800,
+            color: KC.cream,
+            lineHeight: 1,
+            letterSpacing: '-0.03em'
+          }
+        }, juzProgress, "%"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            fontSize: 12,
+            color: KC.textDim,
+            marginTop: 8,
+            fontStyle: 'italic'
+          }
+        }, "of Juz Amma memorized"), /*#__PURE__*/React.createElement("div", {
+          style: {
+            height: 6,
+            background: KC.bg,
+            borderRadius: 3,
+            marginTop: 16,
+            overflow: 'hidden'
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            width: `${juzProgress}%`,
+            height: '100%',
+            background: `linear-gradient(90deg, ${KC.cream}, ${KC.acid})`
+          }
+        }))), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 14
+          }
+        }, /*#__PURE__*/React.createElement(Slider, {
+          label: "Progress %",
+          value: juzProgress,
+          setValue: setJuzProgress,
+          min: 0,
+          max: 100,
+          step: 5,
+          format: v => `${v}%`
+        })), /*#__PURE__*/React.createElement("div", {
+          style: {
+            marginTop: 10,
+            padding: 10,
+            background: KC.bgInset,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("p", {
+          style: {
+            fontSize: 11,
+            color: KC.textDim,
+            margin: 0,
+            lineHeight: 1.5
+          }
+        }, "Currently working through Surah Al-Mursalat. Plan: complete Juz 30 by Month 6, then return to madrasa for proper study once income stabilizes."))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "3-YEAR VISION \xB7 NIYYAH NORTH STAR",
+          icon: /*#__PURE__*/React.createElement(Target, {
+            size: 13
+          }),
+          accent: KC.acid
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10
+          }
+        }, /*#__PURE__*/React.createElement(VisionItem, {
+          n: "01",
+          text: "Laptop-based, location-independent income",
+          status: "building"
+        }), /*#__PURE__*/React.createElement(VisionItem, {
+          n: "02",
+          text: "$3,000/week \xB7 Freedom number",
+          status: "building"
+        }), /*#__PURE__*/React.createElement(VisionItem, {
+          n: "03",
+          text: "Time to study Islam properly \xB7 madrasa",
+          status: "future"
+        }), /*#__PURE__*/React.createElement(VisionItem, {
+          n: "04",
+          text: "Relocate Mom from America",
+          status: "future"
+        }), /*#__PURE__*/React.createElement(VisionItem, {
+          n: "05",
+          text: "Family vault honored \xB7 brother remembered",
+          status: "ongoing"
+        })))), /*#__PURE__*/React.createElement(KCCard, {
+          title: "THE OPERATOR'S PRINCIPLES",
+          icon: /*#__PURE__*/React.createElement(Flame, {
+            size: 13
+          })
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: 10
+          }
+        }, ['Niyyah-driven decisions only. If it doesn\'t serve the vision, it doesn\'t ship.', 'Operator, not performer. Build systems that don\'t require my face.', 'Ship → learn → iterate. No polishing past 90% before live.', '10% sadaqah off the top. Money flows past you, not into you.', 'Newark raised, Cairo based. Don\'t lie about origin.', 'Relationships matter more than money. 4 generations of barbers proves it.', 'No new tools, no new courses for 90 days. Master what\'s in hand.', 'Sundays for family + filming. No client calls.'].map((p, i) => /*#__PURE__*/React.createElement("div", {
+          key: i,
+          style: {
+            padding: '12px 14px',
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderLeft: `2px solid ${KC.acid}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            gap: 10
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 10,
+            color: KC.acid,
+            fontWeight: 700,
+            letterSpacing: '0.1em',
+            minWidth: 24
+          }
+        }, String(i + 1).padStart(2, '0')), /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 12,
+            color: KC.text,
+            lineHeight: 1.5
+          }
+        }, p)))))));
+      }
+      function VisionItem({
+        n,
+        text,
+        status
+      }) {
+        const colors = {
+          building: KC.acid,
+          future: KC.cream,
+          ongoing: KC.emerald
+        };
+        const labels = {
+          building: 'BUILDING',
+          future: 'AHEAD',
+          ongoing: 'ALWAYS'
+        };
+        return /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            padding: 12,
+            background: KC.bgInset,
+            border: `1px solid ${KC.border}`,
+            borderRadius: 4
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          className: "display-font",
+          style: {
+            fontSize: 22,
+            fontWeight: 700,
+            color: colors[status],
+            minWidth: 32,
+            letterSpacing: '-0.03em'
+          }
+        }, n), /*#__PURE__*/React.createElement("span", {
+          style: {
+            flex: 1,
+            fontSize: 13,
+            color: KC.text,
+            lineHeight: 1.4
+          }
+        }, text), /*#__PURE__*/React.createElement("span", {
+          className: "mono-font",
+          style: {
+            fontSize: 9,
+            padding: '2px 6px',
+            background: colors[status] + '20',
+            color: colors[status],
+            borderRadius: 2,
+            letterSpacing: '0.1em',
+            fontWeight: 600
+          }
+        }, labels[status]));
+      }
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(/*#__PURE__*/React.createElement(KhyreeCityDashboard, null));
+      setTimeout(() => {
+        const loader = document.getElementById('loading');
+        if (loader) {
+          loader.classList.add('hidden');
+          setTimeout(() => loader && loader.remove(), 500);
+        }
+      }, 100);
+    }
+  </script>
+</body>
+</html>

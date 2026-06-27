@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Khyree City · Logo Marks · v.01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#fafaf7;
+  --paper-2:#f4f3ee;
+  --ink:#0a0a0a;
+  --ink-2:#2a2a2a;
+  --ink-soft:#5a5a5a;
+  --ink-dim:#999;
+  --line:#e8e8e3;
+  --line-strong:#d0d0c8;
+  --acid:#b8ff00;
+  --acid-dark:#9bd400;
+  --max:1280px;
+  --display:'Inter Tight',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased;letter-spacing:-0.005em;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* Top bar */
+.bar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,250,247,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.bar-inner{max-width:var(--max);margin:0 auto;padding:14px 32px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--ink-soft)}
+.bar-inner .id{color:var(--ink);font-weight:700;display:flex;align-items:center;gap:8px}
+.bar-inner .id .dot{width:8px;height:8px;background:var(--acid);border-radius:50%}
+.bar-inner .meta{color:var(--ink-dim);font-size:10px;letter-spacing:0.16em;text-transform:uppercase}
+@media(max-width:640px){.bar-inner{padding:12px 18px}.bar-inner .meta{display:none}}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+@media(max-width:640px){.wrap{padding:0 22px}}
+
+/* Hero */
+.hero{padding-top:140px;padding-bottom:80px}
+.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(40px,7vw,84px);letter-spacing:-0.04em;line-height:0.92;margin-bottom:24px;max-width:880px}
+.hero h1 em{font-style:normal;background:var(--acid);padding:0 0.08em;font-weight:900}
+.hero p{font-family:var(--display);font-weight:400;font-size:clamp(16px,2vw,20px);color:var(--ink-soft);max-width:640px;line-height:1.5}
+.hero p strong{color:var(--ink);font-weight:600}
+
+/* Grid */
+.grid{padding:48px 0 80px;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+
+.mark{background:var(--paper);padding:48px 40px;position:relative;display:flex;flex-direction:column;gap:32px}
+.mark.recommended{background:linear-gradient(180deg, rgba(184,255,0,0.06), rgba(184,255,0,0))}
+.mark.recommended::before{
+  content:"RECOMMENDED";
+  position:absolute;top:24px;right:24px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.24em;
+  color:var(--ink);background:var(--acid);
+  padding:5px 10px;font-weight:700;
+}
+@media(max-width:640px){.mark{padding:36px 24px}}
+
+.mark-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.mark-num{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--ink-dim);font-weight:600}
+.mark-num b{color:var(--ink);font-weight:700;font-size:14px;letter-spacing:-0.01em;display:inline-block;margin-left:4px;font-family:var(--display)}
+.mark-name{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-0.015em}
+.mark-feel{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+
+/* Canvas pair */
+.canvas-pair{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.canvas{padding:48px 24px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;background:var(--paper)}
+.canvas.dark{background:var(--ink)}
+.canvas svg{max-width:62%;max-height:62%}
+.canvas .corner{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:8px;letter-spacing:0.14em;color:var(--ink-dim);font-weight:600}
+.canvas.dark .corner{color:rgba(250,250,247,0.35)}
+
+/* Mini row */
+.mini-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.mini{padding:18px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:var(--paper);position:relative}
+.mini.dark{background:var(--ink)}
+.mini svg{max-width:80%;max-height:80%}
+.mini.fav svg{max-width:42%;max-height:42%}
+.mini .lbl{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:7px;letter-spacing:0.18em;color:var(--ink-dim);font-weight:600}
+.mini.dark .lbl{color:rgba(250,250,247,0.35)}
+
+.mark-desc{font-family:var(--display);font-weight:400;font-size:14px;color:var(--ink-soft);line-height:1.55}
+.mark-desc strong{color:var(--ink);font-weight:600}
+
+/* Closing */
+.closing{padding:80px 0 120px;text-align:center;border-top:1px solid var(--line);background:var(--paper-2)}
+.closing h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,4vw,44px);letter-spacing:-0.03em;line-height:1.05;margin-bottom:20px;max-width:680px;margin-left:auto;margin-right:auto}
+.closing h2 em{font-style:normal;background:var(--acid);padding:0 0.1em;font-weight:800}
+.closing p{font-family:var(--display);font-size:16px;color:var(--ink-soft);max-width:520px;margin:0 auto;line-height:1.5}
+.closing p code{font-family:var(--mono);font-size:14px;background:var(--ink);color:var(--paper);padding:3px 10px;font-weight:600;letter-spacing:0.04em}
+.closing .endmeta{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-dim);padding-top:48px;margin-top:48px;border-top:1px solid var(--line-strong);max-width:600px;margin-left:auto;margin-right:auto;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<nav class="bar">
+  <div class="bar-inner">
+    <div class="id"><span class="dot"></span>KHYREE CITY · LOGO MARKS</div>
+    <div class="meta">v.01 · 6 CONCEPTS · 2026.05.14</div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Six <em>marks.</em><br/>Pick a number.</h1>
+    <p>No K. No C. No barber tools. Six pure geometric marks, each engineered to stand on its own — favicon to suite door — without ever depicting what you do. <strong>Tell me the number. I'll refine the winner.</strong></p>
+  </div>
+</header>
+
+<section class="grid">
+
+  <!-- ========= 01 THE CUT ========= -->
+  <div class="mark">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>01</b></div>
+        <div class="mark-name">The Cut</div>
+      </div>
+      <div class="mark-feel">PRECISION · OFFSET</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="40" y="30" width="50" height="140" fill="#0a0a0a"/>
+          <rect x="110" y="42" width="50" height="140" fill="#0a0a0a"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="40" y="30" width="50" height="140" fill="#fafaf7"/>
+          <rect x="110" y="42" width="50" height="140" fill="#fafaf7"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <rect x="40" y="30" width="50" height="140" fill="#0a0a0a"/>
+          <rect x="110" y="42" width="50" height="140" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">LARGE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="40" y="30" width="50" height="140" fill="#0a0a0a"/>
+          <rect x="110" y="42" width="50" height="140" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="40" y="30" width="50" height="140" fill="#fafaf7"/>
+          <rect x="110" y="42" width="50" height="140" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">Two parallel blocks. <strong>The second slightly offset from the first.</strong> The space between them is the entire mark — a clean precision line you read instantly without ever being told what it represents. Reads as architecture, as cut, as a slight imperfection that's clearly intentional.</p>
+  </div>
+
+  <!-- ========= 02 THE WEDGE ========= -->
+  <div class="mark">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>02</b></div>
+        <div class="mark-name">The Wedge</div>
+      </div>
+      <div class="mark-feel">MOTION · ASCENT</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <polygon points="40,30 40,170 160,100" fill="#0a0a0a"/>
+          <rect x="40" y="92" width="120" height="16" fill="#fafaf7"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK</div>
+        <svg viewBox="0 0 200 200">
+          <polygon points="40,30 40,170 160,100" fill="#fafaf7"/>
+          <rect x="40" y="92" width="120" height="16" fill="#0a0a0a"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <polygon points="40,30 40,170 160,100" fill="#0a0a0a"/>
+          <rect x="40" y="92" width="120" height="16" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">LARGE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <polygon points="40,30 40,170 160,100" fill="#0a0a0a"/>
+          <rect x="40" y="92" width="120" height="16" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <polygon points="40,30 40,170 160,100" fill="#fafaf7"/>
+          <rect x="40" y="92" width="120" height="16" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">A right-pointing wedge cleaved horizontally. <strong>Two stacked triangles with a single slice through the middle.</strong> Reads as direction, as level-up, as forward motion — and the slice is the signature move. Strongest geometric profile of the six.</p>
+  </div>
+
+  <!-- ========= 03 THE GATE ========= -->
+  <div class="mark">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>03</b></div>
+        <div class="mark-name">The Gate</div>
+      </div>
+      <div class="mark-feel">THRESHOLD · ARCHITECTURE</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="46" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="122" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="46" y="30" width="108" height="22" fill="#0a0a0a"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="46" y="30" width="32" height="140" fill="#fafaf7"/>
+          <rect x="122" y="30" width="32" height="140" fill="#fafaf7"/>
+          <rect x="46" y="30" width="108" height="22" fill="#fafaf7"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <rect x="46" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="122" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="46" y="30" width="108" height="22" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">LARGE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="46" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="122" y="30" width="32" height="140" fill="#0a0a0a"/>
+          <rect x="46" y="30" width="108" height="22" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="46" y="30" width="32" height="140" fill="#fafaf7"/>
+          <rect x="122" y="30" width="32" height="140" fill="#fafaf7"/>
+          <rect x="46" y="30" width="108" height="22" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">A doorway in elevation. Two columns capped by a lintel. <strong>Reads as architecture, as threshold, as the moment of crossing into the chair.</strong> Quietly references Cut Creaters as a building without depicting any furniture. Heritage energy.</p>
+  </div>
+
+  <!-- ========= 04 THE NOTCH ========= -->
+  <div class="mark recommended">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>04</b></div>
+        <div class="mark-name">The Notch</div>
+      </div>
+      <div class="mark-feel">COIN · SEAL · SUBTLE</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <path d="M 100 20 A 80 80 0 1 1 20 100 L 100 100 Z" fill="#0a0a0a"/>
+          <path d="M 100 20 L 180 100" fill="none" stroke="#0a0a0a" stroke-width="2" opacity="0"/>
+          <line x1="100" y1="20" x2="100" y2="100" stroke="#fafaf7" stroke-width="6"/>
+          <line x1="100" y1="100" x2="180" y2="100" stroke="#fafaf7" stroke-width="6"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK · ACCENT</div>
+        <svg viewBox="0 0 200 200">
+          <path d="M 100 20 A 80 80 0 1 1 20 100 L 100 100 Z" fill="#fafaf7"/>
+          <path d="M 100 20 L 180 100 L 100 100 Z" fill="#b8ff00"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <path d="M 100 20 A 80 80 0 1 1 20 100 L 100 100 Z" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">PURE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <path d="M 100 20 A 80 80 0 1 1 20 100 L 100 100 Z" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <path d="M 100 20 A 80 80 0 1 1 20 100 L 100 100 Z" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">A solid circle with <strong>a single perfect quarter-wedge cut out of the top-right.</strong> Reads as a coin, a seal, a stamp of approval. The notch is the entire signature — subtle, ownable, ages forever. The accent version fills the notch in acid green for a luxury accent variant. <strong>This is the strongest of the six.</strong></p>
+  </div>
+
+  <!-- ========= 05 THE SPIRE ========= -->
+  <div class="mark">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>05</b></div>
+        <div class="mark-name">The Spire</div>
+      </div>
+      <div class="mark-feel">MONOLITH · LINEAGE</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <polygon points="76,170 124,170 124,80 110,60 110,40 90,40 90,60 76,80" fill="#0a0a0a"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK</div>
+        <svg viewBox="0 0 200 200">
+          <polygon points="76,170 124,170 124,80 110,60 110,40 90,40 90,60 76,80" fill="#fafaf7"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <polygon points="76,170 124,170 124,80 110,60 110,40 90,40 90,60 76,80" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">LARGE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <polygon points="76,170 124,170 124,80 110,60 110,40 90,40 90,60 76,80" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <polygon points="76,170 124,170 124,80 110,60 110,40 90,40 90,60 76,80" fill="#fafaf7"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">A stepped obelisk in profile. <strong>Built from a single closed polygon</strong> — base, neck, capital. Reads as monument, as classical architecture, as four-generation lineage made vertical. Heritage register. Could be cast in brass for the suite door.</p>
+  </div>
+
+  <!-- ========= 06 THE STACK ========= -->
+  <div class="mark">
+    <div class="mark-head">
+      <div>
+        <div class="mark-num">CONCEPT <b>06</b></div>
+        <div class="mark-name">The Stack</div>
+      </div>
+      <div class="mark-feel">LEVEL-UP · COMPOUND</div>
+    </div>
+
+    <div class="canvas-pair">
+      <div class="canvas">
+        <div class="corner">LIGHT</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="30" y="146" width="140" height="20" fill="#0a0a0a"/>
+          <rect x="46" y="118" width="108" height="20" fill="#0a0a0a"/>
+          <rect x="62" y="90" width="76" height="20" fill="#0a0a0a"/>
+          <rect x="78" y="62" width="44" height="20" fill="#0a0a0a"/>
+          <rect x="94" y="34" width="12" height="20" fill="#0a0a0a"/>
+        </svg>
+      </div>
+      <div class="canvas dark">
+        <div class="corner">DARK</div>
+        <svg viewBox="0 0 200 200">
+          <rect x="30" y="146" width="140" height="20" fill="#fafaf7"/>
+          <rect x="46" y="118" width="108" height="20" fill="#fafaf7"/>
+          <rect x="62" y="90" width="76" height="20" fill="#fafaf7"/>
+          <rect x="78" y="62" width="44" height="20" fill="#fafaf7"/>
+          <rect x="94" y="34" width="12" height="20" fill="#b8ff00"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <svg viewBox="0 0 200 200">
+          <rect x="30" y="146" width="140" height="20" fill="#0a0a0a"/>
+          <rect x="46" y="118" width="108" height="20" fill="#0a0a0a"/>
+          <rect x="62" y="90" width="76" height="20" fill="#0a0a0a"/>
+          <rect x="78" y="62" width="44" height="20" fill="#0a0a0a"/>
+          <rect x="94" y="34" width="12" height="20" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">LARGE</span>
+      </div>
+      <div class="mini fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="30" y="146" width="140" height="20" fill="#0a0a0a"/>
+          <rect x="46" y="118" width="108" height="20" fill="#0a0a0a"/>
+          <rect x="62" y="90" width="76" height="20" fill="#0a0a0a"/>
+          <rect x="78" y="62" width="44" height="20" fill="#0a0a0a"/>
+          <rect x="94" y="34" width="12" height="20" fill="#0a0a0a"/>
+        </svg>
+        <span class="lbl">FAVICON</span>
+      </div>
+      <div class="mini dark fav">
+        <svg viewBox="0 0 200 200">
+          <rect x="30" y="146" width="140" height="20" fill="#fafaf7"/>
+          <rect x="46" y="118" width="108" height="20" fill="#fafaf7"/>
+          <rect x="62" y="90" width="76" height="20" fill="#fafaf7"/>
+          <rect x="78" y="62" width="44" height="20" fill="#fafaf7"/>
+          <rect x="94" y="34" width="12" height="20" fill="#b8ff00"/>
+        </svg>
+        <span class="lbl">16PX</span>
+      </div>
+    </div>
+
+    <p class="mark-desc">Five horizontal bars ascending to a single capstone. <strong>Each tier narrows by exactly the same ratio.</strong> Reads as ziggurat, as compound interest, as the level-up made visible — the geometry of climbing without an arrow. The capstone can hold the acid-green accent.</p>
+  </div>
+
+</section>
+
+<div class="closing">
+  <div class="wrap">
+    <h2>Tell me the <em>number.</em></h2>
+    <p>Pick one of the six. I'll refine the winner — push the geometry to lock, draw the full lockup with the wordmark beside it, and export at every size you'll ever need. <br/><br/>Reply with <code>01</code> through <code>06</code>.</p>
+    <div class="endmeta">
+      <span>KHYREE CITY · LOGO MARKS</span>
+      <span>v.01 · 6 CONCEPTS</span>
+      <span>2026.05.14</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

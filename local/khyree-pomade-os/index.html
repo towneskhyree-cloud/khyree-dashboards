@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Khyree City — Product Launch OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --bg-2: #11141a;
+    --bg-3: #181c25;
+    --bg-4: #1f2430;
+    --line: rgba(255,255,255,0.06);
+    --line-2: rgba(255,255,255,0.12);
+    --line-3: rgba(255,255,255,0.18);
+    --text: #f4f6fb;
+    --text-2: #a8b0c0;
+    --text-3: #6b7388;
+    --blue: #3b82f6;
+    --blue-2: #60a5fa;
+    --blue-glow: rgba(59,130,246,0.35);
+    --acid: #b8ff00;
+    --acid-glow: rgba(184,255,0,0.3);
+    --gold: #d4a574;
+    --gold-2: #f0c896;
+    --gold-glow: rgba(212,165,116,0.35);
+    --green: #34d399;
+    --green-soft: rgba(52,211,153,0.1);
+    --amber: #fbbf24;
+    --red: #f87171;
+    --red-soft: rgba(248,113,113,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Bricolage Grotesque', sans-serif; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; overflow-x: hidden; }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 0%, rgba(59,130,246,0.08), transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(184,255,0,0.04), transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.025 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+    pointer-events: none; opacity: .8; z-index: 1; mix-blend-mode: overlay;
+  }
+
+  .wrap { position: relative; z-index: 2; max-width: 1440px; margin: 0 auto; padding: 28px 32px 80px; }
+
+  /* HEADER */
+  header { display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid var(--line); margin-bottom: 24px; gap: 24px; flex-wrap: wrap; }
+  .brand { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--acid); display: flex; align-items: center; gap: 10px; }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 12px var(--acid); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  h1 { font-family: 'Anton', sans-serif; font-size: 56px; line-height: 0.95; letter-spacing: -0.02em; text-transform: uppercase; }
+  h1 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: normal; color: var(--acid); text-transform: lowercase; letter-spacing: 0; }
+  .sub { font-size: 13px; color: var(--text-2); margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+  .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .clock { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); background: var(--bg-2); border: 1px solid var(--line); padding: 10px 14px; border-radius: 8px; }
+  .btn { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--blue); color: #0a0c10; padding: 12px 18px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; font-weight: 700; }
+  .btn:hover { background: var(--blue-2); transform: translateY(-1px); box-shadow: 0 4px 20px var(--blue-glow); }
+  .btn.acid { background: var(--acid); color: #0a0c10; }
+  .btn.acid:hover { box-shadow: 0 4px 20px var(--acid-glow); }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line-2); }
+  .btn.ghost:hover { border-color: var(--blue); color: var(--blue); }
+
+  /* KPI STRIP */
+  .kpis { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; margin-bottom: 24px; }
+  @media (max-width: 1300px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 700px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+  .kpi { background: var(--bg-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; overflow: hidden; transition: border-color 0.2s; }
+  .kpi:hover { border-color: var(--line-2); }
+  .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--blue), transparent); }
+  .kpi.acid::before { background: linear-gradient(90deg, var(--acid), transparent); }
+  .kpi.gold::before { background: linear-gradient(90deg, var(--gold), transparent); }
+  .kpi.green::before { background: linear-gradient(90deg, var(--green), transparent); }
+  .kpi-label { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+  .kpi-value { font-family: 'Anton', sans-serif; font-size: 24px; line-height: 1; }
+  .kpi-value .unit { font-family: 'Bricolage Grotesque', sans-serif; font-size: 12px; color: var(--text-2); margin-left: 2px; font-weight: 500; }
+  .kpi-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-3); margin-top: 6px; letter-spacing: 0.06em; }
+
+  /* PHASE TRACKER */
+  .panel { background: var(--bg-2); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px 14px; gap: 12px; flex-wrap: wrap; }
+  .panel-title { font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 0.01em; text-transform: uppercase; }
+  .panel-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: normal; color: var(--acid); text-transform: lowercase; letter-spacing: 0; }
+  .panel-title .gold { color: var(--gold); }
+
+  .phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0 22px 22px; }
+  @media (max-width: 1000px) { .phases { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .phases { grid-template-columns: 1fr; } }
+  .phase-card { background: var(--bg-3); border: 1px solid var(--line); border-radius: 12px; padding: 16px; position: relative; transition: all 0.2s; }
+  .phase-card.active { border-color: var(--acid); background: linear-gradient(135deg, var(--bg-3), rgba(184,255,0,0.04)); }
+  .phase-card.done { border-color: var(--green); }
+  .phase-card.done::after { content: '✓'; position: absolute; top: 12px; right: 14px; color: var(--green); font-size: 18px; font-weight: 700; }
+  .phase-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--text-3); margin-bottom: 4px; }
+  .phase-card.active .phase-num { color: var(--acid); }
+  .phase-name { font-family: 'Anton', sans-serif; font-size: 22px; line-height: 1; margin-bottom: 4px; text-transform: uppercase; }
+  .phase-when { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-2); margin-bottom: 12px; letter-spacing: 0.08em; }
+  .phase-tasks { display: flex; flex-direction: column; gap: 6px; }
+  .task { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.4; cursor: pointer; padding: 4px 0; user-select: none; }
+  .task input { margin-top: 2px; cursor: pointer; accent-color: var(--acid); flex-shrink: 0; }
+  .task.done span { text-decoration: line-through; color: var(--text-3); }
+  .phase-progress { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .phase-progress-bar { height: 4px; background: var(--bg-4); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+  .phase-progress-fill { height: 100%; background: var(--acid); transition: width 0.4s; }
+  .phase-progress-text { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-3); letter-spacing: 0.08em; }
+
+  /* CHANNEL CALCULATORS */
+  .channels { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media (max-width: 1100px) { .channels { grid-template-columns: 1fr; } }
+  .channel { padding: 20px; }
+  .channel-icon { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+  .channel-name { font-family: 'Anton', sans-serif; font-size: 24px; text-transform: uppercase; margin-bottom: 4px; line-height: 1; }
+  .channel-name em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: normal; text-transform: lowercase; letter-spacing: 0; }
+  .channel-name.blue em { color: var(--blue); }
+  .channel-name.gold em { color: var(--gold); }
+  .channel-name.acid em { color: var(--acid); }
+  .channel-desc { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-2); margin-bottom: 16px; line-height: 1.5; }
+  .channel-inputs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .ch-input-row { display: flex; align-items: center; gap: 10px; }
+  .ch-input-row label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); flex: 1; }
+  .ch-input { background: var(--bg); border: 1px solid var(--line-2); color: var(--text); padding: 7px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; outline: none; width: 90px; text-align: right; font-weight: 700; transition: border-color 0.2s; }
+  .ch-input:focus { border-color: var(--blue); }
+  .channel-output { background: var(--bg-3); border-radius: 10px; padding: 14px; }
+  .co-row { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 0; }
+  .co-row .l { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
+  .co-row .v { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+  .co-divider { height: 1px; background: var(--line); margin: 6px 0; }
+  .co-big { font-family: 'Anton', sans-serif; font-size: 28px; text-align: center; margin: 6px 0 4px; }
+  .co-big.blue { color: var(--blue); }
+  .co-big.gold { color: var(--gold); }
+  .co-big.acid { color: var(--acid); }
+  .co-big.green { color: var(--green); }
+  .co-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-2); text-align: center; }
+
+  /* TOTAL + RAMP */
+  .ramp-row { display: grid; grid-template-columns: 380px 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 1000px) { .ramp-row { grid-template-columns: 1fr; } }
+
+  .totals-card { padding: 24px; }
+  .total-big { text-align: center; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 14px; }
+  .tb-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--text-3); margin-bottom: 6px; text-transform: uppercase; }
+  .tb-value { font-family: 'Anton', sans-serif; font-size: 56px; line-height: 1; color: var(--acid); }
+  .tb-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); margin-top: 6px; }
+  .total-stack { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ts-cell { background: var(--bg-3); border-radius: 8px; padding: 12px; }
+  .ts-cell .l { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.16em; color: var(--text-3); margin-bottom: 4px; text-transform: uppercase; }
+  .ts-cell .v { font-family: 'Anton', sans-serif; font-size: 22px; }
+  .ts-cell .v.green { color: var(--green); }
+  .ts-cell .v.gold { color: var(--gold); }
+  .ts-cell .v.blue { color: var(--blue); }
+
+  .ramp-card { padding: 22px; }
+  .ramp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .ramp-svg { width: 100%; height: 240px; display: block; }
+  .ramp-tip { position: absolute; background: var(--bg); border: 1px solid var(--line-2); padding: 6px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; pointer-events: none; opacity: 0; transition: opacity 0.15s; z-index: 10; white-space: nowrap; }
+
+  /* 5-YEAR PROJECTION */
+  .y5-row { padding: 22px; margin-bottom: 24px; }
+  .y5-toggle { display: flex; gap: 4px; }
+  .y5-btn { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 6px 12px; border-radius: 5px; cursor: pointer; color: var(--text-3); border: 1px solid var(--line-2); background: transparent; font-weight: 700; transition: all 0.15s; }
+  .y5-btn:hover { color: var(--text); }
+  .y5-btn.active { background: var(--blue); color: #0a0c10; border-color: var(--blue); }
+  .y5-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 18px; }
+  @media (max-width: 1000px) { .y5-grid { grid-template-columns: repeat(2, 1fr); } }
+  .year-card { background: var(--bg-3); border-radius: 12px; padding: 16px 14px; position: relative; overflow: hidden; }
+  .year-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--blue); opacity: 0.5; }
+  .year-card.milestone::before { background: var(--gold); opacity: 1; }
+  .year-card.legacy::before { background: var(--acid); opacity: 1; }
+  .yc-year { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--text-3); margin-bottom: 6px; }
+  .yc-rev { font-family: 'Anton', sans-serif; font-size: 30px; line-height: 1; }
+  .year-card.milestone .yc-rev { color: var(--gold); }
+  .year-card.legacy .yc-rev { color: var(--acid); }
+  .yc-profit { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--green); margin-top: 4px; font-weight: 700; }
+  .yc-note { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-3); margin-top: 6px; line-height: 1.4; letter-spacing: 0.04em; }
+  .y5-note { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); margin-top: 14px; padding: 12px; background: var(--bg-3); border-radius: 8px; border-left: 3px solid var(--gold); line-height: 1.6; }
+
+  /* PRODUCT SOURCING */
+  .sourcing { padding: 22px; margin-bottom: 24px; }
+  .source-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 900px) { .source-grid { grid-template-columns: 1fr; } }
+  .source-card { background: var(--bg-3); border: 1px solid var(--line); border-radius: 12px; padding: 16px; transition: all 0.2s; }
+  .source-card:hover { border-color: var(--blue); }
+  .source-name { font-family: 'Anton', sans-serif; font-size: 18px; margin-bottom: 4px; }
+  .source-loc { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .source-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .source-stat { font-family: 'JetBrains Mono', monospace; }
+  .source-stat .l { font-size: 9px; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
+  .source-stat .v { font-size: 13px; color: var(--text); font-weight: 700; }
+  .source-pros { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 11px; color: var(--text-2); line-height: 1.5; }
+  .source-calc { background: var(--bg-3); border-radius: 12px; padding: 16px; }
+  .source-calc-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+  .sc-row { display: flex; align-items: center; gap: 10px; }
+  .sc-row label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2); flex: 1; }
+  .sc-row input { background: var(--bg); border: 1px solid var(--line-2); color: var(--text); padding: 8px 12px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; outline: none; width: 100px; text-align: right; }
+  .sc-out { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .sc-out-cell { background: var(--bg); border-radius: 8px; padding: 10px; text-align: center; }
+  .sc-out-cell .l { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.14em; color: var(--text-3); margin-bottom: 4px; text-transform: uppercase; }
+  .sc-out-cell .v { font-family: 'Anton', sans-serif; font-size: 20px; color: var(--blue); }
+  .sc-out-cell .v.gold { color: var(--gold); }
+  .sc-out-cell .v.green { color: var(--green); }
+
+  /* SCRIPTS */
+  .scripts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  @media (max-width: 1000px) { .scripts-row { grid-template-columns: 1fr; } }
+  .script-card { padding: 22px; }
+  .script-text { background: var(--bg-3); border-radius: 12px; padding: 18px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 13px; color: var(--text); line-height: 1.7; margin-top: 12px; border-left: 3px solid var(--acid); }
+  .script-text em { color: var(--acid); font-style: normal; font-weight: 700; }
+  .script-card.wholesale .script-text { border-left-color: var(--gold); }
+  .script-card.wholesale .script-text em { color: var(--gold); }
+  .script-meta { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); margin-top: 12px; letter-spacing: 0.08em; line-height: 1.6; }
+
+  /* NIYYAH */
+  .niyyah { padding: 22px; margin-bottom: 24px; }
+  .niyyah-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 800px) { .niyyah-grid { grid-template-columns: 1fr; } }
+  .niyyah-cell { background: var(--bg-3); border-radius: 12px; padding: 18px; text-align: center; border: 1px solid var(--line); }
+  .niyyah-cell.acid { border-color: rgba(184,255,0,0.3); background: linear-gradient(135deg, var(--bg-3), rgba(184,255,0,0.04)); }
+  .nc-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.16em; color: var(--text-3); margin-bottom: 8px; text-transform: uppercase; }
+  .nc-value { font-family: 'Anton', sans-serif; font-size: 38px; line-height: 1; color: var(--acid); }
+  .nc-sub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-2); margin-top: 6px; line-height: 1.5; }
+  .niyyah-quote { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 16px; color: var(--text-2); text-align: center; padding: 20px 0 8px; line-height: 1.5; }
+  .niyyah-quote em { color: var(--acid); font-style: italic; }
+
+  /* FOOTER */
+  .foot { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+  .foot .tag { color: var(--acid); }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 20px 16px; }
+    h1 { font-size: 38px; }
+    .kpi-value { font-size: 18px; }
+    .tb-value { font-size: 42px; }
+  }
+
+  .fade-in { animation: fadeIn 0.5s ease-out backwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand fade-in">
+      <div class="eyebrow"><span class="dot"></span>PRODUCT LAUNCH OS · KHYREE CITY</div>
+      <h1>Pomade <em>os.</em></h1>
+      <div class="sub">PHASE 1 OF 4 · 4-GEN BARBER LINEAGE × 111K IG × 480-CUT ATL SPRINT</div>
+    </div>
+    <div class="header-actions fade-in" style="animation-delay: 0.1s;">
+      <div class="clock" id="clock">—</div>
+      <button class="btn ghost" onclick="resetProgress()">Reset</button>
+      <button class="btn acid" onclick="exportPlan()">Export Plan</button>
+    </div>
+  </header>
+
+  <!-- KPI STRIP -->
+  <section class="kpis">
+    <div class="kpi acid fade-in" style="animation-delay: 0.15s;">
+      <div class="kpi-label">Capital Needed</div>
+      <div class="kpi-value">$<span id="kpiCapital">5K</span></div>
+      <div class="kpi-meta">PHASE 1+2</div>
+    </div>
+    <div class="kpi gold fade-in" style="animation-delay: 0.18s;">
+      <div class="kpi-label">Y1 Revenue</div>
+      <div class="kpi-value">$<span id="kpiY1Rev">—</span></div>
+      <div class="kpi-meta">CONSERVATIVE</div>
+    </div>
+    <div class="kpi green fade-in" style="animation-delay: 0.21s;">
+      <div class="kpi-label">Y1 Profit</div>
+      <div class="kpi-value">$<span id="kpiY1Profit">—</span></div>
+      <div class="kpi-meta"><span id="kpiY1Margin">—</span>% MARGIN</div>
+    </div>
+    <div class="kpi fade-in" style="animation-delay: 0.24s;">
+      <div class="kpi-label">Y1 Units</div>
+      <div class="kpi-value"><span id="kpiY1Units">—</span></div>
+      <div class="kpi-meta">ACROSS 3 CHANNELS</div>
+    </div>
+    <div class="kpi gold fade-in" style="animation-delay: 0.27s;">
+      <div class="kpi-label">Y5 Revenue</div>
+      <div class="kpi-value">$<span id="kpiY5Rev">—</span></div>
+      <div class="kpi-meta">REALISTIC SCENARIO</div>
+    </div>
+    <div class="kpi fade-in" style="animation-delay: 0.3s;">
+      <div class="kpi-label">ROI Y1</div>
+      <div class="kpi-value"><span id="kpiROI">—</span>×</div>
+      <div class="kpi-meta">ON $5K INVESTED</div>
+    </div>
+    <div class="kpi acid fade-in" style="animation-delay: 0.33s;">
+      <div class="kpi-label">Days to $1K Profit</div>
+      <div class="kpi-value"><span id="kpiTo1k">—</span></div>
+      <div class="kpi-meta">FROM LAUNCH</div>
+    </div>
+    <div class="kpi acid fade-in" style="animation-delay: 0.36s;">
+      <div class="kpi-label">10% Sadaqah Y1</div>
+      <div class="kpi-value">$<span id="kpiSadaqah">—</span></div>
+      <div class="kpi-meta">NIYYAH-DRIVEN</div>
+    </div>
+  </section>
+
+  <!-- PHASE TRACKER -->
+  <div class="panel fade-in" style="margin-bottom: 24px; animation-delay: 0.4s;">
+    <div class="panel-head">
+      <div class="panel-title">4-Phase <em>launch.</em></div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); letter-spacing: 0.1em;">CHECK TASKS AS YOU SHIP THEM ↓</div>
+    </div>
+    <div class="phases" id="phases"></div>
+  </div>
+
+  <!-- CHANNELS -->
+  <div class="channels">
+    <!-- Channel 1: Chair Retail -->
+    <div class="panel channel fade-in" style="animation-delay: 0.45s;">
+      <div class="channel-icon">★ CHANNEL 1</div>
+      <div class="channel-name blue">Chair <em>retail.</em></div>
+      <div class="channel-desc">Sell pomade directly to every cut during the ATL 16-week sprint. Built-in demo while you fade them up.</div>
+      <div class="channel-inputs">
+        <div class="ch-input-row">
+          <label>Cuts (16wk)</label>
+          <input type="number" class="ch-input" id="c1Cuts" value="480" />
+        </div>
+        <div class="ch-input-row">
+          <label>Conversion %</label>
+          <input type="number" class="ch-input" id="c1Conv" value="50" />
+        </div>
+        <div class="ch-input-row">
+          <label>Price $</label>
+          <input type="number" class="ch-input" id="c1Price" value="30" step="1" />
+        </div>
+        <div class="ch-input-row">
+          <label>COGS $</label>
+          <input type="number" class="ch-input" id="c1Cogs" value="5" step="0.5" />
+        </div>
+      </div>
+      <div class="channel-output">
+        <div class="co-big blue">$<span id="c1Rev">7,200</span></div>
+        <div class="co-sub">REVENUE · <span id="c1Units">240</span> UNITS</div>
+        <div class="co-divider"></div>
+        <div class="co-row"><span class="l">Profit</span><span class="v" style="color: var(--green);">$<span id="c1Profit">6,000</span></span></div>
+        <div class="co-row"><span class="l">Margin</span><span class="v" style="color: var(--gold);"><span id="c1Margin">83</span>%</span></div>
+      </div>
+    </div>
+
+    <!-- Channel 2: ATL Wholesale -->
+    <div class="panel channel fade-in" style="animation-delay: 0.5s;">
+      <div class="channel-icon">★★ CHANNEL 2</div>
+      <div class="channel-name gold">ATL <em>wholesale.</em></div>
+      <div class="channel-desc">Cold-walk into 30 ATL barber shops during the trip. Place product in 8. Recurring monthly reorders for 6 months.</div>
+      <div class="channel-inputs">
+        <div class="ch-input-row">
+          <label>Shops placed</label>
+          <input type="number" class="ch-input" id="c2Shops" value="8" />
+        </div>
+        <div class="ch-input-row">
+          <label>Units/order</label>
+          <input type="number" class="ch-input" id="c2UnitsPer" value="35" />
+        </div>
+        <div class="ch-input-row">
+          <label>Price $</label>
+          <input type="number" class="ch-input" id="c2Price" value="15" step="0.5" />
+        </div>
+        <div class="ch-input-row">
+          <label>Months active</label>
+          <input type="number" class="ch-input" id="c2Months" value="6" />
+        </div>
+      </div>
+      <div class="channel-output">
+        <div class="co-big gold">$<span id="c2Rev">25,200</span></div>
+        <div class="co-sub">REVENUE · <span id="c2Units">1,680</span> UNITS</div>
+        <div class="co-divider"></div>
+        <div class="co-row"><span class="l">Profit</span><span class="v" style="color: var(--green);">$<span id="c2Profit">16,800</span></span></div>
+        <div class="co-row"><span class="l">Margin</span><span class="v" style="color: var(--gold);"><span id="c2Margin">67</span>%</span></div>
+      </div>
+    </div>
+
+    <!-- Channel 3: DTC -->
+    <div class="panel channel fade-in" style="animation-delay: 0.55s;">
+      <div class="channel-icon">★★★ CHANNEL 3</div>
+      <div class="channel-name acid">DTC <em>online.</em></div>
+      <div class="channel-desc">IG → Shopify direct-to-consumer. Pays in dollars, runs from anywhere — Cairo, Bali, Medina. The leverage channel.</div>
+      <div class="channel-inputs">
+        <div class="ch-input-row">
+          <label>Orders/mo</label>
+          <input type="number" class="ch-input" id="c3Orders" value="40" />
+        </div>
+        <div class="ch-input-row">
+          <label>AOV $</label>
+          <input type="number" class="ch-input" id="c3AOV" value="30" step="1" />
+        </div>
+        <div class="ch-input-row">
+          <label>Months active</label>
+          <input type="number" class="ch-input" id="c3Months" value="9" />
+        </div>
+        <div class="ch-input-row">
+          <label>COGS $</label>
+          <input type="number" class="ch-input" id="c3Cogs" value="5" step="0.5" />
+        </div>
+      </div>
+      <div class="channel-output">
+        <div class="co-big acid">$<span id="c3Rev">10,800</span></div>
+        <div class="co-sub">REVENUE · <span id="c3Units">360</span> UNITS</div>
+        <div class="co-divider"></div>
+        <div class="co-row"><span class="l">Profit</span><span class="v" style="color: var(--green);">$<span id="c3Profit">9,000</span></span></div>
+        <div class="co-row"><span class="l">Margin</span><span class="v" style="color: var(--gold);"><span id="c3Margin">83</span>%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOTALS + RAMP -->
+  <div class="ramp-row">
+    <div class="panel totals-card fade-in" style="animation-delay: 0.6s;">
+      <div class="panel-title" style="font-size: 18px; margin-bottom: 6px;">Year 1 <em>totals.</em></div>
+      <div class="total-big">
+        <div class="tb-label">YEAR 1 REVENUE</div>
+        <div class="tb-value">$<span id="totalRev">—</span></div>
+        <div class="tb-sub"><span id="totalUnits">—</span> UNITS · 3 CHANNELS</div>
+      </div>
+      <div class="total-stack">
+        <div class="ts-cell">
+          <div class="l">Profit</div>
+          <div class="v green">$<span id="totalProfit">—</span></div>
+        </div>
+        <div class="ts-cell">
+          <div class="l">Margin</div>
+          <div class="v gold"><span id="totalMargin">—</span>%</div>
+        </div>
+        <div class="ts-cell">
+          <div class="l">Avg/Month</div>
+          <div class="v blue">$<span id="totalAvgMo">—</span></div>
+        </div>
+        <div class="ts-cell">
+          <div class="l">Avg/Day</div>
+          <div class="v">$<span id="totalAvgDay">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel ramp-card fade-in" style="animation-delay: 0.65s; position: relative;">
+      <div class="ramp-header">
+        <div class="panel-title" style="font-size: 18px;">12-month <em>ramp.</em></div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); letter-spacing: 0.08em;">REVENUE BUILDS AS PHASES UNLOCK</div>
+      </div>
+      <svg class="ramp-svg" id="rampChart" viewBox="0 0 800 240" preserveAspectRatio="none"></svg>
+      <div class="ramp-tip" id="rampTip"></div>
+    </div>
+  </div>
+
+  <!-- 5-YEAR PROJECTION -->
+  <div class="panel y5-row fade-in" style="animation-delay: 0.7s;">
+    <div class="panel-head" style="padding: 0 0 14px;">
+      <div class="panel-title">5-year <em>compound.</em></div>
+      <div class="y5-toggle">
+        <button class="y5-btn" data-y5="conservative">Conservative</button>
+        <button class="y5-btn active" data-y5="realistic">Realistic</button>
+        <button class="y5-btn" data-y5="aggressive">Aggressive</button>
+      </div>
+    </div>
+    <div class="y5-grid" id="y5Grid"></div>
+    <div class="y5-note" id="y5Note">—</div>
+  </div>
+
+  <!-- SOURCING -->
+  <div class="panel sourcing fade-in" style="animation-delay: 0.75s;">
+    <div class="panel-head" style="padding: 0 0 14px;">
+      <div class="panel-title">Product <em>sourcing.</em></div>
+    </div>
+    <div class="source-grid">
+      <div class="source-card">
+        <div class="source-name">Pravada Private Label</div>
+        <div class="source-loc">CANADA · SHIPS US</div>
+        <div class="source-stats">
+          <div class="source-stat"><div class="l">MOQ</div><div class="v">500u</div></div>
+          <div class="source-stat"><div class="l">Cost/unit</div><div class="v">$3-5</div></div>
+          <div class="source-stat"><div class="l">Lead time</div><div class="v">6-8wk</div></div>
+          <div class="source-stat"><div class="l">Custom</div><div class="v">Yes</div></div>
+        </div>
+        <div class="source-pros">Strong with Black-owned hair brands. Custom formulation. Higher cost but premium feel — fits "level up barbers" positioning.</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Onyx Private Label</div>
+        <div class="source-loc">USA · GEORGIA-ADJACENT</div>
+        <div class="source-stats">
+          <div class="source-stat"><div class="l">MOQ</div><div class="v">250u</div></div>
+          <div class="source-stat"><div class="l">Cost/unit</div><div class="v">$4-7</div></div>
+          <div class="source-stat"><div class="l">Lead time</div><div class="v">4-6wk</div></div>
+          <div class="source-stat"><div class="l">Custom</div><div class="v">Yes</div></div>
+        </div>
+        <div class="source-pros">Lower MOQ = test the market with less cash. Faster ATL ship. Best for first run / proof of concept.</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Alibaba (Vetted)</div>
+        <div class="source-loc">CHINA · WHITE-LABEL</div>
+        <div class="source-stats">
+          <div class="source-stat"><div class="l">MOQ</div><div class="v">1000u</div></div>
+          <div class="source-stat"><div class="l">Cost/unit</div><div class="v">$1-3</div></div>
+          <div class="source-stat"><div class="l">Lead time</div><div class="v">8-12wk</div></div>
+          <div class="source-stat"><div class="l">Custom</div><div class="v">Limited</div></div>
+        </div>
+        <div class="source-pros">Cheapest per unit but quality risk. Use for SCALE phase 4 only — never for first launch. Get samples from 5 suppliers before committing.</div>
+      </div>
+    </div>
+    <div class="source-calc">
+      <div class="source-calc-title">★ COST-PER-RUN CALCULATOR</div>
+      <div class="sc-row">
+        <label>Order quantity (units):</label>
+        <input type="number" id="srcQty" value="500" step="100" />
+        <label style="text-align:right;">Cost per unit ($):</label>
+        <input type="number" id="srcCost" value="4" step="0.25" />
+      </div>
+      <div class="sc-out">
+        <div class="sc-out-cell"><div class="l">Order Total</div><div class="v">$<span id="srcTotal">2,000</span></div></div>
+        <div class="sc-out-cell"><div class="l">Retail Value</div><div class="v gold">$<span id="srcRetailVal">15,000</span></div></div>
+        <div class="sc-out-cell"><div class="l">Profit if Sold</div><div class="v green">$<span id="srcProfit">13,000</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <div class="scripts-row">
+    <div class="panel script-card fade-in" style="animation-delay: 0.85s;">
+      <div class="panel-title" style="font-size: 18px;">Chair-to-cash <em>script.</em></div>
+      <div class="script-text">
+        <em>[While finishing the cut, after the lineup]</em><br/><br/>
+        "Yo before you head out — I been using this on every cut this trip. <em>Made it myself.</em> Water-based so it don't flake. You should feel the difference."<br/><br/>
+        <em>[Apply small amount, let them feel hold]</em><br/><br/>
+        "I'm only here 'til [date], so I got it for $25 to whoever's in the chair. Restock days back to $30. Want one before you bounce?"
+      </div>
+      <div class="script-meta">
+        ★ KEY MOVES: (1) Demo first, sell second. (2) Use scarcity tied to your ATL exit date. (3) Price drop = "in-chair only" loyalty discount. (4) Don't pitch. Just observe their hair.<br/>
+        ★ AT 50% CONVERSION × $30: 240 SALES = $7,200 RETAIL CHANNEL Y1.
+      </div>
+    </div>
+
+    <div class="panel script-card wholesale fade-in" style="animation-delay: 0.9s;">
+      <div class="panel-title" style="font-size: 18px;">Wholesale <em>cold-walk.</em></div>
+      <div class="script-text">
+        <em>[Walk into shop with one product in hand. Find the owner.]</em><br/><br/>
+        "What's good. I'm Khyree — barber out of Newark, been cutting in [shop you're at] this season. <em>Made my own pomade.</em> Water-based, medium hold. I'm placing 5 jars in 8 ATL shops. You sell at $25, I'll set you up at $15. Five jars front, restock when you call."<br/><br/>
+        <em>[Hand them one. Don't ask. Tell.]</em><br/><br/>
+        "Try it on a head today. If it move, you call me. I'm at [number]. If not, that one's yours, no hard feelings."
+      </div>
+      <div class="script-meta">
+        ★ KEY MOVES: (1) Free demo unit removes risk. (2) Frame the deal — they know the math instantly. (3) "8 shops" = scarcity + curated. (4) Walk out before they say no. Test the demo unit, not your sales pitch.<br/>
+        ★ HIT 30 SHOPS, PLACE IN 8 = 27% CLOSE RATE. RECURRING $525/MO PER SHOP.
+      </div>
+    </div>
+  </div>
+
+  <!-- NIYYAH -->
+  <div class="panel niyyah fade-in" style="animation-delay: 0.95s;">
+    <div class="panel-head" style="padding: 0;">
+      <div class="panel-title">Niyyah <em>tracker.</em></div>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); letter-spacing: 0.1em;">10% SADAQAH ON ALL INCOME · ANTI-RIYA FIREWALL</div>
+    </div>
+    <div class="niyyah-grid">
+      <div class="niyyah-cell acid">
+        <div class="nc-label">Y1 SADAQAH POOL</div>
+        <div class="nc-value">$<span id="ny1">—</span></div>
+        <div class="nc-sub">10% of $<span id="nyRev">—</span> Y1 revenue</div>
+      </div>
+      <div class="niyyah-cell">
+        <div class="nc-label">Y5 SADAQAH POOL</div>
+        <div class="nc-value">$<span id="ny5">—</span></div>
+        <div class="nc-sub">10% of Y5 projection</div>
+      </div>
+      <div class="niyyah-cell">
+        <div class="nc-label">5-YEAR TOTAL SADAQAH</div>
+        <div class="nc-value">$<span id="nyTotal">—</span></div>
+        <div class="nc-sub">Cumulative across all years</div>
+      </div>
+    </div>
+    <div class="niyyah-quote">
+      "Innamal a'maalu binniyyat" — <em>actions are by intention.</em>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div>KHYREE CITY POMADE · LAUNCH OS v1.0</div>
+    <div class="tag">I LEVEL UP BARBERS · CAI → ATL → THE WORLD</div>
+  </div>
+
+</div>
+
+<script>
+  // ============================================
+  // PHASES
+  // ============================================
+  const PHASES = [
+    {
+      num: '01',
+      name: 'Source',
+      when: 'CAIRO · WEEKS 1-2',
+      tasks: [
+        'Pick 3 private-label manufacturers (Onyx, Pravada, 1 Alibaba)',
+        'Order $200-400 in samples to ATL family address',
+        'Have mom test sample formulas',
+        'Lock supplier choice based on quality + MOQ + price',
+      ],
+    },
+    {
+      num: '02',
+      name: 'Brand + Order',
+      when: 'CAIRO · WEEKS 3-8',
+      tasks: [
+        'Lock product name (Khyree City [X])',
+        'Design label + packaging in Canva',
+        'Place first run order (500u, ~$3-5K)',
+        'Set up Shopify store while waiting on inventory',
+        'Pre-build IG content from product mockups',
+      ],
+    },
+    {
+      num: '03',
+      name: 'ATL Launch',
+      when: 'ATL · MONTHS 4-7',
+      tasks: [
+        'Inventory delivered to ATL family address',
+        'Use product on every cut (built-in demo)',
+        'Sell at chair: 50% close rate target',
+        'Cold-walk 30 ATL barber shops, place in 8',
+        'Launch DTC on IG to 111K audience',
+        'Capture content from each cut for IG',
+      ],
+    },
+    {
+      num: '04',
+      name: 'Scale',
+      when: 'CAIRO · MONTHS 8-12+',
+      tasks: [
+        'DTC running on autopilot (Shopify + IG content)',
+        'Wholesale shops on auto-reorder',
+        'Add SKU 2 (beard oil) Month 6',
+        'Pursue 1 distributor deal (Sally, regional)',
+        'Layer 3 community gets product perks',
+      ],
+    },
+  ];
+
+  let phaseState = JSON.parse(localStorage.getItem('khyreePomadePhases') || '{}');
+
+  function renderPhases() {
+    const wrap = document.getElementById('phases');
+    wrap.innerHTML = PHASES.map((p, i) => {
+      const checks = phaseState[p.num] || [];
+      const done = checks.filter(Boolean).length;
+      const pct = (done / p.tasks.length) * 100;
+      const isDone = done === p.tasks.length;
+      const isActive = !isDone && (i === 0 || (phaseState[PHASES[i-1].num] || []).filter(Boolean).length === PHASES[i-1].tasks.length);
+      return `
+        <div class="phase-card ${isDone ? 'done' : isActive ? 'active' : ''}">
+          <div class="phase-num">PHASE ${p.num}</div>
+          <div class="phase-name">${p.name}</div>
+          <div class="phase-when">${p.when}</div>
+          <div class="phase-tasks">
+            ${p.tasks.map((t, ti) => `
+              <label class="task ${checks[ti] ? 'done' : ''}">
+                <input type="checkbox" ${checks[ti] ? 'checked' : ''} onchange="toggleTask('${p.num}', ${ti}, ${p.tasks.length})" />
+                <span>${t}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="phase-progress">
+            <div class="phase-progress-bar"><div class="phase-progress-fill" style="width: ${pct}%;"></div></div>
+            <div class="phase-progress-text">${done}/${p.tasks.length} TASKS · ${Math.round(pct)}%</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleTask(phaseNum, taskIdx, totalTasks) {
+    if (!phaseState[phaseNum]) phaseState[phaseNum] = new Array(totalTasks).fill(false);
+    phaseState[phaseNum][taskIdx] = !phaseState[phaseNum][taskIdx];
+    localStorage.setItem('khyreePomadePhases', JSON.stringify(phaseState));
+    renderPhases();
+  }
+
+  function resetProgress() {
+    if (confirm('Reset all phase progress?')) {
+      phaseState = {};
+      localStorage.removeItem('khyreePomadePhases');
+      renderPhases();
+    }
+  }
+
+  // ============================================
+  // CHANNEL CALCULATIONS
+  // ============================================
+  function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
+  function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+  function fmtK(n) {
+    if (n >= 1000000) return (n/1000000).toFixed(2) + 'M';
+    if (n >= 10000) return Math.round(n/1000) + 'K';
+    if (n >= 1000) return (n/1000).toFixed(1) + 'K';
+    return Math.round(n).toLocaleString();
+  }
+
+  function calcChannel1() {
+    const cuts = num('c1Cuts');
+    const conv = num('c1Conv') / 100;
+    const price = num('c1Price');
+    const cogs = num('c1Cogs');
+    const units = Math.round(cuts * conv);
+    const rev = units * price;
+    const profit = units * (price - cogs);
+    const margin = rev ? (profit / rev) * 100 : 0;
+    document.getElementById('c1Units').textContent = fmt(units);
+    document.getElementById('c1Rev').textContent = fmt(rev);
+    document.getElementById('c1Profit').textContent = fmt(profit);
+    document.getElementById('c1Margin').textContent = margin.toFixed(0);
+    return { rev, profit, units };
+  }
+  function calcChannel2() {
+    const shops = num('c2Shops');
+    const unitsPer = num('c2UnitsPer');
+    const price = num('c2Price');
+    const months = num('c2Months');
+    const cogs = num('c1Cogs');
+    const units = shops * unitsPer * months;
+    const rev = units * price;
+    const profit = units * (price - cogs);
+    const margin = rev ? (profit / rev) * 100 : 0;
+    document.getElementById('c2Units').textContent = fmt(units);
+    document.getElementById('c2Rev').textContent = fmt(rev);
+    document.getElementById('c2Profit').textContent = fmt(profit);
+    document.getElementById('c2Margin').textContent = margin.toFixed(0);
+    return { rev, profit, units };
+  }
+  function calcChannel3() {
+    const orders = num('c3Orders');
+    const aov = num('c3AOV');
+    const months = num('c3Months');
+    const cogs = num('c3Cogs');
+    const units = orders * months;
+    const rev = orders * aov * months;
+    const profit = orders * (aov - cogs) * months;
+    const margin = rev ? (profit / rev) * 100 : 0;
+    document.getElementById('c3Units').textContent = fmt(units);
+    document.getElementById('c3Rev').textContent = fmt(rev);
+    document.getElementById('c3Profit').textContent = fmt(profit);
+    document.getElementById('c3Margin').textContent = margin.toFixed(0);
+    return { rev, profit, units };
+  }
+
+  // ============================================
+  // TOTALS + KPIs
+  // ============================================
+  function renderTotals() {
+    const c1 = calcChannel1();
+    const c2 = calcChannel2();
+    const c3 = calcChannel3();
+    const totalRev = c1.rev + c2.rev + c3.rev;
+    const totalProfit = c1.profit + c2.profit + c3.profit;
+    const totalUnits = c1.units + c2.units + c3.units;
+    const margin = totalRev ? (totalProfit / totalRev) * 100 : 0;
+
+    document.getElementById('totalRev').textContent = fmt(totalRev);
+    document.getElementById('totalProfit').textContent = fmt(totalProfit);
+    document.getElementById('totalUnits').textContent = fmt(totalUnits);
+    document.getElementById('totalMargin').textContent = margin.toFixed(0);
+    document.getElementById('totalAvgMo').textContent = fmt(totalRev / 12);
+    document.getElementById('totalAvgDay').textContent = fmt(totalRev / 365);
+
+    // KPI strip
+    document.getElementById('kpiY1Rev').textContent = fmtK(totalRev);
+    document.getElementById('kpiY1Profit').textContent = fmtK(totalProfit);
+    document.getElementById('kpiY1Units').textContent = fmt(totalUnits);
+    document.getElementById('kpiY1Margin').textContent = margin.toFixed(0);
+    document.getElementById('kpiROI').textContent = (totalProfit / 5000).toFixed(1);
+
+    // Days to first $1K profit (assume ATL launch month 4)
+    const monthlyProfit = totalProfit / 9; // active months
+    const daysTo1k = monthlyProfit > 0 ? Math.ceil((1000 / monthlyProfit) * 30) : '∞';
+    document.getElementById('kpiTo1k').textContent = typeof daysTo1k === 'number' ? daysTo1k : daysTo1k;
+
+    // Sadaqah
+    const sadaqah = totalRev * 0.10;
+    document.getElementById('kpiSadaqah').textContent = fmtK(sadaqah);
+    document.getElementById('ny1').textContent = fmt(sadaqah);
+    document.getElementById('nyRev').textContent = fmt(totalRev);
+
+    // Ramp + Y5 update
+    renderRamp(totalRev);
+    renderY5(totalRev, totalProfit);
+  }
+
+  // ============================================
+  // 12-MONTH RAMP CHART
+  // ============================================
+  function renderRamp(y1Rev) {
+    // Distribute revenue across 12 months realistically
+    // Phases: Mo 1-3 = $0 (sourcing), Mo 4-7 = ATL sprint (heavy), Mo 8-12 = Cairo recurring
+    const c1 = calcChannel1(); // ATL chair retail (mo 4-7)
+    const c2 = calcChannel2(); // ATL wholesale + 6mo recurring (mo 4-9)
+    const c3 = calcChannel3(); // DTC mo 4-12
+
+    const c2Months = num('c2Months');
+    const c3Months = num('c3Months');
+
+    // Per-month allocation
+    const monthlyData = [];
+    for (let m = 1; m <= 12; m++) {
+      let rev = 0;
+      // Phase 1-2: Mo 1-3 = $0
+      if (m >= 4 && m <= 7) {
+        // ATL sprint — chair retail spread across mo 4-7
+        rev += c1.rev / 4;
+      }
+      // ATL wholesale starts Mo 4, runs c2Months
+      if (m >= 4 && m < 4 + c2Months) {
+        rev += c2.rev / c2Months;
+      }
+      // DTC starts Mo 4, runs c3Months
+      if (m >= 4 && m < 4 + c3Months) {
+        rev += c3.rev / c3Months;
+      }
+      monthlyData.push(rev);
+    }
+
+    const W = 800, H = 240, P = 30;
+    const max = Math.max(...monthlyData, 1);
+    const points = monthlyData.map((v, i) => {
+      const x = P + (i / 11) * (W - P*2);
+      const y = H - P - (v / max) * (H - P*2);
+      return { x, y, v, m: i + 1 };
+    });
+
+    // Bars
+    const barW = (W - P*2) / 12 * 0.7;
+    let bars = '';
+    points.forEach(p => {
+      const isLaunch = p.m >= 4 && p.m <= 7;
+      const isCairo = p.m >= 8;
+      const color = isLaunch ? 'url(#barLaunch)' : isCairo ? 'url(#barCairo)' : '#1f2430';
+      const h = (p.v / max) * (H - P*2);
+      bars += `<rect class="hover-bar" data-i="${p.m - 1}" x="${p.x - barW/2}" y="${H - P - h}" width="${barW}" height="${h}" fill="${color}" rx="3" />`;
+    });
+
+    // Phase labels
+    const phaseLabels = `
+      <text x="${P + (1.5/11)*(W-P*2)}" y="20" text-anchor="middle" fill="#6b7388" font-family="JetBrains Mono" font-size="9" letter-spacing="2">SOURCE</text>
+      <text x="${P + (5/11)*(W-P*2)}" y="20" text-anchor="middle" fill="#b8ff00" font-family="JetBrains Mono" font-size="9" letter-spacing="2">ATL SPRINT</text>
+      <text x="${P + (10/11)*(W-P*2)}" y="20" text-anchor="middle" fill="#3b82f6" font-family="JetBrains Mono" font-size="9" letter-spacing="2">CAIRO RECUR</text>
+    `;
+
+    // X labels
+    const monthNames = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
+    let xLabels = '';
+    points.forEach((p, i) => {
+      xLabels += `<text x="${p.x}" y="${H - 8}" text-anchor="middle" fill="#6b7388" font-family="JetBrains Mono" font-size="9">M${p.m}</text>`;
+    });
+
+    // Y labels
+    let yLabels = '';
+    for (let i = 0; i <= 4; i++) {
+      const y = P + (i / 4) * (H - P*2);
+      const v = max * (1 - i/4);
+      yLabels += `<line x1="${P}" x2="${W - P}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.04)" />`;
+      yLabels += `<text x="${P - 6}" y="${y + 3}" text-anchor="end" fill="#6b7388" font-family="JetBrains Mono" font-size="9">${'$' + fmtK(v)}</text>`;
+    }
+
+    document.getElementById('rampChart').innerHTML = `
+      <defs>
+        <linearGradient id="barLaunch" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#b8ff00" />
+          <stop offset="100%" stop-color="#88c200" stop-opacity="0.6" />
+        </linearGradient>
+        <linearGradient id="barCairo" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3b82f6" />
+          <stop offset="100%" stop-color="#1e40af" stop-opacity="0.6" />
+        </linearGradient>
+      </defs>
+      ${yLabels}
+      ${bars}
+      ${xLabels}
+      ${phaseLabels}
+    `;
+
+    // Hover
+    document.querySelectorAll('.hover-bar').forEach(rect => {
+      rect.addEventListener('mouseenter', e => {
+        const i = parseInt(e.target.dataset.i);
+        const p = points[i];
+        const tip = document.getElementById('rampTip');
+        tip.style.opacity = '1';
+        const wrap = e.target.ownerSVGElement.parentElement;
+        const wrapRect = wrap.getBoundingClientRect();
+        const svgRect = e.target.ownerSVGElement.getBoundingClientRect();
+        const xRatio = svgRect.width / W;
+        tip.style.left = (svgRect.left - wrapRect.left + p.x * xRatio - 30) + 'px';
+        tip.style.top = (e.target.getBoundingClientRect().top - wrapRect.top - 30) + 'px';
+        tip.innerHTML = `<span style="color:var(--acid)">M${p.m}</span> · $${fmt(p.v)}`;
+      });
+      rect.addEventListener('mouseleave', () => {
+        document.getElementById('rampTip').style.opacity = '0';
+      });
+    });
+  }
+
+  // ============================================
+  // 5-YEAR PROJECTION
+  // ============================================
+  let y5Mode = 'realistic';
+  const y5Multipliers = {
+    conservative: [1, 2.0, 3.5, 5.5, 8.0],
+    realistic:    [1, 3.0, 7.5, 16.0, 33.0],
+    aggressive:   [1, 4.5, 13.0, 35.0, 80.0],
+  };
+  const y5Notes = {
+    conservative: 'CONSERVATIVE — DTC stalls, only 8 wholesale shops, no distributor deals. You still build something real but the curve is gentler.',
+    realistic: 'REALISTIC — Y2 momentum from IG growth + word-of-mouth. Y3 first distributor deal. Y4-5 regional scale. Mom-style $330K days possible Y5+.',
+    aggressive: 'AGGRESSIVE — viral IG hit, 50+ wholesale shops, Sally/Walmart deal Y3, full hair line by Y4. Requires near-perfect execution + luck.',
+  };
+  const y5YearNotes = ['Launch year', 'Momentum builds', 'First distributor', 'Regional scale', 'Brand era — $330K days'];
+
+  function renderY5(y1Rev, y1Profit) {
+    const mults = y5Multipliers[y5Mode];
+    const grid = document.getElementById('y5Grid');
+    grid.innerHTML = mults.map((m, i) => {
+      const rev = y1Rev * m;
+      const profit = y1Profit * m;
+      const isMilestone = rev >= 1000000 && rev < 5000000;
+      const isLegacy = rev >= 5000000;
+      return `
+        <div class="year-card ${isLegacy ? 'legacy' : isMilestone ? 'milestone' : ''}">
+          <div class="yc-year">YEAR ${i + 1}</div>
+          <div class="yc-rev">$${fmtK(rev)}</div>
+          <div class="yc-profit">+$${fmtK(profit)} profit</div>
+          <div class="yc-note">${y5YearNotes[i]}</div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('y5Note').textContent = y5Notes[y5Mode];
+    document.getElementById('kpiY5Rev').textContent = fmtK(y1Rev * mults[4]);
+
+    // Niyyah Y5 + total
+    const sadY5 = y1Rev * mults[4] * 0.10;
+    const totalSadaqah = mults.reduce((s, m) => s + (y1Rev * m * 0.10), 0);
+    document.getElementById('ny5').textContent = fmt(sadY5);
+    document.getElementById('nyTotal').textContent = fmt(totalSadaqah);
+  }
+
+  document.querySelectorAll('.y5-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.y5-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      y5Mode = btn.dataset.y5;
+      renderTotals();
+    });
+  });
+
+  // ============================================
+  // SOURCING CALC
+  // ============================================
+  function renderSourcing() {
+    const qty = num('srcQty');
+    const cost = num('srcCost');
+    const total = qty * cost;
+    const retailVal = qty * 30; // assumes $30 retail
+    const profit = retailVal - total;
+    document.getElementById('srcTotal').textContent = fmt(total);
+    document.getElementById('srcRetailVal').textContent = fmt(retailVal);
+    document.getElementById('srcProfit').textContent = fmt(profit);
+  }
+  document.getElementById('srcQty').addEventListener('input', renderSourcing);
+  document.getElementById('srcCost').addEventListener('input', renderSourcing);
+
+  // ============================================
+  // EXPORT
+  // ============================================
+  function exportPlan() {
+    const c1 = calcChannel1();
+    const c2 = calcChannel2();
+    const c3 = calcChannel3();
+    const total = c1.rev + c2.rev + c3.rev;
+    const txt = `KHYREE CITY POMADE - LAUNCH PLAN
+Generated: ${new Date().toISOString().split('T')[0]}
+
+YEAR 1 PROJECTION:
+- Channel 1 (Chair Retail): $${fmt(c1.rev)} rev / $${fmt(c1.profit)} profit / ${c1.units} units
+- Channel 2 (ATL Wholesale): $${fmt(c2.rev)} rev / $${fmt(c2.profit)} profit / ${c2.units} units
+- Channel 3 (DTC Online): $${fmt(c3.rev)} rev / $${fmt(c3.profit)} profit / ${c3.units} units
+- TOTAL: $${fmt(total)} revenue / $${fmt(c1.profit + c2.profit + c3.profit)} profit
+
+NIYYAH: 10% sadaqah pool Y1 = $${fmt(total * 0.10)}
+
+PHASE PROGRESS:
+${PHASES.map(p => {
+  const checks = phaseState[p.num] || [];
+  const done = checks.filter(Boolean).length;
+  return `Phase ${p.num} (${p.name}): ${done}/${p.tasks.length} tasks complete`;
+}).join('\n')}
+
+I LEVEL UP BARBERS.`;
+    const blob = new Blob([txt], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'khyree_pomade_plan_' + new Date().toISOString().split('T')[0] + '.txt';
+    a.click(); URL.revokeObjectURL(url);
+  }
+
+  // ============================================
+  // CLOCK
+  // ============================================
+  function updateClock() {
+    const now = new Date();
+    const cairo = new Date(now.toLocaleString('en-US', { timeZone: 'Africa/Cairo' }));
+    const atl = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+    const fmt = d => d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+    document.getElementById('clock').textContent = `CAI ${fmt(cairo)} · ATL ${fmt(atl)}`;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  // ============================================
+  // BIND EVENTS
+  // ============================================
+  ['c1Cuts','c1Conv','c1Price','c1Cogs','c2Shops','c2UnitsPer','c2Price','c2Months','c3Orders','c3AOV','c3Months','c3Cogs'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderTotals);
+  });
+
+  // ============================================
+  // INIT
+  // ============================================
+  renderPhases();
+  renderTotals();
+  renderSourcing();
+</script>
+</body>
+</html>

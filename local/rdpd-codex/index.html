@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rich Dad Poor Dad — The Operator's Codex</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&f[]=boska@400i,500i,700i&f[]=jetbrains-mono@400,500,700&f[]=excon@400,500,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #06070a;
+    --bg-elev: #0e1015;
+    --bg-card: #11141a;
+    --acid: #b8ff00;
+    --acid-dim: #87bf00;
+    --blue: #3b82f6;
+    --cream: #f5e6c8;
+    --gold: #d4a76a;
+    --text: #ededed;
+    --muted: #6b7280;
+    --line: #1c2028;
+    --red: #ff5d5d;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Satoshi', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  /* Background */
+  .orb { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.2; pointer-events: none; z-index: 0; animation: drift 24s ease-in-out infinite; }
+  .orb-1 { width: 500px; height: 500px; background: var(--acid); top: -100px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--blue); top: 50%; right: -100px; animation-delay: -8s; opacity: 0.15; }
+  .orb-3 { width: 350px; height: 350px; background: var(--gold); bottom: -100px; left: 30%; animation-delay: -16s; opacity: 0.12; }
+  @keyframes drift { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(80px,-50px) scale(1.1); } 66% { transform: translate(-50px,80px) scale(0.95); } }
+
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--acid), var(--blue), var(--gold)); width: 0; z-index: 100; transition: width 0.1s; box-shadow: 0 0 10px var(--acid); }
+
+  main { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 60px 24px 80px; }
+
+  /* Typography */
+  .display { font-family: 'Clash Display', sans-serif; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+  .serif-i { font-family: 'Boska', serif; font-style: italic; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .excon { font-family: 'Excon', sans-serif; }
+
+  ::selection { background: var(--acid); color: var(--bg); }
+
+  /* HERO */
+  .hero { padding: 60px 0 80px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 100px; font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; background: rgba(184,255,0,0.04); margin-bottom: 28px; }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); box-shadow: 0 0 10px var(--acid); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+  .hero h1 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(48px, 9vw, 120px); letter-spacing: -0.04em; line-height: 0.9; margin-bottom: 32px; }
+  .hero h1 .grad { background: linear-gradient(135deg, var(--acid) 0%, var(--gold) 100%); background-size: 200% 200%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradShift 8s ease-in-out infinite; }
+  @keyframes gradShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .hero h1 .italic { font-family: 'Boska', serif; font-style: italic; font-weight: 500; }
+
+  .hero p.lede { font-size: 19px; color: var(--muted); max-width: 660px; line-height: 1.55; margin-bottom: 40px; }
+
+  /* Progress tracker */
+  .tracker {
+    background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: 20px; padding: 24px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .tracker-label { font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+  .tracker-num {
+    font-family: 'Clash Display', sans-serif; font-weight: 600;
+    font-size: 36px; letter-spacing: -0.02em; color: var(--acid);
+    text-shadow: 0 0 30px rgba(184,255,0,0.3);
+  }
+  .tracker-num .of { color: var(--muted); font-size: 18px; }
+  .tracker-bar { flex: 1; min-width: 200px; height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; }
+  .tracker-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--acid)); border-radius: 6px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 15px rgba(184,255,0,0.4); }
+  .tracker-actions { display: flex; gap: 8px; }
+  .btn-sm {
+    padding: 8px 14px; background: var(--bg-card); border: 1px solid var(--line);
+    border-radius: 8px; color: var(--muted); font-family: inherit;
+    font-size: 12px; cursor: pointer; transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .btn-sm:hover { color: var(--acid); border-color: var(--acid); }
+
+  /* Sections */
+  section { margin-top: 100px; }
+  .section-head { margin-bottom: 36px; }
+  .section-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+  .section-head h2 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(32px, 5vw, 56px); letter-spacing: -0.03em; line-height: 1; margin-bottom: 12px; }
+  .section-head h2 .italic { font-family: 'Boska', serif; font-style: italic; font-weight: 500; color: var(--acid); }
+  .section-head p { color: var(--muted); font-size: 16px; max-width: 580px; }
+
+  /* THE 6 LESSONS - Cards */
+  .lessons { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .lesson {
+    background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: 18px; padding: 32px;
+    cursor: pointer; transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .lesson::before {
+    content: attr(data-num);
+    position: absolute; top: -20px; right: -10px;
+    font-family: 'Clash Display', sans-serif; font-weight: 700;
+    font-size: 220px; line-height: 1; color: var(--bg-card);
+    pointer-events: none; letter-spacing: -0.05em;
+  }
+  .lesson:hover { border-color: rgba(184,255,0,0.3); transform: translateY(-2px); }
+  .lesson.expanded { border-color: var(--acid); background: linear-gradient(135deg, rgba(184,255,0,0.03), transparent); }
+  .lesson-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; position: relative; z-index: 1; }
+  .lesson-head .left { flex: 1; }
+  .lesson-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 10px; }
+  .lesson h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: clamp(24px, 3vw, 32px); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 12px; }
+  .lesson .summary { color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 720px; }
+  .toggle {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-card); border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.3s; color: var(--muted);
+  }
+  .lesson.expanded .toggle { background: var(--acid); color: var(--bg); transform: rotate(45deg); border-color: var(--acid); }
+
+  .lesson-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s ease, margin-top 0.3s ease;
+    position: relative; z-index: 1;
+  }
+  .lesson.expanded .lesson-body { max-height: 2400px; margin-top: 28px; }
+  .lesson-body .quote {
+    font-family: 'Boska', serif; font-style: italic; font-weight: 500;
+    font-size: clamp(20px, 2.5vw, 28px); line-height: 1.35; color: var(--cream);
+    padding: 24px 28px; background: rgba(184,255,0,0.04);
+    border-left: 3px solid var(--acid); border-radius: 0 12px 12px 0;
+    margin-bottom: 24px;
+  }
+  .lesson-body h4 {
+    font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 13px;
+    color: var(--acid); letter-spacing: 0.15em; text-transform: uppercase;
+    margin: 24px 0 14px; padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  .lesson-body h4:first-child { padding-top: 0; border-top: none; margin-top: 0; }
+  .lesson-body p { color: var(--text); font-size: 15px; line-height: 1.65; margin-bottom: 12px; max-width: 800px; }
+  .lesson-body ul { list-style: none; }
+  .lesson-body li {
+    padding: 10px 0 10px 28px; color: var(--text); font-size: 15px; line-height: 1.55;
+    position: relative; border-bottom: 1px dashed var(--line);
+  }
+  .lesson-body li:last-child { border-bottom: none; }
+  .lesson-body li::before {
+    content: '→'; position: absolute; left: 0; top: 10px;
+    color: var(--acid); font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  }
+  .lesson-body li.action::before { content: '⚡'; color: var(--acid); }
+  .lesson-body li b { color: var(--acid); font-weight: 600; }
+
+  /* Khyree application box */
+  .for-you {
+    margin-top: 24px; padding: 24px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(184,255,0,0.03));
+    border: 1px solid rgba(59,130,246,0.3); border-radius: 14px;
+  }
+  .for-you-head {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--blue); letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .for-you-head::before { content: ''; width: 6px; height: 6px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 8px var(--blue); }
+  .for-you p { font-size: 15px; line-height: 1.65; color: var(--cream); margin: 0; }
+
+  /* CHECKBOX (action items) */
+  .check-list { list-style: none; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 0; border-bottom: 1px dashed var(--line);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { padding-left: 8px; }
+  .check-item .box {
+    width: 22px; height: 22px; border: 2px solid var(--line);
+    border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; margin-top: 2px;
+    background: var(--bg-card);
+  }
+  .check-item.done .box {
+    background: var(--acid); border-color: var(--acid);
+    box-shadow: 0 0 12px rgba(184,255,0,0.4);
+  }
+  .check-item .box svg { opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+  .check-item.done .box svg { opacity: 1; transform: scale(1); }
+  .check-item .text { flex: 1; }
+  .check-item .text .t { font-size: 15px; color: var(--text); transition: all 0.2s; line-height: 1.45; }
+  .check-item.done .text .t { color: var(--muted); text-decoration: line-through; }
+  .check-item .text .why { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* VOCABULARY GRID */
+  .vocab-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .vocab-grid { grid-template-columns: 1fr; } }
+  .vocab-card {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 14px;
+    padding: 24px; transition: all 0.3s; cursor: pointer; position: relative; overflow: hidden;
+    perspective: 1000px;
+  }
+  .vocab-card:hover { border-color: var(--acid); }
+  .vocab-card .term {
+    font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 22px;
+    letter-spacing: -0.01em; margin-bottom: 8px; color: var(--text);
+  }
+  .vocab-card .term .ic {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acid);
+    margin-right: 8px; opacity: 0.7;
+  }
+  .vocab-card .def { color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .vocab-card .ex {
+    margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line);
+    font-family: 'Boska', serif; font-style: italic; font-size: 14px;
+    color: var(--cream); line-height: 1.5;
+  }
+  .vocab-card .ex::before { content: '"'; color: var(--acid); margin-right: 4px; }
+  .vocab-card .ex::after { content: '"'; color: var(--acid); margin-left: 4px; }
+
+  /* PILLARS / 4 BIG IDEAS */
+  .pillars { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 820px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px;
+    padding: 32px; position: relative; overflow: hidden;
+    transition: all 0.3s;
+  }
+  .pillar:hover { border-color: rgba(184,255,0,0.3); transform: translateY(-2px); }
+  .pillar .icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--acid), var(--blue));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bg); font-family: 'Clash Display', sans-serif; font-weight: 700;
+    font-size: 20px; margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(184,255,0,0.3);
+  }
+  .pillar h3 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; margin-bottom: 10px; }
+  .pillar p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+  /* TWO-COLUMN COMPARE */
+  .compare {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+    background: var(--line); border: 1px solid var(--line); border-radius: 18px;
+    overflow: hidden;
+  }
+  @media (max-width: 720px) { .compare { grid-template-columns: 1fr; } }
+  .compare .col { background: var(--bg-elev); padding: 32px; }
+  .compare .col-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 16px; }
+  .compare .poor .col-tag { color: var(--red); }
+  .compare .rich .col-tag { color: var(--acid); }
+  .compare h4 { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 22px; margin-bottom: 20px; }
+  .compare ul { list-style: none; }
+  .compare li {
+    padding: 12px 0; border-bottom: 1px dashed var(--line);
+    color: var(--text); font-size: 14px; line-height: 1.55; position: relative;
+    padding-left: 22px;
+  }
+  .compare li:last-child { border-bottom: none; }
+  .compare li::before {
+    position: absolute; left: 0; top: 12px;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+  }
+  .compare .poor li::before { content: '✕'; color: var(--red); }
+  .compare .rich li::before { content: '✓'; color: var(--acid); }
+
+  /* CASHFLOW QUADRANT */
+  .quadrant {
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 20px;
+    padding: 36px; position: relative;
+  }
+  .quad-grid {
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 1px; background: var(--line); border: 1px solid var(--line);
+    border-radius: 14px; overflow: hidden; position: relative;
+  }
+  .quad-cell { background: var(--bg-card); padding: 28px; transition: all 0.3s; cursor: pointer; min-height: 200px; position: relative; }
+  .quad-cell:hover { background: var(--bg-elev); }
+  .quad-cell.left-side { border-right: 2px solid var(--red); }
+  .quad-cell.right-side { border-left: 2px solid var(--acid); }
+  .quad-letter { font-family: 'Clash Display', sans-serif; font-weight: 700; font-size: 56px; line-height: 1; margin-bottom: 8px; letter-spacing: -0.04em; }
+  .quad-cell.q-e .quad-letter { color: var(--red); }
+  .quad-cell.q-s .quad-letter { color: #ff8c5d; }
+  .quad-cell.q-b .quad-letter { color: var(--acid); }
+  .quad-cell.q-i .quad-letter { color: var(--blue); }
+  .quad-name { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 18px; margin-bottom: 6px; }
+  .quad-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .quad-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 12px; padding: 4px 8px; display: inline-block; border-radius: 4px; }
+  .q-e .quad-tag, .q-s .quad-tag { color: var(--red); background: rgba(255,93,93,0.1); }
+  .q-b .quad-tag, .q-i .quad-tag { color: var(--acid); background: rgba(184,255,0,0.1); }
+
+  .quad-axes {
+    display: flex; justify-content: space-between; margin-bottom: 20px;
+    padding: 0 28px;
+  }
+  .quad-axes .ax { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .quad-axes .ax.left { color: var(--red); }
+  .quad-axes .ax.right { color: var(--acid); }
+
+  /* CTA / CALL TO ACTION */
+  .cta-final {
+    background: linear-gradient(135deg, rgba(184,255,0,0.06), rgba(59,130,246,0.04));
+    border: 1px solid rgba(184,255,0,0.2);
+    border-radius: 24px; padding: 56px;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .cta-final::before {
+    content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(184,255,0,0.1), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-final h2 {
+    font-family: 'Clash Display', sans-serif; font-weight: 600;
+    font-size: clamp(36px, 5vw, 56px); letter-spacing: -0.03em; line-height: 1;
+    margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .cta-final h2 .italic { font-family: 'Boska', serif; font-style: italic; color: var(--acid); }
+  .cta-final p { color: var(--muted); font-size: 17px; max-width: 600px; margin: 0 auto 32px; line-height: 1.6; position: relative; z-index: 1; }
+  .cta-stamps { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+  .stamp-pill {
+    padding: 10px 18px; background: var(--bg-card); border: 1px solid var(--line);
+    border-radius: 100px; font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--acid); letter-spacing: 0.05em;
+  }
+
+  /* Filter buttons */
+  .filter-bar {
+    display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;
+    padding: 6px; background: var(--bg-elev); border: 1px solid var(--line);
+    border-radius: 12px; width: fit-content;
+  }
+  .filter-btn {
+    padding: 10px 18px; background: transparent; border: none; cursor: pointer;
+    color: var(--muted); font-family: inherit; font-size: 13px; font-weight: 500;
+    border-radius: 8px; transition: all 0.2s;
+  }
+  .filter-btn:hover { color: var(--text); }
+  .filter-btn.active { background: var(--bg-card); color: var(--acid); }
+
+  /* Reveal animations */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  footer { margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--line); }
+  footer .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer .src { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+  footer .stamp { font-family: 'Boska', serif; font-style: italic; color: var(--acid); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grain"></div>
+<div class="progress" id="progress"></div>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge"><span class="dot"></span> THE OPERATOR'S CODEX · RICH DAD POOR DAD</div>
+    <h1>
+      Everything <span class="italic">worth</span><br>
+      memorizing from <span class="grad">Rich Dad</span><br>
+      <span class="italic">Poor Dad.</span>
+    </h1>
+    <p class="lede">
+      Six lessons. Twenty-eight action items. Eight terms to know cold. The cashflow quadrant. The mindset gaps. Built so you can read it once and live it forever.
+    </p>
+
+    <div class="tracker">
+      <div>
+        <div class="tracker-label">Action items completed</div>
+        <div class="tracker-num"><span id="done-count">0</span><span class="of"> / 28</span></div>
+      </div>
+      <div class="tracker-bar"><div class="tracker-fill" id="tracker-fill"></div></div>
+      <div class="tracker-actions">
+        <button class="btn-sm" onclick="resetAll()">Reset</button>
+        <button class="btn-sm" onclick="expandAll()">Expand all</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE 6 LESSONS -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 01 — The Six Lessons</span>
+      <h2>The whole book in <span class="italic">six moves.</span></h2>
+      <p>Click any lesson to expand. The quote, the principle, the action items, and how it applies to Khyree City + Cut Creaters.</p>
+    </div>
+
+    <div class="lessons">
+
+      <!-- LESSON 1 -->
+      <div class="lesson" data-num="01" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 01</div>
+            <h3>The rich don't work for money.</h3>
+            <p class="summary">Money obeys those who control fear and greed. The poor & middle class let fear (of bills) and greed (of more stuff) drive their decisions — that's why they stay on the treadmill.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"The poor and middle class work for money. The rich have money work for them."</div>
+
+          <h4>The Core Principle</h4>
+          <p>A raise doesn't make you rich — it just makes the trap bigger. More income usually means more spending (a bigger house, nicer car, more debt). The actual move is to learn how money works so you stop being its servant. Your mind is your most powerful asset; train it before you train your bank account.</p>
+
+          <h4>What To Memorize</h4>
+          <ul>
+            <li><b>Fear and greed run the poor.</b> "I need this job or my family starves" = fear. "If I had more money, I'd be happy" = greed. Both keep you trapped.</li>
+            <li><b>Most people have a price.</b> They take any job that pays more, regardless of whether it builds them. Don't let your salary cap your imagination.</li>
+            <li><b>Emotions are the lock.</b> Knowledge is the key.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">Sit with the fear instead of running from it. Ask: "What am I avoiding by chasing this paycheck?"</li>
+            <li class="action">Track every dollar that comes in this month. Where does it actually go? (Most people are surprised.)</li>
+            <li class="action">Replace "I can't afford it" with "How can I afford it?" — the first kills creativity, the second activates it.</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>You already escaped this trap once when you walked away from the UCO business. Your $500/$797 setup fee isn't trading hours — it's selling outcomes barbers couldn't build for themselves. You stopped working for money the day you started selling systems. The $97/mo recurring is money working while you pray Fajr.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LESSON 2 -->
+      <div class="lesson" data-num="02" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 02</div>
+            <h3>Why teach financial literacy?</h3>
+            <p class="summary">School teaches academic and professional literacy — never financial. So adults with PhDs go broke from buying liabilities they think are assets. Rule #1: Know the difference between an asset and a liability. Buy assets.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"An asset puts money in your pocket. A liability takes money out of your pocket."</div>
+
+          <h4>The Core Principle</h4>
+          <p>Most people can't define "asset" correctly. They call their house, their car, their 401k assets. Rich Dad's test: which direction does the money flow? If it flows OUT every month, it's a liability — no matter what the bank or the realtor calls it. Wealth is built one rule at a time: every dollar you earn buys an asset that earns more dollars.</p>
+
+          <h4>What To Memorize</h4>
+          <ul>
+            <li><b>Asset = puts $ IN your pocket.</b> Examples: businesses you don't run yourself, real estate that cash-flows, stocks, bonds, royalties, IP that earns passive income.</li>
+            <li><b>Liability = takes $ OUT of your pocket.</b> Examples: your mortgage, car loan, credit cards, and yes — your primary residence.</li>
+            <li><b>The story of your wealth lives in your balance sheet, not your income statement.</b> Big paycheck + big liabilities = poor. Small paycheck + growing assets = rich.</li>
+            <li><b>The Holy Grail:</b> when income from your asset column exceeds your monthly expenses → you're financially free.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">Write your personal balance sheet TODAY. Two columns: Assets and Liabilities. Be honest. Most people's house goes in the wrong column.</li>
+            <li class="action">Calculate your "freedom number" — total monthly expenses. That's the income your asset column needs to generate before you're free.</li>
+            <li class="action">Every month, ask one question: did I add to my asset column or my liability column?</li>
+            <li class="action">Stop buying liabilities that look like assets (status purchases dressed up as investments).</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>Cut Creaters as it sits today is fixing toward asset-status: 140 suites × full occupancy × monthly rent = a cash-flowing machine that doesn't need your father's hands. Each $97/mo Khyree City contract is also an asset (recurring revenue). Your freedom number stated: $3K/week ($12K/mo). Goal: build the asset column to throw off $12K monthly without requiring your active labor.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LESSON 3 -->
+      <div class="lesson" data-num="03" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 03</div>
+            <h3>Mind your own business.</h3>
+            <p class="summary">Your profession pays the bills. Your business builds your wealth. Don't confuse them. Most people work hard at someone else's business their whole life and wonder why they never built one of their own.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"Financial struggle is often the result of people working all their life for someone else."</div>
+
+          <h4>The Core Principle</h4>
+          <p>"Mind your own business" doesn't mean quit your job. It means: keep the day job, but spend every spare hour building YOUR asset column. Your salary feeds your business — the businesses owned by others get your loyalty for 8 hours, your business gets the other 16.</p>
+
+          <h4>What To Memorize</h4>
+          <ul>
+            <li><b>Your profession ≠ your business.</b> Ray Kroc said McDonald's wasn't in the burger business — it was in the real estate business. The burgers paid for the property.</li>
+            <li><b>Real assets to acquire:</b> businesses that don't require your presence, income-producing real estate, stocks, bonds, notes/IOUs, royalties from IP, anything that has value/produces income/appreciates.</li>
+            <li><b>Don't quit your day job.</b> But don't let your day job define your wealth ceiling.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">List the assets you currently own. Are any of them paying you monthly without your active labor?</li>
+            <li class="action">This week: identify ONE asset you can acquire in the next 90 days (digital product, content library, rental, ownership stake).</li>
+            <li class="action">Schedule 90 minutes/week labeled "build my business" — non-negotiable, no client work allowed in that slot.</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>You ARE minding your own business. Khyree City is yours. The Cut Creaters partnership earns you a seat in another asset (140 suites). Your IG (111K followers, dormant) is a sleeping asset. The brotherhood community (Layer 3) is a future asset. Don't let "helping dad" become a job — structure it as ownership/partnership upfront.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LESSON 4 -->
+      <div class="lesson" data-num="04" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 04</div>
+            <h3>The history of taxes & the power of corporations.</h3>
+            <p class="summary">Tax was invented to take from the rich. The rich responded by inventing the corporation — a legal entity that lets them earn → spend → pay tax (instead of earn → tax → spend like everyone else). Same dollar. Different order.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"Knowledge is power. With money comes great power that requires the right knowledge to keep it and make it multiply."</div>
+
+          <h4>The Core Principle</h4>
+          <p>The tax code is written FOR business owners and investors, not against them. It's full of incentives — to start companies, to hire, to build buildings, to invest in equipment. Employees don't get to use most of these. The order of operations is everything: the corporation pays expenses with PRE-TAX dollars; the employee pays expenses with POST-TAX dollars.</p>
+
+          <h4>The Four Pillars Of Financial IQ</h4>
+          <ul>
+            <li><b>Accounting.</b> Read financial statements. Spot strengths and weaknesses of any business.</li>
+            <li><b>Investing.</b> The science of money making money. Strategy, not gambling.</li>
+            <li><b>Markets.</b> Understanding supply and demand. What people will pay, when, and why.</li>
+            <li><b>The law.</b> Tax code, corporation structures, asset protection, securities law. Free education from books and accountants.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">Form an LLC or S-Corp this quarter if you haven't already. Khyree City revenue should NOT flow through your personal account.</li>
+            <li class="action">Hire a tax-strategist accountant (not a tax-filer). The good ones save you 5–10x what they cost.</li>
+            <li class="action">Read one book per quarter on the tax code or business structures. Compounding knowledge.</li>
+            <li class="action">Track every business expense religiously. What feels like a personal cost might be deductible.</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>You're in two countries (US income + Egypt living) — that's a tax strategy goldmine if structured right, or a nightmare if ignored. Get a US-based accountant who understands expat/Section 911 (Foreign Earned Income Exclusion: ~$120K/yr earned abroad can be tax-free). Your Cairo flights = business travel. Your laptop = equipment. Run the numbers WITH a pro before tax season hits.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LESSON 5 -->
+      <div class="lesson" data-num="05" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 05</div>
+            <h3>The rich invent money.</h3>
+            <p class="summary">Opportunities are not born — they're created by people who can see what others can't. While most people wait for the "right" stock or property to drop, the rich are building deals, structures, and businesses out of thin air.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"Often in the real world, it's not the smart who get ahead, but the bold."</div>
+
+          <h4>The Core Principle</h4>
+          <p>Two types of investors: (1) those who buy packaged investments — picks the broker offers, the rental on Zillow, the index fund. (2) Those who CREATE investments — they see a deserted lot and imagine a salon suite, see a barber and imagine an empire. The second type uses creativity, courage, and financial IQ to manufacture deals where others see nothing.</p>
+
+          <h4>The Five Things That Hold People Back</h4>
+          <ul>
+            <li><b>Fear.</b> Fear of losing money is real. The rich don't fear failing — they manage fear. They start small, learn fast, and stay in the game.</li>
+            <li><b>Cynicism.</b> "What if the market crashes?" "What if it doesn't work?" Doubt is paralysis dressed up as wisdom.</li>
+            <li><b>Laziness.</b> The busiest people are often the laziest financially. Too "busy" to study money, structure deals, build assets.</li>
+            <li><b>Bad habits.</b> "Pay yourself first" — buy assets BEFORE paying bills. The pressure of unpaid bills sharpens your hustle.</li>
+            <li><b>Arrogance.</b> "I already know" = the door slams shut. The rich stay students forever.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">This month, look at one situation in your life and ask: "What asset can I create here that doesn't exist yet?"</li>
+            <li class="action">Pay yourself first. Set up an automatic transfer the day money hits — to investments/assets BEFORE bills.</li>
+            <li class="action">Identify your biggest fear about money. Name it. Write it down. Then attack it with knowledge.</li>
+            <li class="action">When you don't know something, say "I don't know" and learn — not "that's stupid" and dismiss.</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>Inventing money is your superpower. You looked at no-website barbers and saw $797 setup fees. You looked at your father's struggling suites and saw a system. You looked at 111K dormant followers and saw a community. Most people would walk past all three. Don't let the cynicism creep in when 14 cold calls in a row hang up — that's the test of lesson 5.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LESSON 6 -->
+      <div class="lesson" data-num="06" onclick="toggleLesson(this)">
+        <div class="lesson-head">
+          <div class="left">
+            <div class="lesson-tag">// Lesson 06</div>
+            <h3>Work to learn, don't work for money.</h3>
+            <p class="summary">Take jobs for the skills they teach, not the salary. The highest-paying job in your 20s might be the worst thing for your 40s if it teaches you nothing transferable.</p>
+          </div>
+          <div class="toggle">+</div>
+        </div>
+        <div class="lesson-body">
+          <div class="quote">"The main management skills needed for success are: management of cash flow, management of systems, and management of people."</div>
+
+          <h4>The Core Principle</h4>
+          <p>Most people specialize too early. A lifetime in one field makes you the expert nobody can replace — until that industry shifts and your skills don't transfer. Become a generalist who knows a little of everything: sales, marketing, accounting, systems, leadership, public speaking. These are the skills that print money in any market.</p>
+
+          <h4>Skills To Build (Memorize This List)</h4>
+          <ul>
+            <li><b>Sales.</b> The #1 skill of every wealthy person. If you can't sell, you can't get paid.</li>
+            <li><b>Marketing.</b> How to make people want what you have before you ever speak to them.</li>
+            <li><b>Cashflow management.</b> Reading the numbers. Knowing where money comes from and where it goes.</li>
+            <li><b>Systems thinking.</b> Designing processes that run without you in the room.</li>
+            <li><b>People management.</b> Leading, hiring, firing, motivating.</li>
+            <li><b>Communication.</b> Writing, speaking, persuading, negotiating.</li>
+          </ul>
+
+          <h4>Action Items</h4>
+          <ul>
+            <li class="action">Audit your current skills. Which of the six above are you weakest in? Spend 30 days obsessively on that one.</li>
+            <li class="action">Take a job (or project) that pays less but teaches more — only if the skill is transferable to your wealth-building.</li>
+            <li class="action">Read one book/month in a skill OUTSIDE your specialty.</li>
+            <li class="action">Find a mentor who's 10 years ahead of you in the skill you need most. Buy them dinner. Ask questions.</li>
+          </ul>
+
+          <div class="for-you">
+            <div class="for-you-head">For Khyree</div>
+            <p>You're already running this play. Cutting hair = your specialty. But Khyree City forced you to learn sales (cold calls), marketing (IG content), systems (Base44, Make.com pipelines), and leadership (managing Hassan + Cowork agents). That's the multi-skill rich-dad mode. Keep stacking. The brotherhood community (Layer 3) is going to require communication & people management at a whole new level — start studying it now.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VOCABULARY -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 02 — The Vocabulary</span>
+      <h2>Eight terms to <span class="italic">know cold.</span></h2>
+      <p>Get these right and you'll think clearer than 95% of people. Use them in conversation — they reshape how you make decisions.</p>
+    </div>
+    <div class="vocab-grid">
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">01</span>Asset</div>
+        <div class="def">Anything that puts money INTO your pocket without your active labor.</div>
+        <div class="ex">A rental property. A book that pays royalties. A business with a manager running it.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">02</span>Liability</div>
+        <div class="def">Anything that takes money OUT of your pocket — even if it has value.</div>
+        <div class="ex">Your house with a mortgage. Your car. Your boat. Things that bleed you monthly.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">03</span>Cash flow</div>
+        <div class="def">The direction money moves between income, expense, asset, and liability columns.</div>
+        <div class="ex">Salary in → expenses out → broke. Asset in → asset in → free.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">04</span>Financial IQ</div>
+        <div class="def">The combined skill of accounting, investing, markets, and law. The four pillars.</div>
+        <div class="ex">Knowing whether to take the W-2 job or start the LLC. That decision IS financial IQ.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">05</span>Pay yourself first</div>
+        <div class="def">Move money to assets BEFORE paying bills. The pressure forces you to find more income.</div>
+        <div class="ex">Money hits → 10% to investments AUTO → then rent → then everything else.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">06</span>Rat race</div>
+        <div class="def">The trap where higher income just creates higher expenses. More raises = more debt.</div>
+        <div class="ex">Promotion → bigger house → bigger mortgage → still broke at month 30.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">07</span>Doodads</div>
+        <div class="def">Kiyosaki's word for liabilities people THINK are assets. Status purchases dressed up.</div>
+        <div class="ex">Luxury car, designer wardrobe, second home you don't rent. All doodads.</div>
+      </div>
+
+      <div class="vocab-card">
+        <div class="term"><span class="ic">08</span>Financial freedom</div>
+        <div class="def">When monthly income from your asset column exceeds your monthly expenses.</div>
+        <div class="ex">$12K/mo expenses + $13K/mo from rentals & royalties = free, regardless of any job.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- POOR vs RICH MINDSET -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 03 — Mindset Gap</span>
+      <h2>The <span class="italic">two scripts</span> playing in people's heads.</h2>
+      <p>Same situation, two different reactions. The first one is what most people say. The second one is what builds wealth.</p>
+    </div>
+    <div class="compare">
+      <div class="col poor">
+        <div class="col-tag">Poor Dad's Script</div>
+        <h4>What keeps you stuck</h4>
+        <ul>
+          <li>"I can't afford it."</li>
+          <li>"Money is the root of all evil."</li>
+          <li>"Study hard so you can find a good company to work for."</li>
+          <li>"I'm not interested in money."</li>
+          <li>"The reason I'm not rich is because I have you kids."</li>
+          <li>"Don't take risks."</li>
+          <li>"Our home is our greatest investment."</li>
+          <li>"Pay your bills first."</li>
+          <li>"It's hard to get ahead in this economy."</li>
+          <li>"I'll never be rich."</li>
+        </ul>
+      </div>
+      <div class="col rich">
+        <div class="col-tag">Rich Dad's Script</div>
+        <h4>What builds wealth</h4>
+        <ul>
+          <li>"How can I afford it?"</li>
+          <li>"The lack of money is the root of all evil."</li>
+          <li>"Study hard so you can find a good company to BUY."</li>
+          <li>"Money is power. Learn how it works."</li>
+          <li>"The reason I MUST be rich is because I have you kids."</li>
+          <li>"Learn to manage risk."</li>
+          <li>"Our business is our greatest investment."</li>
+          <li>"Pay yourself first."</li>
+          <li>"This economy creates new opportunities."</li>
+          <li>"I'm a rich man, and rich people don't do this."</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASHFLOW QUADRANT -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 04 — Cashflow Quadrant</span>
+      <h2>The <span class="italic">four ways</span> people earn.</h2>
+      <p>Kiyosaki's most famous diagram. The left side trades time for money. The right side owns systems. Goal: move from left to right.</p>
+    </div>
+    <div class="quadrant">
+      <div class="quad-axes">
+        <span class="ax left">← Trade time for money</span>
+        <span class="ax right">Build assets that earn →</span>
+      </div>
+      <div class="quad-grid">
+        <div class="quad-cell left-side q-e">
+          <div class="quad-letter">E</div>
+          <div class="quad-name">Employee</div>
+          <div class="quad-desc">Trades hours for a paycheck. Wants security & benefits. Highest tax burden, lowest control.</div>
+          <div class="quad-tag">linear income</div>
+        </div>
+        <div class="quad-cell right-side q-b">
+          <div class="quad-letter">B</div>
+          <div class="quad-name">Business Owner</div>
+          <div class="quad-desc">Owns a system that runs without them. Earns from other people's time + the asset itself. Tax advantages stack here.</div>
+          <div class="quad-tag">scalable income</div>
+        </div>
+        <div class="quad-cell left-side q-s">
+          <div class="quad-letter">S</div>
+          <div class="quad-name">Self-Employed</div>
+          <div class="quad-desc">Owns a job, not a business. The work stops if they stop. Doctors, lawyers, freelancers — high income, no freedom.</div>
+          <div class="quad-tag">capped income</div>
+        </div>
+        <div class="quad-cell right-side q-i">
+          <div class="quad-letter">I</div>
+          <div class="quad-name">Investor</div>
+          <div class="quad-desc">Money makes money. The rich live here. Capital deployed into assets that throw off cash forever. Lowest tax bracket.</div>
+          <div class="quad-tag">passive income</div>
+        </div>
+      </div>
+      <div style="margin-top: 24px; padding: 20px; background: var(--bg-card); border-radius: 12px; border-left: 3px solid var(--acid);">
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--blue); letter-spacing: 0.15em; margin-bottom: 8px;">WHERE YOU ARE</div>
+        <p style="color: var(--text); font-size: 15px; line-height: 1.65; margin: 0;">Khyree right now sits between <b style="color: var(--acid)">S</b> (self-employed agency) and <b style="color: var(--acid)">B</b> (system-owner). The $97/mo MRR is dragging you toward B. Cut Creaters tenant rent is pure <b style="color: var(--acid)">B</b>. Goal for year 3: stack enough <b style="color: var(--acid)">B</b> income to start deploying into <b style="color: var(--acid)">I</b> (real estate, equity stakes).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTION CHECKLIST -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 05 — Action Checklist</span>
+      <h2>What to <span class="italic">do this week.</span></h2>
+      <p>Click each box as you complete it. Progress saves to your tracker at the top.</p>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All (10)</button>
+      <button class="filter-btn" data-filter="this-week">This Week</button>
+      <button class="filter-btn" data-filter="30-days">30 Days</button>
+      <button class="filter-btn" data-filter="90-days">90 Days</button>
+    </div>
+
+    <div style="background: var(--bg-elev); border: 1px solid var(--line); border-radius: 18px; padding: 32px;">
+      <ul class="check-list" id="action-list">
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Write your personal balance sheet. Two columns. Be honest.</div>
+            <div class="why">Lesson 2 — you can't fix what you can't see. 30 minutes max.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Calculate your freedom number — total monthly expenses, including taxes.</div>
+            <div class="why">Lesson 2 — that's the income your asset column needs to cover. You said $12K/mo.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="this-week" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Set up "pay yourself first" auto-transfer. 10% off the top, the day money lands.</div>
+            <div class="why">Lesson 5 — this is the single most powerful habit Kiyosaki teaches.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Confirm Khyree City is set up as an LLC or S-Corp (US-based).</div>
+            <div class="why">Lesson 4 — corporation = pre-tax expense magic. Don't run revenue through your personal account.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Hire a tax-strategist accountant who understands expat (Section 911 FEIE).</div>
+            <div class="why">Lesson 4 — earning in US, living in Cairo = ~$120K/yr potentially tax-free if structured right.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Identify ONE asset to acquire in 90 days. Write the path.</div>
+            <div class="why">Lesson 3 — could be: a rental, an equity stake in Cut Creaters, a digital product line.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="30-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Audit your six core skills. Which is weakest? 30 days obsession on it.</div>
+            <div class="why">Lesson 6 — sales, marketing, cashflow, systems, people, communication.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Read "Cashflow Quadrant" (Kiyosaki's follow-up book). Then "Tax-Free Wealth" by Tom Wheelwright.</div>
+            <div class="why">Lesson 4 — Wheelwright was Kiyosaki's actual accountant. The applied tax playbook.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Document your Cut Creaters partnership terms in writing BEFORE you do the work.</div>
+            <div class="why">Lesson 3 — birrul walidayn doesn't override the rule "get it in writing." Honor + clarity.</div>
+          </div>
+        </li>
+
+        <li class="check-item" data-cat="90-days" onclick="toggleCheck(this)">
+          <div class="box"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="#06070a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="text">
+            <div class="t">Track Khyree City monthly net signings. (Same KPI Cut Creaters needs.)</div>
+            <div class="why">Lesson 6 — systems thinking. Same metric runs both businesses.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- THE 4 BIG PILLARS -->
+  <section class="reveal">
+    <div class="section-head">
+      <span class="section-tag">/ 06 — The Four Pillars Of Financial IQ</span>
+      <h2>The <span class="italic">subjects</span> school never taught.</h2>
+      <p>Master these and the game changes. Stay ignorant in any one of them and the others can't save you.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="icon">A</div>
+        <h3>Accounting</h3>
+        <p>Read financial statements. Spot the strengths and weaknesses of any business in 60 seconds. Income statement, balance sheet, cash flow statement — these three documents tell every story.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">I</div>
+        <h3>Investing</h3>
+        <p>The science of money making money. Strategy not gambling. Knowing the difference between speculation, value investing, and cash-flow investing — and choosing on purpose.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">M</div>
+        <h3>Markets</h3>
+        <p>Supply and demand. What people want, what they'll pay, when, why, and what makes price move. The market doesn't care about your feelings — but it rewards those who read it well.</p>
+      </div>
+      <div class="pillar">
+        <div class="icon">L</div>
+        <h3>Law</h3>
+        <p>Tax code, corporate structure, asset protection, contracts, securities. Free education through books, podcasts, and a good accountant. The wealthy aren't smarter — they just know the rules.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="reveal">
+    <div class="cta-final">
+      <h2>The book in <span class="italic">one sentence.</span></h2>
+      <p>Use your job to fund your asset column, learn the four pillars cold, structure everything through a corporation, and remember — wealth is measured in the freedom your money buys you, not the things it buys you.</p>
+      <div class="cta-stamps">
+        <div class="stamp-pill">// memorize the 8 terms</div>
+        <div class="stamp-pill">// run the 6 lessons monthly</div>
+        <div class="stamp-pill">// build assets, not income</div>
+        <div class="stamp-pill">// pay yourself first</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="row">
+      <div class="src">SOURCE // Robert T. Kiyosaki — "Rich Dad Poor Dad" (1997) + "Cashflow Quadrant" (1998)</div>
+      <div class="stamp">Khyree City · Operator's Codex</div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+// SCROLL PROGRESS
+window.addEventListener('scroll', () => {
+  const s = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('progress').style.width = s + '%';
+});
+
+// REVEAL OBSERVER
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// LESSON TOGGLE
+function toggleLesson(el) {
+  // Don't toggle if clicking inside the body
+  if (event.target.closest('.lesson-body')) return;
+  el.classList.toggle('expanded');
+}
+
+function expandAll() {
+  document.querySelectorAll('.lesson').forEach(l => l.classList.add('expanded'));
+}
+
+// CHECKBOX TRACKING
+function toggleCheck(el) {
+  el.classList.toggle('done');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.check-item').length;
+  const done = document.querySelectorAll('.check-item.done').length;
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('tracker-fill').style.width = (done/total)*100 + '%';
+}
+
+function resetAll() {
+  document.querySelectorAll('.check-item.done').forEach(el => el.classList.remove('done'));
+  updateProgress();
+}
+
+// FILTER BUTTONS
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.check-item').forEach(item => {
+      if (f === 'all' || item.dataset.cat === f) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Init
+updateProgress();
+</script>
+</body>
+</html>

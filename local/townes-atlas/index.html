@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Atlas">
+<meta name="theme-color" content="#F4EEE1">
+<title>Townes Family Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    background: #F4EEE1;
+    color: #1B1916;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+  .font-display { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+  .font-body { font-family: 'Bricolage Grotesque', system-ui, sans-serif; font-optical-sizing: auto; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+  .grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(27,25,22,0.05) 1px, transparent 0);
+    background-size: 14px 14px;
+  }
+  .card-shadow { box-shadow: 0 1px 3px rgba(27,25,22,0.04), 0 0 0 1px #E5DBC4; }
+
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 28px;
+    background: transparent; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px; background: #EFE7D2; border-radius: 999px;
+  }
+  input[type="range"]::-moz-range-track {
+    height: 6px; background: #EFE7D2; border-radius: 999px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 26px; height: 26px;
+    background: #fff; border: 2px solid #2C5A3D; border-radius: 50%;
+    margin-top: -10px;
+    box-shadow: 0 2px 8px rgba(27,25,22,0.18);
+    transition: transform 0.1s;
+  }
+  input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.18); }
+  input[type="range"]::-moz-range-thumb {
+    width: 26px; height: 26px;
+    background: #fff; border: 2px solid #2C5A3D; border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(27,25,22,0.18);
+  }
+  .income-track input[type="range"]::-webkit-slider-thumb { border-color: #2C5A3D; }
+  .expense-track input[type="range"]::-webkit-slider-thumb { border-color: #A24E36; }
+  .save-track input[type="range"]::-webkit-slider-thumb { border-color: #B58A3D; }
+  .income-track input[type="range"]::-moz-range-thumb { border-color: #2C5A3D; }
+  .expense-track input[type="range"]::-moz-range-thumb { border-color: #A24E36; }
+  .save-track input[type="range"]::-moz-range-thumb { border-color: #B58A3D; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.3s ease-out; }
+
+  .scroll-snap { scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+  .scroll-snap > * { scroll-snap-align: start; }
+
+  button { font-family: inherit; }
+
+  #root { min-height: 100vh; }
+
+  .loading {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: #F4EEE1; z-index: 9999;
+    flex-direction: column; gap: 16px;
+  }
+  .loading-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #E5DBC4;
+    border-top-color: #2C5A3D;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-family: 'Fraunces', serif; font-style: italic;
+    color: #7A6F5F; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+  <div id="root">
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Loading the Atlas&hellip;</div>
+    </div>
+  </div>
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+// ─── Color palette ─────────────────────────────────────────
+const C = {
+  cream: "#F4EEE1", paper: "#FBF7EC", card: "#FFFFFF",
+  ink: "#1B1916", inkSoft: "#403A33", muted: "#7A6F5F", mutedLt: "#A89B86",
+  line: "#E5DBC4", lineSoft: "#EFE7D2",
+  green: "#2C5A3D", greenDk: "#1F4029", greenLt: "#E7EFE6",
+  gold: "#B58A3D", goldDk: "#8A6824", goldLt: "#F4EAD0",
+  rust: "#A24E36", rustLt: "#F3E0D8", sage: "#7A9A82", navy: "#1F2D44",
+};
+
+// ─── Inline SVG icon system (Lucide path data) ─────────────
+const ICON_PATHS = {
+  Home: 'M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z|M9 22V12h6v10',
+  Briefcase: 'M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16|R:2,7,20,14,2,4',
+  Car: 'M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2|M14 17H9|C:6.5,17,2.5|C:16.5,17,2.5',
+  Baby: 'M9 12h.01|M15 12h.01|M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5|M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1',
+  HeartPulse: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z|M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27',
+  ShoppingBasket: 'M5 11l4-7|M19 11l-4-7|M2 11h20l-1.5 9a2 2 0 0 1-2 1.7H5.5a2 2 0 0 1-2-1.7L2 11Z|M4.5 15.5h15|M7 19l1-4|M16 15l1 4',
+  Zap: 'M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z',
+  Moon: 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z',
+  User: 'M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2|C:12,7,4',
+  Sparkles: 'M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z|M20 3v4|M22 5h-4|M4 17v2|M5 18H3',
+  PiggyBank: 'M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z|M2 9v1c0 1.1.9 2 2 2h1|C:16,11,.5',
+  AlertTriangle: 'M21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z|M12 9v4|M12 17h.01',
+  Plane: 'M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z',
+  Building2: 'M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z|M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2|M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2|M10 6h4|M10 10h4|M10 14h4|M10 18h4',
+  ShieldCheck: 'M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z|M9 12l2 2 4-4',
+  Compass: 'C:12,12,10|M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z',
+  Lightbulb: 'M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5|M9 18h6|M10 22h4',
+  TrendingUp: 'M22 7l-8.5 8.5-5-5L2 17|M16 7h6v6',
+  TrendingDown: 'M22 17l-8.5-8.5-5 5L2 7|M16 17h6v-6',
+  Calendar: 'R:3,4,18,18,2,2|M16 2v4|M8 2v4|M3 10h18',
+  Target: 'C:12,12,10|C:12,12,6|C:12,12,2',
+  Wand2: 'M15 4V2|M15 16v-2|M8 9h2|M20 9h2|M17.8 11.8 19 13|M15 9h.01|M17.8 6.2 19 5|M3 21l9-9|M12.2 6.2 11 5',
+  BookOpen: 'M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z|M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z',
+  Heart: 'M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z',
+  Send: 'M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z|M22 2 11 13',
+  Copy: 'R:8,8,14,14,2,2|M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2',
+  Check: 'M20 6 9 17l-5-5',
+  X: 'M18 6 6 18|M6 6l12 12',
+  ArrowRight: 'M5 12h14|M12 5l7 7-7 7',
+  Star: 'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z',
+  Flame: 'M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z',
+  Sliders: 'M4 21V14|M4 10V3|M12 21V12|M12 8V3|M20 21V16|M20 12V3|M2 14h4|M10 8h4|M18 16h4',
+  RotateCcw: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8|M3 3v5h5',
+  AlertCircle: 'C:12,12,10|M12 8v4|M12 16h.01',
+  Info: 'C:12,12,10|M12 16v-4|M12 8h.01',
+  ChevronDown: 'm6 9 6 6 6-6',
+};
+
+function Icon({ name, size = 20, color = "currentColor", strokeWidth = 2, style }) {
+  const data = ICON_PATHS[name];
+  if (!data) return null;
+  const parts = data.split('|').map((p, i) => {
+    if (p.startsWith('C:')) {
+      const [cx, cy, r] = p.slice(2).split(',').map(Number);
+      return <circle key={i} cx={cx} cy={cy} r={r}/>;
+    }
+    if (p.startsWith('R:')) {
+      const [x, y, w, h, rx, ry] = p.slice(2).split(',').map(Number);
+      return <rect key={i} x={x} y={y} width={w} height={h} rx={rx || 0} ry={ry || 0}/>;
+    }
+    return <path key={i} d={p}/>;
+  });
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+      viewBox="0 0 24 24" fill="none" stroke={color}
+      strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"
+      style={style}>
+      {parts}
+    </svg>
+  );
+}
+
+// Icon shortcuts
+const Home = (p) => <Icon name="Home" {...p}/>;
+const Briefcase = (p) => <Icon name="Briefcase" {...p}/>;
+const Car = (p) => <Icon name="Car" {...p}/>;
+const Baby = (p) => <Icon name="Baby" {...p}/>;
+const HeartPulse = (p) => <Icon name="HeartPulse" {...p}/>;
+const ShoppingBasket = (p) => <Icon name="ShoppingBasket" {...p}/>;
+const Zap = (p) => <Icon name="Zap" {...p}/>;
+const Moon = (p) => <Icon name="Moon" {...p}/>;
+const User = (p) => <Icon name="User" {...p}/>;
+const Sparkles = (p) => <Icon name="Sparkles" {...p}/>;
+const PiggyBank = (p) => <Icon name="PiggyBank" {...p}/>;
+const AlertTriangle = (p) => <Icon name="AlertTriangle" {...p}/>;
+const Plane = (p) => <Icon name="Plane" {...p}/>;
+const Building2 = (p) => <Icon name="Building2" {...p}/>;
+const ShieldCheck = (p) => <Icon name="ShieldCheck" {...p}/>;
+const Compass = (p) => <Icon name="Compass" {...p}/>;
+const Lightbulb = (p) => <Icon name="Lightbulb" {...p}/>;
+const TrendingUp = (p) => <Icon name="TrendingUp" {...p}/>;
+const TrendingDown = (p) => <Icon name="TrendingDown" {...p}/>;
+const Calendar = (p) => <Icon name="Calendar" {...p}/>;
+const Target = (p) => <Icon name="Target" {...p}/>;
+const Wand2 = (p) => <Icon name="Wand2" {...p}/>;
+const BookOpen = (p) => <Icon name="BookOpen" {...p}/>;
+const Heart = (p) => <Icon name="Heart" {...p}/>;
+const Send = (p) => <Icon name="Send" {...p}/>;
+const Copy = (p) => <Icon name="Copy" {...p}/>;
+const Check = (p) => <Icon name="Check" {...p}/>;
+const XIcon = (p) => <Icon name="X" {...p}/>;
+const ArrowRight = (p) => <Icon name="ArrowRight" {...p}/>;
+const Star = (p) => <Icon name="Star" {...p}/>;
+const Flame = (p) => <Icon name="Flame" {...p}/>;
+const Sliders = (p) => <Icon name="Sliders" {...p}/>;
+const RotateCcw = (p) => <Icon name="RotateCcw" {...p}/>;
+const AlertCircle = (p) => <Icon name="AlertCircle" {...p}/>;
+const InfoIcon = (p) => <Icon name="Info" {...p}/>;
+const ChevronDown = (p) => <Icon name="ChevronDown" {...p}/>;
+
+// ─── Storage (localStorage shim) ───────────────────────────
+const STORAGE_KEY = "townes-atlas-v2";
+const storage = {
+  get: async (key) => {
+    try {
+      const v = localStorage.getItem(key);
+      return v ? { value: v } : null;
+    } catch { return null; }
+  },
+  set: async (key, value) => {
+    try { localStorage.setItem(key, value); return true; }
+    catch { return false; }
+  }
+};
+
+// ─── CATEGORIES — every line item, every slider, every note ─
+const CATEGORIES = [
+  { id: "income", name: "Income", sub: "Money flowing in",
+    icon: Briefcase, color: C.green, type: "income",
+    items: [
+      { id: "inc_cc",    name: "Cut Creaters take-home",     min: 0, max: 25000, step: 100, def: 6000, note: "Operator seat at the salon — NET after taxes, not gross." },
+      { id: "inc_kc",    name: "Khyree City (conservative)", min: 0, max: 25000, step: 100, def: 3000, note: "Use the floor number. Anything over goes straight to savings." },
+      { id: "inc_wife",  name: "Wife's income",              min: 0, max: 15000, step: 100, def: 0,    note: "Even if joint household — her income is logged in her name." },
+      { id: "inc_other", name: "Other recurring",            min: 0, max: 20000, step: 100, def: 0,    note: "Rentals, royalties, content, Loc N Gel once relaunched, etc." },
+    ]},
+  { id: "house", name: "The House", sub: "Roof over six heads · Conyers GA",
+    icon: Home, color: C.green, type: "expense",
+    items: [
+      { id: "h_pi",     name: "Mortgage (P&I)",         min: 0, max: 6000, step: 25, def: 1900, note: "Principal & Interest only. Traditional mortgage = riba. Halal options: Guidance Residential, UIF, Ameen Housing." },
+      { id: "h_tax",    name: "Property tax (escrow)",  min: 0, max: 1500, step: 25, def: 280,  note: "Rockdale County ~$3,200/yr ÷ 12 with homestead exemption." },
+      { id: "h_ins",    name: "Home insurance (escrow)",min: 0, max: 800,  step: 10, def: 180,  note: "GA family home: ~$2,100/yr ÷ 12." },
+      { id: "h_hoa",    name: "HOA fees",               min: 0, max: 500,  step: 5,  def: 0,    note: "Skip if your subdivision doesn't have one." },
+      { id: "h_maint",  name: "Home maintenance fund",  min: 0, max: 1500, step: 25, def: 250,  note: "1% of home value per year ÷ 12. The line everyone skips — until the AC dies in July." },
+      { id: "h_repair", name: "Big-ticket sinking",     min: 0, max: 1000, step: 25, def: 150,  note: "Roof, HVAC, water heater. Save now or panic later." },
+      { id: "h_lawn",   name: "Lawn / landscaping",     min: 0, max: 400,  step: 10, def: 100,  note: "$120/mo service or $0 if you handle it." },
+      { id: "h_pest",   name: "Pest control",           min: 0, max: 200,  step: 5,  def: 50,   note: "GA quarterly: ~$40–65/mo. Roaches + termites are real here." },
+    ]},
+  { id: "utilities", name: "Utilities", sub: "The monthly drumbeat",
+    icon: Zap, color: C.gold, type: "expense",
+    items: [
+      { id: "u_elec",     name: "Electric (Georgia Power)", min: 0, max: 800,  step: 10, def: 285, note: "Family of 6 + GA summer AC: $220–350. Tier rates spike in summer." },
+      { id: "u_gas",      name: "Natural gas",              min: 0, max: 300,  step: 5,  def: 80,  note: "Heat + water + stove. $25 summer to $130 winter. Avg ~$80." },
+      { id: "u_water",    name: "Water / sewer / trash",    min: 0, max: 400,  step: 10, def: 120, note: "Family-of-6 in Rockdale: $80–150." },
+      { id: "u_internet", name: "Internet",                 min: 0, max: 200,  step: 5,  def: 85,  note: "Comcast/AT&T $70–100. Google Fiber gigabit $70 if available." },
+      { id: "u_phone",    name: "Cell phones (all lines)",  min: 0, max: 400,  step: 5,  def: 180, note: "Family plan + kid lines. Cricket/Mint beats Verizon/AT&T." },
+      { id: "u_stream",   name: "Streaming bundle",         min: 0, max: 200,  step: 5,  def: 35,  note: "Netflix + Disney+ creep. Cut what you don't watch monthly." },
+      { id: "u_security", name: "Home security",            min: 0, max: 150,  step: 5,  def: 30,  note: "ADT $40–60, Ring $4–10, or one-time smart cams." },
+    ]},
+  { id: "food", name: "Food", sub: "Feeding six halal in America",
+    icon: ShoppingBasket, color: C.rust, type: "expense",
+    items: [
+      { id: "f_groc",    name: "Groceries (halal-priority)", min: 0, max: 3500, step: 25, def: 1400, note: "Family of 6 with halal meat premium: $1,200–1,800. Costco/Sam's + Halalco/Madinah Market." },
+      { id: "f_meat",    name: "Bulk halal meat sinking",    min: 0, max: 800,  step: 10, def: 150,  note: "Quarter-cow halal twice a year beats per-pound. Deep freezer pays for itself in 90 days." },
+      { id: "f_eatout",  name: "Eating out (halal)",         min: 0, max: 1500, step: 25, def: 250,  note: "Set the number or it grows. Talkin Tacos, Halal Guys, ATL has dozens." },
+      { id: "f_lunches", name: "Work lunches",               min: 0, max: 600,  step: 10, def: 80,   note: "Pack from home = $80/mo. Buy out = $300+/mo per adult." },
+      { id: "f_coffee",  name: "Coffee + breakfast",         min: 0, max: 300,  step: 5,  def: 40,   note: "Home brew $20/mo vs daily $5 coffee $150/mo." },
+      { id: "f_ramadan", name: "Ramadan extra (sinking)",    min: 0, max: 400,  step: 10, def: 100,  note: "Extra grocery + iftars hosted + masjid iftars. $1,200/yr ÷ 12." },
+    ]},
+  { id: "cars", name: "Cars & Commute", sub: "Conyers to Decatur · ~48 mi round trip",
+    icon: Car, color: C.navy, type: "expense",
+    items: [
+      { id: "c_pay1",   name: "Car payment #1",        min: 0, max: 1500, step: 25, def: 0,   note: "Traditional auto loan = riba. LARIBA offers halal auto financing." },
+      { id: "c_pay2",   name: "Car payment #2",        min: 0, max: 1500, step: 25, def: 0,   note: "Same logic. Two $500 payments = $1K/mo gone." },
+      { id: "c_ins",    name: "Auto insurance (all)",  min: 0, max: 800,  step: 10, def: 280, note: "GA family rate: $150–250/car. Bundle with home for discount." },
+      { id: "c_gas",    name: "Gas (both cars)",       min: 0, max: 900,  step: 10, def: 380, note: "Two cars + daily commute. Adjust if wife is remote/local." },
+      { id: "c_maint",  name: "Car maintenance fund",  min: 0, max: 500,  step: 10, def: 120, note: "Oil, tires, brakes. $80–150/mo across 2 cars." },
+      { id: "c_repair", name: "Big repair sinking",    min: 0, max: 600,  step: 10, def: 80,  note: "Transmission/engine $3K hit wrecks a month without this." },
+      { id: "c_toll",   name: "Peach Pass / tolls",    min: 0, max: 300,  step: 5,  def: 40,  note: "I-285/400 express lanes $5–15 each way in rush." },
+      { id: "c_aaa",    name: "Roadside / AAA",        min: 0, max: 30,   step: 1,  def: 8,   note: "AAA Family $80–120/yr. Peace of mind for commute + 4 kids." },
+    ]},
+  { id: "kids", name: "The Four Kids", sub: "Biggest cost driver in any American family",
+    icon: Baby, color: C.gold, type: "expense",
+    items: [
+      { id: "k_school",   name: "School tuition (Islamic)",  min: 0, max: 5000, step: 50, def: 1600, note: "Mohammed Schools ATL ~$8–12K/yr/kid. Public is 'free' but $50–200/mo extras." },
+      { id: "k_madrasa",  name: "Quran teacher (all kids)",  min: 0, max: 800,  step: 10, def: 200,  note: "Online from Egypt: $30–80/kid. ATL in-person: $100–200/kid." },
+      { id: "k_supplies", name: "School supplies sinking",   min: 0, max: 200,  step: 5,  def: 60,   note: "August spike: $400–800 for 4 kids. Sink-fund avoids the hit." },
+      { id: "k_activity", name: "Activities (sports, art)",  min: 0, max: 800,  step: 10, def: 200,  note: "Soccer $200/season + gear x 4 kids x multiple seasons." },
+      { id: "k_camp",     name: "Summer camp sinking",       min: 0, max: 600,  step: 10, def: 120,  note: "MAS Camp / MIST $300–700/wk per kid. Sink across the year." },
+      { id: "k_clothes",  name: "Kids' clothing",            min: 0, max: 600,  step: 10, def: 200,  note: "Hand-downs cut this in half. ThredUp + Once Upon A Child." },
+      { id: "k_birthday", name: "Kids' birthdays sinking",   min: 0, max: 400,  step: 10, def: 60,   note: "4 birthdays/yr ÷ 12." },
+      { id: "k_friends",  name: "Friend-party gifts",        min: 0, max: 200,  step: 5,  def: 50,   note: "30 invites/yr x $25 = $750/yr. Most parents don't see this coming." },
+      { id: "k_phones",   name: "Kids' phone lines",         min: 0, max: 200,  step: 5,  def: 30,   note: "$25–40 per line once teens have phones." },
+      { id: "k_allow",    name: "Kids' allowance",           min: 0, max: 400,  step: 5,  def: 80,   note: "$5/wk x 4 kids = $80/mo. Teaches money rhythm." },
+    ]},
+  { id: "health", name: "Health & Body", sub: "Family-of-six healthcare — the biggest unknown",
+    icon: HeartPulse, color: C.rust, type: "expense",
+    items: [
+      { id: "hl_prem",   name: "Health insurance premium",  min: 0, max: 3500, step: 25, def: 1800, note: "Family of 6 marketplace: $1,500–2,500/mo. ACA subsidies under ~$140K AGI." },
+      { id: "hl_oop",    name: "Out-of-pocket medical",     min: 0, max: 800,  step: 10, def: 200,  note: "Co-pays, prescriptions, deductibles. Family of 6 = something monthly." },
+      { id: "hl_dental", name: "Dental insurance",          min: 0, max: 200,  step: 5,  def: 60,   note: "Family dental $40–80/mo. Braces coming for at least one of 4 — plan now." },
+      { id: "hl_vision", name: "Vision insurance",          min: 0, max: 100,  step: 5,  def: 25,   note: "$15–35/mo for the family." },
+      { id: "hl_gym",    name: "Gym / fitness",             min: 0, max: 200,  step: 5,  def: 30,   note: "$30–60 each, or $0 if bodyweight + walks." },
+    ]},
+  { id: "deen", name: "The Deen", sub: "Faith is the spine, not a line item",
+    icon: Moon, color: C.green, type: "expense",
+    items: [
+      { id: "d_sadaqah", name: "Sadaqah (10% of income)",      min: 0, max: 5000, step: 25, def: 900, note: "Your standing 10% pledge — anti-riya firewall on all income." },
+      { id: "d_masjid",  name: "Masjid recurring support",     min: 0, max: 500,  step: 5,  def: 75,  note: "$50–100/mo recurring beats $600 once a year." },
+      { id: "d_zakat",   name: "Zakat sinking fund",           min: 0, max: 1500, step: 10, def: 150, note: "2.5% of zakatable wealth annually. Sink monthly toward your hawl." },
+      { id: "d_umrah",   name: "Umrah / Hajj sinking",         min: 0, max: 2500, step: 25, def: 400, note: "Family of 6 Umrah ~$25–35K. Set the rhythm now." },
+      { id: "d_eid",     name: "Eid sinking (both Eids)",      min: 0, max: 300,  step: 5,  def: 75,  note: "Family of 6, both Eids: $500–1,500/yr." },
+      { id: "d_charity", name: "Other charity (Gaza, orphans)",min: 0, max: 1000, step: 10, def: 50,  note: "Specific causes get specific lines." },
+    ]},
+  { id: "wife", name: "Wife's Lane", sub: "Her visibility, her decisions",
+    icon: User, color: C.rust, type: "expense",
+    items: [
+      { id: "w_allow",    name: "Her personal allowance", min: 0, max: 1500, step: 25, def: 200, note: "Untracked. Sacred. Her decision." },
+      { id: "w_fashion",  name: "Modest fashion",         min: 0, max: 500,  step: 10, def: 120, note: "Haute Hijab, Veiled Collection, ASIYAH. Quality lasts longer." },
+      { id: "w_care",     name: "Her self-care / health", min: 0, max: 400,  step: 10, def: 80,  note: "Postpartum, dental, women's health. Don't cut this." },
+      { id: "w_business", name: "Her business reserve",   min: 0, max: 500,  step: 10, def: 50,  note: "Loc N Gel relaunch seed. Year-2 fund." },
+    ]},
+  { id: "personal", name: "Personal", sub: "Your lane",
+    icon: Sparkles, color: C.gold, type: "expense",
+    items: [
+      { id: "p_allow",   name: "Your personal allowance",   min: 0, max: 1500, step: 25, def: 200, note: "Untracked. Sacred." },
+      { id: "p_clothes", name: "Your clothing",             min: 0, max: 400,  step: 10, def: 80,  note: "Quality over quantity." },
+      { id: "p_gifts",   name: "Gifts (parents, weddings)", min: 0, max: 400,  step: 10, def: 100, note: "$1,200–2,400/yr typical." },
+      { id: "p_hobby",   name: "Books, courses, hobby",     min: 0, max: 400,  step: 10, def: 50,  note: "Self-investment compounds." },
+    ]},
+  { id: "biz", name: "Business Layer", sub: "Khyree City + Cut Creaters",
+    icon: Building2, color: C.navy, type: "expense",
+    items: [
+      { id: "b_kc",       name: "Khyree City SaaS stack",      min: 0, max: 1500, step: 10, def: 450, note: "Base44, Claude, Telnyx, Outscraper, Square, Zoho, Framer, Buffer, Manychat, Wispr." },
+      { id: "b_6fb",      name: "6FB Mentorship",              min: 0, max: 300,  step: 5,  def: 120, note: "Chris Bossio / Tomb45. Feeds into Khyree City build." },
+      { id: "b_tools",    name: "Tools / equipment / books",   min: 0, max: 500,  step: 10, def: 100, note: "Barber tools + agency tool stack updates." },
+      { id: "b_taxes",    name: "Self-employment tax savings", min: 0, max: 3000, step: 25, def: 600, note: "25–30% of business net to separate tax account immediately." },
+      { id: "b_reinvest", name: "Cut Creaters reinvest",       min: 0, max: 1500, step: 25, def: 300, note: "Operator = builder. 10–20% reinvested compounds the turnaround." },
+    ]},
+  { id: "protect", name: "Protection Layers", sub: "What most families don't budget for",
+    icon: ShieldCheck, color: C.navy, type: "expense",
+    items: [
+      { id: "pr_umbrella", name: "Umbrella liability ins.",   min: 0, max: 100, step: 5, def: 25, note: "$200–400/yr for $1M coverage above home/auto. Cheap for business owners." },
+      { id: "pr_takaful",  name: "Term life takaful",         min: 0, max: 200, step: 5, def: 50, note: "Halal pooled-risk alternative to life insurance." },
+      { id: "pr_id",       name: "Identity theft protection", min: 0, max: 50,  step: 5, def: 15, note: "Aura/LifeLock $10–30/mo. Worth it for business owners with home equity." },
+      { id: "pr_legal",    name: "Wasiyyah + POA fund",       min: 0, max: 100, step: 5, def: 20, note: "Islamic will + power of attorney. $200–500 one-time with Muslim attorney." },
+    ]},
+  { id: "travel", name: "Travel & Family", sub: "Newark · Cairo · Mecca",
+    icon: Plane, color: C.gold, type: "expense",
+    items: [
+      { id: "tv_newark", name: "Newark visit sinking",    min: 0, max: 800,  step: 10, def: 150, note: "Family of 6 ATL to EWR $1,500–2,400 flights, or drive $400 + 14hrs." },
+      { id: "tv_egypt",  name: "Egypt visit sinking",     min: 0, max: 1500, step: 25, def: 400, note: "Family of 6 ATL to CAI: $4,500–7,500 peak season." },
+      { id: "tv_emerg",  name: "Emergency family travel", min: 0, max: 800,  step: 25, def: 200, note: "Last-minute international = 3x normal. $5K minimum fund." },
+    ]},
+  { id: "hidden", name: "Hidden American Costs", sub: "Lines that ambush every family",
+    icon: Lightbulb, color: C.muted, type: "expense",
+    items: [
+      { id: "hd_subs",     name: "Subscription bleed",         min: 0, max: 300, step: 5, def: 80, note: "Apps, iCloud, software. Avg family bleeds $200–400/mo unnoticed." },
+      { id: "hd_annual",   name: "Annual memberships sinking", min: 0, max: 100, step: 5, def: 35, note: "Prime $139 + Costco $130 + Apple One $100 = ~$30/mo." },
+      { id: "hd_school",   name: "School fundraisers / trips", min: 0, max: 200, step: 5, def: 40, note: "Field trips, fundraisers, teacher gifts, photos." },
+      { id: "hd_licenses", name: "Licenses, tags, passports",  min: 0, max: 200, step: 5, def: 30, note: "Family of 6 passport renewals $660+, tags, licenses, emissions." },
+    ]},
+  { id: "savings", name: "Savings & Future", sub: "Halal wealth-building",
+    icon: PiggyBank, color: C.green, type: "save",
+    items: [
+      { id: "sv_emerg",  name: "Emergency fund deposit",        min: 0, max: 3000, step: 25, def: 500, note: "Target: 6 months expenses. Variable income to 12 months." },
+      { id: "sv_kids",   name: "Kids' future fund",             min: 0, max: 2000, step: 25, def: 200, note: "Halal alternatives to 529: Wahed kids accounts, gold savings." },
+      { id: "sv_retire", name: "Halal retirement (Wahed/Amana)",min: 0, max: 3000, step: 25, def: 400, note: "Sharia-screened. Wahed robo or Amana mutual funds." },
+      { id: "sv_gold",   name: "Physical gold / silver",        min: 0, max: 1500, step: 25, def: 100, note: "Hedge against fiat. Zakat applies above nisab." },
+      { id: "sv_biz",    name: "Business reserves",             min: 0, max: 2000, step: 25, def: 300, note: "3–6 months business expenses in separate account." },
+    ]},
+];
+
+const ALL_ITEMS = CATEGORIES.flatMap(c => c.items.map(i => ({ ...i, catId: c.id, catType: c.type })));
+const DEFAULTS = ALL_ITEMS.reduce((acc, i) => ({ ...acc, [i.id]: i.def }), {});
+
+const SCENARIOS = [
+  { id: "job_loss", name: "Cut Creaters Slowdown", icon: TrendingDown, color: C.rust,
+    desc: "CC income drops 50% for 3 months.",
+    impact: (v) => ({ inc_cc: Math.round((v.inc_cc || 0) * 0.5) }) },
+  { id: "kc_boom", name: "Khyree City Doubles", icon: TrendingUp, color: C.green,
+    desc: "Agency hits and KC income doubles.",
+    impact: (v) => ({ inc_kc: Math.round((v.inc_kc || 0) * 2) }) },
+  { id: "ac_dies", name: "AC Dies in July", icon: Flame, color: C.rust,
+    desc: "HVAC replacement: $8,500 spread over 12 mo.",
+    impact: () => ({ h_repair: Math.round(8500 / 12) }) },
+  { id: "umrah_year", name: "Family Umrah This Year", icon: Star, color: C.gold,
+    desc: "Family of 6 Umrah: $28K saved in 12 mo.",
+    impact: () => ({ d_umrah: Math.round(28000 / 12) }) },
+  { id: "baby_5", name: "Baby #5 Inshallah", icon: Heart, color: C.rust,
+    desc: "Adds ~$650/mo for prenatal + newborn.",
+    impact: (v) => ({ hl_oop: (v.hl_oop || 0) + 350, k_clothes: (v.k_clothes || 0) + 300 }) },
+  { id: "ramadan", name: "Ramadan Hosting Mode", icon: Moon, color: C.green,
+    desc: "Hosting 4 iftars + visits. +$400 month.",
+    impact: (v) => ({ f_ramadan: (v.f_ramadan || 0) + 400 }) },
+];
+
+const PRESETS = [
+  { id: "lean", name: "Lean Year One", icon: Target, color: C.muted,
+    desc: "First 12 months. Minimum viable. Stack savings.",
+    apply: () => ({
+      ...DEFAULTS,
+      inc_cc: 5000, inc_kc: 2500,
+      f_eatout: 100, f_lunches: 50, f_coffee: 20,
+      k_school: 0, k_madrasa: 150, k_activity: 100, k_camp: 50,
+      hl_prem: 1400, c_toll: 0,
+      w_fashion: 60, p_clothes: 40, p_hobby: 20,
+      hd_subs: 40, b_reinvest: 100,
+      sv_emerg: 800, sv_retire: 200, sv_kids: 100, sv_gold: 50,
+      d_umrah: 200, tv_egypt: 200, tv_newark: 100,
+    }) },
+  { id: "balanced", name: "Balanced Stability", icon: Compass, color: C.green,
+    desc: "Year 1–2. Steady growth. Real comfort.",
+    apply: () => ({ ...DEFAULTS }) },
+  { id: "growth", name: "Growth & Generosity", icon: TrendingUp, color: C.gold,
+    desc: "Both engines firing. Reinvest + give more.",
+    apply: () => ({
+      ...DEFAULTS,
+      inc_cc: 8000, inc_kc: 6000, inc_wife: 1500,
+      d_sadaqah: 1500, d_masjid: 150, d_charity: 200, d_umrah: 800,
+      sv_emerg: 1200, sv_retire: 800, sv_kids: 400, sv_gold: 200, sv_biz: 500,
+      b_reinvest: 700, k_school: 2400, k_madrasa: 300, k_activity: 350,
+      f_groc: 1600, f_meat: 200,
+    }) },
+];
+
+const fmtMoney = (n) => {
+  if (!n && n !== 0) return "$0";
+  if (Math.abs(n) >= 1000) {
+    const k = n / 1000;
+    return "$" + (k % 1 === 0 ? k.toFixed(0) : k.toFixed(1)) + "K";
+  }
+  return "$" + Math.round(n).toLocaleString("en-US");
+};
+const fmtFull = (n) => {
+  if (!n && n !== 0) return "$0";
+  return "$" + Math.round(n).toLocaleString("en-US");
+};
+
+// ─── SliderLine ────────────────────────────────────────────
+function SliderLine({ item, value, onChange, accent, type }) {
+  const pct = item.max > item.min ? ((value - item.min) / (item.max - item.min)) * 100 : 0;
+  const [showNote, setShowNote] = useState(false);
+  const trackClass = type === "income" ? "income-track" : type === "save" ? "save-track" : "expense-track";
+
+  return (
+    <div className="fade-in" style={{ padding: "14px 0", borderBottom: "1px solid " + C.lineSoft }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8, gap: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flex: 1, minWidth: 0 }}>
+          <div className="font-body" style={{ fontSize: 14, fontWeight: 600, color: C.ink, lineHeight: 1.3 }}>
+            {item.name}
+          </div>
+          <button onClick={() => setShowNote(!showNote)} style={{
+            background: "transparent", border: "none", padding: 0, cursor: "pointer",
+            color: C.mutedLt, display: "flex", alignItems: "center"
+          }}>
+            <InfoIcon size={13}/>
+          </button>
+        </div>
+        <div className="font-display num" style={{
+          fontSize: 18, fontWeight: 600, color: accent,
+          letterSpacing: "-0.01em", flexShrink: 0
+        }}>
+          {fmtFull(value)}
+        </div>
+      </div>
+
+      {showNote && (
+        <div className="font-body fade-in" style={{
+          fontSize: 12, color: C.muted, lineHeight: 1.55,
+          padding: "8px 12px", background: C.paper,
+          borderRadius: 8, marginBottom: 10, fontStyle: "italic"
+        }}>
+          {item.note}
+        </div>
+      )}
+
+      <div className={trackClass} style={{ position: "relative" }}>
+        <div style={{
+          position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)",
+          height: 6, width: pct + "%", background: accent,
+          borderRadius: 999, pointerEvents: "none", zIndex: 1
+        }}/>
+        <input type="range" min={item.min} max={item.max} step={item.step}
+          value={value} onChange={(e) => onChange(Number(e.target.value))}
+          style={{ position: "relative", zIndex: 2 }}/>
+      </div>
+
+      <div style={{
+        display: "flex", justifyContent: "space-between",
+        marginTop: 2, fontSize: 10, color: C.mutedLt,
+        fontVariantNumeric: "tabular-nums"
+      }}>
+        <span>{fmtMoney(item.min)}</span>
+        <span>{fmtMoney(item.max)}</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── CategoryCard ──────────────────────────────────────────
+function CategoryCard({ cat, values, setVal, open, toggle }) {
+  const CatIcon = cat.icon;
+  const total = cat.items.reduce((sum, item) => sum + (values[item.id] || 0), 0);
+  const isIncome = cat.type === "income";
+  const isSave = cat.type === "save";
+
+  return (
+    <div className="card-shadow" style={{ background: C.card, borderRadius: 16, overflow: "hidden", marginBottom: 14 }}>
+      <button onClick={toggle} style={{
+        width: "100%", textAlign: "left", background: "transparent",
+        border: "none", padding: "20px 20px", cursor: "pointer",
+        display: "flex", alignItems: "center", gap: 14
+      }}>
+        <div style={{
+          width: 42, height: 42, flexShrink: 0, borderRadius: 11,
+          background: cat.color + "18", color: cat.color,
+          display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <CatIcon size={20} strokeWidth={1.8}/>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="font-display" style={{
+            fontSize: 18, fontWeight: 500, color: C.ink,
+            letterSpacing: "-0.01em", lineHeight: 1.2, marginBottom: 2
+          }}>
+            {cat.name}
+          </div>
+          <div className="font-body" style={{ fontSize: 12, color: C.muted, lineHeight: 1.3 }}>
+            {cat.sub}
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2, flexShrink: 0 }}>
+          <div className="font-display num" style={{
+            fontSize: 19, fontWeight: 600,
+            color: isIncome ? C.green : isSave ? C.gold : C.ink,
+            letterSpacing: "-0.02em", lineHeight: 1
+          }}>
+            {isIncome ? "+" : ""}{fmtFull(total)}
+          </div>
+          <div className="font-body" style={{
+            fontSize: 10, color: C.mutedLt,
+            letterSpacing: "0.06em", textTransform: "uppercase"
+          }}>
+            /month
+          </div>
+        </div>
+        <ChevronDown size={18} color={C.mutedLt} style={{
+          flexShrink: 0,
+          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "transform 0.25s"
+        }}/>
+      </button>
+
+      {open && (
+        <div className="fade-in" style={{ padding: "0 20px 16px", borderTop: "1px solid " + C.lineSoft }}>
+          {cat.items.map(item => (
+            <SliderLine key={item.id} item={item}
+              value={values[item.id] || 0}
+              onChange={(v) => setVal(item.id, v)}
+              accent={cat.color} type={cat.type}/>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── HeroSummary ───────────────────────────────────────────
+function HeroSummary({ totalIncome, totalExpense, leftover }) {
+  const surplus = leftover >= 0;
+  return (
+    <div style={{
+      background: "linear-gradient(135deg, " + C.ink + " 0%, " + C.greenDk + " 100%)",
+      color: C.cream, borderRadius: 20, padding: "30px 26px",
+      position: "relative", overflow: "hidden", marginBottom: 20
+    }}>
+      <div style={{
+        position: "absolute", top: -60, right: -60, width: 220, height: 220,
+        background: "radial-gradient(circle, " + C.gold + "28 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+      <div style={{
+        position: "absolute", bottom: -40, left: -40, width: 160, height: 160,
+        background: "radial-gradient(circle, " + C.sage + "20 0%, transparent 70%)",
+        borderRadius: "50%", pointerEvents: "none"
+      }}/>
+
+      <div className="font-body" style={{
+        fontSize: 11, letterSpacing: "0.16em", textTransform: "uppercase",
+        color: C.gold, fontWeight: 600, marginBottom: 8,
+        display: "flex", alignItems: "center", gap: 8, position: "relative"
+      }}>
+        <Compass size={13}/> Townes Family Atlas · Live
+      </div>
+
+      <div style={{ position: "relative" }}>
+        <div className="font-display num" style={{
+          fontSize: "clamp(42px, 9vw, 60px)", fontWeight: 500,
+          color: surplus ? C.cream : "#E8B4A4",
+          letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: 6,
+          fontStyle: surplus ? "normal" : "italic"
+        }}>
+          {surplus ? "+" : ""}{fmtFull(leftover)}
+        </div>
+        <div className="font-body" style={{
+          fontSize: 13, color: "#D9CFB6",
+          letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 22
+        }}>
+          Leftover per month {surplus ? "→ surplus" : "→ shortfall"}
+        </div>
+      </div>
+
+      <div style={{
+        display: "grid", gridTemplateColumns: "1fr 1fr",
+        gap: 10, position: "relative"
+      }}>
+        <SummaryStat label="Income" value={totalIncome} color={C.sage} prefix="+"/>
+        <SummaryStat label="Out (expenses + saving)" value={totalExpense} color="#E8B4A4" prefix="−"/>
+      </div>
+    </div>
+  );
+}
+
+function SummaryStat({ label, value, color, prefix }) {
+  return (
+    <div style={{
+      background: "rgba(255,255,255,0.06)", borderRadius: 12,
+      padding: "12px 14px", backdropFilter: "blur(4px)"
+    }}>
+      <div className="font-body" style={{
+        fontSize: 10, color: "#A89B86",
+        letterSpacing: "0.08em", textTransform: "uppercase",
+        fontWeight: 600, marginBottom: 4
+      }}>
+        {label}
+      </div>
+      <div className="font-display num" style={{
+        fontSize: 19, color: color, fontWeight: 600,
+        letterSpacing: "-0.01em", lineHeight: 1
+      }}>
+        {prefix}{fmtMoney(value)}
+      </div>
+    </div>
+  );
+}
+
+// ─── PresetStrip ───────────────────────────────────────────
+function PresetStrip({ onApply, onReset, activePreset }) {
+  return (
+    <div style={{ marginBottom: 22 }}>
+      <div className="font-body" style={{
+        fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase",
+        color: C.muted, fontWeight: 600, marginBottom: 10, paddingLeft: 4,
+        display: "flex", alignItems: "center", gap: 6
+      }}>
+        <Wand2 size={12}/> Quick Presets · Tap one
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        {PRESETS.map(p => {
+          const PIcon = p.icon;
+          const active = activePreset === p.id;
+          return (
+            <button key={p.id} onClick={() => onApply(p)} className="font-body" style={{
+              background: active ? p.color : C.card,
+              color: active ? "#fff" : C.ink,
+              border: "1px solid " + (active ? p.color : C.line),
+              borderRadius: 14, padding: "12px 11px",
+              textAlign: "left", cursor: "pointer",
+              transition: "all 0.2s",
+              display: "flex", flexDirection: "column", gap: 5,
+              boxShadow: active ? "0 6px 16px " + p.color + "33" : "0 1px 2px rgba(0,0,0,0.03)"
+            }}>
+              <PIcon size={15} color={active ? "#fff" : p.color}/>
+              <div style={{ fontSize: 12.5, fontWeight: 600, lineHeight: 1.2 }}>{p.name}</div>
+              <div style={{
+                fontSize: 10.5,
+                color: active ? "rgba(255,255,255,0.85)" : C.muted,
+                lineHeight: 1.35
+              }}>
+                {p.desc}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <button onClick={onReset} className="font-body" style={{
+        marginTop: 10, background: "transparent", color: C.muted,
+        border: "1px dashed " + C.line, borderRadius: 999,
+        padding: "8px 14px", fontSize: 12, fontWeight: 500,
+        cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 6
+      }}>
+        <RotateCcw size={12}/> Reset to defaults
+      </button>
+    </div>
+  );
+}
+
+// ─── SinkingFundCalendar ───────────────────────────────────
+function SinkingFundCalendar({ values }) {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const events = [
+    { month: 7, label: "Back to School", color: C.gold },
+    { month: 1, label: "Ramadan ramp-up", color: C.green },
+    { month: 2, label: "Ramadan", color: C.green },
+    { month: 3, label: "Eid al-Fitr", color: C.green },
+    { month: 5, label: "Summer Camp", color: C.gold },
+    { month: 5, label: "Eid al-Adha", color: C.green },
+    { month: 11, label: "Year-end gifts", color: C.rust },
+    { month: 3, label: "Q1 taxes", color: C.navy },
+    { month: 6, label: "Q2 taxes", color: C.navy },
+    { month: 9, label: "Q3 taxes", color: C.navy },
+  ];
+
+  const monthlySinking =
+    (values.h_repair || 0) + (values.k_supplies || 0) +
+    (values.k_camp || 0) + (values.k_birthday || 0) +
+    (values.f_ramadan || 0) + (values.f_meat || 0) +
+    (values.d_zakat || 0) + (values.d_umrah || 0) +
+    (values.d_eid || 0) + (values.hd_annual || 0) +
+    (values.hd_licenses || 0) + (values.tv_newark || 0) +
+    (values.tv_egypt || 0) + (values.tv_emerg || 0) +
+    (values.c_repair || 0);
+
+  return (
+    <div className="card-shadow" style={{
+      background: C.card, borderRadius: 16,
+      padding: "22px 20px", marginBottom: 20
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+        <Calendar size={18} color={C.green}/>
+        <div className="font-display" style={{
+          fontSize: 18, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+        }}>
+          12-Month Sinking Calendar
+        </div>
+      </div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.muted, marginBottom: 16, lineHeight: 1.5
+      }}>
+        Money set aside every month for predictable hits. You're saving{" "}
+        <strong style={{ color: C.green }}>{fmtFull(monthlySinking)}/mo</strong> across these funds.
+      </div>
+
+      <div style={{ overflowX: "auto", paddingBottom: 8, marginLeft: -4, marginRight: -4 }} className="scroll-snap">
+        <div style={{ display: "flex", gap: 8, padding: "0 4px", minWidth: "min-content" }}>
+          {months.map((m, idx) => {
+            const monthEvents = events.filter(e => e.month === idx);
+            return (
+              <div key={m} style={{
+                background: C.paper, borderRadius: 12,
+                padding: "12px 14px", minWidth: 110,
+                border: monthEvents.length > 0
+                  ? "1px solid " + monthEvents[0].color + "66"
+                  : "1px solid " + C.lineSoft
+              }}>
+                <div className="font-display" style={{
+                  fontSize: 14, fontWeight: 600, color: C.ink, marginBottom: 6
+                }}>
+                  {m}
+                </div>
+                {monthEvents.length === 0 && (
+                  <div className="font-body" style={{
+                    fontSize: 10, color: C.mutedLt, fontStyle: "italic"
+                  }}>
+                    Steady
+                  </div>
+                )}
+                {monthEvents.map((e, i) => (
+                  <div key={i} className="font-body" style={{
+                    fontSize: 10.5, color: e.color,
+                    fontWeight: 600, marginBottom: 3, lineHeight: 1.25
+                  }}>
+                    {e.label}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── WhatIfPanel ───────────────────────────────────────────
+function WhatIfPanel({ values }) {
+  const [active, setActive] = useState(null);
+
+  const baseLeftover = useMemo(() => {
+    let inc = 0, exp = 0;
+    ALL_ITEMS.forEach(item => {
+      const v = values[item.id] || 0;
+      if (item.catType === "income") inc += v;
+      else exp += v;
+    });
+    return inc - exp;
+  }, [values]);
+
+  const projectedLeftover = useMemo(() => {
+    if (!active) return baseLeftover;
+    const sc = SCENARIOS.find(s => s.id === active);
+    if (!sc) return baseLeftover;
+    const overrides = sc.impact(values);
+    let inc = 0, exp = 0;
+    ALL_ITEMS.forEach(item => {
+      const v = overrides[item.id] !== undefined ? overrides[item.id] : (values[item.id] || 0);
+      if (item.catType === "income") inc += v;
+      else exp += v;
+    });
+    return inc - exp;
+  }, [active, values, baseLeftover]);
+
+  const delta = projectedLeftover - baseLeftover;
+
+  return (
+    <div className="card-shadow" style={{
+      background: C.card, borderRadius: 16, padding: "22px 20px", marginBottom: 20
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+        <AlertCircle size={18} color={C.rust}/>
+        <div className="font-display" style={{
+          fontSize: 18, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+        }}>
+          What-If Scenarios
+        </div>
+      </div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.muted, marginBottom: 16, lineHeight: 1.5
+      }}>
+        Tap one to see the dollar impact. Tap again to clear.
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 16 }}>
+        {SCENARIOS.map(s => {
+          const SIcon = s.icon;
+          const isActive = active === s.id;
+          return (
+            <button key={s.id} onClick={() => setActive(isActive ? null : s.id)} className="font-body" style={{
+              background: isActive ? s.color : C.paper,
+              color: isActive ? "#fff" : C.ink,
+              border: "1px solid " + (isActive ? s.color : C.line),
+              borderRadius: 12, padding: "11px 13px",
+              textAlign: "left", cursor: "pointer",
+              display: "flex", flexDirection: "column", gap: 4,
+              transition: "all 0.2s"
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                <SIcon size={13} color={isActive ? "#fff" : s.color}/>
+                <div style={{ fontSize: 12.5, fontWeight: 600, lineHeight: 1.2 }}>{s.name}</div>
+              </div>
+              <div style={{
+                fontSize: 10.5,
+                color: isActive ? "rgba(255,255,255,0.85)" : C.muted,
+                lineHeight: 1.4
+              }}>
+                {s.desc}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {active && (
+        <div className="fade-in" style={{
+          background: C.paper, borderRadius: 12, padding: "16px 18px",
+          display: "flex", flexDirection: "column", gap: 8
+        }}>
+          <div className="font-body" style={{
+            fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase",
+            color: C.muted, fontWeight: 600
+          }}>
+            Impact on monthly leftover
+          </div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
+            <div>
+              <div className="font-display num" style={{
+                fontSize: 24, fontWeight: 600, color: C.muted,
+                textDecoration: "line-through", letterSpacing: "-0.02em"
+              }}>
+                {fmtFull(baseLeftover)}
+              </div>
+              <div className="font-body" style={{ fontSize: 10, color: C.mutedLt }}>was</div>
+            </div>
+            <ArrowRight size={18} color={C.muted}/>
+            <div>
+              <div className="font-display num" style={{
+                fontSize: 28, fontWeight: 600,
+                color: projectedLeftover >= 0 ? C.green : C.rust,
+                letterSpacing: "-0.02em"
+              }}>
+                {fmtFull(projectedLeftover)}
+              </div>
+              <div className="font-body" style={{ fontSize: 10, color: C.mutedLt, fontWeight: 600 }}>
+                ({delta >= 0 ? "+" : ""}{fmtFull(delta)} change)
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── HalalNotes ────────────────────────────────────────────
+function HalalNotes({ values }) {
+  const flags = [];
+  const totalIncome = (values.inc_cc || 0) + (values.inc_kc || 0) +
+                       (values.inc_wife || 0) + (values.inc_other || 0);
+
+  if ((values.h_pi || 0) > 0) {
+    flags.push({ icon: AlertTriangle, color: C.rust,
+      title: "Mortgage = Riba (likely)",
+      body: "Traditional mortgages charge interest. Halal alternatives: Guidance Residential, UIF, Ameen Housing. Diminishing musharakah or ijara model." });
+  }
+  if ((values.c_pay1 || 0) > 0 || (values.c_pay2 || 0) > 0) {
+    flags.push({ icon: AlertTriangle, color: C.rust,
+      title: "Car payments = Riba",
+      body: "Standard auto loans are interest-based. LARIBA offers halal auto financing. Best path: drive what you can buy cash." });
+  }
+  if ((values.sv_retire || 0) > 0) {
+    flags.push({ icon: Check, color: C.green,
+      title: "Halal retirement on track",
+      body: "Wahed Invest (robo-advisor) and Amana Mutual Funds are Sharia-screened. Avoid traditional 401k unless your employer's options include halal funds." });
+  }
+  if (totalIncome > 0 && (values.d_sadaqah || 0) > 0) {
+    const sadaqahPct = ((values.d_sadaqah || 0) / totalIncome) * 100;
+    if (sadaqahPct >= 9 && sadaqahPct <= 11) {
+      flags.push({ icon: Heart, color: C.green,
+        title: "Sadaqah at " + sadaqahPct.toFixed(1) + "% — your standing pledge",
+        body: "Your 10% sadaqah anti-riya firewall is locked in. Keep it sacred." });
+    } else if (sadaqahPct < 9) {
+      flags.push({ icon: AlertCircle, color: C.gold,
+        title: "Sadaqah at " + sadaqahPct.toFixed(1) + "% — below your 10% pledge",
+        body: "Bump the sadaqah slider until it lands at 10% of total income." });
+    }
+  }
+  if ((values.pr_takaful || 0) > 0) {
+    flags.push({ icon: ShieldCheck, color: C.green,
+      title: "Takaful — halal protection",
+      body: "Takaful avoids the riba/gharar of conventional insurance. Limited U.S. providers." });
+  }
+  if ((values.d_zakat || 0) > 0 && (values.d_umrah || 0) > 0) {
+    flags.push({ icon: Star, color: C.gold,
+      title: "Zakat + Umrah sinking funds active",
+      body: "You're treating the deen as a real budget line. Hawl hits ready, Umrah becomes inevitable." });
+  }
+  if ((values.sv_gold || 0) > 0) {
+    flags.push({ icon: Star, color: C.gold,
+      title: "Physical gold as halal store",
+      body: "Gold has been the ummah's halal store of value for 1,400 years. Above nisab, zakat applies." });
+  }
+  if ((values.b_taxes || 0) === 0 && ((values.inc_cc || 0) > 0 || (values.inc_kc || 0) > 0)) {
+    flags.push({ icon: AlertTriangle, color: C.rust,
+      title: "No quarterly tax savings set aside",
+      body: "Self-employment + federal tax = ~25–30% of net business income. Move the slider so you're not scrambling in April." });
+  }
+
+  return (
+    <div className="card-shadow" style={{
+      background: C.card, borderRadius: 16,
+      padding: "22px 20px 16px", marginBottom: 20
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+        <BookOpen size={18} color={C.green}/>
+        <div className="font-display" style={{
+          fontSize: 18, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+        }}>
+          Halal Lane Check
+        </div>
+      </div>
+      <div className="font-body" style={{
+        fontSize: 13, color: C.muted, marginBottom: 16, lineHeight: 1.5
+      }}>
+        Flags + greens based on your current numbers. Salafi manhaj.
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {flags.map((f, i) => {
+          const FIcon = f.icon;
+          return (
+            <div key={i} style={{
+              background: f.color + "0E",
+              border: "1px solid " + f.color + "33",
+              borderRadius: 12, padding: "12px 14px",
+              display: "flex", gap: 12, alignItems: "flex-start"
+            }}>
+              <div style={{
+                width: 28, height: 28, flexShrink: 0, borderRadius: 7,
+                background: f.color, color: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center"
+              }}>
+                <FIcon size={14}/>
+              </div>
+              <div>
+                <div className="font-body" style={{
+                  fontSize: 13.5, fontWeight: 600, color: C.ink,
+                  marginBottom: 4, lineHeight: 1.3
+                }}>
+                  {f.title}
+                </div>
+                <div className="font-body" style={{
+                  fontSize: 12.5, color: C.inkSoft, lineHeight: 1.5
+                }}>
+                  {f.body}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {flags.length === 0 && (
+          <div className="font-body" style={{
+            fontSize: 13, color: C.muted, fontStyle: "italic", padding: "8px 0"
+          }}>
+            Start moving sliders — halal-lane flags appear here as the budget shapes up.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── ExportModal (with native share for iOS) ───────────────
+function ExportModal({ values, onClose }) {
+  const [copied, setCopied] = useState(false);
+  const [shared, setShared] = useState(false);
+
+  const exportText = useMemo(() => {
+    let out = "════════════════════════════════════\n";
+    out += "TOWNES FAMILY ATLAS · BUDGET SNAPSHOT\n";
+    out += "Exported " + new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) + "\n";
+    out += "════════════════════════════════════\n\n";
+
+    let totalIncome = 0, totalExpense = 0, totalSave = 0;
+
+    CATEGORIES.forEach(cat => {
+      const catTotal = cat.items.reduce((s, i) => s + (values[i.id] || 0), 0);
+      if (cat.type === "income") totalIncome += catTotal;
+      else if (cat.type === "save") totalSave += catTotal;
+      else totalExpense += catTotal;
+
+      out += "━━━ " + cat.name.toUpperCase() + " — " + (cat.type === "income" ? "+" : "") + fmtFull(catTotal) + "/mo ━━━\n";
+      cat.items.forEach(item => {
+        const v = values[item.id] || 0;
+        if (v > 0) out += "  " + item.name + ": " + fmtFull(v) + "/mo\n";
+      });
+      out += "\n";
+    });
+
+    out += "════════════════════════════════════\n";
+    out += "MONTHLY INCOME:        +" + fmtFull(totalIncome) + "\n";
+    out += "MONTHLY EXPENSE:       -" + fmtFull(totalExpense) + "\n";
+    out += "MONTHLY SAVING:         " + fmtFull(totalSave) + "\n";
+    out += "LEFTOVER:               " + fmtFull(totalIncome - totalExpense - totalSave) + "\n";
+    out += "════════════════════════════════════\n";
+
+    return out;
+  }, [values]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(exportText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      const ta = document.getElementById("export-ta");
+      if (ta) { ta.select(); document.execCommand("copy"); setCopied(true); setTimeout(() => setCopied(false), 2200); }
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Townes Family Atlas — Budget",
+          text: exportText
+        });
+        setShared(true);
+        setTimeout(() => setShared(false), 2200);
+      } catch (err) {
+        // user cancelled or error — silent
+      }
+    }
+  };
+
+  const canShare = typeof navigator !== 'undefined' && !!navigator.share;
+
+  return (
+    <div onClick={onClose} style={{
+      position: "fixed", inset: 0,
+      background: "rgba(27,25,22,0.65)",
+      backdropFilter: "blur(6px)",
+      zIndex: 1000, display: "flex",
+      alignItems: "center", justifyContent: "center", padding: 16
+    }}>
+      <div onClick={e => e.stopPropagation()} style={{
+        background: C.cream, borderRadius: 18,
+        maxWidth: 720, width: "100%", maxHeight: "90vh",
+        display: "flex", flexDirection: "column", overflow: "hidden",
+        boxShadow: "0 24px 80px rgba(0,0,0,0.45)"
+      }}>
+        <div style={{
+          padding: "20px 24px",
+          borderBottom: "1px solid " + C.line,
+          display: "flex", alignItems: "center", justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase",
+              color: C.gold, fontWeight: 600, marginBottom: 4
+            }}>
+              Your Budget Snapshot
+            </div>
+            <div className="font-display" style={{
+              fontSize: 22, fontWeight: 500, color: C.ink, letterSpacing: "-0.01em"
+            }}>
+              Share with your wife
+            </div>
+          </div>
+          <button onClick={onClose} style={{
+            width: 36, height: 36, borderRadius: 9,
+            background: "transparent", border: "1px solid " + C.line,
+            cursor: "pointer", display: "flex",
+            alignItems: "center", justifyContent: "center", color: C.muted
+          }}>
+            <XIcon size={16}/>
+          </button>
+        </div>
+
+        <div style={{ padding: "14px 24px", background: C.greenLt, borderBottom: "1px solid " + C.line }}>
+          <div className="font-body" style={{ fontSize: 13, color: C.greenDk, lineHeight: 1.55 }}>
+            <strong>Tap Share</strong> to send via iMessage, AirDrop, or email. Or copy the text to paste anywhere.
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflow: "auto", padding: "16px 24px" }}>
+          <textarea id="export-ta" readOnly value={exportText}
+            onClick={e => e.target.select()} style={{
+              width: "100%", minHeight: 240, maxHeight: "40vh",
+              padding: "14px 16px", background: C.paper,
+              border: "1px solid " + C.line, borderRadius: 10,
+              fontFamily: "ui-monospace, Menlo, monospace",
+              fontSize: 11.5, lineHeight: 1.6,
+              color: C.ink, resize: "vertical"
+            }}/>
+        </div>
+
+        <div style={{ padding: "16px 24px 20px", borderTop: "1px solid " + C.line,
+          display: "flex", flexDirection: "column", gap: 10 }}>
+          {canShare && (
+            <button onClick={handleShare} className="font-body" style={{
+              width: "100%", padding: "14px 20px",
+              background: shared ? C.green : C.green,
+              color: "#fff",
+              border: "none", borderRadius: 11,
+              fontSize: 15, fontWeight: 600, cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+            }}>
+              {shared ? <><Check size={18}/> Shared</> : <><Send size={18}/> Share — iMessage, AirDrop, Mail</>}
+            </button>
+          )}
+          <button onClick={handleCopy} className="font-body" style={{
+            width: "100%", padding: "14px 20px",
+            background: copied ? C.green : C.ink,
+            color: copied ? "#fff" : C.cream,
+            border: "none", borderRadius: 11,
+            fontSize: 15, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8
+          }}>
+            {copied ? <><Check size={18}/> Copied</> : <><Copy size={18}/> Copy text</>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN APP ──────────────────────────────────────────────
+function App() {
+  const [values, setValues] = useState(DEFAULTS);
+  const [openCats, setOpenCats] = useState({});
+  const [activePreset, setActivePreset] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const saveRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const r = await storage.get(STORAGE_KEY);
+        if (r && r.value) {
+          const parsed = JSON.parse(r.value);
+          if (parsed.values) setValues({ ...DEFAULTS, ...parsed.values });
+          if (parsed.openCats) setOpenCats(parsed.openCats);
+          if (parsed.activePreset) setActivePreset(parsed.activePreset);
+        }
+      } catch {}
+      setLoaded(true);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    if (saveRef.current) clearTimeout(saveRef.current);
+    saveRef.current = setTimeout(async () => {
+      try {
+        await storage.set(STORAGE_KEY, JSON.stringify({ values, openCats, activePreset }));
+      } catch {}
+    }, 400);
+    return () => saveRef.current && clearTimeout(saveRef.current);
+  }, [values, openCats, activePreset, loaded]);
+
+  const setVal = (id, v) => {
+    setValues(prev => ({ ...prev, [id]: v }));
+    setActivePreset(null);
+  };
+
+  const toggleCat = (id) => setOpenCats(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const applyPreset = (preset) => {
+    setValues(preset.apply());
+    setActivePreset(preset.id);
+    setOpenCats(prev => ({ ...prev, income: true }));
+  };
+
+  const resetAll = () => {
+    setValues(DEFAULTS);
+    setActivePreset(null);
+  };
+
+  const totals = useMemo(() => {
+    let inc = 0, exp = 0, sv = 0;
+    ALL_ITEMS.forEach(item => {
+      const v = values[item.id] || 0;
+      if (item.catType === "income") inc += v;
+      else if (item.catType === "save") sv += v;
+      else exp += v;
+    });
+    return { totalIncome: inc, totalOut: exp + sv, totalSave: sv };
+  }, [values]);
+
+  const leftover = totals.totalIncome - totals.totalOut;
+
+  return (
+    <div className="font-body grain" style={{
+      minHeight: "100vh", background: C.cream,
+      color: C.ink, paddingBottom: 110
+    }}>
+      <header style={{
+        maxWidth: 880, margin: "0 auto",
+        padding: "30px 16px 12px", textAlign: "center"
+      }}>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 8,
+          padding: "6px 14px", background: C.goldLt,
+          border: "1px solid " + C.gold + "44", borderRadius: 999,
+          fontSize: 10.5, letterSpacing: "0.16em",
+          textTransform: "uppercase", fontWeight: 700,
+          color: C.goldDk, marginBottom: 12
+        }}>
+          <Compass size={11}/> Atlas · Conyers ↔ Decatur
+        </div>
+
+        <h1 className="font-display" style={{
+          fontSize: "clamp(34px, 7vw, 50px)", fontWeight: 400, color: C.ink,
+          margin: 0, letterSpacing: "-0.03em", lineHeight: 1.0, fontStyle: "italic"
+        }}>
+          Every number,
+        </h1>
+        <h1 className="font-display" style={{
+          fontSize: "clamp(34px, 7vw, 50px)", fontWeight: 500, color: C.green,
+          margin: "2px 0 0", letterSpacing: "-0.03em", lineHeight: 1.0
+        }}>
+          in your hands.
+        </h1>
+
+        <p className="font-body" style={{
+          fontSize: 14, color: C.inkSoft, maxWidth: 520,
+          margin: "14px auto 0", lineHeight: 1.55
+        }}>
+          Move any slider. Watch the leftover change in real time. Tap a preset for a quick scenario.
+          Everything saves automatically.
+        </p>
+      </header>
+
+      <main style={{ maxWidth: 880, margin: "0 auto", padding: "0 14px" }}>
+        <HeroSummary totalIncome={totals.totalIncome} totalExpense={totals.totalOut} leftover={leftover}/>
+
+        <PresetStrip onApply={applyPreset} onReset={resetAll} activePreset={activePreset}/>
+
+        <HalalNotes values={values}/>
+
+        <div className="font-body" style={{
+          fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase",
+          color: C.muted, fontWeight: 600, marginBottom: 10,
+          marginTop: 8, paddingLeft: 4,
+          display: "flex", alignItems: "center", gap: 6
+        }}>
+          <Sliders size={12}/> Every Line · Tap to expand
+        </div>
+
+        {CATEGORIES.map(cat => (
+          <CategoryCard key={cat.id} cat={cat}
+            values={values} setVal={setVal}
+            open={!!openCats[cat.id]}
+            toggle={() => toggleCat(cat.id)}/>
+        ))}
+
+        <div style={{ marginTop: 28 }}>
+          <SinkingFundCalendar values={values}/>
+        </div>
+
+        <WhatIfPanel values={values}/>
+
+        <div style={{
+          background: C.ink, color: C.cream, borderRadius: 18,
+          padding: "26px 22px", textAlign: "center",
+          marginTop: 20, position: "relative", overflow: "hidden"
+        }}>
+          <div style={{
+            position: "absolute", top: -30, right: -30,
+            width: 160, height: 160,
+            background: "radial-gradient(circle, " + C.gold + "26 0%, transparent 70%)",
+            borderRadius: "50%", pointerEvents: "none"
+          }}/>
+          <div className="font-display" style={{
+            fontSize: 21, fontWeight: 500,
+            letterSpacing: "-0.01em", lineHeight: 1.3,
+            marginBottom: 10, position: "relative"
+          }}>
+            "Relationships are way more important than money."
+          </div>
+          <div className="font-body" style={{
+            fontSize: 12, color: "#A89B86",
+            letterSpacing: "0.04em", position: "relative"
+          }}>
+            Your own thesis. Build the budget around the relationships, not the other way.
+          </div>
+        </div>
+      </main>
+
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0,
+        background: "rgba(244, 238, 225, 0.94)",
+        backdropFilter: "blur(12px)",
+        borderTop: "1px solid " + C.line,
+        padding: "12px 14px", paddingBottom: "calc(12px + env(safe-area-inset-bottom))",
+        zIndex: 100
+      }}>
+        <div style={{
+          maxWidth: 880, margin: "0 auto",
+          display: "flex", alignItems: "center", gap: 12,
+          justifyContent: "space-between"
+        }}>
+          <div>
+            <div className="font-body" style={{
+              fontSize: 10, color: C.muted, letterSpacing: "0.08em",
+              textTransform: "uppercase", fontWeight: 600
+            }}>
+              Monthly leftover
+            </div>
+            <div className="font-display num" style={{
+              fontSize: 21, fontWeight: 600,
+              color: leftover >= 0 ? C.green : C.rust,
+              letterSpacing: "-0.02em", lineHeight: 1.1
+            }}>
+              {leftover >= 0 ? "+" : ""}{fmtFull(leftover)}
+            </div>
+          </div>
+          <button onClick={() => setShowExport(true)} className="font-body" style={{
+            padding: "12px 18px", background: C.ink,
+            color: C.cream, border: "none", borderRadius: 999,
+            fontSize: 13, fontWeight: 600, cursor: "pointer",
+            display: "flex", alignItems: "center", gap: 8,
+            boxShadow: "0 4px 12px " + C.ink + "33", whiteSpace: "nowrap"
+          }}>
+            <Send size={14}/> Share
+          </button>
+        </div>
+      </div>
+
+      {showExport && <ExportModal values={values} onClose={() => setShowExport(false)}/>}
+    </div>
+  );
+}
+
+// ─── Mount ─────────────────────────────────────────────────
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KHYREE CITY — The Barber Digital Opportunity / Market Analysis 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg-elev: #141414;
+  --bg-card: #1a1a1a;
+  --line: #262626;
+  --line-bright: #3a3a3a;
+  --ink: #f5e6c8;
+  --ink-dim: #a89e85;
+  --ink-mute: #6b6555;
+  --acid: #b8ff00;
+  --blue: #3b82f6;
+  --warn: #ff5c2b;
+  --serif: 'Instrument Serif', Georgia, serif;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --display: 'Anton', 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(184,255,0,0.05), transparent 60%),
+    radial-gradient(900px 600px at 0% 30%, rgba(59,130,246,0.04), transparent 60%);
+}
+body::before {
+  content:''; position: fixed; inset: 0; pointer-events: none; opacity: 0.04; z-index: 100;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+::selection { background: var(--acid); color: var(--bg); }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+@media (max-width: 720px) { .wrap { padding: 0 20px; } }
+
+/* ============ NAV ============ */
+nav.top {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+}
+nav.top .brand { color: var(--acid); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+nav.top .brand svg { width: 18px; height: 18px; }
+nav.top .links { display: flex; gap: 22px; }
+nav.top .links a { color: var(--ink-mute); text-decoration: none; transition: color 0.2s; }
+nav.top .links a:hover { color: var(--acid); }
+nav.top .meta { color: var(--ink-mute); font-size: 10px; }
+@media (max-width: 720px) { nav.top { padding: 12px 20px; } nav.top .links { display: none; } nav.top .meta { display: none; } }
+
+.progress {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: var(--acid); width: 0%; z-index: 200;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 12px var(--acid);
+}
+
+/* ============ HERO ============ */
+.hero { padding: 100px 0 80px; border-bottom: 1px solid var(--line); position: relative; overflow: hidden; }
+.hero::after {
+  content:''; position: absolute; right: -100px; top: 50%; transform: translateY(-50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(184,255,0,0.08), transparent 60%);
+  pointer-events: none;
+}
+.hero .eyebrow {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute);
+  margin-bottom: 36px; display: flex; align-items: center; gap: 14px;
+}
+.hero .eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--acid); }
+.hero h1 {
+  font-family: var(--display);
+  font-size: clamp(56px, 11vw, 168px);
+  line-height: 0.86; letter-spacing: -0.02em;
+  color: var(--ink); text-transform: uppercase; margin-bottom: 28px;
+}
+.hero h1 .acid { color: var(--acid); }
+.hero h1 .stroke { -webkit-text-stroke: 1.5px var(--ink); color: transparent; }
+.hero .lede {
+  font-family: var(--serif); font-size: clamp(20px, 2.4vw, 30px);
+  line-height: 1.35; color: var(--ink-dim);
+  max-width: 760px; margin-top: 36px; font-style: italic;
+}
+.hero .lede em { color: var(--acid); font-style: normal; font-family: var(--serif); }
+.hero-meta {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  margin-top: 70px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+}
+.hero-meta div { padding: 22px 22px 22px 0; border-right: 1px solid var(--line); }
+.hero-meta div:last-child { border-right: none; padding-right: 0; }
+.hero-meta .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 8px; }
+.hero-meta .val { font-family: var(--display); font-size: 22px; color: var(--ink); letter-spacing: 0.02em; }
+@media (max-width: 720px) {
+  .hero { padding: 60px 0 50px; }
+  .hero-meta { grid-template-columns: repeat(2, 1fr); }
+  .hero-meta div { padding: 18px 18px 18px 0; }
+  .hero-meta div:nth-child(2) { border-right: none; padding-right: 0; }
+  .hero-meta div:nth-child(1), .hero-meta div:nth-child(2) { border-bottom: 1px solid var(--line); }
+}
+
+/* ============ SECTIONS ============ */
+section { padding: 100px 0; border-bottom: 1px solid var(--line); position: relative; }
+@media (max-width: 720px) { section { padding: 60px 0; } }
+
+.section-head {
+  display: grid; grid-template-columns: 200px 1fr; gap: 60px;
+  margin-bottom: 56px; align-items: start;
+}
+.section-num {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--acid);
+  padding-top: 18px; border-top: 1px solid var(--acid);
+}
+.section-num .sub { display: block; color: var(--ink-mute); margin-top: 8px; }
+.section-title {
+  font-family: var(--display);
+  font-size: clamp(40px, 6.5vw, 92px);
+  line-height: 0.92; letter-spacing: -0.01em;
+  text-transform: uppercase; color: var(--ink);
+}
+.section-title .dim { color: var(--ink-mute); }
+.section-title .acid { color: var(--acid); }
+@media (max-width: 720px) {
+  .section-head { grid-template-columns: 1fr; gap: 24px; margin-bottom: 36px; }
+}
+
+/* ============ THESIS / EXEC ============ */
+.thesis {
+  font-family: var(--serif); font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.25; color: var(--ink); max-width: 980px;
+  margin-bottom: 56px; font-style: italic;
+}
+.thesis em {
+  font-style: normal; color: var(--acid);
+  border-bottom: 2px solid var(--acid); padding-bottom: 2px;
+}
+.bullets {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+@media (max-width: 720px) { .bullets { grid-template-columns: 1fr; } }
+.bullets .b {
+  background: var(--bg); padding: 32px;
+  display: flex; flex-direction: column; gap: 12px;
+  transition: background 0.3s;
+}
+.bullets .b:hover { background: var(--bg-elev); }
+.bullets .b .num { font-family: var(--mono); font-size: 11px; color: var(--acid); letter-spacing: 0.15em; }
+.bullets .b h3 {
+  font-family: var(--display); font-size: 22px;
+  letter-spacing: 0.01em; text-transform: uppercase; color: var(--ink);
+}
+.bullets .b p { color: var(--ink-dim); font-size: 15px; line-height: 1.6; }
+
+/* ============ MARKET SIZING TAM/SAM/SOM ============ */
+.tam-cascade {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 0; margin-bottom: 56px;
+  border: 1px solid var(--line);
+}
+@media (max-width: 720px) { .tam-cascade { grid-template-columns: 1fr; } }
+.tam-cell {
+  padding: 40px 32px; position: relative;
+  border-right: 1px solid var(--line);
+}
+.tam-cell:last-child { border-right: none; }
+@media (max-width: 720px) { .tam-cell { border-right: none; border-bottom: 1px solid var(--line); } .tam-cell:last-child { border-bottom: none; } }
+.tam-cell.tam { background: linear-gradient(180deg, rgba(184,255,0,0.08), transparent); }
+.tam-cell.sam { background: linear-gradient(180deg, rgba(184,255,0,0.14), transparent); }
+.tam-cell.som { background: linear-gradient(180deg, rgba(184,255,0,0.22), transparent); }
+.tam-cell .tier {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--acid); margin-bottom: 14px;
+}
+.tam-cell .label-name {
+  font-family: var(--display); font-size: 20px;
+  text-transform: uppercase; color: var(--ink);
+  margin-bottom: 24px; letter-spacing: 0.02em;
+}
+.tam-cell .big-num {
+  font-family: var(--display); font-size: clamp(48px, 7vw, 84px);
+  line-height: 0.9; color: var(--acid); margin-bottom: 16px; letter-spacing: -0.01em;
+}
+.tam-cell .desc { color: var(--ink-dim); font-size: 14px; line-height: 1.6; }
+
+.market-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line);
+}
+@media (max-width: 720px) { .market-stats { grid-template-columns: repeat(2, 1fr); } }
+.stat-cell {
+  background: var(--bg); padding: 28px; text-align: left;
+  transition: background 0.2s;
+}
+.stat-cell:hover { background: var(--bg-elev); }
+.stat-cell .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 14px; }
+.stat-cell .num { font-family: var(--display); font-size: 42px; color: var(--ink); line-height: 1; margin-bottom: 8px; }
+.stat-cell .num.acid { color: var(--acid); }
+.stat-cell .sub { font-size: 13px; color: var(--ink-dim); }
+
+/* ============ TREND CHART ============ */
+.trend-chart {
+  margin-top: 32px; padding: 40px;
+  background: var(--bg-elev); border: 1px solid var(--line);
+}
+.chart-row {
+  display: grid; grid-template-columns: 240px 1fr 100px;
+  gap: 24px; align-items: center; padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.chart-row:last-child { border-bottom: none; }
+@media (max-width: 720px) {
+  .chart-row { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+}
+.chart-label { font-family: var(--mono); font-size: 12px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 0.08em; }
+.chart-bar-wrap { background: var(--line); height: 28px; position: relative; overflow: hidden; }
+.chart-bar { height: 100%; background: linear-gradient(90deg, var(--acid), #d4ff4d); width: 0%; transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; }
+.chart-bar.blue { background: linear-gradient(90deg, var(--blue), #60a5fa); }
+.chart-value { font-family: var(--display); font-size: 22px; color: var(--ink); text-align: right; }
+@media (max-width: 720px) { .chart-value { text-align: left; } }
+
+/* ============ COMPETITOR MATRIX ============ */
+.matrix-wrap {
+  position: relative;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 60px 60px 40px;
+  margin-bottom: 48px;
+}
+@media (max-width: 720px) { .matrix-wrap { padding: 40px 24px 24px; } }
+.matrix {
+  position: relative;
+  width: 100%; aspect-ratio: 1.4;
+  background:
+    linear-gradient(to right, transparent 49.7%, var(--line) 49.7%, var(--line) 50.3%, transparent 50.3%),
+    linear-gradient(to bottom, transparent 49.7%, var(--line) 49.7%, var(--line) 50.3%, transparent 50.3%);
+  border: 1px solid var(--line);
+}
+.matrix-axis-x, .matrix-axis-y {
+  position: absolute;
+  font-family: var(--mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-mute);
+}
+.matrix-axis-x.left { bottom: -28px; left: 0; }
+.matrix-axis-x.right { bottom: -28px; right: 0; }
+.matrix-axis-y.top { top: -32px; left: 50%; transform: translateX(-50%); }
+.matrix-axis-y.bot { bottom: -28px; left: 50%; transform: translateX(-50%); }
+.dot {
+  position: absolute; transform: translate(-50%, -50%);
+  background: var(--bg-card); border: 1px solid var(--line-bright);
+  padding: 8px 14px; cursor: pointer;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+  color: var(--ink-dim); white-space: nowrap;
+  transition: all 0.25s ease;
+}
+.dot:hover { color: var(--ink); border-color: var(--acid); transform: translate(-50%, -50%) scale(1.05); z-index: 5; }
+.dot.us {
+  background: var(--acid); color: var(--bg);
+  border-color: var(--acid); font-weight: 700;
+  box-shadow: 0 0 30px rgba(184,255,0,0.4);
+}
+.dot.us::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 60px; height: 60px; transform: translate(-50%, -50%);
+  border: 1px solid var(--acid); border-radius: 50%;
+  animation: pulse 2s infinite;
+  pointer-events: none;
+}
+@keyframes pulse {
+  0% { opacity: 0.8; transform: translate(-50%, -50%) scale(0.7); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.6); }
+}
+
+.competitor-list {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+@media (max-width: 900px) { .competitor-list { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .competitor-list { grid-template-columns: 1fr; } }
+.comp-card {
+  background: var(--bg); padding: 26px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: background 0.2s;
+}
+.comp-card:hover { background: var(--bg-elev); }
+.comp-card .name { font-family: var(--display); font-size: 22px; text-transform: uppercase; color: var(--ink); }
+.comp-card .price { font-family: var(--mono); font-size: 12px; color: var(--acid); }
+.comp-card .desc { font-size: 13px; color: var(--ink-dim); margin-top: 6px; }
+.comp-card .funded { font-family: var(--mono); font-size: 10px; color: var(--ink-mute); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* ============ STATS BIG NUMBERS ============ */
+.big-stats {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  background: var(--line); border: 1px solid var(--line);
+}
+@media (max-width: 720px) { .big-stats { grid-template-columns: 1fr; } }
+.big-stat {
+  background: var(--bg); padding: 50px 40px; transition: background 0.3s;
+}
+.big-stat:hover { background: var(--bg-elev); }
+.big-stat .pct {
+  font-family: var(--display); font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.85; color: var(--acid); letter-spacing: -0.02em;
+}
+.big-stat .label-text {
+  font-family: var(--serif); font-size: 22px; line-height: 1.35;
+  color: var(--ink); margin-top: 20px; max-width: 440px;
+}
+.big-stat .src {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--ink-mute); margin-top: 18px;
+}
+
+/* ============ MRR CALCULATOR ============ */
+.calc {
+  background: var(--bg-elev); border: 1px solid var(--line);
+  padding: 40px; margin-top: 32px;
+}
+@media (max-width: 720px) { .calc { padding: 28px 22px; } }
+.calc-title {
+  font-family: var(--display); font-size: 28px;
+  text-transform: uppercase; letter-spacing: 0.02em;
+  color: var(--ink); margin-bottom: 8px;
+}
+.calc-sub { color: var(--ink-dim); font-size: 14px; margin-bottom: 32px; }
+.calc-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+  align-items: start;
+}
+@media (max-width: 720px) { .calc-grid { grid-template-columns: 1fr; gap: 28px; } }
+.calc-input { display: flex; flex-direction: column; gap: 24px; }
+.input-block label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ink-mute);
+  margin-bottom: 12px; display: flex; justify-content: space-between; align-items: baseline;
+}
+.input-block label .val { color: var(--acid); font-size: 14px; }
+.input-block input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; background: var(--line);
+  outline: none; border-radius: 0;
+}
+.input-block input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; background: var(--acid);
+  cursor: pointer; border: 2px solid var(--bg);
+  box-shadow: 0 0 12px rgba(184,255,0,0.5);
+}
+.input-block input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; background: var(--acid);
+  cursor: pointer; border: 2px solid var(--bg);
+}
+.calc-output {
+  background: var(--bg); border: 1px solid var(--line-bright);
+  padding: 28px; min-height: 280px;
+}
+.output-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0; border-bottom: 1px solid var(--line);
+}
+.output-row:last-child { border-bottom: none; padding-bottom: 0; }
+.output-row .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-mute); }
+.output-row .num { font-family: var(--display); font-size: 24px; color: var(--ink); }
+.output-row.total .num { color: var(--acid); font-size: 36px; }
+.output-row.total .lbl { color: var(--ink); font-weight: 700; }
+
+/* ============ THREE-LAYER TABS ============ */
+.tabs-nav {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+  margin-bottom: 0;
+}
+@media (max-width: 600px) { .tabs-nav { grid-template-columns: 1fr; } }
+.tab-btn {
+  background: var(--bg); border: none; cursor: pointer;
+  padding: 22px 24px; text-align: left; color: var(--ink-dim);
+  transition: all 0.25s; font-family: inherit;
+}
+.tab-btn:hover { background: var(--bg-elev); }
+.tab-btn.active { background: var(--bg-elev); color: var(--ink); }
+.tab-btn .layer { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; color: var(--acid); }
+.tab-btn .name { font-family: var(--display); font-size: 22px; text-transform: uppercase; margin-top: 6px; }
+.tab-btn .price { font-family: var(--mono); font-size: 11px; color: var(--ink-mute); margin-top: 4px; }
+.tab-btn.active .name { color: var(--ink); }
+
+.tab-panel {
+  background: var(--bg-elev); padding: 48px; border: 1px solid var(--line); border-top: none;
+  display: none;
+}
+.tab-panel.active { display: block; }
+@media (max-width: 720px) { .tab-panel { padding: 32px 22px; } }
+.tab-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px;
+}
+@media (max-width: 720px) { .tab-grid { grid-template-columns: 1fr; gap: 28px; } }
+.tab-grid h4 {
+  font-family: var(--display); font-size: 36px;
+  text-transform: uppercase; color: var(--acid); margin-bottom: 20px; line-height: 1;
+}
+.tab-grid p { color: var(--ink-dim); margin-bottom: 16px; font-size: 15px; line-height: 1.65; }
+.tab-grid .tactic {
+  display: flex; gap: 16px; padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.tab-grid .tactic:last-of-type { border-bottom: none; }
+.tab-grid .tactic .k { font-family: var(--mono); font-size: 11px; color: var(--acid); letter-spacing: 0.12em; min-width: 90px; padding-top: 2px; text-transform: uppercase; }
+.tab-grid .tactic .v { font-size: 14px; color: var(--ink); }
+.metrics-mini { background: var(--bg); border: 1px solid var(--line); padding: 22px; }
+.metrics-mini h5 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 18px; }
+.metrics-mini .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.metrics-mini .row:last-child { border-bottom: none; }
+.metrics-mini .row .l { color: var(--ink-dim); }
+.metrics-mini .row .r { color: var(--ink); font-family: var(--display); font-size: 18px; }
+
+/* ============ GAPS / WHITESPACE ============ */
+.gap-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+}
+@media (max-width: 900px) { .gap-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .gap-grid { grid-template-columns: 1fr; } }
+.gap-card {
+  background: var(--bg); padding: 30px;
+  position: relative; transition: all 0.3s;
+  cursor: default;
+}
+.gap-card:hover {
+  background: var(--bg-elev);
+}
+.gap-card:hover .gap-arrow { transform: translateX(6px); color: var(--acid); }
+.gap-card .gap-num { font-family: var(--mono); font-size: 11px; color: var(--acid); letter-spacing: 0.15em; margin-bottom: 16px; }
+.gap-card h4 { font-family: var(--display); font-size: 24px; text-transform: uppercase; color: var(--ink); margin-bottom: 14px; line-height: 1.05; letter-spacing: 0.01em; }
+.gap-card p { font-size: 14px; color: var(--ink-dim); line-height: 1.65; }
+.gap-card .gap-arrow {
+  position: absolute; bottom: 24px; right: 24px;
+  color: var(--ink-mute); font-size: 22px;
+  transition: all 0.25s;
+}
+
+/* ============ ADVANTAGES ============ */
+.adv-list {
+  display: flex; flex-direction: column; gap: 0;
+  border-top: 1px solid var(--line);
+}
+.adv-row {
+  display: grid; grid-template-columns: 80px 1fr 280px;
+  gap: 32px; padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center; transition: padding 0.3s;
+}
+.adv-row:hover { padding-left: 16px; }
+@media (max-width: 720px) { .adv-row { grid-template-columns: 1fr; gap: 12px; padding: 24px 0; } .adv-row:hover { padding-left: 0; } }
+.adv-row .num { font-family: var(--display); font-size: 48px; color: var(--acid); line-height: 1; }
+.adv-row .lbl { font-family: var(--display); font-size: 24px; text-transform: uppercase; color: var(--ink); letter-spacing: 0.01em; }
+.adv-row .det { font-size: 14px; color: var(--ink-dim); line-height: 1.6; }
+
+/* ============ ROADMAP ============ */
+.timeline { position: relative; padding-left: 0; }
+.timeline-row {
+  display: grid; grid-template-columns: 140px 1fr;
+  gap: 40px; padding: 32px 0; align-items: start;
+  border-bottom: 1px solid var(--line); position: relative;
+}
+.timeline-row:last-child { border-bottom: none; }
+@media (max-width: 720px) { .timeline-row { grid-template-columns: 1fr; gap: 12px; } }
+.timeline-row .when {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--acid);
+  padding-top: 8px; border-top: 1px solid var(--acid);
+}
+.timeline-row .what h4 { font-family: var(--display); font-size: 28px; text-transform: uppercase; color: var(--ink); margin-bottom: 14px; line-height: 1; letter-spacing: 0.01em; }
+.timeline-row .what p { color: var(--ink-dim); font-size: 15px; line-height: 1.65; max-width: 720px; }
+.timeline-row .what .tags { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--acid); padding: 5px 10px;
+  border: 1px solid var(--line-bright);
+}
+
+/* ============ ASK / CTA ============ */
+.cta {
+  padding: 120px 0; text-align: center; border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--bg), rgba(184,255,0,0.04));
+}
+@media (max-width: 720px) { .cta { padding: 80px 0; } }
+.cta h2 {
+  font-family: var(--display);
+  font-size: clamp(48px, 9vw, 132px);
+  line-height: 0.9; letter-spacing: -0.02em;
+  text-transform: uppercase; color: var(--ink);
+  margin-bottom: 32px;
+}
+.cta h2 .acid { color: var(--acid); }
+.cta .lede {
+  font-family: var(--serif); font-size: clamp(20px, 2.4vw, 28px);
+  font-style: italic; color: var(--ink-dim);
+  max-width: 720px; margin: 0 auto 48px;
+}
+.cta .lede em { color: var(--acid); font-style: normal; }
+.cta .ask-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--line); border: 1px solid var(--line);
+  max-width: 880px; margin: 0 auto;
+}
+@media (max-width: 720px) { .cta .ask-grid { grid-template-columns: 1fr; max-width: 480px; } }
+.cta .ask-cell { background: var(--bg); padding: 36px 28px; }
+.cta .ask-cell .n { font-family: var(--display); font-size: 56px; color: var(--acid); line-height: 1; }
+.cta .ask-cell .l { font-family: var(--mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-dim); margin-top: 12px; }
+
+/* ============ FOOTER / SOURCES ============ */
+footer { padding: 60px 0; border-bottom: none; }
+footer .src-title {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-mute); margin-bottom: 24px;
+}
+footer .src-list {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 14px 32px; font-size: 12px; color: var(--ink-dim);
+}
+@media (max-width: 720px) { footer .src-list { grid-template-columns: 1fr; } }
+footer .src-list .src { padding: 10px 0; border-bottom: 1px solid var(--line); }
+footer .src-list .src .n { font-family: var(--mono); color: var(--acid); margin-right: 10px; }
+footer .colophon {
+  margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute);
+}
+@media (max-width: 720px) { footer .colophon { flex-direction: column; gap: 12px; } }
+
+/* superscript */
+sup { color: var(--acid); font-family: var(--mono); font-size: 9px; padding-left: 2px; vertical-align: super; }
+
+/* fadein animation */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* stair step motif accent */
+.stairs {
+  display: inline-flex; align-items: flex-end; gap: 4px;
+  margin-right: 14px; vertical-align: middle;
+}
+.stairs span { background: var(--acid); width: 6px; }
+.stairs span:nth-child(1) { height: 6px; }
+.stairs span:nth-child(2) { height: 12px; }
+.stairs span:nth-child(3) { height: 18px; }
+.stairs span:nth-child(4) { height: 24px; }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav class="top">
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="18" width="3" height="3" fill="currentColor"/><rect x="7" y="14" width="3" height="7" fill="currentColor"/><rect x="12" y="10" width="3" height="11" fill="currentColor"/><rect x="17" y="6" width="3" height="15" fill="currentColor"/></svg>
+    KHYREE.CITY
+  </div>
+  <div class="links">
+    <a href="#thesis">01 Thesis</a>
+    <a href="#market">02 Market</a>
+    <a href="#trends">03 Trends</a>
+    <a href="#comp">04 Competition</a>
+    <a href="#consumer">05 Consumer</a>
+    <a href="#revenue">06 Revenue</a>
+    <a href="#play">07 Play</a>
+    <a href="#gaps">08 Gaps</a>
+    <a href="#why">09 Why</a>
+    <a href="#vision">10 Vision</a>
+  </div>
+  <div class="meta">v1.0 / May 2026</div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Market Analysis · Investor Brief · Q2 2026</div>
+    <h1>The Barber<br><span class="acid">Digital</span><br><span class="stroke">Opportunity</span></h1>
+    <p class="lede">A $7B fragmented industry, with <em>~30% of operators still offline</em>, sits at the intersection of the fastest-growing trend in male beauty spend and the largest community-driven creator vertical no one is consolidating. This is the operator-led play to own it.</p>
+    <div class="hero-meta">
+      <div><div class="label">Prepared by</div><div class="val">Khyree Sharif Townes</div></div>
+      <div><div class="label">Brand</div><div class="val">Khyree City</div></div>
+      <div><div class="label">Tagline</div><div class="val">I Level Up Barbers</div></div>
+      <div><div class="label">Stage</div><div class="val">Live · 90-Day Sprint</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 01 THESIS ============ -->
+<section id="thesis">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">01<span class="sub">Executive Thesis</span></div>
+      <h2 class="section-title">Five Lines.<br><span class="dim">One Wedge.</span></h2>
+    </div>
+    <p class="thesis reveal">The barber industry is <em>fragmented, growing, and digitally underbuilt</em>. Generic SaaS captured the booking layer; the website, content, and community layers are wide open — and the only person positioned to own them is a barber who built the bench with his own hands.</p>
+    <div class="bullets">
+      <div class="b reveal"><div class="num">PILLAR 01</div><h3>Industry Tailwind</h3><p>US barber shops: $7.0B in 2026, growing at a 4.6% CAGR with 155K businesses.<sup>1</sup> Men's grooming spend is up 9.9% in 2024 — outpacing women's at 5.8% — driven by Gen Z.<sup>2</sup></p></div>
+      <div class="b reveal"><div class="num">PILLAR 02</div><h3>Digital Gap</h3><p>29% of small businesses still operate without a website,<sup>3</sup> and 31% of US shoppers walked away from a small business specifically because it had no web presence.<sup>4</sup> Barbers over-index on this gap.</p></div>
+      <div class="b reveal"><div class="num">PILLAR 03</div><h3>SaaS Already Won The Wrong Layer</h3><p>Squire raised $165M+, Booksy hit 10M users — both stopped at booking.<sup>5,6</sup> Nobody is building the brand layer (website, content, community) for the independent barber.</p></div>
+      <div class="b reveal"><div class="num">PILLAR 04</div><h3>Operator Trust Moat</h3><p>4 generations of barbers in the family. ~20 years behind the chair. 111K dormant followers at @Khyree_city. This is unbuyable distribution and unbuyable credibility in a trade that runs on both.</p></div>
+      <div class="b reveal"><div class="num">PILLAR 05</div><h3>Triple-Stacked Revenue</h3><p>Track A (warm Framer sites, $597 setup + $97/mo). Track B (cold outreach, same product, scaled volume). Layer 3 (Muslim brotherhood community, $19–47/mo). Three lines, one audience, compounding.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 MARKET SIZING ============ -->
+<section id="market">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">02<span class="sub">Market Sizing</span></div>
+      <h2 class="section-title">A <span class="acid">$7B</span> Industry,<br><span class="dim">Wide Open.</span></h2>
+    </div>
+    <div class="tam-cascade reveal">
+      <div class="tam-cell tam">
+        <div class="tier">TAM · Total Addressable</div>
+        <div class="label-name">All US Barber Shops + Independent Barbers</div>
+        <div class="big-num" data-target="7.0" data-suffix="B">$0.0B</div>
+        <p class="desc">155,000 US barber shop businesses generating ~$7B in 2026. Industry is highly fragmented — no operator holds &gt;5% market share.<sup>1</sup> The men's grooming products layer adds $15.6B more in US spend.<sup>7</sup></p>
+      </div>
+      <div class="tam-cell sam">
+        <div class="tier">SAM · Serviceable Available</div>
+        <div class="label-name">Barbers Without a Website</div>
+        <div class="big-num" data-target="2.0" data-suffix="B">$0.0B</div>
+        <p class="desc">~29% of US small businesses still have no website.<sup>3</sup> Among individual barbers (not shops), the gap is materially wider. Conservatively: 45,000+ barbers needing the digital infrastructure layer.</p>
+      </div>
+      <div class="tam-cell som">
+        <div class="tier">SOM · Serviceable Obtainable</div>
+        <div class="label-name">Khyree City 36-Month Capture</div>
+        <div class="big-num" data-target="3.6" data-suffix="M">$0.0M</div>
+        <p class="desc">Realistic 36-month capture: 500 active clients on $97/mo recurring + 2,000-member Layer 3 community at $29/mo blended ARPU. Recurring ARR before any product expansion.</p>
+      </div>
+    </div>
+
+    <div class="market-stats reveal">
+      <div class="stat-cell"><div class="label">US Barber Shop Revenue</div><div class="num acid" data-target="7.0" data-prefix="$" data-suffix="B">$0.0B</div><div class="sub">2026 industry size, IBISWorld<sup>1</sup></div></div>
+      <div class="stat-cell"><div class="label">5-Year CAGR</div><div class="num" data-target="9.8" data-suffix="%">0.0%</div><div class="sub">Revenue growth 2020–2025<sup>1</sup></div></div>
+      <div class="stat-cell"><div class="label">Active Businesses</div><div class="num" data-target="155" data-suffix="K">0K</div><div class="sub">US barber shops in 2026<sup>1</sup></div></div>
+      <div class="stat-cell"><div class="label">Top Player Share</div><div class="num" data-target="5" data-prefix="<" data-suffix="%">0%</div><div class="sub">No operator above 5% — fragmented<sup>1</sup></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 TRENDS ============ -->
+<section id="trends">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">03<span class="sub">Growth Trends</span></div>
+      <h2 class="section-title">Tailwinds<br><span class="acid">Stacked.</span></h2>
+    </div>
+    <p class="thesis reveal">Five vectors are pushing this market up at once. <em>Each one alone justifies a play. Stacked, they make this the strongest US small-business vertical of the decade.</em></p>
+
+    <div class="trend-chart reveal" id="trendChart">
+      <div class="chart-row">
+        <div class="chart-label">US Men's Grooming Products</div>
+        <div class="chart-bar-wrap"><div class="chart-bar" data-pct="83"></div></div>
+        <div class="chart-value">8.3% CAGR<sup>7</sup></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">US Online Grooming Sales</div>
+        <div class="chart-bar-wrap"><div class="chart-bar" data-pct="100"></div></div>
+        <div class="chart-value">12.8% CAGR<sup>7</sup></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">Mobile Barber Services (Global)</div>
+        <div class="chart-bar-wrap"><div class="chart-bar" data-pct="80"></div></div>
+        <div class="chart-value">10.0% CAGR<sup>8</sup></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">Barber Management Software</div>
+        <div class="chart-bar-wrap"><div class="chart-bar blue" data-pct="73"></div></div>
+        <div class="chart-value">9.2% CAGR<sup>9</sup></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">Men's Beauty Spend (2024 vs 2023)</div>
+        <div class="chart-bar-wrap"><div class="chart-bar" data-pct="79"></div></div>
+        <div class="chart-value">+9.9%<sup>2</sup></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-label">US Barber Shops 5Y Revenue CAGR</div>
+        <div class="chart-bar-wrap"><div class="chart-bar" data-pct="78"></div></div>
+        <div class="chart-value">+9.8%<sup>1</sup></div>
+      </div>
+    </div>
+
+    <div class="bullets reveal" style="margin-top: 32px;">
+      <div class="b">
+        <div class="num">TREND 01 · CULTURAL</div>
+        <h3>The "Manissance"</h3>
+        <p>Gen Z men are the fastest-growing skincare and grooming consumers. 68% of Gen Z males are active skincare users.<sup>2</sup> Barber appointments are a core ritual of this shift, not an adjacent one.</p>
+      </div>
+      <div class="b">
+        <div class="num">TREND 02 · STRUCTURAL</div>
+        <h3>Independent &gt; Chain</h3>
+        <p>Industry is fragmented and getting more so — top players hold &lt;5% share. Customers want the named individual barber, not a faceless chain. Personal brand is now a P&amp;L line item.</p>
+      </div>
+      <div class="b">
+        <div class="num">TREND 03 · SEARCH</div>
+        <h3>78% Of Local Mobile Searches Convert Offline</h3>
+        <p>78% of location-based mobile searches lead to an offline purchase within 24 hours.<sup>10</sup> A barber without a website is invisible to the highest-intent buyer in the funnel.</p>
+      </div>
+      <div class="b">
+        <div class="num">TREND 04 · PLATFORM</div>
+        <h3>AI Site-Building Crashed CAC</h3>
+        <p>Custom small business sites historically cost $3K–$10K. AI builders compress that to $15–50/mo software + service.<sup>11</sup> Margin per delivered site has never been higher for a niched operator.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 COMPETITIVE LANDSCAPE ============ -->
+<section id="comp">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">04<span class="sub">Competitive Landscape</span></div>
+      <h2 class="section-title">Everyone<br>Stopped At<br><span class="acid">Booking.</span></h2>
+    </div>
+    <p class="thesis reveal">The category is loud at the booking layer and silent at the brand layer. <em>Squire and Booksy spent over $200M combined building calendars.</em> Nobody is building the website, the content engine, or the community.</p>
+
+    <div class="matrix-wrap reveal">
+      <div class="matrix" id="matrix">
+        <div class="matrix-axis-x left">← Booking / Ops Focus</div>
+        <div class="matrix-axis-x right">Brand / Identity Focus →</div>
+        <div class="matrix-axis-y top">↑ Barber-Native</div>
+        <div class="matrix-axis-y bot">↓ Generic Salon SaaS</div>
+        <div class="dot" style="left: 18%; top: 18%;">Squire</div>
+        <div class="dot" style="left: 28%; top: 32%;">TheCut</div>
+        <div class="dot" style="left: 26%; top: 58%;">Booksy</div>
+        <div class="dot" style="left: 22%; top: 70%;">Vagaro</div>
+        <div class="dot" style="left: 35%; top: 78%;">Mangomint</div>
+        <div class="dot" style="left: 30%; top: 88%;">Boulevard</div>
+        <div class="dot" style="left: 50%; top: 65%;">GlossGenius</div>
+        <div class="dot" style="left: 38%; top: 50%;">Fresha</div>
+        <div class="dot" style="left: 50%; top: 38%;">Wix / Squarespace</div>
+        <div class="dot us" style="left: 82%; top: 14%;">KHYREE CITY</div>
+      </div>
+    </div>
+
+    <div class="competitor-list reveal">
+      <div class="comp-card"><div class="name">Squire</div><div class="price">$30–250/mo</div><div class="desc">"Operating system for barbershops." Strongest barber-native SaaS, premium pricing, multi-location focus.</div><div class="funded">Funded · $165M+ raised</div></div>
+      <div class="comp-card"><div class="name">Booksy</div><div class="price">$29.99/mo + $20/seat</div><div class="desc">Marketplace-first booking. 10M+ global users. Broader beauty focus than barber-only.</div><div class="funded">Funded · 2014 founded</div></div>
+      <div class="comp-card"><div class="name">GlossGenius</div><div class="price">$24/mo</div><div class="desc">Mobile-first independent operator focus. Aesthetic appeal. Beauty-broad, not barber-specific.</div><div class="funded">Funded · Series scale</div></div>
+      <div class="comp-card"><div class="name">Vagaro</div><div class="price">$120/mo</div><div class="desc">All-in-one beauty/wellness SaaS. Built-in website builder, marketplace, marketing.</div><div class="funded">Bootstrapped scale</div></div>
+      <div class="comp-card"><div class="name">Mangomint</div><div class="price">~$165/mo</div><div class="desc">Premium modern UX, automation-heavy. Salons + barbershops.</div><div class="funded">Funded · Recent rounds</div></div>
+      <div class="comp-card"><div class="name">Boulevard</div><div class="price">Premium tier</div><div class="desc">Enterprise-grade. Large established shops. Front-desk first design.</div><div class="funded">Funded · Series C+</div></div>
+      <div class="comp-card"><div class="name">TheCut</div><div class="price">Free / freemium</div><div class="desc">Barber-specific booking app. Strong with younger barbers and clients. Limited brand tooling.</div><div class="funded">Independent</div></div>
+      <div class="comp-card"><div class="name">Wix / Squarespace</div><div class="price">$15–40/mo</div><div class="desc">Generic website builders. Zero barber context. DIY by default — most barbers never finish.</div><div class="funded">Public</div></div>
+      <div class="comp-card" style="background: rgba(184,255,0,0.06);"><div class="name" style="color:var(--acid);">KHYREE CITY</div><div class="price">$597 + $97/mo</div><div class="desc">Done-for-you barber-native sites. Premium Framer build. Operator-built. Content + community attached.</div><div class="funded" style="color:var(--acid);">→ The wedge</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 CONSUMER ============ -->
+<section id="consumer">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">05<span class="sub">Consumer Behavior</span></div>
+      <h2 class="section-title">The Customer<br>Already <span class="acid">Decided.</span></h2>
+    </div>
+    <p class="thesis reveal">The consumer side of this market isn't where the friction is. <em>The buyer is ready.</em> The supplier — the barber — is the one without the storefront.</p>
+
+    <div class="big-stats reveal">
+      <div class="big-stat"><div class="pct" data-target="81" data-suffix="%">0%</div><div class="label-text">of consumers research online <em>before</em> buying anything — including which barber to book.</div><div class="src">Source · Invoca, 2024<sup>10</sup></div></div>
+      <div class="big-stat"><div class="pct" data-target="78" data-suffix="%">0%</div><div class="label-text">of "near me" mobile searches result in an offline visit within 24 hours.</div><div class="src">Source · Google / BrightLocal<sup>10</sup></div></div>
+      <div class="big-stat"><div class="pct" data-target="75" data-suffix="%">0%</div><div class="label-text">of consumers judge a business's credibility based on its website design alone.</div><div class="src">Source · Stanford Web Credibility / Blue Corona<sup>11</sup></div></div>
+      <div class="big-stat"><div class="pct" data-target="31" data-suffix="%">0%</div><div class="label-text">of US shoppers chose <em>not</em> to buy from a small business specifically because it had no website.</div><div class="src">Source · Digital Silk, 2024<sup>4</sup></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 REVENUE ============ -->
+<section id="revenue">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">06<span class="sub">Revenue Model · MRR Calculator</span></div>
+      <h2 class="section-title">The Math<br><span class="acid">Compounds.</span></h2>
+    </div>
+    <p class="thesis reveal">One-time setup fee covers fulfillment cost. <em>Recurring monthly fee is the asset.</em> Stack three offers at the same audience and the unit economics turn into a creator-economy moat with infrastructure rails.</p>
+
+    <div class="calc reveal">
+      <div class="calc-title"><span class="stairs"><span></span><span></span><span></span><span></span></span>Project Your MRR</div>
+      <div class="calc-sub">Drag the inputs. The model assumes Khyree City pricing (Track A: $597 setup + $97/mo · Layer 3 community: $29/mo blended). Setup revenue is one-time; MRR compounds.</div>
+
+      <div class="calc-grid">
+        <div class="calc-input">
+          <div class="input-block">
+            <label>Active Website Clients <span class="val" id="lblClients">100</span></label>
+            <input type="range" id="sliderClients" min="10" max="1000" value="100" step="10">
+          </div>
+          <div class="input-block">
+            <label>Layer 3 Community Members <span class="val" id="lblMembers">500</span></label>
+            <input type="range" id="sliderMembers" min="0" max="5000" value="500" step="50">
+          </div>
+          <div class="input-block">
+            <label>Monthly New Setup Sales <span class="val" id="lblNew">10</span></label>
+            <input type="range" id="sliderNew" min="0" max="100" value="10" step="1">
+          </div>
+          <div class="input-block">
+            <label>Monthly Churn Rate <span class="val" id="lblChurn">3%</span></label>
+            <input type="range" id="sliderChurn" min="0" max="15" value="3" step="1">
+          </div>
+        </div>
+
+        <div class="calc-output">
+          <div class="output-row"><div class="lbl">Website MRR ($97 × clients)</div><div class="num" id="outWebMRR">$0</div></div>
+          <div class="output-row"><div class="lbl">Community MRR ($29 × members)</div><div class="num" id="outCommMRR">$0</div></div>
+          <div class="output-row"><div class="lbl">Setup Revenue (one-time)</div><div class="num" id="outSetup">$0</div></div>
+          <div class="output-row"><div class="lbl">Monthly Churn Loss</div><div class="num" id="outChurn">$0</div></div>
+          <div class="output-row total"><div class="lbl">Net Monthly Revenue</div><div class="num" id="outTotal">$0</div></div>
+          <div class="output-row total"><div class="lbl">Projected ARR</div><div class="num" id="outARR">$0</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bullets reveal" style="margin-top: 32px;">
+      <div class="b"><div class="num">UNIT ECONOMICS</div><h3>Setup Pays Fulfillment</h3><p>Framer build cost (Khyree's time + Submagic + tools) ≈ $80–120 per site. $597 setup covers fulfillment 5x over. The $97/mo recurring is gross margin almost in full.</p></div>
+      <div class="b"><div class="num">LTV : CAC</div><h3>Warm Network Cuts CAC To Near-Zero</h3><p>Track A leverages 4 generations of barber relationships + 111K dormant IG followers at @Khyree_city. CAC trends to $0 inside the warm tier. LTV at 24-month avg client lifespan = $2,925.</p></div>
+      <div class="b"><div class="num">EXPANSION</div><h3>Three Offers, Same Audience</h3><p>Same barber that buys the website is the one most likely to join the Layer 3 brotherhood and recommend their crew. Each new line raises blended ARPU without raising acquisition cost.</p></div>
+      <div class="b"><div class="num">DEFENSIBILITY</div><h3>Recurring + Reputation</h3><p>Generic agencies churn fast because the relationship is thin. A barber doesn't churn from another barber. Identity-based loyalty &gt; software loyalty. This is the moat SaaS can't copy.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 THREE-LAYER PLAY ============ -->
+<section id="play">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">07<span class="sub">The Three-Layer Play</span></div>
+      <h2 class="section-title">Three Tracks.<br>One <span class="acid">Operator.</span></h2>
+    </div>
+    <p class="thesis reveal">This is not a single-product company. <em>It's an audience company.</em> The website is the front door; the content is the magnet; the community is the moat. Each layer feeds the next.</p>
+
+    <div class="tabs-nav reveal">
+      <button class="tab-btn active" data-tab="a">
+        <div class="layer">LAYER A · WARM</div>
+        <div class="name">Premium Framer Sites</div>
+        <div class="price">$597 setup · $97/mo</div>
+      </button>
+      <button class="tab-btn" data-tab="b">
+        <div class="layer">LAYER B · COLD</div>
+        <div class="name">Cold Outreach Sites</div>
+        <div class="price">$597 setup · $97/mo (warm) → $797 (cold)</div>
+      </button>
+      <button class="tab-btn" data-tab="c">
+        <div class="layer">LAYER C · COMMUNITY</div>
+        <div class="name">Brotherhood Membership</div>
+        <div class="price">$19.99–$47/mo</div>
+      </button>
+    </div>
+
+    <div class="tab-panel active" data-panel="a">
+      <div class="tab-grid">
+        <div>
+          <h4>Done-For-You Premium Framer Sites</h4>
+          <p>The flagship offer. Sold to barbers Khyree already knows or who follow him. No friction. The site is high-end editorial — not a Wix template — and the ongoing $97 buys hosting + edits + the standing relationship.</p>
+          <p>This is the layer that compounds first because the sales cycle is conversation, not pitch. Three referrals deep, the warm pool is 200+ barbers nationally before any cold outreach.</p>
+          <div class="tactic"><div class="k">Sales</div><div class="v">DM + voice note → 10-min Loom → close</div></div>
+          <div class="tactic"><div class="k">Build Tool</div><div class="v">Framer (premium) + Khyree's curated component library</div></div>
+          <div class="tactic"><div class="k">Avg Cycle</div><div class="v">3–7 days from DM to live site</div></div>
+          <div class="tactic"><div class="k">Retention Lever</div><div class="v">Monthly edits + content embed + relationship</div></div>
+        </div>
+        <div>
+          <div class="metrics-mini">
+            <h5>Track A · Targets</h5>
+            <div class="row"><div class="l">Monthly target</div><div class="r">10–15 closes</div></div>
+            <div class="row"><div class="l">CAC</div><div class="r">~$0</div></div>
+            <div class="row"><div class="l">LTV (24mo)</div><div class="r">$2,925</div></div>
+            <div class="row"><div class="l">Gross margin</div><div class="r">~85%</div></div>
+            <div class="row"><div class="l">Lock-in</div><div class="r">Lifetime warm pricing</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="b">
+      <div class="tab-grid">
+        <div>
+          <h4>Cold Outreach At Volume</h4>
+          <p>Outscraper pulls Georgia barbers with no website. PhoneBurner auto-dials at scale. The pitch is the same product but at $797 setup — strangers pay the premium until they earn warm pricing through referrals.</p>
+          <p>This track is the volume engine. It's the layer that turns the agency from "Khyree closes warm friends" into a real machine that runs without him on every call.</p>
+          <div class="tactic"><div class="k">Lead Source</div><div class="v">Outscraper (Georgia, blank website filter)</div></div>
+          <div class="tactic"><div class="k">Dialer</div><div class="v">PhoneBurner — auto-dial CSV at scale</div></div>
+          <div class="tactic"><div class="k">Build Tool</div><div class="v">Base44 (faster fulfillment, lower-touch)</div></div>
+          <div class="tactic"><div class="k">Conversion</div><div class="v">~2–4% of dials → discovery → ~30% close</div></div>
+        </div>
+        <div>
+          <div class="metrics-mini">
+            <h5>Track B · Targets</h5>
+            <div class="row"><div class="l">Daily dials</div><div class="r">300–500</div></div>
+            <div class="row"><div class="l">Weekly closes</div><div class="r">5–8</div></div>
+            <div class="row"><div class="l">CAC</div><div class="r">$45–80</div></div>
+            <div class="row"><div class="l">LTV (18mo)</div><div class="r">$2,543</div></div>
+            <div class="row"><div class="l">Setup price</div><div class="r">$797 cold</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="c">
+      <div class="tab-grid">
+        <div>
+          <h4>The Brotherhood · Layer 3</h4>
+          <p>Months 6–18 play. A paid community for Muslim men building halal income — many of them barbers. Not a guru product. Operator-led, audio-first, written playbooks, members-centered. Khyree as guide, not figurehead.</p>
+          <p>This is where the audience company shows up. The website + content tracks build the trust that makes this offer obvious instead of awkward. Recurring $19.99–$47/mo at scale = the largest line in the P&amp;L by Year 3.</p>
+          <div class="tactic"><div class="k">Format</div><div class="v">Audio calls + written playbooks + member-led threads</div></div>
+          <div class="tactic"><div class="k">Hook</div><div class="v">Halal income + hijrah readiness + barber economics</div></div>
+          <div class="tactic"><div class="k">Funnel</div><div class="v">@Khyree_city reels → site → community waitlist</div></div>
+          <div class="tactic"><div class="k">Moat</div><div class="v">Identity-based — cannot be cloned by SaaS</div></div>
+        </div>
+        <div>
+          <div class="metrics-mini">
+            <h5>Layer 3 · Targets (24mo)</h5>
+            <div class="row"><div class="l">Members target</div><div class="r">2,000+</div></div>
+            <div class="row"><div class="l">Blended ARPU</div><div class="r">$29/mo</div></div>
+            <div class="row"><div class="l">Monthly recurring</div><div class="r">$58,000</div></div>
+            <div class="row"><div class="l">Annualized</div><div class="r">$696,000</div></div>
+            <div class="row"><div class="l">Margin</div><div class="r">~92%</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 GAPS ============ -->
+<section id="gaps">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">08<span class="sub">Market Gaps · White Space</span></div>
+      <h2 class="section-title">Where Nobody<br>Is <span class="acid">Building.</span></h2>
+    </div>
+    <p class="thesis reveal">If this opportunity were obvious, it'd already be saturated. <em>It isn't, because the people positioned to see it don't have the trade reps to build it,</em> and the people with the trade reps have never had the AI tools to scale it. Until now.</p>
+
+    <div class="gap-grid reveal">
+      <div class="gap-card">
+        <div class="gap-num">GAP 01</div>
+        <h4>Barber-Native Brand Layer</h4>
+        <p>SaaS won the booking layer and stopped. No company is building an editorial-grade web presence specifically for individual barbers — the layer that drives walk-ins, premium pricing, and personal brand.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+      <div class="gap-card">
+        <div class="gap-num">GAP 02</div>
+        <h4>Done-For-You At Mid-Tier Pricing</h4>
+        <p>Wix/Squarespace = DIY most barbers never finish. Custom agencies = $5K–$15K. Nothing in between. Khyree City lands at $597 setup + $97/mo — premium quality at indie price.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+      <div class="gap-card">
+        <div class="gap-num">GAP 03</div>
+        <h4>Content Bundled With Infrastructure</h4>
+        <p>Barbers need reels. They don't need another agency that only ships a website. The content engine + site + community as one bundle is unbuilt at this niche.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+      <div class="gap-card">
+        <div class="gap-num">GAP 04</div>
+        <h4>Operator-Led, Not Marketer-Led</h4>
+        <p>Every existing barber agency is run by marketers selling at barbers. This is run by a barber selling to barbers. Trust converts in seconds instead of weeks.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+      <div class="gap-card">
+        <div class="gap-num">GAP 05</div>
+        <h4>Faith / Identity Communities</h4>
+        <p>Layer 3 — paid Muslim men's brotherhood for halal income — has zero direct competitor at this niche x faith intersection. Adjacent communities exist but none are barber-led or identity-anchored.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+      <div class="gap-card">
+        <div class="gap-num">GAP 06</div>
+        <h4>Underserved Geographic Segments</h4>
+        <p>Cold outreach pipeline starts in Georgia but the play is geo-agnostic. Tier-2 and rural metros have the highest "no-website" density and lowest agency competition. Most overlooked acquisition pool in the country.</p>
+        <div class="gap-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 09 WHY KHYREE ============ -->
+<section id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">09<span class="sub">Unfair Advantages</span></div>
+      <h2 class="section-title">Why <span class="acid">Khyree.</span><br><span class="dim">Why Now.</span></h2>
+    </div>
+    <p class="thesis reveal">Investors don't fund opportunities. <em>They fund the operator who can take them.</em> The market analysis above is real. So is this list.</p>
+
+    <div class="adv-list reveal">
+      <div class="adv-row"><div class="num">01</div><div class="lbl">4 Generations Of Barbers</div><div class="det">Family lineage in the trade. The credibility takes a competitor decades to fake — and most don't try.</div></div>
+      <div class="adv-row"><div class="num">02</div><div class="lbl">~20 Years Behind The Chair</div><div class="det">Celebrity barber from age 8–9. Atlanta-trained craft. Knows the customer because he was the customer.</div></div>
+      <div class="adv-row"><div class="num">03</div><div class="lbl">111K Dormant IG Followers</div><div class="det">@Khyree_city audience already exists. Reactivation cost is zero. Most agencies pay $50K+ for an audience this size.</div></div>
+      <div class="adv-row"><div class="num">04</div><div class="lbl">Operator-Built Stack</div><div class="det">Base44 + Framer + Outscraper + PhoneBurner + Submagic + Make.com — locked-in tooling, no consultant overhead.</div></div>
+      <div class="adv-row"><div class="num">05</div><div class="lbl">Faith As Filter</div><div class="det">10% sadaqah on income. Anti-riya discipline. The Layer 3 brotherhood is community he lives, not a deck slide.</div></div>
+      <div class="adv-row"><div class="num">06</div><div class="lbl">Geographic Arbitrage</div><div class="det">Operates from Cairo. Dollar-revenue, MENA cost base. Margins competitors operating from US metros cannot match.</div></div>
+      <div class="adv-row"><div class="num">07</div><div class="lbl">Proven Scaling Operator</div><div class="det">Built and scaled a used-cooking-oil business with his wife to significant daily revenue before walking away. Knows the muscle of going zero-to-one in operating cycles.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 10 ROADMAP ============ -->
+<section id="vision">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">10<span class="sub">36-Month Roadmap</span></div>
+      <h2 class="section-title">From Wedge<br>To <span class="acid">Empire.</span></h2>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-row"><div class="when">Month 0–3<br>Now</div><div class="what">
+        <h4>Foundation Sprint</h4>
+        <p>Track A live (warm Framer sites). Track B cold pipeline filled (Outscraper + PhoneBurner). Content engine batch-filming 3 niyyah-driven reels/week to @Khyree_city. Site khyreecity.com locked with "Built for Barbers" mockup section.</p>
+        <div class="tags"><span class="tag">Framer</span><span class="tag">Base44</span><span class="tag">Submagic</span><span class="tag">Make.com</span></div>
+      </div></div>
+      <div class="timeline-row"><div class="when">Month 3–6</div><div class="what">
+        <h4>Pipeline Scale</h4>
+        <p>Agent 2 (Manychat + Make.com + Claude) automating IG inbound at full speed. 50+ active recurring clients. Cold dial volume hitting 500/day. Reactivate @Khyree_city to 250K followers. Set the on-ramp for community waitlist.</p>
+        <div class="tags"><span class="tag">Agent 2</span><span class="tag">Cold Volume</span><span class="tag">IG Reactivation</span></div>
+      </div></div>
+      <div class="timeline-row"><div class="when">Month 6–12</div><div class="what">
+        <h4>Layer 3 Soft Launch</h4>
+        <p>Brotherhood community opens with founding 100 members at locked pricing. Waitlist conversion proves community-market fit. TikTok activation considered post 250K IG. First case studies of barbers 2x'ing bookings via Khyree City sites publish.</p>
+        <div class="tags"><span class="tag">Community</span><span class="tag">Case Studies</span><span class="tag">TikTok Phase</span></div>
+      </div></div>
+      <div class="timeline-row"><div class="when">Month 12–24</div><div class="what">
+        <h4>Audience Compound</h4>
+        <p>500+ active recurring website clients. 1,000+ Layer 3 members. Content engine running without Khyree on camera daily. Faceless edit pipeline mature. First mid-six-figures month. Studying Islam returns to the daily schedule.</p>
+        <div class="tags"><span class="tag">$3K/wk Freedom</span><span class="tag">Faceless Pipeline</span><span class="tag">Madrasa</span></div>
+      </div></div>
+      <div class="timeline-row"><div class="when">Month 24–36</div><div class="what">
+        <h4>Empire</h4>
+        <p>2,000+ community members. 1,000+ recurring website clients. Adjacent expansion: Hassan's HVAC parallel ops as proof of niching playbook. Six-to-seven-figures saved. Beach in Bali or Medina on the table. Tools run without the operator on every call.</p>
+        <div class="tags"><span class="tag">Vision Realized</span><span class="tag">Halal Income</span><span class="tag">Location Free</span></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 11 ASK ============ -->
+<section class="cta" id="ask">
+  <div class="wrap">
+    <h2>Build The <span class="acid">Bench.</span><br>Own The <span class="acid">City.</span></h2>
+    <p class="lede">Khyree City isn't the next salon SaaS. It's the <em>operator-led media + infrastructure company</em> for the most fragmented, loyalty-driven small business vertical in America. The trend is moving. The wedge is open. The chair is empty.</p>
+    <div class="ask-grid">
+      <div class="ask-cell"><div class="n">$3.6M</div><div class="l">36-Month ARR Target</div></div>
+      <div class="ask-cell"><div class="n">3</div><div class="l">Compounding Revenue Lines</div></div>
+      <div class="ask-cell"><div class="n">1</div><div class="l">Operator With The Reps</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="src-title">Sources / Citations</div>
+    <div class="src-list">
+      <div class="src"><span class="n">01</span>IBISWorld · "Barber Shops in the US Industry Analysis" · 2025/2026 release</div>
+      <div class="src"><span class="n">02</span>Cosmetics Business / Barclays "Man in the Mirror" Report · 2024–2025</div>
+      <div class="src"><span class="n">03</span>Zippia · "Small Business Website Statistics" · 2024–2026</div>
+      <div class="src"><span class="n">04</span>Digital Silk · "Top 50 Small Business Website Statistics" · 2024–2025</div>
+      <div class="src"><span class="n">05</span>StylesGo / industry reporting on Squire funding · 2024–2026</div>
+      <div class="src"><span class="n">06</span>Goodcall · "Booksy vs Squire" comparison · 2025</div>
+      <div class="src"><span class="n">07</span>Grand View Research · "U.S. Men's Grooming Products Market" · 2024–2026</div>
+      <div class="src"><span class="n">08</span>Technavio · "Mobile Barber Shop Market Report" · 2024–2029</div>
+      <div class="src"><span class="n">09</span>Upmetrics · Barber business management software CAGR · 2025–2033</div>
+      <div class="src"><span class="n">10</span>Invoca / Google / BrightLocal · Local search behavior data · 2024</div>
+      <div class="src"><span class="n">11</span>Stanford Web Credibility / Blue Corona · Web design credibility data · 2023–2024</div>
+      <div class="src"><span class="n">12</span>Rudys.AI / Clutch · Small business website cost benchmarks · 2024</div>
+    </div>
+    <div class="colophon">
+      <div>Khyree City · Market Analysis v1.0</div>
+      <div>I Level Up Barbers</div>
+      <div>May 2026 · Cairo</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ============ PROGRESS BAR ============
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  progress.style.width = pct + '%';
+}, { passive: true });
+
+// ============ REVEAL ON SCROLL ============
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+reveals.forEach(r => io.observe(r));
+
+// ============ ANIMATED COUNTERS ============
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.target);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const isFloat = target % 1 !== 0;
+  const duration = 1800;
+  const start = performance.now();
+  function tick(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const cur = target * eased;
+    el.textContent = prefix + (isFloat ? cur.toFixed(1) : Math.floor(cur)) + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+    else el.textContent = prefix + (isFloat ? target.toFixed(1) : target) + suffix;
+  }
+  requestAnimationFrame(tick);
+}
+const counterEls = document.querySelectorAll('[data-target]');
+const counterIO = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); counterIO.unobserve(e.target); } });
+}, { threshold: 0.4 });
+counterEls.forEach(c => counterIO.observe(c));
+
+// ============ TREND CHART BARS ============
+const chartIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.chart-bar').forEach(b => {
+        b.style.width = b.dataset.pct + '%';
+      });
+      chartIO.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.25 });
+const trendChart = document.getElementById('trendChart');
+if (trendChart) chartIO.observe(trendChart);
+
+// ============ MRR CALCULATOR ============
+const sliderClients = document.getElementById('sliderClients');
+const sliderMembers = document.getElementById('sliderMembers');
+const sliderNew = document.getElementById('sliderNew');
+const sliderChurn = document.getElementById('sliderChurn');
+const lblClients = document.getElementById('lblClients');
+const lblMembers = document.getElementById('lblMembers');
+const lblNew = document.getElementById('lblNew');
+const lblChurn = document.getElementById('lblChurn');
+const outWebMRR = document.getElementById('outWebMRR');
+const outCommMRR = document.getElementById('outCommMRR');
+const outSetup = document.getElementById('outSetup');
+const outChurn = document.getElementById('outChurn');
+const outTotal = document.getElementById('outTotal');
+const outARR = document.getElementById('outARR');
+
+function fmt(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'K';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function recalc() {
+  const clients = +sliderClients.value;
+  const members = +sliderMembers.value;
+  const newSales = +sliderNew.value;
+  const churn = +sliderChurn.value;
+
+  lblClients.textContent = clients;
+  lblMembers.textContent = members;
+  lblNew.textContent = newSales;
+  lblChurn.textContent = churn + '%';
+
+  const webMRR = clients * 97;
+  const commMRR = members * 29;
+  const setupRev = newSales * 597;
+  const churnLoss = (clients * 97) * (churn / 100);
+  const total = webMRR + commMRR + setupRev - churnLoss;
+  const arr = (webMRR + commMRR - churnLoss) * 12;
+
+  outWebMRR.textContent = fmt(webMRR);
+  outCommMRR.textContent = fmt(commMRR);
+  outSetup.textContent = fmt(setupRev);
+  outChurn.textContent = '-' + fmt(churnLoss);
+  outTotal.textContent = fmt(total);
+  outARR.textContent = fmt(arr);
+}
+
+[sliderClients, sliderMembers, sliderNew, sliderChurn].forEach(s => s.addEventListener('input', recalc));
+recalc();
+
+// ============ TABS ============
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+  });
+});
+
+// ============ KEYBOARD SHORTCUTS ============
+document.addEventListener('keydown', (e) => {
+  if (e.key >= '1' && e.key <= '3') {
+    const idx = parseInt(e.key) - 1;
+    const btns = document.querySelectorAll('.tab-btn');
+    if (btns[idx]) btns[idx].click();
+  }
+});
+</script>
+</body>
+</html>

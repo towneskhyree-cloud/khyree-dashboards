@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khyree City — Four Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;500;700&family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=VT323&family=Reem+Kufi:wght@400;600;700&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080808;--panel:#111;--line:#1f1f1f;--mut:#777;--white:#fafafa}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif}
+  body{line-height:1.6;padding:24px 16px 100px;max-width:780px;margin:0 auto}
+
+  /* HERO */
+  .hero{padding:24px 0 38px;border-bottom:1px solid var(--line)}
+  .stamp{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#888;border:1px solid #2a2a2a;padding:5px 11px;border-radius:3px;margin-bottom:18px}
+  h1{font-family:'Cormorant Garamond',serif;font-size:74px;line-height:.94;font-weight:300;letter-spacing:-1.5px}
+  h1 em{font-style:italic;font-weight:400}
+  .hero .tag{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#888;letter-spacing:.32em;text-transform:uppercase}
+  .note{margin-top:28px;padding:18px 20px;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:10px;font-size:13.5px;color:#c8c8c8;line-height:1.7;max-width:580px}
+  .note b{color:#fafafa;font-weight:500}
+  .note .sig{display:block;margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#666;letter-spacing:.22em;text-transform:uppercase}
+
+  /* DIRECTION HEADER */
+  .direction{margin-top:64px}
+  .dh{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+  .dh-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:#888;letter-spacing:.32em;text-transform:uppercase}
+  .dh-name{font-size:48px;line-height:1;letter-spacing:-1px}
+  .dh-mood{font-family:'JetBrains Mono',monospace;font-size:10px;color:#888;letter-spacing:.22em;text-transform:uppercase;margin-top:8px}
+
+  /* STORY FRAME (universal) */
+  .story-frame{position:relative;width:100%;max-width:340px;margin:0 auto 22px;padding:14px;border-radius:22px}
+  .frame-tag{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#888;letter-spacing:.22em;text-transform:uppercase}
+  .story{position:relative;width:100%;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000;isolation:isolate}
+  .photo{position:absolute;inset:0;background-size:cover;background-position:center;z-index:2}
+  .grain{position:absolute;inset:0;z-index:8;pointer-events:none;opacity:.2;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+  /* SPEC BLOCKS */
+  .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+  @media(max-width:520px){.spec-grid{grid-template-columns:1fr}}
+  .spec-card{background:#0d0d0d;border:1px solid #1a1a1a;border-radius:10px;padding:14px}
+  .spec-card .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:#888;letter-spacing:.25em;text-transform:uppercase;margin-bottom:10px;display:block}
+  .spec-card p{font-size:13px;color:#d4d4d4;line-height:1.55}
+  .spec-card p b{color:#fff}
+
+  /* PALETTE */
+  .palette{display:flex;gap:8px;flex-wrap:wrap}
+  .sw{flex:1;min-width:60px;height:60px;border-radius:6px;position:relative;display:flex;align-items:flex-end;padding:6px 8px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;font-weight:600}
+  .sw.dark{color:#fafafa}
+  .sw.light{color:#0a0a0a}
+
+  /* TYPE SAMPLES */
+  .type-sample{margin-top:6px}
+  .type-sample > div{margin:6px 0}
+  .ts-name{font-family:'JetBrains Mono',monospace;font-size:9px;color:#888;letter-spacing:.18em;text-transform:uppercase}
+
+  /* CHIPS (different colors per direction) */
+  .chip-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:3px;font-weight:600}
+
+  /* CLOSING */
+  .closing{margin-top:64px;padding:26px 22px;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:14px;position:relative}
+  .closing::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:2px;background:#fafafa}
+  .closing h3{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;letter-spacing:-.5px;margin-bottom:14px}
+  .closing h3 em{font-style:italic}
+  .closing p{font-size:14px;color:#cfcfcf;line-height:1.7;margin-bottom:12px}
+  .closing p b{color:#fff;font-weight:500}
+  .closing .pick{margin-top:18px;padding:14px 16px;background:#000;border-left:2px solid #fafafa;border-radius:6px}
+  .closing .pick .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:#888;letter-spacing:.32em;text-transform:uppercase;display:block;margin-bottom:8px}
+  .closing .pick p{margin:0;color:#fafafa;font-size:14.5px}
+
+  .foot{text-align:center;margin-top:40px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.32em;color:#666;text-transform:uppercase}
+</style>
+
+<!-- SVG filters for RGB-split (CRT direction) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="redOnly"><feColorMatrix values="1.1 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 1 0"/></filter>
+    <filter id="greenOnly"><feColorMatrix values="0 0 0 0 0   0 1.1 0 0 0   0 0 0 0 0   0 0 0 1 0"/></filter>
+    <filter id="blueOnly"><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 1.1 0 0   0 0 0 1 0"/></filter>
+  </defs>
+</svg>
+
+</head>
+<body>
+
+<!-- ============== HERO ============== -->
+<div class="hero">
+  <span class="stamp">Creative · Direction Pitch · 2026</span>
+  <h1>Four<br><em>directions.</em></h1>
+  <div class="tag">No formula · No filler · One brand · Pick the room</div>
+
+  <div class="note">
+    <b>Director's note.</b> You're tired of the same look. Fair. So instead of polishing one direction, here's a real range — four distinct rooms the brand could live in. Each built on your actual photos. Each speaks a different language. None lean on the acid-green crutch. Pick one to lead, save one for a second register, kill the other two. That's how grown brands work.
+    <span class="sig">— for K. · Khyree City · v4</span>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- DIRECTION 01: BROADCAST KC (CRT/VHS) -->
+<!-- ========================================================== -->
+<div class="direction">
+  <div class="dh">
+    <div>
+      <div class="dh-num">DIRECTION · 01</div>
+      <div class="dh-name" style="font-family:'Bebas Neue',sans-serif;color:#00e5ff;text-shadow:2px 0 0 #ff006a,-2px 0 0 #00e5ff">BROADCAST KC</div>
+      <div class="dh-mood">VHS · CRT · Y2K music video intro</div>
+    </div>
+  </div>
+
+  <!-- MOCKUP: CRT TREATMENT on Photo 3 -->
+  <div class="story-frame" style="background:linear-gradient(180deg,#0a0a14,#000);border:1px solid #1a1a2a">
+    <div class="frame-tag"><span>01 · A — BROADCAST</span><span style="color:#00e5ff">▶ REC</span></div>
+    <div class="story" style="background:#000">
+      <!-- RGB split photo: 3 layers -->
+      <div class="photo" style="background-image:url('khyree_03_neon.png');background-position:center 25%;filter:saturate(0.4) brightness(0.85);z-index:2"></div>
+      <div class="photo" style="background-image:url('khyree_03_neon.png');background-position:center 25%;mix-blend-mode:screen;filter:brightness(1.3) sepia(1) hue-rotate(160deg) saturate(6);transform:translateX(-3px);opacity:.55;z-index:3"></div>
+      <div class="photo" style="background-image:url('khyree_03_neon.png');background-position:center 25%;mix-blend-mode:screen;filter:brightness(1.3) sepia(1) hue-rotate(290deg) saturate(6);transform:translateX(3px);opacity:.55;z-index:3"></div>
+      <!-- Heavy scanlines -->
+      <div style="position:absolute;inset:0;z-index:6;pointer-events:none;opacity:.18;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 1px,#000 1px,#000 2px)"></div>
+      <!-- CRT vignette -->
+      <div style="position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.85) 100%)"></div>
+      <!-- Static noise patch -->
+      <div style="position:absolute;top:32%;left:0;right:0;height:18px;z-index:6;background-image:url(&quot;data:image/svg+xml;utf8,<svg viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='3' numOctaves='2'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);mix-blend-mode:screen;opacity:.8"></div>
+      <div class="grain" style="opacity:.3"></div>
+
+      <!-- TOP HUD: REC + TIMECODE -->
+      <div style="position:absolute;top:12px;left:14px;z-index:9;font-family:'VT323',monospace;font-size:14px;color:#00e5ff;letter-spacing:.05em">
+        <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:8px;height:8px;background:#ff006a;border-radius:50%;box-shadow:0 0 6px #ff006a;animation:blink 1s infinite"></span>REC</span>
+      </div>
+      <div style="position:absolute;top:12px;right:14px;z-index:9;font-family:'VT323',monospace;font-size:14px;color:#00e5ff;letter-spacing:.05em;text-align:right">
+        00:34:21:14<br><span style="color:#ff006a">CH · 001</span>
+      </div>
+
+      <!-- "TRACKING" line at top -->
+      <div style="position:absolute;top:46px;left:14px;right:14px;z-index:9;font-family:'VT323',monospace;font-size:13px;color:#ffb800;letter-spacing:.1em;text-align:center;text-shadow:0 0 6px rgba(255,184,0,0.6)">— TRACKING : SIGNAL LOCKED —</div>
+
+      <!-- BIG TITLE -->
+      <div style="position:absolute;top:60%;left:0;right:0;transform:translateY(-50%);text-align:center;z-index:9">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:68px;line-height:.9;color:#00e5ff;letter-spacing:1px;text-shadow:3px 0 0 #ff006a,-3px 0 0 rgba(0,229,255,0.8);text-transform:uppercase">TRANSMISSION</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:80px;line-height:.9;color:#fff;letter-spacing:1px;text-shadow:3px 0 0 #ff006a,-3px 0 0 #00e5ff;text-transform:uppercase;margin-top:4px">001</div>
+        <div style="font-family:'VT323',monospace;font-size:18px;color:#ffb800;margin-top:10px;letter-spacing:.1em;text-shadow:0 0 6px rgba(255,184,0,0.5)">▶ ATL · INCOMING</div>
+      </div>
+
+      <!-- BOTTOM TICKER -->
+      <div style="position:absolute;bottom:14px;left:14px;right:14px;z-index:9">
+        <div style="font-family:'VT323',monospace;font-size:11px;color:#00e5ff;letter-spacing:.18em;text-transform:uppercase;border-top:1px solid rgba(0,229,255,0.4);padding-top:6px;display:flex;justify-content:space-between">
+          <span>>> KHYREECITY.COM</span><span style="color:#ff006a">PLAY [▶]</span>
+        </div>
+      </div>
+
+      <!-- corner artifacts -->
+      <div style="position:absolute;bottom:0;left:0;width:30%;height:2px;background:#ff006a;z-index:9;opacity:.6"></div>
+      <div style="position:absolute;top:0;right:0;width:40%;height:1px;background:#00e5ff;z-index:9;opacity:.5"></div>
+    </div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="spec-grid">
+    <div class="spec-card">
+      <span class="lbl">Palette</span>
+      <div class="palette">
+        <div class="sw dark" style="background:#0a0a14">#0A0A14</div>
+        <div class="sw dark" style="background:#00e5ff;color:#000">#00E5FF</div>
+        <div class="sw dark" style="background:#ff006a">#FF006A</div>
+        <div class="sw dark" style="background:#ffb800;color:#000">#FFB800</div>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="lbl">Type Pairing</span>
+      <div class="type-sample">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:#00e5ff;letter-spacing:1px">BEBAS NEUE</div>
+        <div class="ts-name">display · all caps</div>
+        <div style="font-family:'VT323',monospace;font-size:16px;color:#ffb800">VT323 — terminal</div>
+        <div class="ts-name">UI · timecodes · tickers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <span class="lbl">Signature · what makes this BROADCAST</span>
+    <p style="margin-bottom:8px">RGB chromatic split on the photo (cyan/magenta offset). Cyberpunk scan lines. Static noise band that cuts across the image like tape damage. VT323 monospace UI labels — pulled straight from late-90s VCRs. Headlines are <b>shouted</b>, not whispered.</p>
+    <div class="chip-row">
+      <span class="chip" style="color:#00e5ff;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3)">RGB SPLIT</span>
+      <span class="chip" style="color:#ff006a;background:rgba(255,0,106,.1);border:1px solid rgba(255,0,106,.3)">SCAN LINES</span>
+      <span class="chip" style="color:#ffb800;background:rgba(255,184,0,.1);border:1px solid rgba(255,184,0,.3)">STATIC NOISE</span>
+      <span class="chip" style="color:#00e5ff;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3)">VCR HUD</span>
+    </div>
+  </div>
+
+  <div class="spec-card" style="margin-top:12px">
+    <span class="lbl">When to use</span>
+    <p><b>Hype drops, countdown reveals, "transmission" series, return-arc storytelling.</b> The Hype Williams / Travis Scott / late-90s music video lane. Use sparingly so the noise doesn't become the norm — this direction wins by feeling like an <em>event</em>.</p>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- DIRECTION 02: EDITORIAL -->
+<!-- ========================================================== -->
+<div class="direction">
+  <div class="dh">
+    <div>
+      <div class="dh-num">DIRECTION · 02</div>
+      <div class="dh-name" style="font-family:'Playfair Display',serif;font-weight:900;color:#fafafa;font-style:italic">Editorial.</div>
+      <div class="dh-mood">NY Times Magazine · Cereal · Vogue Hommes</div>
+    </div>
+  </div>
+
+  <!-- MOCKUP: Editorial magazine cover -->
+  <div class="story-frame" style="background:#f4ede2;border:1px solid #d8cfbc">
+    <div class="frame-tag" style="color:#8a7e6a"><span>02 · A — EDITORIAL</span><span style="color:#6b1f2c">VOL · 01</span></div>
+    <div class="story" style="background:#f4ede2;border-radius:14px">
+      <!-- Top masthead -->
+      <div style="position:absolute;top:18px;left:18px;right:18px;z-index:5;border-bottom:1px solid #1a1a1a;padding-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:#1a1a1a;text-transform:uppercase">Volume One</div>
+          <div style="font-family:'Playfair Display',serif;font-size:13px;color:#1a1a1a;font-weight:700;letter-spacing:.5px">KHYREE CITY</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:#1a1a1a;text-transform:uppercase">Issue №1</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:#6b1f2c;text-transform:uppercase;margin-top:2px">May · 2026</div>
+        </div>
+      </div>
+
+      <!-- Photo, framed -->
+      <div style="position:absolute;top:60px;left:18px;right:18px;height:55%;border:1px solid #1a1a1a;overflow:hidden;z-index:3">
+        <div class="photo" style="background-image:url('khyree_02_beardcut.png');background-position:center 25%;filter:contrast(1.05) saturate(.85)"></div>
+      </div>
+
+      <!-- Big headline -->
+      <div style="position:absolute;bottom:90px;left:18px;right:18px;z-index:5">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.32em;color:#6b1f2c;text-transform:uppercase;margin-bottom:6px">The Return · A Profile</div>
+        <div style="font-family:'Playfair Display',serif;font-size:34px;line-height:.95;color:#1a1a1a;font-weight:900;letter-spacing:-1px">The Barber<br><em style="font-weight:400;font-style:italic">who left.</em></div>
+      </div>
+
+      <!-- Footer -->
+      <div style="position:absolute;bottom:18px;left:18px;right:18px;z-index:5;border-top:1px solid #1a1a1a;padding-top:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#1a1a1a">Two years away. One return.</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.32em;color:#6b1f2c;text-transform:uppercase">P. 60</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card">
+      <span class="lbl">Palette</span>
+      <div class="palette">
+        <div class="sw light" style="background:#f4ede2">#F4EDE2</div>
+        <div class="sw dark" style="background:#0a0a0a">#0A0A0A</div>
+        <div class="sw dark" style="background:#6b1f2c">#6B1F2C</div>
+        <div class="sw light" style="background:#d8cfbc">#D8CFBC</div>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="lbl">Type Pairing</span>
+      <div class="type-sample">
+        <div style="font-family:'Playfair Display',serif;font-size:26px;color:#fafafa;font-weight:900;letter-spacing:-.5px">Playfair</div>
+        <div class="ts-name">display serif · headlines</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#cfcfcf;letter-spacing:.18em;text-transform:uppercase">Mono · labels</div>
+        <div class="ts-name">UI · captions · dates</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <span class="lbl">Signature · what makes this EDITORIAL</span>
+    <p style="margin-bottom:8px">Bone-cream paper background. Heavy serif headline. Hairline rules above and below. <b>Photo treated as exhibit, not decoration.</b> Volume / Issue numbers like an actual print magazine. Restraint over noise. The <b>silence</b> between elements is the design.</p>
+    <div class="chip-row">
+      <span class="chip" style="color:#1a1a1a;background:#f4ede2;border:1px solid #d8cfbc">PAPER BG</span>
+      <span class="chip" style="color:#1a1a1a;background:#f4ede2;border:1px solid #d8cfbc">SERIF DISPLAY</span>
+      <span class="chip" style="color:#1a1a1a;background:#f4ede2;border:1px solid #d8cfbc">HAIRLINE RULES</span>
+      <span class="chip" style="color:#1a1a1a;background:#f4ede2;border:1px solid #d8cfbc">MASTHEAD</span>
+    </div>
+  </div>
+
+  <div class="spec-card" style="margin-top:12px">
+    <span class="lbl">When to use</span>
+    <p><b>Profile posts, portfolio drops, brand statement moments.</b> When you want the audience to slow down and read. This direction trains them to see you as a craftsman, not a hustler. Powerful for the "Why I Left" reel cover, year-end recaps, press features.</p>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- DIRECTION 03: HERITAGE WARM -->
+<!-- ========================================================== -->
+<div class="direction">
+  <div class="dh">
+    <div>
+      <div class="dh-num">DIRECTION · 03</div>
+      <div class="dh-name" style="font-family:'Cinzel',serif;font-weight:900;color:#c84d10;letter-spacing:1px">HERITAGE</div>
+      <div class="dh-mood">Old-school barbershop · boxing poster · vintage Esquire</div>
+    </div>
+  </div>
+
+  <!-- MOCKUP: Warm vintage poster -->
+  <div class="story-frame" style="background:#ede0c8;border:1px solid #c8b896">
+    <div class="frame-tag" style="color:#6e5a3a"><span>03 · A — HERITAGE</span><span style="color:#c84d10">EST · ATL</span></div>
+    <div class="story" style="background:#ede0c8;border-radius:14px">
+      <!-- Top ornamental rule -->
+      <div style="position:absolute;top:18px;left:18px;right:18px;z-index:5;text-align:center">
+        <div style="height:1px;background:#2a1810;margin:6px 0"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.4em;color:#2a1810;text-transform:uppercase;font-weight:700">Est · in the city · of atlanta</div>
+        <div style="height:1px;background:#2a1810;margin:6px 0"></div>
+      </div>
+
+      <!-- Photo with warm grade -->
+      <div style="position:absolute;top:62px;left:18px;right:18px;height:38%;z-index:3;border:2px solid #2a1810;overflow:hidden">
+        <div class="photo" style="background-image:url('khyree_01_throwback.png');background-position:center 30%;filter:sepia(.5) saturate(1.1) contrast(1.1) hue-rotate(-8deg) brightness(.95)"></div>
+        <!-- Warm overlay -->
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(200,77,16,0.15),transparent 50%,rgba(42,24,16,0.3));mix-blend-mode:multiply"></div>
+      </div>
+
+      <!-- Big headline -->
+      <div style="position:absolute;top:54%;left:18px;right:18px;text-align:center;z-index:5">
+        <div style="font-family:'Cinzel',serif;font-size:38px;line-height:.95;color:#2a1810;font-weight:900;letter-spacing:1px">THE<br><span style="color:#c84d10">FOUNDATION</span></div>
+        <div style="font-family:'DM Serif Display',serif;font-size:18px;font-style:italic;color:#2a1810;margin-top:6px">— before the city, there was a crew —</div>
+      </div>
+
+      <!-- Decorative center mark -->
+      <div style="position:absolute;top:73%;left:50%;transform:translateX(-50%);z-index:5">
+        <div style="width:50px;height:1px;background:#b08d3a"></div>
+        <div style="width:8px;height:8px;background:#c84d10;border-radius:50%;margin:6px auto;transform:rotate(45deg)"></div>
+        <div style="width:50px;height:1px;background:#b08d3a"></div>
+      </div>
+
+      <!-- Bottom block -->
+      <div style="position:absolute;bottom:24px;left:18px;right:18px;z-index:5;text-align:center">
+        <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.32em;color:#2a1810;font-weight:700;text-transform:uppercase">— Khyree City · MMXXVI —</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:13px;font-style:italic;color:#c84d10;margin-top:4px">a return, kept warm.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card">
+      <span class="lbl">Palette</span>
+      <div class="palette">
+        <div class="sw light" style="background:#ede0c8">#EDE0C8</div>
+        <div class="sw dark" style="background:#c84d10">#C84D10</div>
+        <div class="sw dark" style="background:#2a1810">#2A1810</div>
+        <div class="sw dark" style="background:#b08d3a">#B08D3A</div>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="lbl">Type Pairing</span>
+      <div class="type-sample">
+        <div style="font-family:'Cinzel',serif;font-size:22px;color:#fafafa;font-weight:900;letter-spacing:1px">CINZEL</div>
+        <div class="ts-name">classical display · engraved</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:18px;font-style:italic;color:#fafafa">DM Serif italic</div>
+        <div class="ts-name">poetic sub-line · italic</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <span class="lbl">Signature · what makes this HERITAGE</span>
+    <p style="margin-bottom:8px">Warm cream paper instead of digital screen. Sepia-warm photo grade. Roman numerals (MMXXVI). Classical Cinzel — the same lettering style used on monuments and old shop signs. Brass-gold ornamental marks. <b>Feels like a poster you'd find framed in a 100-year-old shop.</b></p>
+    <div class="chip-row">
+      <span class="chip" style="color:#2a1810;background:#ede0c8;border:1px solid #c8b896">SEPIA GRADE</span>
+      <span class="chip" style="color:#2a1810;background:#ede0c8;border:1px solid #c8b896">ROMAN NUMERALS</span>
+      <span class="chip" style="color:#2a1810;background:#ede0c8;border:1px solid #c8b896">ENGRAVED TYPE</span>
+      <span class="chip" style="color:#2a1810;background:#ede0c8;border:1px solid #c8b896">BRASS ACCENT</span>
+    </div>
+  </div>
+
+  <div class="spec-card" style="margin-top:12px">
+    <span class="lbl">When to use</span>
+    <p><b>Heritage posts, anniversary moments, Cut Creaters tie-ins, the family-story arc.</b> This direction tells the world your shop has roots — that you're not a TikTok barber, you're carrying something forward. Perfect for any post involving your dad, Cut Creaters, or the long arc of the family business.</p>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- DIRECTION 04: MAISON KC -->
+<!-- ========================================================== -->
+<div class="direction">
+  <div class="dh">
+    <div>
+      <div class="dh-num">DIRECTION · 04</div>
+      <div class="dh-name" style="font-family:'Cormorant Garamond',serif;font-weight:300;color:#d4af37;font-style:italic;letter-spacing:-1px">Maison KC.</div>
+      <div class="dh-mood">Cartier · Hublot · perfume campaign · whispered luxury</div>
+    </div>
+  </div>
+
+  <!-- MOCKUP: Ultra-luxe gold on black -->
+  <div class="story-frame" style="background:#000;border:1px solid #1a1a1a">
+    <div class="frame-tag" style="color:#666"><span>04 · A — MAISON</span><span style="color:#d4af37">⌘ INAUGURAL</span></div>
+    <div class="story" style="background:#000">
+      <div class="photo" style="background-image:url('khyree_06_desert.png');background-position:center 30%;filter:grayscale(.95) brightness(.45) contrast(1.05)"></div>
+      <!-- Gold radial -->
+      <div style="position:absolute;inset:0;z-index:3;background:radial-gradient(ellipse at 50% 65%,rgba(212,175,55,0.15),transparent 60%);pointer-events:none"></div>
+      <!-- Vignette -->
+      <div style="position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,0.6) 0%,transparent 35%,transparent 65%,rgba(0,0,0,0.85) 100%)"></div>
+      <div class="grain" style="opacity:.12"></div>
+
+      <!-- Top: maison mark -->
+      <div style="position:absolute;top:24px;left:0;right:0;text-align:center;z-index:6">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:#d4af37;letter-spacing:.4em;font-weight:300">M A I S O N</div>
+        <div style="width:30px;height:1px;background:#d4af37;margin:8px auto;opacity:.7"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;color:#f5f1e6;letter-spacing:.4em;text-transform:uppercase;opacity:.6">Khyree City · Atlanta</div>
+      </div>
+
+      <!-- Center: the number -->
+      <div style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);text-align:center;z-index:6">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:160px;line-height:.9;color:#d4af37;font-weight:300;letter-spacing:-6px;font-style:italic">20</div>
+        <div style="width:50px;height:.5px;background:#d4af37;margin:14px auto;opacity:.6"></div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:#f5f1e6;letter-spacing:.3em;text-transform:uppercase;font-weight:300">Inaugural Members</div>
+      </div>
+
+      <!-- Bottom: subtle CTA -->
+      <div style="position:absolute;bottom:24px;left:0;right:0;text-align:center;z-index:6">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:14px;font-style:italic;color:#f5f1e6;opacity:.85">By invitation. By name. By return.</div>
+        <div style="width:30px;height:1px;background:#d4af37;margin:12px auto;opacity:.5"></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#d4af37;letter-spacing:.4em;text-transform:uppercase">khyreecity.com</div>
+      </div>
+
+      <!-- Subtle Arabic accent -->
+      <div style="position:absolute;top:34%;right:20px;z-index:6;font-family:'Aref Ruqaa',serif;font-size:18px;color:#d4af37;opacity:.5;direction:rtl;letter-spacing:1px">المؤسس</div>
+    </div>
+  </div>
+
+  <div class="spec-grid">
+    <div class="spec-card">
+      <span class="lbl">Palette</span>
+      <div class="palette">
+        <div class="sw dark" style="background:#000">#000000</div>
+        <div class="sw dark" style="background:#d4af37;color:#000">#D4AF37</div>
+        <div class="sw dark" style="background:#f5f1e6;color:#000">#F5F1E6</div>
+        <div class="sw dark" style="background:#1a1a1a">#1A1A1A</div>
+      </div>
+    </div>
+    <div class="spec-card">
+      <span class="lbl">Type Pairing</span>
+      <div class="type-sample">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:30px;color:#d4af37;font-weight:300;font-style:italic;letter-spacing:-1px">Cormorant</div>
+        <div class="ts-name">thin serif italic · display</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4af37;letter-spacing:.4em;text-transform:uppercase">Mono · spaced</div>
+        <div class="ts-name">tiny utility text only</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spec-card">
+    <span class="lbl">Signature · what makes this MAISON</span>
+    <p style="margin-bottom:8px">Pure black + champagne gold + pearl. <b>Italic thin serif numerals — like a Cartier ad.</b> Words use letter-spacing so wide they breathe. The photo is barely there — grayscaled, darkened to 45% brightness, just a whisper. <b>This direction sells absence and restraint.</b> The luxury is what's NOT on screen.</p>
+    <div class="chip-row">
+      <span class="chip" style="color:#d4af37;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3)">CHAMPAGNE GOLD</span>
+      <span class="chip" style="color:#d4af37;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3)">THIN ITALIC SERIF</span>
+      <span class="chip" style="color:#d4af37;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3)">EXTREME RESTRAINT</span>
+      <span class="chip" style="color:#d4af37;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.3)">DARKENED PHOTO</span>
+    </div>
+  </div>
+
+  <div class="spec-card" style="margin-top:12px">
+    <span class="lbl">When to use</span>
+    <p><b>Founding member announcements, premium offers, "by invitation" energy, year-anniversary moments.</b> This direction positions you above the barber market entirely — you're not selling a haircut, you're selling membership. Best for offers worth $200+ or anything you want to feel <em>earned</em>, not bought.</p>
+  </div>
+</div>
+
+<!-- ============== CLOSING ============== -->
+<div class="closing">
+  <h3>The <em>recommendation.</em></h3>
+  <p>Four directions. Real range. None of them lean on the acid-green default. Now the design question becomes a <b>positioning question</b>: how do you want the city to see you?</p>
+  <p style="font-size:13px;color:#a0a0a0"><b>BROADCAST</b> says <em>I'm an event.</em> Hype, energy, attention. Burns hot.<br>
+  <b>EDITORIAL</b> says <em>I'm a craftsman.</em> Slow, considered, profound. Builds trust.<br>
+  <b>HERITAGE</b> says <em>I have roots.</em> Family, lineage, return. The most "Khyree City" of the four.<br>
+  <b>MAISON</b> says <em>I'm above the market.</em> Membership, not transaction. Highest ceiling.</p>
+
+  <div class="pick">
+    <span class="lbl">— if I had to pick one —</span>
+    <p><b>Lead with HERITAGE.</b> It's the most authentic to who you actually are — a barber returning to a family shop, carrying something forward. Use <b>MAISON</b> for the founding-20 offer (matches the "membership" framing). Use <b>BROADCAST</b> sparingly, only for hype-drop moments. Keep <b>EDITORIAL</b> in your back pocket for press features and year-end reflections.</p>
+  </div>
+</div>
+
+<div class="foot">Khyree City · v4 · Four Directions · Designer pitch · 2026</div>
+
+</body>
+</html>

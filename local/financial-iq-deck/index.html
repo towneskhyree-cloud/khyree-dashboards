@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The 4 Pillars of Financial IQ — Study Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;700&family=Bricolage+Grotesque:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0d;
+    --bg-2:#15140f;
+    --ink:#f5e6c8;
+    --ink-dim:#9a8f78;
+    --rule:#2a2823;
+    --green:#b8ff00;
+    --blue:#3b82f6;
+    --red:#ff4d4d;
+    --amber:#ffb84d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink)}
+  body{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:400;
+    line-height:1.55;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ── DECK FRAME ── */
+  .deck{
+    max-width:840px;
+    margin:0 auto;
+    padding:20px 16px 100px;
+  }
+
+  /* ── HEADER ── */
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:18px;
+    border-bottom:1px solid var(--rule);
+    margin-bottom:28px;
+  }
+  .header-left{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.2em;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+  }
+  .header-left .accent{color:var(--green)}
+  .header-right{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    color:var(--ink-dim);
+    letter-spacing:0.15em;
+  }
+
+  /* ── TABS ── */
+  .tabs{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-bottom:32px;
+    border:1px solid var(--rule);
+    background:var(--bg-2);
+    padding:6px;
+  }
+  .tab{
+    background:transparent;
+    border:none;
+    color:var(--ink-dim);
+    padding:14px 10px;
+    cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    text-align:left;
+    transition:all 0.2s ease;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    position:relative;
+  }
+  .tab:hover{color:var(--ink)}
+  .tab .num{font-size:18px;font-family:'Instrument Serif',serif;color:var(--ink-dim);font-style:italic}
+  .tab .name{font-weight:700;font-size:11px}
+  .tab.active{
+    background:var(--ink);
+    color:var(--bg);
+  }
+  .tab.active .num{color:var(--bg)}
+  .tab.active::after{
+    content:'';
+    position:absolute;
+    bottom:-7px;left:50%;
+    width:8px;height:8px;
+    background:var(--ink);
+    transform:translateX(-50%) rotate(45deg);
+  }
+
+  /* ── PANEL ── */
+  .panel{display:none;animation:fadeIn 0.3s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .panel-head{margin-bottom:32px}
+  .pillar-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.25em;
+    color:var(--green);
+    margin-bottom:12px;
+  }
+  .pillar-title{
+    font-family:'Instrument Serif',serif;
+    font-weight:400;
+    font-size:clamp(44px,9vw,76px);
+    line-height:0.92;
+    letter-spacing:-0.02em;
+    margin-bottom:16px;
+  }
+  .pillar-title em{color:var(--green);font-style:italic}
+  .pillar-tagline{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:clamp(18px,3.5vw,22px);
+    color:var(--ink-dim);
+    max-width:600px;
+  }
+
+  /* ── BLOCKS ── */
+  .block{
+    margin-bottom:36px;
+    padding-top:24px;
+    border-top:1px solid var(--rule);
+  }
+  .block-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .block-label .dot{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--green);
+  }
+  .block-label.q .dot{background:var(--amber)}
+  .block-label.cc .dot{background:var(--blue)}
+  .block-label.mistake .dot{background:var(--red)}
+  .block-label.study .dot{background:var(--ink)}
+  .block-label .text{color:var(--ink)}
+
+  .block h3{
+    font-family:'Instrument Serif',serif;
+    font-weight:400;
+    font-size:clamp(24px,4.5vw,32px);
+    line-height:1.15;
+    margin-bottom:14px;
+    letter-spacing:-0.01em;
+  }
+  .block p{
+    font-size:15px;
+    color:var(--ink);
+    line-height:1.65;
+    margin-bottom:14px;
+  }
+  .block p .dim{color:var(--ink-dim)}
+  .block p .green{color:var(--green);font-weight:600}
+  .block p .red{color:var(--red);font-weight:600}
+
+  /* ── VISUAL EXAMPLE BOX ── */
+  .visual{
+    background:var(--bg-2);
+    border:1px solid var(--rule);
+    padding:20px;
+    margin:16px 0;
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+  }
+  .visual .v-head{
+    font-size:10px;
+    letter-spacing:0.18em;
+    color:var(--ink-dim);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    padding-bottom:10px;
+    border-bottom:1px dashed var(--rule);
+  }
+  .v-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    padding:6px 0;
+    align-items:baseline;
+    gap:12px;
+  }
+  .v-row.indent{padding-left:16px;color:var(--ink-dim);font-size:12px}
+  .v-row.bold{font-weight:700;border-top:1px solid var(--rule);margin-top:8px;padding-top:10px}
+  .v-row .lbl{font-family:'Bricolage Grotesque',sans-serif}
+  .v-row.indent .lbl{font-family:'JetBrains Mono',monospace}
+  .v-row .num{font-variant-numeric:tabular-nums}
+  .num.pos{color:var(--green)}
+  .num.neg{color:var(--red)}
+
+  /* ── CC APPLICATION CARD ── */
+  .cc-card{
+    background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(59,130,246,0.02));
+    border:1px solid var(--blue);
+    border-left:3px solid var(--blue);
+    padding:20px 22px;
+    margin:18px 0;
+  }
+  .cc-card .cc-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.2em;
+    color:var(--blue);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .cc-card h4{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:600;
+    font-size:18px;
+    margin-bottom:10px;
+    line-height:1.3;
+  }
+  .cc-card p{font-size:14px;color:var(--ink);line-height:1.6;margin-bottom:8px}
+  .cc-card ul{list-style:none;padding-left:0}
+  .cc-card li{
+    font-size:14px;
+    color:var(--ink);
+    padding:6px 0 6px 22px;
+    position:relative;
+    line-height:1.5;
+  }
+  .cc-card li::before{
+    content:'→';
+    position:absolute;
+    left:0;
+    color:var(--blue);
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  /* ── MISTAKE BOX ── */
+  .mistake-box{
+    background:rgba(255,77,77,0.04);
+    border:1px solid rgba(255,77,77,0.3);
+    padding:18px 20px;
+    margin:14px 0;
+  }
+  .mistake-box .m-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.2em;
+    color:var(--red);
+    text-transform:uppercase;
+    margin-bottom:8px;
+  }
+  .mistake-box p{font-size:14px;color:var(--ink);line-height:1.55}
+
+  /* ── STUDY PATH ── */
+  .study-grid{
+    display:grid;
+    gap:10px;
+    margin-top:8px;
+  }
+  .study-item{
+    background:var(--bg-2);
+    border:1px solid var(--rule);
+    padding:14px 16px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:14px;
+    align-items:start;
+  }
+  .study-item .step{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:24px;
+    color:var(--green);
+    line-height:1;
+    padding-top:2px;
+  }
+  .study-item .body strong{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    display:block;
+    margin-bottom:4px;
+  }
+  .study-item .body span{
+    font-size:13px;
+    color:var(--ink-dim);
+    line-height:1.5;
+  }
+
+  /* ── NAVIGATION FOOTER ── */
+  .nav-footer{
+    margin-top:50px;
+    padding-top:20px;
+    border-top:1px solid var(--rule);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .nav-btn{
+    flex:1;
+    background:transparent;
+    border:1px solid var(--rule);
+    color:var(--ink-dim);
+    padding:14px 16px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all 0.2s ease;
+    text-align:left;
+  }
+  .nav-btn:hover:not(:disabled){
+    border-color:var(--green);
+    color:var(--green);
+  }
+  .nav-btn:disabled{opacity:0.3;cursor:not-allowed}
+  .nav-btn.next{text-align:right}
+  .nav-btn .label{display:block;font-size:9px;color:var(--ink-dim);margin-bottom:4px}
+  .nav-btn .name{color:var(--ink);font-weight:500}
+  .nav-btn:hover:not(:disabled) .name{color:var(--green)}
+
+  /* ── INTRO PANEL ── */
+  .intro-card{
+    background:var(--bg-2);
+    border:1px solid var(--rule);
+    padding:24px;
+    margin-bottom:18px;
+  }
+  .intro-card h3{
+    font-family:'Instrument Serif',serif;
+    font-size:22px;
+    margin-bottom:10px;
+  }
+  .intro-card p{font-size:14.5px;line-height:1.65;color:var(--ink)}
+
+  .four-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin:24px 0;
+  }
+  .four-cell{
+    background:var(--bg-2);
+    border:1px solid var(--rule);
+    padding:18px;
+    cursor:pointer;
+    transition:all 0.2s ease;
+  }
+  .four-cell:hover{border-color:var(--green);transform:translateY(-2px)}
+  .four-cell .fc-num{
+    font-family:'Instrument Serif',serif;
+    font-style:italic;
+    font-size:36px;
+    color:var(--green);
+    line-height:1;
+    margin-bottom:10px;
+  }
+  .four-cell h4{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;
+    font-size:18px;
+    margin-bottom:6px;
+  }
+  .four-cell p{font-size:13px;color:var(--ink-dim);line-height:1.5}
+
+  /* ── HOW TO STUDY GUIDE ── */
+  .how-to-card{
+    background:linear-gradient(135deg,rgba(184,255,0,0.08),transparent);
+    border:1px solid var(--green);
+    padding:24px;
+    margin:30px 0;
+  }
+  .how-to-card .htc-tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:0.2em;
+    color:var(--green);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .how-to-card h3{
+    font-family:'Instrument Serif',serif;
+    font-size:26px;
+    margin-bottom:14px;
+    line-height:1.2;
+  }
+  .how-to-card p{font-size:14.5px;line-height:1.6;color:var(--ink);margin-bottom:10px}
+
+  @media(max-width:560px){
+    .tabs{grid-template-columns:repeat(2,1fr)}
+    .four-grid{grid-template-columns:1fr}
+    .tab .name{font-size:10px}
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">KHYREE CITY <span class="accent">/</span> FINANCIAL IQ DECK 01</div>
+    <div class="header-right">v1.0</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-panel="intro">
+      <span class="num">00</span><span class="name">START</span>
+    </button>
+    <button class="tab" data-panel="accounting">
+      <span class="num">01</span><span class="name">ACCOUNTING</span>
+    </button>
+    <button class="tab" data-panel="investing">
+      <span class="num">02</span><span class="name">INVESTING</span>
+    </button>
+    <button class="tab" data-panel="markets">
+      <span class="num">03</span><span class="name">MARKETS</span>
+    </button>
+    <button class="tab" data-panel="law">
+      <span class="num">04</span><span class="name">LAW</span>
+    </button>
+  </div>
+
+  <!-- ───────── INTRO PANEL ───────── -->
+  <div class="panel active" id="intro">
+    <div class="panel-head">
+      <div class="pillar-num">00 // ORIENTATION</div>
+      <h2 class="pillar-title">Four <em>literacies.</em><br/>One operator.</h2>
+      <p class="pillar-tagline">Kiyosaki's framework. The four kinds of intelligence every wealthy person has — and most poor people lack.</p>
+    </div>
+
+    <div class="intro-card">
+      <h3>Why these four, in this order?</h3>
+      <p>Most people try to skip straight to investing. They lose money because they can't <span style="color:var(--green)">read the numbers</span> (Accounting), don't understand <span style="color:var(--green)">supply and demand</span> (Markets), and get destroyed by <span style="color:var(--green)">tax law</span> (Law) they didn't know existed. Kiyosaki's whole point: investing is the last pillar, not the first.</p>
+    </div>
+
+    <div class="four-grid">
+      <div class="four-cell" data-jump="accounting">
+        <div class="fc-num">01</div>
+        <h4>ACCOUNTING</h4>
+        <p>Reading the numbers. The language of every business.</p>
+      </div>
+      <div class="four-cell" data-jump="investing">
+        <div class="fc-num">02</div>
+        <h4>INVESTING</h4>
+        <p>The science of money making more money. Strategies & formulas.</p>
+      </div>
+      <div class="four-cell" data-jump="markets">
+        <div class="fc-num">03</div>
+        <h4>MARKETS</h4>
+        <p>Supply & demand. What people want, what they'll pay.</p>
+      </div>
+      <div class="four-cell" data-jump="law">
+        <div class="fc-num">04</div>
+        <h4>LAW</h4>
+        <p>The rules of the game. Tax law, corporate structure, contracts.</p>
+      </div>
+    </div>
+
+    <div class="how-to-card">
+      <div class="htc-tag">★ HOW TO STUDY THIS DECK</div>
+      <h3>Don't just read it. Apply it to Cut Creaters.</h3>
+      <p>Each pillar has a section called <strong style="color:var(--blue)">CUT CREATERS APPLICATION</strong> — that's where the lesson stops being theory and starts being your father's business.</p>
+      <p>Suggested rhythm: <span class="dim">one pillar per day for 4 days. Read the pillar in the morning, look for it in real life all day, journal what you saw at night.</span> By Day 4 you'll see the same business through 4 different lenses — that's financial IQ.</p>
+    </div>
+  </div>
+
+  <!-- ───────── ACCOUNTING PANEL ───────── -->
+  <div class="panel" id="accounting">
+    <div class="panel-head">
+      <div class="pillar-num">01 // PILLAR ONE</div>
+      <h2 class="pillar-title"><em>Accounting.</em></h2>
+      <p class="pillar-tagline">Financial literacy. The ability to read the numbers and know what they're telling you.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label"><div class="dot"></div><div class="text">DEFINITION</div></div>
+      <h3>Accounting is reading the story the numbers tell.</h3>
+      <p>Every business — whether it's a barber chair, a salon suite, or Apple — speaks one language: <span class="green">three financial statements.</span></p>
+      <p>The <strong>Income Statement</strong> tells you if you made money this month. <span class="dim">Income minus expenses.</span></p>
+      <p>The <strong>Balance Sheet</strong> tells you what you own versus what you owe right now. <span class="dim">Assets minus liabilities = net worth.</span></p>
+      <p>The <strong>Cash Flow Statement</strong> tells you where the actual cash moved. <span class="dim">Often different from "profit" — and this difference kills businesses.</span></p>
+    </div>
+
+    <div class="block">
+      <div class="block-label q"><div class="dot"></div><div class="text">WHAT IT LOOKS LIKE</div></div>
+      <h3>The minimum viable financial picture.</h3>
+
+      <div class="visual">
+        <div class="v-head">INCOME STATEMENT — MONTHLY</div>
+        <div class="v-row"><span class="lbl">Revenue</span><span class="num">$36,400</span></div>
+        <div class="v-row indent"><span class="lbl">— suite rent (42 × $200/wk)</span><span class="num">$36,400</span></div>
+        <div class="v-row"><span class="lbl">Expenses</span><span class="num neg">$42,800</span></div>
+        <div class="v-row indent"><span class="lbl">— lease</span><span class="num">$30,000</span></div>
+        <div class="v-row indent"><span class="lbl">— utilities</span><span class="num">$9,500</span></div>
+        <div class="v-row indent"><span class="lbl">— insurance + maint.</span><span class="num">$3,300</span></div>
+        <div class="v-row bold"><span class="lbl">NET PROFIT / (LOSS)</span><span class="num neg">($6,400)</span></div>
+      </div>
+
+      <div class="visual">
+        <div class="v-head">BALANCE SHEET — SNAPSHOT</div>
+        <div class="v-row"><span class="lbl">ASSETS</span><span class="num">TBD</span></div>
+        <div class="v-row indent"><span class="lbl">— cash</span><span class="num">?</span></div>
+        <div class="v-row indent"><span class="lbl">— buildouts/equipment</span><span class="num">?</span></div>
+        <div class="v-row"><span class="lbl">LIABILITIES</span><span class="num neg">$40,000+</span></div>
+        <div class="v-row indent"><span class="lbl">— Georgia Power debt</span><span class="num">$40,000</span></div>
+        <div class="v-row bold"><span class="lbl">NET WORTH</span><span class="num">TBD</span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label cc"><div class="dot"></div><div class="text">CUT CREATERS APPLICATION</div></div>
+      <div class="cc-card">
+        <div class="cc-tag">→ APPLY IT TO CUT CREATERS</div>
+        <h4>You're already doing accounting — that's literally what we did last message.</h4>
+        <p>Your job in the first 30 days back in Atlanta: <strong style="color:var(--blue)">build the real income statement.</strong> Not vibes. Not "I think we lose money." Real numbers.</p>
+        <ul>
+          <li>Pull the last 12 months of bank statements</li>
+          <li>Categorize every expense (lease / utilities / payroll / etc.)</li>
+          <li>Track suite rent collected per week</li>
+          <li>Build one P&L spreadsheet — update it every Sunday</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label mistake"><div class="dot"></div><div class="text">THE COMMON MISTAKE</div></div>
+      <div class="mistake-box">
+        <div class="m-tag">⚠ DON'T DO THIS</div>
+        <p>Confusing <strong>profit</strong> with <strong>cash</strong>. A business can show $20K profit on paper while having $200 in the bank — because that "profit" is sitting in tenant invoices that haven't paid yet. Cut Creaters' Georgia Power bill doesn't care about profit. It cares about cash.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label study"><div class="dot"></div><div class="text">HOW TO STUDY IT</div></div>
+      <div class="study-grid">
+        <div class="study-item"><span class="step">1</span><div class="body"><strong>Read: Rich Dad's Guide to Investing — Ch. 1-3</strong><span>Or watch any free Kiyosaki "financial statement" YouTube breakdown. 30 minutes.</span></div></div>
+        <div class="study-item"><span class="step">2</span><div class="body"><strong>Practice: Build Cut Creaters' P&L this week</strong><span>One Google Sheet. Income, expenses, profit. That's it. Update weekly.</span></div></div>
+        <div class="study-item"><span class="step">3</span><div class="body"><strong>Repeat: Read 1 public company's annual report (10-K)</strong><span>Pick one — Apple, Procter & Gamble. Find the 3 statements. See the same structure at scale.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── INVESTING PANEL ───────── -->
+  <div class="panel" id="investing">
+    <div class="panel-head">
+      <div class="pillar-num">02 // PILLAR TWO</div>
+      <h2 class="pillar-title"><em>Investing.</em></h2>
+      <p class="pillar-tagline">The science of money making more money. Knowing what's a deal versus what's a trap.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label"><div class="dot"></div><div class="text">DEFINITION</div></div>
+      <h3>Investing isn't gambling. It's a science with formulas.</h3>
+      <p>An <strong>investor</strong> doesn't ask "will this go up?" — that's a gambler. An investor asks: <span class="green">"how much cash flow does this asset produce, what did it cost, and what's my return?"</span></p>
+      <p>The core formula is <strong>ROI — Return on Investment.</strong> Money made / money put in = your return percentage. Anything less than the bank pays in interest? Bad investment.</p>
+      <p>Kiyosaki splits investments into 4 classes: <span class="dim">businesses, real estate, paper assets (stocks/bonds), and commodities (gold, oil).</span> Most rich people pick one or two and master them. They don't dabble.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label q"><div class="dot"></div><div class="text">WHAT IT LOOKS LIKE</div></div>
+      <h3>The investor's question, every single time.</h3>
+
+      <div class="visual">
+        <div class="v-head">THE ROI CALCULATION</div>
+        <div class="v-row"><span class="lbl">Annual cash flow from asset</span><span class="num pos">$X</span></div>
+        <div class="v-row"><span class="lbl">Money you put in</span><span class="num">$Y</span></div>
+        <div class="v-row bold"><span class="lbl">ROI = X ÷ Y × 100</span><span class="num pos">= __%</span></div>
+      </div>
+
+      <div class="visual" style="margin-top:14px">
+        <div class="v-head">EXAMPLE — FILLING ONE EMPTY SUITE</div>
+        <div class="v-row"><span class="lbl">Cost: marketing 1 suite</span><span class="num">$200</span></div>
+        <div class="v-row"><span class="lbl">Result: 1 tenant signs at $200/wk</span><span class="num pos">$10,400/yr</span></div>
+        <div class="v-row bold"><span class="lbl">ROI</span><span class="num pos">5,200%</span></div>
+      </div>
+
+      <p style="margin-top:14px;font-size:14px;color:var(--ink-dim)">That's why Cut Creaters' single best "investment" right now isn't real estate or stocks — it's marketing dollars to fill suites. The ROI dwarfs everything else.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label cc"><div class="dot"></div><div class="text">CUT CREATERS APPLICATION</div></div>
+      <div class="cc-card">
+        <div class="cc-tag">→ APPLY IT TO CUT CREATERS</div>
+        <h4>Every dollar has to fight for its job.</h4>
+        <p>Before you spend on anything, ask: <strong style="color:var(--blue)">"What's the ROI?"</strong></p>
+        <ul>
+          <li>$500 on Instagram ads to fill 2 suites = $20K/yr return = <strong>4,000% ROI</strong></li>
+          <li>$2,000 redesigning the lobby = $0 direct return = <strong>0% ROI</strong> (delay it)</li>
+          <li>$300 on a referral bounty (pay tenants $300 to refer a tenant) = if 1 fills = <strong>3,400% ROI</strong></li>
+          <li>$5,000 buying the building? <strong>Not yet</strong> — fix the income statement first, then talk acquisition</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label mistake"><div class="dot"></div><div class="text">THE COMMON MISTAKE</div></div>
+      <div class="mistake-box">
+        <div class="m-tag">⚠ DON'T DO THIS</div>
+        <p>Investing in things that <strong>feel</strong> like investments but don't produce cash. A nicer car. A bigger house you live in. A course you don't finish. Kiyosaki's line: <em>"Your house is not an asset"</em> — because it takes money out your pocket every month, not in.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label study"><div class="dot"></div><div class="text">HOW TO STUDY IT</div></div>
+      <div class="study-grid">
+        <div class="study-item"><span class="step">1</span><div class="body"><strong>Read: Rich Dad Poor Dad (the original)</strong><span>Foundation. Asset vs liability framework lives here.</span></div></div>
+        <div class="study-item"><span class="step">2</span><div class="body"><strong>Practice: Run ROI math on every Cut Creaters spend</strong><span>Before any expense above $100, write the ROI in your notes app. Train the muscle.</span></div></div>
+        <div class="study-item"><span class="step">3</span><div class="body"><strong>Pick your lane</strong><span>You're not going to be a stock investor and a real estate investor and a business owner. Pick one. For you, it's businesses (Cut Creaters, Khyree City).</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── MARKETS PANEL ───────── -->
+  <div class="panel" id="markets">
+    <div class="panel-head">
+      <div class="pillar-num">03 // PILLAR THREE</div>
+      <h2 class="pillar-title">Understanding<br/><em>Markets.</em></h2>
+      <p class="pillar-tagline">Supply and demand. Why something's worth what it's worth — and when that worth is about to change.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label"><div class="dot"></div><div class="text">DEFINITION</div></div>
+      <h3>A market is a conversation between supply and demand.</h3>
+      <p>Two forces, always: <span class="green">how much of the thing exists</span> (supply) and <span class="green">how badly people want it</span> (demand). When demand is up and supply is down, prices rise. Reverse it, prices fall.</p>
+      <p>Understanding markets means knowing <strong>what people actually want</strong> (not what you think they should want) and <strong>what they're willing to pay</strong>. Most businesses fail because the founder built something nobody asked for.</p>
+      <p>The advanced version: knowing <span class="dim">market timing</span> — when a market is about to expand or collapse before everyone else sees it.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label q"><div class="dot"></div><div class="text">WHAT IT LOOKS LIKE</div></div>
+      <h3>Reading a market in 4 questions.</h3>
+
+      <div class="visual">
+        <div class="v-head">THE MARKET DIAGNOSTIC</div>
+        <div class="v-row"><span class="lbl">1. Who is the customer?</span><span class="num"></span></div>
+        <div class="v-row indent"><span class="lbl">→ specific person, not "everyone"</span><span class="num"></span></div>
+        <div class="v-row"><span class="lbl">2. What's the pain?</span><span class="num"></span></div>
+        <div class="v-row indent"><span class="lbl">→ what are they losing without you?</span><span class="num"></span></div>
+        <div class="v-row"><span class="lbl">3. What do they pay alternatives?</span><span class="num"></span></div>
+        <div class="v-row indent"><span class="lbl">→ that's your price ceiling</span><span class="num"></span></div>
+        <div class="v-row"><span class="lbl">4. Why you over them?</span><span class="num"></span></div>
+        <div class="v-row indent"><span class="lbl">→ if no answer, no business</span><span class="num"></span></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label cc"><div class="dot"></div><div class="text">CUT CREATERS APPLICATION</div></div>
+      <div class="cc-card">
+        <div class="cc-tag">→ APPLY IT TO CUT CREATERS</div>
+        <h4>100 empty suites = market failure. Find the why.</h4>
+        <p>The market is telling you something. Your job is to <strong style="color:var(--blue)">listen, not argue.</strong></p>
+        <ul>
+          <li><strong>Customer:</strong> Atlanta stylists/barbers earning $800-$2,500/wk who want their own space</li>
+          <li><strong>Pain:</strong> Booth-renting at someone else's shop, no privacy, no brand, owner taking a cut</li>
+          <li><strong>Alternatives:</strong> Sola Salons, Phenix, MY Salon Suite — call them, learn their pricing + waitlist</li>
+          <li><strong>Why Cut Creaters?</strong> 30-yr brand. Decatur location. Pop's reputation. Find the angle nobody else has.</li>
+        </ul>
+        <p style="margin-top:8px"><strong style="color:var(--green)">Field research week 1:</strong> tour 3 competitor properties pretending to be a tenant. Note their price, amenities, vibe, fill rate. That's market research.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label mistake"><div class="dot"></div><div class="text">THE COMMON MISTAKE</div></div>
+      <div class="mistake-box">
+        <div class="m-tag">⚠ DON'T DO THIS</div>
+        <p>Falling in love with your offer instead of the customer. Cut Creaters has been "we have suites" for 30 years. The market shifted — Atlanta now has competitors with better lighting, on-site beauty supply, content rooms for IG. <strong>The market doesn't owe you tenure.</strong> What does it want now?</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label study"><div class="dot"></div><div class="text">HOW TO STUDY IT</div></div>
+      <div class="study-grid">
+        <div class="study-item"><span class="step">1</span><div class="body"><strong>Read: The Mom Test by Rob Fitzpatrick</strong><span>Short. Teaches you how to interview customers without lying to yourself.</span></div></div>
+        <div class="study-item"><span class="step">2</span><div class="body"><strong>Practice: Tour 3 competitor salon suites</strong><span>This week. Take notes on price, fill rate, amenities, who's renting. That's a market study.</span></div></div>
+        <div class="study-item"><span class="step">3</span><div class="body"><strong>Talk to 5 tenants who left Cut Creaters</strong><span>The most valuable data in any business. Why did they leave? What would bring them back?</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── LAW PANEL ───────── -->
+  <div class="panel" id="law">
+    <div class="panel-head">
+      <div class="pillar-num">04 // PILLAR FOUR</div>
+      <h2 class="pillar-title">The <em>Law.</em></h2>
+      <p class="pillar-tagline">The rules of the game. Tax law, corporate structure, contracts. The rich know them. The poor don't.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label"><div class="dot"></div><div class="text">DEFINITION</div></div>
+      <h3>The same dollar can be taxed at 40% or 0% — depending on what you know.</h3>
+      <p>Law is the part of financial IQ most people skip — and it's the most expensive thing they can skip. <span class="green">Two people earning the same income can keep wildly different amounts</span> based on their legal structure, tax strategy, and contracts.</p>
+      <p>Three sub-pillars sit under this one:</p>
+      <p><strong>Tax law:</strong> What income is taxed how, what's deductible, what's depreciable. <span class="dim">A business owner's expenses come out before tax. An employee's expenses come out after tax. That alone is a 30-40% advantage.</span></p>
+      <p><strong>Corporate law:</strong> LLC, S-Corp, C-Corp. Each has different tax treatment, liability protection, and exit options. <span class="dim">Wrong structure = lose your house if the business gets sued.</span></p>
+      <p><strong>Contract law:</strong> Tenant agreements, vendor contracts, IP protection. <span class="dim">Your mom learned this the hard way with Loc N Gel. The formula was real. The protection wasn't.</span></p>
+    </div>
+
+    <div class="block">
+      <div class="block-label q"><div class="dot"></div><div class="text">WHAT IT LOOKS LIKE</div></div>
+      <h3>Same income. Two different worlds.</h3>
+
+      <div class="visual">
+        <div class="v-head">EMPLOYEE — $100K SALARY</div>
+        <div class="v-row"><span class="lbl">Gross income</span><span class="num">$100,000</span></div>
+        <div class="v-row"><span class="lbl">Tax (federal + state, ~30%)</span><span class="num neg">($30,000)</span></div>
+        <div class="v-row"><span class="lbl">After-tax money</span><span class="num">$70,000</span></div>
+        <div class="v-row"><span class="lbl">Living expenses</span><span class="num neg">($60,000)</span></div>
+        <div class="v-row bold"><span class="lbl">LEFT TO INVEST</span><span class="num">$10,000</span></div>
+      </div>
+
+      <div class="visual" style="margin-top:14px">
+        <div class="v-head">BUSINESS OWNER (LLC) — $100K REVENUE</div>
+        <div class="v-row"><span class="lbl">Revenue</span><span class="num">$100,000</span></div>
+        <div class="v-row"><span class="lbl">Business expenses (deductible)</span><span class="num neg">($60,000)</span></div>
+        <div class="v-row"><span class="lbl">Taxable profit</span><span class="num">$40,000</span></div>
+        <div class="v-row"><span class="lbl">Tax (~25% on profit)</span><span class="num neg">($10,000)</span></div>
+        <div class="v-row bold"><span class="lbl">KEPT</span><span class="num pos">$30,000</span></div>
+      </div>
+
+      <p style="margin-top:14px;font-size:14px;color:var(--ink-dim)"><strong style="color:var(--ink)">Same $100K.</strong> The employee keeps $10K to invest. The business owner keeps $30K. That's not a small difference — that's a 3x compound advantage every single year.</p>
+    </div>
+
+    <div class="block">
+      <div class="block-label cc"><div class="dot"></div><div class="text">CUT CREATERS APPLICATION</div></div>
+      <div class="cc-card">
+        <div class="cc-tag">→ APPLY IT TO CUT CREATERS</div>
+        <h4>Three legal questions to answer in the first 30 days back.</h4>
+        <ul>
+          <li><strong>Entity check:</strong> Is Cut Creaters an LLC? S-Corp? Sole proprietorship in Pop's name? Each has different tax + liability implications. Get the answer from the CPA.</li>
+          <li><strong>Tenant agreements:</strong> Are tenants on written leases? Month-to-month? Can a tenant skip without paying? <strong>Every empty suite that walked owing money is a contract failure.</strong></li>
+          <li><strong>Loc N Gel lesson:</strong> Mom's product was stolen because the formula wasn't IP-protected. When her relaunch happens (Year 2), it gets a trademark, an LLC, and a non-disclosure on day one. Never again.</li>
+        </ul>
+        <p style="margin-top:8px"><strong style="color:var(--green)">Action:</strong> Get a small-business CPA on a $200/mo retainer. They'll save you 5-10x that in tax + structure mistakes.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label mistake"><div class="dot"></div><div class="text">THE COMMON MISTAKE</div></div>
+      <div class="mistake-box">
+        <div class="m-tag">⚠ DON'T DO THIS</div>
+        <p>Treating "the law" as paranoia or paperwork. The legal structure of a business is <strong>the financial chassis</strong> — wrong chassis, wrong outcome no matter how good the engine. Most family businesses run on a handshake until the handshake fails.</p>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-label study"><div class="dot"></div><div class="text">HOW TO STUDY IT</div></div>
+      <div class="study-grid">
+        <div class="study-item"><span class="step">1</span><div class="body"><strong>Read: Tax-Free Wealth by Tom Wheelwright</strong><span>Kiyosaki's CPA. Shows you the legal-tax playbook the rich use. One book, full education.</span></div></div>
+        <div class="study-item"><span class="step">2</span><div class="body"><strong>Practice: Audit Cut Creaters' contracts this month</strong><span>Read every tenant lease. Read the building lease. Note any vague language. Bring to a lawyer.</span></div></div>
+        <div class="study-item"><span class="step">3</span><div class="body"><strong>Hire: Small-business CPA + transactional lawyer</strong><span>Don't DIY this layer. The cost of getting it wrong always exceeds the cost of getting it right.</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAV FOOTER (rendered/hidden by JS) -->
+  <div class="nav-footer" id="navFooter">
+    <button class="nav-btn prev" id="prevBtn">
+      <span class="label">← PREV</span><span class="name">—</span>
+    </button>
+    <button class="nav-btn next" id="nextBtn">
+      <span class="label">NEXT →</span><span class="name">—</span>
+    </button>
+  </div>
+
+</div>
+
+<script>
+  const order = ['intro','accounting','investing','markets','law'];
+  const labels = {
+    intro:'Start',
+    accounting:'01 Accounting',
+    investing:'02 Investing',
+    markets:'03 Markets',
+    law:'04 Law'
+  };
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  function show(panelId){
+    panels.forEach(p=>p.classList.toggle('active', p.id===panelId));
+    tabs.forEach(t=>t.classList.toggle('active', t.dataset.panel===panelId));
+    const idx = order.indexOf(panelId);
+    // prev
+    if(idx<=0){
+      prevBtn.disabled=true;
+      prevBtn.querySelector('.name').textContent='—';
+    } else {
+      prevBtn.disabled=false;
+      prevBtn.querySelector('.name').textContent=labels[order[idx-1]];
+      prevBtn.dataset.target=order[idx-1];
+    }
+    // next
+    if(idx>=order.length-1){
+      nextBtn.disabled=true;
+      nextBtn.querySelector('.name').textContent='—';
+    } else {
+      nextBtn.disabled=false;
+      nextBtn.querySelector('.name').textContent=labels[order[idx+1]];
+      nextBtn.dataset.target=order[idx+1];
+    }
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.panel)));
+  document.querySelectorAll('.four-cell').forEach(c=>{
+    c.addEventListener('click',()=>show(c.dataset.jump));
+  });
+  prevBtn.addEventListener('click',()=>{
+    if(prevBtn.dataset.target) show(prevBtn.dataset.target);
+  });
+  nextBtn.addEventListener('click',()=>{
+    if(nextBtn.dataset.target) show(nextBtn.dataset.target);
+  });
+
+  // initialize
+  show('intro');
+</script>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khyree City — Visual System v3 · Full Campaign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Reem+Kufi:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#050505;--panel:#0d0d0d;--line:#1f1f1f;--line-2:#2a2a2a;--acid:#b8ff00;--cream:#f5e6c8;--mut:#6e6e6e;--white:#fafafa}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  html,body{background:var(--bg);color:var(--white);font-family:'Inter',sans-serif}
+  body{line-height:1.55;padding:24px 16px 100px;max-width:780px;margin:0 auto;background:radial-gradient(ellipse at top,rgba(184,255,0,0.05),transparent 50%),radial-gradient(ellipse at bottom,rgba(184,255,0,0.02),transparent 50%),var(--bg)}
+
+  .hero{padding:30px 0 38px;border-bottom:1px solid var(--line);position:relative}
+  .hero::before{content:"";position:absolute;left:0;top:0;width:32px;height:1px;background:var(--acid)}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.32em;color:var(--acid);text-transform:uppercase;font-weight:700;border:1px solid rgba(184,255,0,0.3);padding:5px 11px;border-radius:3px;margin-bottom:14px}
+  h1{font-family:'Anton',sans-serif;font-size:56px;line-height:.92;text-transform:uppercase}
+  h1 .ital{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-1px;color:var(--acid);text-transform:lowercase}
+  .hero .meta{margin-top:18px;display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--mut);letter-spacing:.18em;text-transform:uppercase}
+  .hero .meta b{color:var(--white);font-weight:500}
+  .intro{margin:26px 0 0;font-size:14.5px;line-height:1.65;color:#c4c4c4;max-width:560px}
+  .intro b{color:var(--acid);font-weight:500}
+
+  .campaign{margin-top:60px}
+  .camp-head{border:1px solid var(--line-2);border-radius:14px;padding:22px 22px 18px;margin-bottom:30px;background:linear-gradient(180deg,var(--panel),#080808);position:relative;overflow:hidden}
+  .camp-head::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acid)}
+  .camp-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acid);letter-spacing:.2em;text-transform:uppercase;margin-bottom:6px}
+  .camp-title{font-family:'Anton',sans-serif;font-size:36px;text-transform:uppercase;line-height:1;letter-spacing:.5px}
+  .camp-title .ar{font-family:'Aref Ruqaa',serif;font-size:30px;color:var(--acid);margin-right:14px;vertical-align:-2px}
+  .camp-desc{margin-top:12px;font-size:13.5px;color:#c0c0c0;line-height:1.6;max-width:540px}
+  .camp-tags{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px}
+  .ctag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--acid);background:rgba(184,255,0,0.06);border:1px solid rgba(184,255,0,0.25);padding:4px 8px;border-radius:3px;text-transform:uppercase}
+
+  .story-row{margin-bottom:46px}
+  .story-frame{position:relative;width:100%;max-width:340px;margin:0 auto 18px;padding:14px;border:1px solid var(--line-2);border-radius:22px;background:linear-gradient(180deg,var(--panel) 0%,#0a0a0a 100%)}
+  .frame-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mut);letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+  .frame-label .live{display:flex;align-items:center;gap:6px;color:var(--acid)}
+  .dot{width:6px;height:6px;background:var(--acid);border-radius:50%;box-shadow:0 0 8px var(--acid);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  .story{position:relative;width:100%;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#000;isolation:isolate}
+  .photo{position:absolute;inset:0;background-size:cover;background-position:center;z-index:2}
+  .grain{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:.18;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1   0 0 0 0 1   0 0 0 0 1   0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .scan{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:.06;background-image:repeating-linear-gradient(0deg,transparent 0,transparent 2px,#000 2px,#000 3px)}
+  .vignette{position:absolute;inset:0;z-index:6;pointer-events:none}
+  .fog{position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse at 30% 60%,rgba(255,255,255,0.06),transparent 50%),radial-gradient(ellipse at 70% 40%,rgba(184,255,0,0.05),transparent 50%);mix-blend-mode:screen}
+
+  .hud{position:absolute;z-index:8;font-family:'JetBrains Mono',monospace;color:var(--acid);font-weight:500}
+  .hud-tl{top:14px;left:14px;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase}
+  .hud-tr{top:14px;right:14px;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;text-align:right}
+  .hud-bl{bottom:14px;left:14px;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase}
+  .hud-br{bottom:14px;right:14px;font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;text-align:right}
+  .hud-rec{display:inline-flex;align-items:center;gap:5px}
+  .hud-rec::before{content:"";width:6px;height:6px;background:var(--acid);border-radius:50%;box-shadow:0 0 6px var(--acid)}
+  .bracket{position:absolute;width:18px;height:18px;border:1.5px solid var(--acid);z-index:8;box-shadow:0 0 6px rgba(184,255,0,0.5)}
+  .bracket.tl{top:8px;left:8px;border-right:0;border-bottom:0}
+  .bracket.tr{top:8px;right:8px;border-left:0;border-bottom:0}
+  .bracket.bl{bottom:8px;left:8px;border-right:0;border-top:0}
+  .bracket.br{bottom:8px;right:8px;border-left:0;border-top:0}
+
+  .display{font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.9;letter-spacing:.5px;color:var(--white)}
+  .display .glow{color:var(--acid);text-shadow:0 0 14px rgba(184,255,0,0.55)}
+  .ital{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-.5px;text-transform:none}
+  .ar-trad{font-family:'Aref Ruqaa',serif;direction:rtl;font-weight:700;color:var(--acid)}
+  .ar-tech{font-family:'Reem Kufi',sans-serif;direction:rtl;font-weight:600;letter-spacing:1px}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--acid);font-weight:500}
+  .lbl-w{color:var(--white)}
+  .ui-line{height:1px;background:linear-gradient(90deg,transparent,var(--acid),transparent)}
+  .ui-bar{height:2px;background:var(--line-2);border-radius:2px;overflow:hidden}
+  .ui-bar .fill{height:100%;background:var(--acid);box-shadow:0 0 8px var(--acid)}
+  .glass{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:6px}
+  .glass.acid{background:rgba(184,255,0,0.08);border:1px solid rgba(184,255,0,0.3);box-shadow:0 0 20px rgba(184,255,0,0.15)}
+
+  .spec{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;position:relative;overflow:hidden}
+  .spec::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:2px;background:var(--acid)}
+  .spec h4{font-family:'Anton',sans-serif;font-size:17px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;color:var(--white)}
+  .spec .h-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--acid);letter-spacing:.2em;text-transform:uppercase;font-weight:500;margin-bottom:14px}
+  .spec dl{display:grid;grid-template-columns:1fr;gap:11px}
+  .spec dt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mut);letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:3px}
+  .spec dd{font-size:13px;color:#dadada;line-height:1.55}
+  .spec dd b{color:var(--white);font-weight:600}
+  .spec dd .acid{color:var(--acid);font-weight:500}
+  .spec dd .ar-inline{font-family:'Aref Ruqaa',serif;color:var(--acid);font-size:15px;font-weight:700;margin:0 3px}
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--acid);background:rgba(184,255,0,0.07);border:1px solid rgba(184,255,0,0.25);padding:4px 8px;border-radius:3px;font-weight:500}
+  .spec dd code{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;color:#d4d4d4;background:#000;border:1px solid var(--line-2);border-radius:6px;padding:10px 12px;margin-top:6px;line-height:1.55;white-space:pre-wrap}
+
+  .guide{margin-top:54px;background:var(--panel);border:1px dashed rgba(184,255,0,0.4);border-radius:14px;padding:22px 20px}
+  .guide h3{font-family:'Anton',sans-serif;font-size:20px;text-transform:uppercase;color:var(--acid);letter-spacing:.5px;margin-bottom:14px}
+  .guide ol{list-style:none;counter-reset:g}
+  .guide li{counter-increment:g;font-size:14px;padding:9px 0 9px 28px;position:relative;border-bottom:1px solid #181818}
+  .guide li:last-child{border:0}
+  .guide li::before{content:counter(g);position:absolute;left:0;top:11px;color:#000;background:var(--acid);font-family:'Anton',sans-serif;font-size:11px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .guide li b{color:var(--white)}
+
+  .foot{text-align:center;margin-top:50px;padding-top:24px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.32em;color:var(--mut);text-transform:uppercase}
+  .foot b{color:var(--acid)}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="pill">Khyree City · Visual System · v3 — FULL</span>
+  <h1>The<br>Full <span class="ital">campaign</span></h1>
+  <div class="meta">
+    <span><b>4</b> campaigns</span>
+    <span><b>10</b> stories</span>
+    <span>Arabic · <b>خط</b></span>
+    <span><b>9:16</b> story-ready</span>
+  </div>
+  <p class="intro">
+    Full execution against the brief. Every campaign you asked for, built on your real photos, in the <b>cinematic luxury</b> direction with a few <b>schematic</b> touches where they sharpen the message. Type lives inside the compositions — behind heads, wrapping bodies, integrated with the geometry. Apple × Cyberpunk × Travis Scott × Arabic gravitas.
+  </p>
+</div>
+
+<!-- ========================================================== -->
+<!-- CAMPAIGN 01 — I'M COMING HOME -->
+<!-- ========================================================== -->
+<div class="campaign">
+  <div class="camp-head">
+    <div class="camp-id">CAMPAIGN · 01</div>
+    <div class="camp-title"><span class="ar">عودة</span>I'm Coming Home</div>
+    <div class="camp-desc">The countdown arc. Builds anticipation. <b>3 stories</b> — open with the hero, build with the craft, land with the manifesto.</div>
+    <div class="camp-tags"><span class="ctag">Countdown</span><span class="ctag">Hero Photo</span><span class="ctag">Hype + Emotion</span></div>
+  </div>
+
+  <!-- 1A: DESERT 60 -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>01 · A</span><span class="live"><span class="dot"></span>HERO</span></div>
+      <div class="story">
+        <div style="position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center">
+          <div style="font-family:'Aref Ruqaa',serif;font-size:340px;color:rgba(184,255,0,0.25);font-weight:700;line-height:1;text-shadow:0 0 60px rgba(184,255,0,0.4);direction:rtl">خط</div>
+        </div>
+        <div class="photo" style="background-image:url('khyree_06_desert.png');background-position:center 30%;mix-blend-mode:luminosity;opacity:.92"></div>
+        <div class="fog"></div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,transparent 25%,transparent 60%,rgba(0,0,0,0.92) 100%)"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">REC · 001</span></div>
+        <div class="hud hud-tr">N 33.7° W 84.4°<br><span style="color:#fff;opacity:.65">ATL · INBOUND</span></div>
+        <div style="position:absolute;left:0;right:0;top:42%;transform:translateY(-50%);text-align:center;z-index:6">
+          <div class="lbl" style="margin-bottom:6px">DAYS · COUNTDOWN</div>
+          <div class="display" style="font-size:160px;line-height:.82;letter-spacing:-4px"><span class="glow">60</span></div>
+        </div>
+        <div style="position:absolute;left:18px;right:18px;bottom:30px;z-index:6">
+          <div class="ital" style="font-size:24px;color:var(--white);text-align:center;line-height:1.05">the chair<br><span style="color:var(--acid)">reopens soon.</span></div>
+          <div class="ui-line" style="margin:14px 0 10px"></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.22em;color:#fff;opacity:.6;text-transform:uppercase">
+            <span>khyreecity.com</span><span class="ar-trad" style="font-size:12px">الحلاق</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>01·A — "Khatt 60"</h4>
+      <div class="h-sub">Hero · post first · drives the arc</div>
+      <dl>
+        <div><dt>Concept</dt><dd>Mega <span class="ar-inline">خط</span> ("the line") glows BEHIND you. Photo on luminosity blend so calligraphy bleeds through dark areas. "60" overlaps your body — countdown number is the headline, not a label.</dd></div>
+        <div><dt>Layout</dt><dd>Full-frame photo. Centered "60" upper-mid. Italic poetry line bottom. HUD corners frame like a cinema viewfinder. Coordinates anchor the place.</dd></div>
+        <div><dt>Typography</dt><dd>Aref Ruqaa for <span class="ar-inline">خط</span>. Anton 160px for "60". Instrument Serif italic for "reopens soon." JetBrains Mono for coordinates.</dd></div>
+        <div><dt>Color</dt><dd>Photo desaturated to luminosity. Acid green = only color. Cream-white type. Two-color discipline = the luxury.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Mega Calligraphy</span><span class="chip">Luminosity Blend</span><span class="chip">Atmospheric Fog</span><span class="chip">Acid Glow</span><span class="chip">Grain</span></div></dd></div>
+        <div><dt>Motion</dt><dd>"60" pulses subtly. Acid corners flicker on entry. Calligraphy breathes (opacity 0.2→0.3).</dd></div>
+        <div><dt>CTA</dt><dd class="acid">Link sticker → khyreecity.com</dd></div>
+        <div><dt>Caption</dt><dd>"60. The count is real. ATL — I'm bringing it back."</dd></div>
+        <div><dt>Music vibe</dt><dd>Slow ambient drone. Single oud or ney note. Movie trailer before the title drops.</dd></div>
+        <div><dt>AI image prompt (if extending)</dt><dd><code>cinematic wide shot of a man on a desert ATV at golden hour, shemagh covering face, monochrome luminosity grade, massive Arabic calligraphy glowing behind him, 9:16 vertical, film grain, A24 poster aesthetic</code></dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 1B: BEARD CUT / RETURNING -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>01 · B</span><span class="live"><span class="dot"></span>CRAFT</span></div>
+      <div class="story">
+        <div style="position:absolute;inset:0;z-index:1;display:flex;align-items:flex-start;justify-content:flex-end;padding-top:8%">
+          <div style="font-family:'Aref Ruqaa',serif;font-size:200px;color:rgba(184,255,0,0.32);font-weight:700;line-height:.95;direction:rtl;text-shadow:0 0 40px rgba(184,255,0,0.5);transform:translateX(8%)">الحلاق</div>
+        </div>
+        <div class="photo" style="background-image:url('khyree_02_beardcut.png');background-position:center 30%;mix-blend-mode:multiply"></div>
+        <div class="photo" style="background-image:url('khyree_02_beardcut.png');background-position:center 30%;mix-blend-mode:screen;opacity:.55;z-index:3"></div>
+        <div class="fog"></div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 28%,transparent 50%,rgba(0,0,0,0.95) 100%);z-index:5"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">SIGNAL · LIVE</span></div>
+        <div class="hud hud-tr">FILE · 002<br><span style="color:#fff;opacity:.65">CRAFT_LOG</span></div>
+        <div style="position:absolute;top:62px;left:0;right:0;text-align:center;z-index:6">
+          <div class="lbl">FROM THE CHAIR · ATL · INCOMING</div>
+        </div>
+        <div style="position:absolute;left:14px;top:38%;z-index:6;writing-mode:vertical-rl;transform:rotate(180deg)">
+          <div class="mono" style="font-size:9px;letter-spacing:.32em;color:var(--acid);text-transform:uppercase">HANDS · PATIENCE · LINE</div>
+        </div>
+        <div style="position:absolute;left:16px;right:16px;bottom:26px;z-index:6">
+          <div class="display" style="font-size:32px;line-height:.95">ATLANTA<br>RETURNING<br><span class="glow">SOON.</span></div>
+          <div class="ui-line" style="margin:14px 0 10px"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="lbl lbl-w" style="opacity:.75">@khyreecity</div>
+            <div class="glass acid" style="padding:5px 10px"><span class="lbl">TAP · JOIN</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>01·B — "Al-Hallaq"</h4>
+      <div class="h-sub">Craft · the proof under the promise</div>
+      <dl>
+        <div><dt>Concept</dt><dd><span class="ar-inline">الحلاق</span> ("The Barber") at 200px behind your head — reads like a halo. Photo double-blended (multiply below, screen on top) so Arabic glows through.</dd></div>
+        <div><dt>Layout</dt><dd>Action shot full-bleed. Three-line headline anchors lower-left. Vertical Mono caption left edge — film-credit feel. Empty middle = breathing room.</dd></div>
+        <div><dt>Typography</dt><dd>Aref Ruqaa Arabic. Anton 32px stacked. The third word "<b>SOON.</b>" in acid with glow — the eye lands there.</dd></div>
+        <div><dt>Color</dt><dd>Photo warm. Acid only on calligraphy + punch word. White elsewhere.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Behind-Subject Type</span><span class="chip">Double Blend</span><span class="chip">Vertical Mono</span><span class="chip">Glass CTA Chip</span></div></dd></div>
+        <div><dt>CTA</dt><dd class="acid">"TAP · JOIN" → khyreecity.com</dd></div>
+        <div><dt>Caption</dt><dd>"The hands didn't forget."</dd></div>
+        <div><dt>Music vibe</dt><dd>Slow boom-bap with vinyl grain. Confident, patient.</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 1C: MANIFESTO -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>01 · C</span><span class="live"><span class="dot"></span>MANIFESTO</span></div>
+      <div class="story" style="background:#000">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 70% 30%,rgba(184,255,0,0.12),transparent 50%);z-index:1"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">STATEMENT · 003</span></div>
+        <div class="hud hud-tr">KHYREE · CITY</div>
+        <div style="position:absolute;top:50%;left:18px;right:18px;transform:translateY(-50%);z-index:6">
+          <div class="lbl" style="margin-bottom:18px">A NOTE TO THE CITY</div>
+          <div class="display" style="font-size:38px;line-height:1.02">I LEFT<br><span class="ital" style="font-size:30px;color:#fff">to come back</span><br><span class="glow">STRONGER.</span></div>
+          <div class="ui-line" style="margin:22px 0 14px;max-width:80px"></div>
+          <div style="font-size:12.5px;color:#bdbdbd;line-height:1.55;max-width:240px">Two years studying. Two years sharpening. Same hands. Different man. <span style="color:var(--acid)">— Khyree</span></div>
+        </div>
+        <div style="position:absolute;left:18px;right:18px;bottom:24px;z-index:6">
+          <div class="ui-bar"><div class="fill" style="width:67%"></div></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.22em;color:#fff;opacity:.6;text-transform:uppercase">
+            <span>RETURN · LOADING</span><span>67% · D-60</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>01·C — "Stronger"</h4>
+      <div class="h-sub">Manifesto · type-only · the WHY in one swipe</div>
+      <dl>
+        <div><dt>Concept</dt><dd>No photo. The brand speaking. Apple-clean meets cyberpunk loading screen. Bottom: a literal "return loading" bar — adjust % weekly as you approach arrival.</dd></div>
+        <div><dt>Layout</dt><dd>Three-line headline center. Body copy below. Loading bar bottom — adds motion + urgency without clutter.</dd></div>
+        <div><dt>Typography</dt><dd>Anton verbs + Instrument Serif italic for the soft "to come back" line + Inter for signature. "STRONGER." hits acid.</dd></div>
+        <div><dt>Color</dt><dd>Pure black. Soft acid radial top-right. Three colors max.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Radial Acid Glow</span><span class="chip">Loading Bar UI</span><span class="chip">Grain</span><span class="chip">Negative Space</span></div></dd></div>
+        <div><dt>Motion</dt><dd>Loading bar animates 0→67% over 2 sec on entry.</dd></div>
+        <div><dt>CTA</dt><dd class="acid">Soft. Emoji slider sticker ("how ready are you?"). Goal = saves + shares.</dd></div>
+        <div><dt>Caption</dt><dd>"For the ones who asked why I went away. Here's why I'm coming back."</dd></div>
+        <div><dt>Music vibe</dt><dd>Silent or a single sustained pad note. This one breathes.</dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- CAMPAIGN 02 — FOUNDING OFFER -->
+<!-- ========================================================== -->
+<div class="campaign">
+  <div class="camp-head">
+    <div class="camp-id">CAMPAIGN · 02</div>
+    <div class="camp-title"><span class="ar">عرض</span>The Founding Offer</div>
+    <div class="camp-desc">High-converting offer drops. The 20-seat scarcity engine. <b>2 stories</b> — one cinematic, one billboard-loud.</div>
+    <div class="camp-tags"><span class="ctag">High Urgency</span><span class="ctag">DM Capture</span><span class="ctag">Scarcity Counter</span></div>
+  </div>
+
+  <!-- 2A: NEON CEILING / FIRST 20 -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>02 · A</span><span class="live"><span class="dot"></span>OFFER</span></div>
+      <div class="story">
+        <div class="photo" style="background-image:url('khyree_03_neon.png');background-position:center 20%"></div>
+        <div class="fog"></div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,transparent 30%,transparent 45%,rgba(0,0,0,0.95) 100%);z-index:5"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">OFFER · LIVE</span></div>
+        <div class="hud hud-tr">SEATS · 20/20</div>
+        <div style="position:absolute;top:54px;left:0;right:0;text-align:center;z-index:6">
+          <div class="lbl">FOUNDING CLIENTS · ATL</div>
+        </div>
+        <!-- Arabic accent on right -->
+        <div style="position:absolute;top:38%;right:12px;z-index:4">
+          <div style="font-family:'Aref Ruqaa',serif;font-size:64px;color:rgba(184,255,0,0.45);font-weight:700;direction:rtl;line-height:1;text-shadow:0 0 18px rgba(184,255,0,0.4)">٢٠</div>
+          <div class="mono" style="font-size:8px;letter-spacing:.2em;color:var(--acid);text-transform:uppercase;text-align:right;margin-top:2px;opacity:.7">٢٠ · TWENTY</div>
+        </div>
+        <div style="position:absolute;left:14px;right:14px;bottom:24px;z-index:6">
+          <div class="glass" style="padding:16px 16px 14px;border-radius:10px">
+            <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:8px">
+              <div class="display" style="font-size:46px;line-height:.9"><span class="glow">FIRST 20</span></div>
+            </div>
+            <div class="display" style="font-size:14px;line-height:1.1;margin-bottom:8px">FOUNDING RATE · <span class="ital" style="font-size:16px;color:var(--acid)">locked for life</span></div>
+            <div style="font-size:11.5px;color:#e2e2e2;line-height:1.45">When the week's full, it's full. No exceptions, no "I'll squeeze you in."</div>
+            <div class="ui-line" style="margin:12px 0 10px"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="lbl lbl-w" style="opacity:.8">DM · "CITY"</div>
+              <div class="lbl">→ khyreecity.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>02·A — "First 20"</h4>
+      <div class="h-sub">Offer · cinematic · DM-driving</div>
+      <dl>
+        <div><dt>Concept</dt><dd>The neon-ceiling shot already looks cyberpunk. We let it. The offer drops in a <b>floating glass panel</b>. Arabic numeral <span class="ar-inline">٢٠</span> hovers right side as a design accent — same number, different alphabet, deeper feel.</dd></div>
+        <div><dt>The offer wording</dt><dd>I used <b>"FOUNDING RATE · locked for life"</b> not "free cut" — this matches what we landed on earlier and protects your margins. <span class="acid">If you want "FREE CUT" instead, swap the headline — it'll convert harder short-term but cost you the lifetime-rate hook. Your call.</span></dd></div>
+        <div><dt>Typography</dt><dd>Anton "FIRST 20" at 46px in acid. Instrument Serif italic for "locked for life" — humanizes the offer. Aref Ruqaa for the Arabic numeral.</dd></div>
+        <div><dt>Color</dt><dd>Photo as-is (the existing neon lights become the accent). Glass panel = white at 6% opacity, 14px backdrop blur. Acid only on the punch words.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Glassmorphism Card</span><span class="chip">Backdrop Blur</span><span class="chip">Bilingual Numeral</span><span class="chip">Atmospheric Fog</span></div></dd></div>
+        <div><dt>Motion</dt><dd>The "20/20" in the top-right HUD ticks down ("17/20", "12/20", "8/20") as seats fill. The counter IS the urgency engine.</dd></div>
+        <div><dt>CTA</dt><dd class="acid">Question-box sticker "Want a seat? DM 'CITY'" + link sticker to khyreecity.com</dd></div>
+        <div><dt>Caption</dt><dd>"20 founding seats. When they're gone, the rate is gone. Comment CITY or hit the link."</dd></div>
+        <div><dt>Music vibe</dt><dd>Mid-tempo with tension. Tight hi-hats. Something's already counting down.</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 2B: PHOTOLESS BILLBOARD 20 -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>02 · B</span><span class="live"><span class="dot"></span>BILLBOARD</span></div>
+      <div class="story" style="background:#000">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 35%,rgba(184,255,0,0.18),transparent 55%);z-index:1"></div>
+        <div class="scan"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">LIMITED · 004</span></div>
+        <div class="hud hud-tr">KC · OFFER</div>
+        <div style="position:absolute;top:14%;left:0;right:0;text-align:center;z-index:6">
+          <div class="lbl" style="margin-bottom:4px">FOUNDING CLIENTS · LIFETIME RATE</div>
+          <div class="display" style="font-size:240px;line-height:.85;letter-spacing:-4px"><span class="glow">20</span></div>
+          <div class="ital" style="font-size:30px;color:#fff;margin-top:-10px">seats. that's all.</div>
+          <div style="font-family:'Aref Ruqaa',serif;font-size:30px;color:var(--acid);direction:rtl;margin-top:14px;text-shadow:0 0 12px rgba(184,255,0,0.4)">عشرون فقط</div>
+          <div class="mono" style="font-size:8px;color:#fff;opacity:.55;letter-spacing:.22em;text-transform:uppercase;margin-top:3px">"TWENTY ONLY"</div>
+        </div>
+        <div style="position:absolute;left:18px;right:18px;bottom:24px;z-index:6">
+          <div class="display" style="font-size:18px;line-height:1.05;text-align:center">DM <span class="glow">"CITY"</span> · KHYREECITY.COM</div>
+          <div class="ui-line" style="margin:12px 0 8px"></div>
+          <div style="text-align:center;font-size:9px;letter-spacing:.3em;color:#fff;opacity:.55;text-transform:uppercase;font-family:'JetBrains Mono',monospace">When they're gone — they're gone.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>02·B — "Just 20"</h4>
+      <div class="h-sub">Billboard · the loudest version</div>
+      <dl>
+        <div><dt>Concept</dt><dd>Strip everything. One number. One offer. One CTA. <b>Billboard energy.</b> Arabic <span class="ar-inline">عشرون فقط</span> ("twenty only") under English doubles the impact.</dd></div>
+        <div><dt>Layout</dt><dd>Massive "20" eats the upper half. Italic sub-line breaks rigidity. Arabic translation underneath gives it depth. CTA at base.</dd></div>
+        <div><dt>Typography</dt><dd>Anton "20" at 240px. Aref Ruqaa for Arabic. Apple ad discipline = 3 colors max.</dd></div>
+        <div><dt>Color</dt><dd>Black + acid + white. Nothing else.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Mega-Number</span><span class="chip">Acid Radial</span><span class="chip">Scan Lines</span><span class="chip">Bilingual Echo</span></div></dd></div>
+        <div><dt>Motion</dt><dd>"20" morphs to current count daily ("20→17→12→5"). High FOMO.</dd></div>
+        <div><dt>CTA</dt><dd class="acid">DM "CITY" + link sticker to khyreecity.com</dd></div>
+        <div><dt>Caption</dt><dd>"20. That's the whole offer."</dd></div>
+        <div><dt>Music vibe</dt><dd>Bass drop with one industrial hit. Or silence + a single click.</dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- CAMPAIGN 03 — PROOF / PORTFOLIO -->
+<!-- ========================================================== -->
+<div class="campaign">
+  <div class="camp-head">
+    <div class="camp-id">CAMPAIGN · 03</div>
+    <div class="camp-title"><span class="ar">حرفة</span>Proof / Portfolio</div>
+    <div class="camp-desc">Editorial showcase of the work. Luxury fashion photography energy. <b>2 stories</b> — one craft action shot, one heritage / origin file.</div>
+    <div class="camp-tags"><span class="ctag">Editorial</span><span class="ctag">Craft Showcase</span><span class="ctag">Heritage</span></div>
+  </div>
+
+  <!-- 3A: BEARD CUT EDITORIAL -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>03 · A</span><span class="live"><span class="dot"></span>EDITORIAL</span></div>
+      <div class="story">
+        <div class="photo" style="background-image:url('khyree_02_beardcut.png');background-position:center 28%;filter:contrast(1.08)"></div>
+        <div class="fog"></div>
+        <!-- Editorial overlay text - "CRAFT" wraps the subject -->
+        <div style="position:absolute;top:8%;left:-2%;z-index:4;transform:rotate(-90deg);transform-origin:left top">
+          <div style="font-family:'Anton',sans-serif;font-size:140px;color:rgba(255,255,255,0.12);line-height:.85;letter-spacing:-3px;text-transform:uppercase">CRAFT</div>
+        </div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.5) 0%,transparent 28%,transparent 65%,rgba(0,0,0,0.95) 100%);z-index:5"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">ISSUE · 01</span><br><span style="color:#fff;opacity:.6">VOL · 2026</span></div>
+        <div class="hud hud-tr">PORTFOLIO<br><span style="color:#fff;opacity:.6">FIG · 3.1</span></div>
+        <div style="position:absolute;right:14px;top:38%;z-index:6;text-align:right;writing-mode:vertical-rl;transform:rotate(180deg)">
+          <div class="mono" style="font-size:8px;letter-spacing:.32em;color:var(--acid);text-transform:uppercase">PRECISION · TONE · LINE</div>
+        </div>
+        <div style="position:absolute;left:16px;right:16px;bottom:22px;z-index:6">
+          <div class="display" style="font-size:30px;line-height:.95">PRECISION<br><span class="ital" style="font-size:30px;color:#fff">is the</span><br><span class="glow">SIGNATURE.</span></div>
+          <div class="ui-line" style="margin:13px 0 9px"></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-end">
+            <div>
+              <div class="mono" style="font-size:8.5px;letter-spacing:.22em;color:#fff;opacity:.6;text-transform:uppercase">VOL · KC / 2026</div>
+              <div class="mono" style="font-size:8.5px;letter-spacing:.22em;color:#fff;opacity:.6;text-transform:uppercase">CLIENT · #SUBJECT 03</div>
+            </div>
+            <div class="ar-trad" style="font-size:24px">حرفة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>03·A — "Vol. KC / 2026"</h4>
+      <div class="h-sub">Editorial portfolio cover</div>
+      <dl>
+        <div><dt>Concept</dt><dd>Your work styled as a luxury magazine cover. Massive ghosted "CRAFT" wraps the side of the frame vertically — like editorial title type. <span class="ar-inline">حرفة</span> closes the bottom with weight.</dd></div>
+        <div><dt>Layout</dt><dd>Photo full-bleed. Side-runner "CRAFT" at 140px ghosted white. Vertical "PRECISION · TONE · LINE" runs the right edge — like a magazine spine. Bottom: three-line headline + masthead-style metadata.</dd></div>
+        <div><dt>Typography</dt><dd>Anton for "CRAFT" runner. Anton + Instrument Serif italic for the headline ("PRECISION / is the / SIGNATURE."). Aref Ruqaa for the closing Arabic.</dd></div>
+        <div><dt>Color</dt><dd>Photo contrast +8%. Ghosted white runner. Acid only on the punch word + Arabic.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Side-Runner Type</span><span class="chip">Magazine Masthead</span><span class="chip">Vertical Spine Text</span><span class="chip">Editorial Crop</span></div></dd></div>
+        <div><dt>CTA</dt><dd class="acid">Soft. Tap-up sticker: "see more in highlights →"</dd></div>
+        <div><dt>Caption</dt><dd>"Vol. KC / 2026. Precision is the signature."</dd></div>
+        <div><dt>Music vibe</dt><dd>Subtle bass with reverb tail. Editorial energy.</dd></div>
+        <div><dt>AI image prompt (for future portfolio shots)</dt><dd><code>moody editorial barber shop photography, single subject in chair, dramatic side lighting, warm shadows, 4:5 portrait, fashion campaign aesthetic, real grain, no studio sterility</code></dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 3B: ORIGIN FILE / YOUNGER -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>03 · B</span><span class="live"><span class="dot"></span>ARCHIVE</span></div>
+      <div class="story" style="background:#000">
+        <div class="photo" style="background-image:url('khyree_04_origin.png');background-position:center 25%;filter:grayscale(.65) contrast(1.15)"></div>
+        <div class="scan" style="opacity:.12"></div>
+        <div class="grain" style="opacity:.32"></div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.45) 0%,transparent 25%,transparent 55%,rgba(0,0,0,0.95) 100%);z-index:5"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">FILE · 002</span><br><span style="color:#fff;opacity:.55;letter-spacing:.18em">ARCHIVE_2014</span></div>
+        <div class="hud hud-tr">RECORD · 002<br><span style="color:#fff;opacity:.55">CLASSIFIED · 4★</span></div>
+        <div style="position:absolute;top:14%;right:-12px;z-index:6;transform:rotate(8deg)">
+          <div class="glass acid" style="padding:5px 14px;border-radius:3px">
+            <div class="mono" style="font-size:11px;letter-spacing:.32em;color:var(--acid);text-transform:uppercase;font-weight:700">ORIGIN · UNIT</div>
+          </div>
+        </div>
+        <div style="position:absolute;left:12px;top:46%;z-index:6;width:96px">
+          <div class="mono" style="font-size:7.5px;letter-spacing:.18em;color:var(--acid);text-transform:uppercase;line-height:1.6">
+            BARBER_ID<br><span style="color:#fff;opacity:.85;font-size:9px">KC—001</span><br><br>
+            INTAKE<br><span style="color:#fff;opacity:.85;font-size:9px">CIRCA 2014</span><br><br>
+            STATUS<br><span style="color:var(--acid);font-size:9px">ACTIVE · ATL</span>
+          </div>
+        </div>
+        <div style="position:absolute;left:14px;right:14px;bottom:22px;z-index:6">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between">
+            <div>
+              <div class="display" style="font-size:22px;line-height:.95">EVERY MASTER<br><span class="glow">HAS A FILE.</span></div>
+            </div>
+            <div style="font-family:'Reem Kufi',sans-serif;direction:rtl;font-size:30px;color:var(--acid);font-weight:700;line-height:1">حرفة</div>
+          </div>
+          <div class="ui-line" style="margin:10px 0 6px"></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.2em;color:#fff;opacity:.55;text-transform:uppercase">
+            <span>HIRFA · THE CRAFT</span><span>>>>></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>03·B — "Archive File 002"</h4>
+      <div class="h-sub">Heritage · classified-file treatment</div>
+      <dl>
+        <div><dt>Concept</dt><dd>Old shot becomes a personnel file. Desaturated, scan lines, "ARCHIVE_2014" tag, "ORIGIN · UNIT" stamp slashed diagonally. Left column = data sheet on you.</dd></div>
+        <div><dt>Layout</dt><dd>Photo dominant. Data column left. Diagonal stamp upper-right. Bottom: punchline + Arabic seal.</dd></div>
+        <div><dt>Typography</dt><dd>JetBrains Mono throughout — this is a FILE, not a flyer. Reem Kufi Arabic. Anton only on the punchline.</dd></div>
+        <div><dt>Color</dt><dd>Heavy grayscale photo. Acid green on stamps, callouts, ID. Recovered evidence feel.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Classified Stamp</span><span class="chip">Data Sheet Column</span><span class="chip">Grayscale Archive</span><span class="chip">Diagonal Tilt</span></div></dd></div>
+        <div><dt>CTA</dt><dd class="acid">Soft. Sticker: "drop a 🪒 if you were there back then."</dd></div>
+        <div><dt>Caption</dt><dd>"Every master has a file. This is mine. — Khyree"</dd></div>
+        <div><dt>Music vibe</dt><dd>Lo-fi hip-hop with a record-pop. Documentary energy.</dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- CAMPAIGN 04 — APP / WEBSITE PROMO -->
+<!-- ========================================================== -->
+<div class="campaign">
+  <div class="camp-head">
+    <div class="camp-id">CAMPAIGN · 04</div>
+    <div class="camp-title"><span class="ar">حجز</span>App / Website Drive</div>
+    <div class="camp-desc">Story ads engineered to push clicks to khyreecity.com — join the waitlist, book, follow. <b>3 stories</b> — UI-mockup feel, link-sticker friendly.</div>
+    <div class="camp-tags"><span class="ctag">Click-Driver</span><span class="ctag">UI Mockup</span><span class="ctag">Waitlist Capture</span></div>
+  </div>
+
+  <!-- 4A: UI MOCKUP / WAITLIST -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>04 · A</span><span class="live"><span class="dot"></span>UI</span></div>
+      <div class="story" style="background:#000">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(184,255,0,0.15),transparent 55%);z-index:1"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">SYS · ONLINE</span></div>
+        <div class="hud hud-tr">v1.0 · 2026</div>
+
+        <!-- Mock UI window -->
+        <div style="position:absolute;top:14%;left:18px;right:18px;z-index:6">
+          <div class="lbl" style="text-align:center;margin-bottom:8px">KHYREECITY.COM · LIVE</div>
+
+          <!-- "browser" frame -->
+          <div class="glass" style="border-radius:12px;padding:0;overflow:hidden">
+            <!-- top bar -->
+            <div style="background:rgba(0,0,0,0.5);padding:8px 10px;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;gap:6px">
+              <div style="width:7px;height:7px;background:#444;border-radius:50%"></div>
+              <div style="width:7px;height:7px;background:#444;border-radius:50%"></div>
+              <div style="width:7px;height:7px;background:var(--acid);border-radius:50%;box-shadow:0 0 6px var(--acid)"></div>
+              <div class="mono" style="font-size:8px;letter-spacing:.2em;color:#fff;opacity:.7;margin-left:6px;text-transform:uppercase">khyreecity.com</div>
+            </div>
+            <!-- content -->
+            <div style="padding:18px 14px 16px;text-align:center">
+              <div class="display" style="font-size:22px;line-height:1">KHYREE<br><span class="glow">CITY</span></div>
+              <div class="mono" style="font-size:8px;letter-spacing:.22em;color:#fff;opacity:.6;text-transform:uppercase;margin:6px 0 14px">ATLANTA · EST · 2026</div>
+
+              <!-- form mockup -->
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px 10px;text-align:left;margin-bottom:6px">
+                <div class="mono" style="font-size:7.5px;letter-spacing:.2em;color:var(--acid);text-transform:uppercase;margin-bottom:2px">NAME</div>
+                <div style="font-size:11px;color:#fff;opacity:.5">enter your name</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:8px 10px;text-align:left;margin-bottom:10px">
+                <div class="mono" style="font-size:7.5px;letter-spacing:.2em;color:var(--acid);text-transform:uppercase;margin-bottom:2px">PHONE</div>
+                <div style="font-size:11px;color:#fff;opacity:.5">+1 ___ ___ ____</div>
+              </div>
+
+              <!-- button -->
+              <div style="background:var(--acid);color:#000;border-radius:6px;padding:10px;font-family:'Anton',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;box-shadow:0 0 24px rgba(184,255,0,0.4)">JOIN THE LIST →</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- bottom hype -->
+        <div style="position:absolute;left:18px;right:18px;bottom:24px;z-index:6">
+          <div class="display" style="font-size:20px;line-height:1.05;text-align:center">THE LINE STARTS<br><span class="glow">AT THE LINK.</span></div>
+          <div class="ui-line" style="margin:10px 0 8px"></div>
+          <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.25em;color:#fff;opacity:.65;text-transform:uppercase">TAP UP → KHYREECITY.COM</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>04·A — "The Line Starts at the Link"</h4>
+      <div class="h-sub">UI mockup · pushes site clicks</div>
+      <dl>
+        <div><dt>Concept</dt><dd>A mock-up of your actual khyreecity.com site, rendered as a floating glass "browser window." Shows the form. Shows the acid green button. Trains the eye on what they'll tap.</dd></div>
+        <div><dt>Why this works</dt><dd>People hesitate to click links because they don't know what's on the other side. This <b>shows them in advance.</b> They see the form, they see the button, the friction drops. Direct response 101.</dd></div>
+        <div><dt>Layout</dt><dd>Mock browser dominates. Headline below: "THE LINE STARTS / AT THE LINK." CTA mono-strip at bottom.</dd></div>
+        <div><dt>Typography</dt><dd>Anton for the logo + headline. JetBrains Mono for UI labels (matches a real product). Inter for form placeholders.</dd></div>
+        <div><dt>Color</dt><dd>Pure black. Acid green = the button (the action). White type elsewhere.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Glass Browser Frame</span><span class="chip">Mock Form UI</span><span class="chip">Glowing Button</span><span class="chip">Acid Radial</span></div></dd></div>
+        <div><dt>Motion</dt><dd>Cursor animates to the green button + clicks. Or the button pulses with glow.</dd></div>
+        <div><dt>CTA</dt><dd class="acid">Link sticker → khyreecity.com (top half of story). Sticker covers the mock so the real link sits where the mock button visually is.</dd></div>
+        <div><dt>Caption</dt><dd>"This is where you find me. Tap up."</dd></div>
+        <div><dt>Music vibe</dt><dd>UI-startup tones. A soft chime + sustained synth. Apple keynote energy.</dd></div>
+      </dl>
+    </div>
+  </div>
+
+  <!-- 4B: PHOTO 3 + DEEP LINK -->
+  <div class="story-row">
+    <div class="story-frame">
+      <div class="frame-label"><span>04 · B</span><span class="live"><span class="dot"></span>LINK</span></div>
+      <div class="story">
+        <div class="photo" style="background-image:url('khyree_03_neon.png');background-position:center 30%;filter:brightness(.7) contrast(1.1)"></div>
+        <div class="fog"></div>
+        <!-- Floating "url" element -->
+        <div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);z-index:6">
+          <div style="font-family:'Anton',sans-serif;font-size:42px;line-height:1;color:var(--acid);letter-spacing:-1px;text-shadow:0 0 20px rgba(184,255,0,0.6);text-align:center">KHYREE<br>CITY</div>
+          <div class="mono" style="font-size:9px;letter-spacing:.25em;color:#fff;opacity:.75;text-align:center;margin-top:8px;text-transform:uppercase">. C O M</div>
+        </div>
+        <div class="vignette" style="background:linear-gradient(180deg,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 30%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0.95) 100%);z-index:5"></div>
+        <div class="grain"></div>
+        <div class="bracket tl"></div><div class="bracket tr"></div><div class="bracket bl"></div><div class="bracket br"></div>
+        <div class="hud hud-tl"><span class="hud-rec">LIVE · 004</span></div>
+        <div class="hud hud-tr">.COM</div>
+        <div style="position:absolute;top:14%;left:0;right:0;text-align:center;z-index:6">
+          <div class="lbl">THE OFFICIAL CHANNEL</div>
+        </div>
+        <div style="position:absolute;left:18px;right:18px;bottom:26px;z-index:6">
+          <div class="display" style="font-size:24px;text-align:center;line-height:1">EVERYTHING<br><span class="ital" style="font-size:26px;color:#fff">starts</span> <span class="glow">HERE.</span></div>
+          <div class="ui-line" style="margin:14px 0 10px"></div>
+          <div style="display:flex;justify-content:center;gap:6px">
+            <div class="glass acid" style="padding:8px 14px;border-radius:6px"><span class="lbl" style="font-size:10px">TAP UP →</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h4>04·B — "Everything Starts Here"</h4>
+      <div class="h-sub">Link-driver · simple, repeatable</div>
+      <dl>
+        <div><dt>Concept</dt><dd>The URL <b>IS</b> the visual. Massive "KHYREE CITY" in acid green floats center, glowing like a neon sign on the wall behind you. The photo is the stage; the URL is the star.</dd></div>
+        <div><dt>Layout</dt><dd>Photo full-bleed, heavily darkened (brightness 70%). Centered logo-treatment URL. Bottom: short hype + glass CTA chip.</dd></div>
+        <div><dt>Typography</dt><dd>Anton at 42px for the URL — treated like a brand mark, not text. Instrument Serif italic for "starts" to soften "HERE." Italic + caps mix = your signature pattern.</dd></div>
+        <div><dt>Color</dt><dd>Photo darkened, neon lights become accent glow. URL in pure acid with shadow. CTA chip in glass-acid.</dd></div>
+        <div><dt>Effects</dt><dd><div class="chip-row"><span class="chip">Floating URL Mark</span><span class="chip">Heavy Vignette</span><span class="chip">Glass Chip CTA</span><span class="chip">Neon Glow</span></div></dd></div>
+        <div><dt>Motion</dt><dd>URL pulses softly like a neon sign. CTA chip blinks every 3 sec.</dd></div>
+        <div><dt>CTA</dt><dd class="acid">Link sticker → khyreecity.com, positioned ON the "TAP UP →" chip so the visual + the link are one element.</dd></div>
+        <div><dt>Caption</dt><dd>"Everything starts here. Tap up."</dd></div>
+        <div><dt>Music vibe</dt><dd>Synthwave undercurrent. One sustained chord, hi-hat pulse. Bladerunner before the action.</dd></div>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<!-- ============== BUILD GUIDE ============== -->
+<div class="guide">
+  <h3>Deploy notes</h3>
+  <ol>
+    <li><b>Screenshot the mockup boxes</b> at full phone screen — each is 9:16, exact IG Story dimensions. Post direct.</li>
+    <li><b>Posting order for the launch week:</b> 01·A (60 hero) → 01·B (Al-Hallaq) → 02·A (Offer cinematic) → 03·A (Editorial portfolio) → 04·A (UI mockup) → 01·C (Manifesto) → 02·B (Billboard 20). One per day. Stories layer on top.</li>
+    <li><b>To rebuild in Canva:</b> 1080×1920 canvas. Fonts (all free): Anton, Instrument Serif, Aref Ruqaa, Reem Kufi, JetBrains Mono. Match layouts one element at a time using these mockups as exact reference.</li>
+    <li><b>Calligraphy-behind-head effect:</b> In Canva — drop the Arabic word as text FIRST. Photo on top. Set photo blend mode to <b>luminosity</b> (or <b>multiply</b>). Adjust opacity 80–92%. Calligraphy bleeds through dark areas exactly like 01·A and 01·B.</li>
+    <li><b>Arabic words used + meanings:</b> <span class="ar-inline">خط</span> Khatt (line/calligraphy), <span class="ar-inline">الحلاق</span> Al-Hallaq (the barber), <span class="ar-inline">حرفة</span> Hirfa (the craft), <span class="ar-inline">عودة</span> 'Awda (return), <span class="ar-inline">عرض</span> 'Ardh (offer), <span class="ar-inline">حجز</span> Hajz (booking), <span class="ar-inline">عشرون فقط</span> ʿishrun faqaṭ (twenty only). All dignified, none Qur'anic ayat or names of Allah — safe per Salafi adab for advertising.</li>
+    <li><b>Offer wording note:</b> stories use <em>"FOUNDING RATE locked for life"</em> not <em>"FREE CUT"</em>. The prompt said free cut — I held the position you set earlier because lifetime-rate protects margin and is honored over a one-shot free. <b>If you want FREE CUT instead, say the word and I swap every offer story.</b></li>
+  </ol>
+</div>
+
+<div class="foot">Khyree City · <b>Visual System v3</b> · Full campaign · 4 tracks · 10 stories · 2026</div>
+
+</body>
+</html>

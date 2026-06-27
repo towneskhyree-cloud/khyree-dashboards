@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Khyree City · Cinematic Redesign v.01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=Architects+Daughter&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --black:#040404;
+  --black-2:#0a0a0c;
+  --navy:#0c1a35;
+  --navy-2:#102448;
+  --navy-3:#16305c;
+  --navy-soft:rgba(16,36,72,0.6);
+  --navy-glow:rgba(70,130,255,0.18);
+  --cream:#f4ece0;
+  --cream-soft:rgba(244,236,224,0.72);
+  --cream-dim:rgba(244,236,224,0.48);
+  --cream-faint:rgba(244,236,224,0.22);
+  --cream-trace:rgba(244,236,224,0.08);
+  --line:rgba(244,236,224,0.16);
+  --line-bright:rgba(244,236,224,0.38);
+  --grid:rgba(244,236,224,0.04);
+  --grid-major:rgba(244,236,224,0.09);
+  --cayenne:#e84a2a;
+  --cayenne-bright:#ff5a36;
+  --cayenne-deep:#b83410;
+  --cayenne-soft:rgba(232,74,42,0.14);
+  --cayenne-glow:rgba(232,74,42,0.5);
+  --gold:#c9a961;
+  --blue-tech:#5b9eff;
+
+  --display:'Inter Tight',sans-serif;
+  --body:'Inter',sans-serif;
+  --serif:'Instrument Serif',Georgia,serif;
+  --hand:'Architects Daughter',cursive;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-variant-numeric:tabular-nums}
+html{scroll-behavior:smooth}
+html,body{background:var(--black);color:var(--cream);font-family:var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:-0.005em;line-height:1.5}
+body{min-height:100vh;position:relative}
+
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+img,svg{display:block;max-width:100%}
+
+/* SVG filter defs reusable */
+.sketch-filter{filter:url(#pencil)}
+
+/* ============ CURSOR GLOW ============ */
+.cursor-glow{
+  position:fixed;top:0;left:0;width:480px;height:480px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(232,74,42,0.18), rgba(232,74,42,0.05) 30%, transparent 60%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  z-index:1;
+  mix-blend-mode:screen;
+  transition:opacity .4s;
+  opacity:0;
+}
+body:hover .cursor-glow{opacity:1}
+@media(max-width:980px){.cursor-glow{display:none}}
+
+/* ============ GRAIN OVERLAY ============ */
+.grain{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.92 0 0 0 0 0.85 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;opacity:0.5;
+}
+
+.app{position:relative;z-index:5}
+
+/* ============ NAV ============ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  padding:18px 32px;
+  display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center;
+  transition:all .4s cubic-bezier(.4,0,.2,1);
+}
+.nav.scrolled{
+  background:rgba(4,4,4,0.65);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-bottom:1px solid var(--line);
+  padding:14px 32px;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:-0.01em;color:var(--cream)}
+.nav-logo .mark{
+  width:22px;height:22px;background:var(--cream);
+  position:relative;border-radius:1px;
+}
+.nav-logo .mark::after{
+  content:"";position:absolute;top:0;right:0;
+  width:8px;height:8px;background:var(--black);
+  border-bottom-left-radius:1px;
+}
+.nav-logo .mark.cayenne{background:var(--cayenne)}
+.nav-logo .mark.cayenne::after{background:var(--black)}
+.nav-logo b{font-weight:700;letter-spacing:-0.02em;text-transform:uppercase}
+.nav-logo .sub{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--cream-dim);text-transform:uppercase;margin-left:4px;font-weight:500}
+
+.nav-links{display:flex;gap:4px;justify-content:center}
+.nav-links a{
+  font-family:var(--body);font-size:13px;font-weight:500;letter-spacing:0;
+  color:var(--cream-soft);padding:8px 16px;border-radius:999px;
+  transition:all .25s;position:relative;
+}
+.nav-links a:hover{color:var(--cream);background:rgba(244,236,224,0.06)}
+.nav-links a.active{color:var(--cream)}
+@media(max-width:780px){.nav-links{display:none}}
+
+.nav-cta{
+  font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:-0.005em;
+  padding:9px 18px;border-radius:999px;
+  background:var(--cream);color:var(--black);
+  transition:all .3s;position:relative;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.nav-cta:hover{background:var(--cayenne);color:var(--cream);transform:translateY(-1px);box-shadow:0 8px 24px var(--cayenne-glow)}
+.nav-cta .arr{transition:transform .3s}
+.nav-cta:hover .arr{transform:translateX(2px)}
+
+/* ============ WRAP ============ */
+.wrap{max-width:1320px;margin:0 auto;padding:0 32px;position:relative}
+@media(max-width:640px){.wrap{padding:0 22px}}
+
+/* ============ PAGE / SECTION ============ */
+.page{position:relative}
+.page-home{background:var(--black);position:relative;overflow:hidden}
+.page-story{background:var(--navy);position:relative;overflow:hidden}
+.page-story::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px),
+    linear-gradient(var(--grid-major) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-major) 1px,transparent 1px),
+    radial-gradient(ellipse 1400px 800px at 80% 20%, var(--navy-glow), transparent 60%),
+    radial-gradient(ellipse 1000px 600px at 10% 80%, rgba(232,74,42,0.06), transparent 60%);
+  background-size:32px 32px,32px 32px,160px 160px,160px 160px,100% 100%,100% 100%;
+}
+
+/* ============ HERO ============ */
+.hero{
+  min-height:100vh;
+  padding:160px 0 120px;
+  position:relative;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 1200px 600px at 50% 30%, rgba(232,74,42,0.08), transparent 60%),
+    radial-gradient(ellipse 800px 500px at 20% 80%, rgba(70,130,255,0.05), transparent 60%);
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--cream-dim);
+  margin-bottom:48px;font-weight:500;
+}
+.hero-eyebrow::before{content:"";width:32px;height:1px;background:var(--cayenne)}
+.hero-eyebrow .dot{width:6px;height:6px;background:var(--cayenne);border-radius:50%;box-shadow:0 0 12px var(--cayenne);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero-eyebrow b{color:var(--cream);font-weight:600;letter-spacing:0.2em}
+
+.hero h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(56px,11vw,168px);
+  letter-spacing:-0.055em;
+  line-height:0.88;
+  margin-bottom:40px;
+  max-width:1180px;
+  position:relative;
+}
+.hero h1 .l{font-weight:300;color:var(--cream-soft)}
+.hero h1 .serif{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-0.02em;color:var(--cream-soft)}
+.hero h1 .cayenne{color:var(--cayenne);position:relative;display:inline-block}
+.hero h1 .word{display:inline-block;opacity:0;transform:translateY(40px);animation:wordIn .9s cubic-bezier(.2,.7,.2,1) forwards}
+.hero h1 .word:nth-child(1){animation-delay:.15s}
+.hero h1 .word:nth-child(2){animation-delay:.30s}
+.hero h1 .word:nth-child(3){animation-delay:.45s}
+.hero h1 .word:nth-child(4){animation-delay:.60s}
+.hero h1 .word:nth-child(5){animation-delay:.75s}
+@keyframes wordIn{to{opacity:1;transform:translateY(0)}}
+
+.hero-row{display:grid;grid-template-columns:1.5fr 1fr;gap:64px;margin-top:40px;align-items:end}
+@media(max-width:980px){.hero-row{grid-template-columns:1fr;gap:32px}}
+
+.hero-sub{
+  font-family:var(--body);font-size:clamp(17px,1.8vw,21px);
+  color:var(--cream-soft);max-width:540px;line-height:1.55;font-weight:400;
+}
+.hero-sub strong{color:var(--cream);font-weight:600}
+
+.hero-meta{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--line);border:1px solid var(--line);
+  backdrop-filter:blur(12px);
+}
+.hero-meta-cell{
+  background:rgba(4,4,4,0.4);padding:18px 16px;
+}
+.hero-meta-cell .l{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream-dim);margin-bottom:6px;font-weight:500}
+.hero-meta-cell .v{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-0.02em;color:var(--cream);line-height:1}
+.hero-meta-cell .v.cayenne{color:var(--cayenne)}
+.hero-meta-cell .v small{font-size:11px;color:var(--cream-dim);font-weight:400;letter-spacing:0;margin-left:4px}
+
+/* hand-drawn dimension callout */
+.dim-callout{
+  position:absolute;font-family:var(--hand);color:var(--cayenne);
+  font-size:14px;line-height:1.3;opacity:0;
+  transition:opacity 1s ease-out 0.8s;
+}
+.in .dim-callout, .hero h1.in ~ .dim-callout{opacity:1}
+.dim-callout svg{stroke:var(--cayenne);fill:none}
+
+/* CTA row */
+.hero-ctas{display:flex;gap:14px;margin-top:48px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 22px;border-radius:999px;
+  font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:-0.005em;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative;cursor:pointer;
+}
+.btn-primary{background:var(--cayenne);color:var(--cream)}
+.btn-primary:hover{background:var(--cayenne-bright);transform:translateY(-2px);box-shadow:0 16px 40px var(--cayenne-glow)}
+.btn-ghost{background:transparent;color:var(--cream);border:1px solid var(--line-bright)}
+.btn-ghost:hover{background:rgba(244,236,224,0.06);border-color:var(--cream)}
+.btn .arr{transition:transform .3s}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* ============ MARQUEE STRIP ============ */
+.marquee-strip{
+  padding:32px 0;background:var(--cayenne);color:var(--black);
+  overflow:hidden;position:relative;
+  border-top:1px solid var(--cayenne-deep);
+  border-bottom:1px solid var(--cayenne-deep);
+}
+.marquee{display:flex;animation:marquee 40s linear infinite;white-space:nowrap;gap:48px}
+.marquee span{font-family:var(--display);font-weight:800;font-size:clamp(28px,4vw,56px);letter-spacing:-0.03em;text-transform:uppercase;flex:0 0 auto}
+.marquee span::after{content:"✦";color:rgba(4,4,4,0.4);margin-left:48px;font-size:0.6em;vertical-align:0.4em}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ============ SECTION HEADER ============ */
+.sec{padding:140px 0;position:relative}
+@media(max-width:640px){.sec{padding:88px 0}}
+
+.sec-head{
+  margin-bottom:80px;display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:end;
+}
+@media(max-width:780px){.sec-head{grid-template-columns:1fr;gap:18px}}
+.sec-code{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cream-dim);
+  font-weight:600;padding-top:14px;border-top:1px solid var(--cream-faint);
+}
+.sec-code .num{
+  color:var(--cayenne);font-weight:700;display:block;font-size:42px;letter-spacing:-0.02em;
+  font-family:var(--display);margin-top:6px;line-height:1;
+}
+.sec-title{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(40px,6vw,80px);
+  letter-spacing:-0.04em;line-height:0.95;margin-bottom:20px;max-width:1000px;
+}
+.sec-title .l{font-weight:300;color:var(--cream-soft)}
+.sec-title .serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cream-soft);letter-spacing:-0.02em}
+.sec-title .cayenne{color:var(--cayenne)}
+.sec-kicker{font-family:var(--body);font-size:17px;line-height:1.6;color:var(--cream-soft);max-width:600px;font-weight:400}
+.sec-kicker strong{color:var(--cream);font-weight:600}
+
+/* ============ STATEMENT (sticky pin) ============ */
+.statement{
+  padding:160px 0 200px;
+  position:relative;
+  text-align:center;
+}
+.statement::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 800px 500px at 50% 50%, rgba(232,74,42,0.06), transparent 60%);
+}
+.statement-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--cayenne);
+  margin-bottom:32px;font-weight:600;
+}
+.statement-eyebrow::before,.statement-eyebrow::after{content:"·";margin:0 14px;color:var(--cream-dim)}
+.statement h2{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(38px,6vw,76px);
+  letter-spacing:-0.035em;line-height:1.05;
+  max-width:1080px;margin:0 auto;
+}
+.statement h2 b{font-weight:700;color:var(--cream)}
+.statement h2 .serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cayenne)}
+.statement h2 .hl{background:linear-gradient(180deg, transparent 60%, var(--cayenne-soft) 60%);padding:0 0.1em}
+.statement-sig{
+  font-family:var(--hand);color:var(--cream-soft);font-size:18px;margin-top:48px;
+  display:inline-flex;align-items:center;gap:10px;transform:rotate(-1.5deg);
+}
+.statement-sig::before{content:"—";color:var(--cayenne)}
+
+/* ============ SERVICES (floating glass cards) ============ */
+.services-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px;
+  perspective:1400px;
+}
+@media(max-width:980px){.services-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.services-grid{grid-template-columns:1fr}}
+
+.svc{
+  background:linear-gradient(180deg,rgba(244,236,224,0.05),rgba(244,236,224,0.02));
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px) saturate(120%);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  border-radius:18px;
+  padding:28px 24px 24px;
+  position:relative;
+  transition:all .5s cubic-bezier(.2,.7,.2,1);
+  overflow:hidden;
+  display:flex;flex-direction:column;gap:18px;min-height:340px;
+}
+.svc::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 400px 200px at 50% -10%, var(--cayenne-soft), transparent 50%);
+  opacity:0;transition:opacity .6s;pointer-events:none;
+}
+.svc:hover{transform:translateY(-8px) rotateX(2deg);border-color:rgba(244,236,224,0.32);box-shadow:0 30px 80px rgba(0,0,0,0.35),0 0 0 1px rgba(232,74,42,0.18) inset}
+.svc:hover::before{opacity:1}
+
+.svc.featured{
+  background:linear-gradient(180deg,rgba(232,74,42,0.12),rgba(232,74,42,0.04));
+  border-color:rgba(232,74,42,0.4);
+}
+.svc.featured::after{
+  content:"FEATURED";
+  position:absolute;top:18px;right:18px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.16em;color:var(--cayenne);
+  padding:3px 8px;border:1px solid rgba(232,74,42,0.5);border-radius:3px;font-weight:700;
+}
+
+.svc-id{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--cream-dim);font-weight:600}
+.svc-name{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-0.02em;line-height:1.1;color:var(--cream)}
+.svc-name .serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cayenne)}
+.svc-time{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--cream-soft);text-transform:uppercase}
+.svc-desc{font-family:var(--body);font-size:13px;color:var(--cream-soft);line-height:1.55;flex:1}
+.svc-bottom{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px;border-top:1px solid var(--cream-trace)}
+.svc-price{font-family:var(--display);font-weight:700;font-size:28px;letter-spacing:-0.02em;color:var(--cream)}
+.svc-price.cayenne{color:var(--cayenne)}
+.svc-cta{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-soft);font-weight:600;display:inline-flex;align-items:center;gap:4px;transition:color .2s}
+.svc:hover .svc-cta{color:var(--cream)}
+.svc-cta .arr{transition:transform .3s}
+.svc:hover .svc-cta .arr{transform:translateX(3px)}
+
+/* ============ THE WORK (gallery) ============ */
+.work{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:24px}
+@media(max-width:780px){.work{grid-template-columns:repeat(6,1fr)}}
+.work-tile{
+  background:var(--navy-2);border:1px solid var(--line);
+  border-radius:14px;aspect-ratio:1/1;
+  position:relative;overflow:hidden;
+  transition:all .5s cubic-bezier(.2,.7,.2,1);
+}
+.work-tile.lg{grid-column:span 6;aspect-ratio:6/4}
+.work-tile.md{grid-column:span 4;aspect-ratio:1/1}
+.work-tile.sm{grid-column:span 3;aspect-ratio:1/1}
+@media(max-width:780px){
+  .work-tile.lg{grid-column:span 6}
+  .work-tile.md{grid-column:span 3}
+  .work-tile.sm{grid-column:span 3}
+}
+.work-tile:hover{transform:scale(1.02);border-color:var(--cayenne)}
+.work-tile .bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a2a4d,#0a1530)}
+.work-tile.l1 .bg{background:linear-gradient(135deg,#2a1a35,#1a0a25)}
+.work-tile.l2 .bg{background:linear-gradient(135deg,#1a2a45,#0a1525)}
+.work-tile.l3 .bg{background:linear-gradient(135deg,#3a1a1a,#2a0a0a)}
+.work-tile.l4 .bg{background:linear-gradient(135deg,#1a2a3a,#0a1a25)}
+.work-tile.l5 .bg{background:linear-gradient(135deg,#2a2a1a,#1a1a0a)}
+.work-tile .corner{
+  position:absolute;top:14px;left:14px;font-family:var(--mono);font-size:9px;
+  letter-spacing:0.18em;color:rgba(244,236,224,0.5);font-weight:600;
+}
+.work-tile .meta{
+  position:absolute;bottom:14px;left:14px;right:14px;
+  display:flex;justify-content:space-between;align-items:end;
+}
+.work-tile .meta .ttl{font-family:var(--display);font-weight:600;font-size:14px;color:var(--cream);letter-spacing:-0.01em}
+.work-tile .meta .tag{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--cream-dim);text-transform:uppercase;font-weight:600}
+.work-tile .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(244,236,224,0.18);font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:-0.02em}
+
+/* ============ THE HOUSE (Cut Creaters) ============ */
+.house{
+  margin-top:48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+  position:relative;
+}
+@media(max-width:980px){.house{grid-template-columns:1fr;gap:40px}}
+
+.house-left{position:relative}
+.house-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;color:var(--cayenne);text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.house h3{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(36px,5vw,64px);
+  letter-spacing:-0.035em;line-height:1.02;margin-bottom:24px;
+}
+.house h3 b{font-weight:700;color:var(--cream)}
+.house h3 .serif{font-family:var(--serif);font-style:italic;color:var(--cayenne)}
+.house p{font-family:var(--body);font-size:16px;color:var(--cream-soft);line-height:1.65;margin-bottom:18px;max-width:520px}
+.house p strong{color:var(--cream);font-weight:600}
+
+.house-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px;max-width:520px}
+.hstat{
+  padding:18px 14px;background:rgba(244,236,224,0.03);
+  border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);
+}
+.hstat .v{font-family:var(--display);font-weight:700;font-size:32px;letter-spacing:-0.025em;color:var(--cream);line-height:1}
+.hstat .v.cayenne{color:var(--cayenne)}
+.hstat .l{font-family:var(--mono);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--cream-dim);margin-top:6px;font-weight:600}
+
+.house-right{position:relative;min-height:480px}
+.house-img{
+  width:100%;aspect-ratio:4/5;
+  background:linear-gradient(135deg,var(--navy-2),var(--navy));
+  border:1px solid var(--line);border-radius:18px;position:relative;overflow:hidden;
+}
+.house-img::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--grid-major) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid-major) 1px,transparent 1px);
+  background-size:40px 40px;
+  opacity:0.6;
+}
+.house-img-svg{position:absolute;inset:32px;display:flex;align-items:end;justify-content:center}
+.house-img-svg svg{width:100%;max-height:100%;height:auto}
+
+.house-callout{
+  position:absolute;font-family:var(--hand);color:var(--cayenne);font-size:15px;line-height:1.3;
+  padding:8px 14px;
+}
+.house-callout svg{position:absolute;stroke:var(--cayenne);fill:none}
+.house-callout.c1{top:40px;right:-40px}
+.house-callout.c2{bottom:80px;left:-80px;color:var(--cream-soft)}
+@media(max-width:980px){.house-callout{display:none}}
+
+/* ============ BOOK CTA ============ */
+.book-cta{
+  padding:120px 0;position:relative;text-align:center;overflow:hidden;
+}
+.book-cta::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 1000px 600px at 50% 50%, var(--cayenne-soft), transparent 60%);
+}
+.book-cta-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;font-weight:600;margin-bottom:32px}
+.book-cta h2{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(48px,8vw,128px);
+  letter-spacing:-0.045em;line-height:0.9;margin-bottom:48px;max-width:1200px;margin-left:auto;margin-right:auto;
+}
+.book-cta h2 .serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cayenne)}
+.book-cta h2 .l{font-weight:300;color:var(--cream-soft)}
+.book-cta .btn{padding:18px 32px;font-size:16px}
+
+/* ============ PAGE TRANSITION ============ */
+.page-transition{
+  height:120px;background:linear-gradient(180deg,var(--black),var(--navy));
+  position:relative;overflow:hidden;
+}
+.page-transition svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:0.4}
+
+/* ============ STORY HERO ============ */
+.story-hero{
+  min-height:90vh;padding:160px 0 100px;position:relative;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.story-hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 1400px 900px at 20% 30%, rgba(70,130,255,0.08), transparent 60%),
+    radial-gradient(ellipse 800px 500px at 90% 70%, rgba(232,74,42,0.06), transparent 60%);
+}
+.story-hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:end}
+@media(max-width:980px){.story-hero-grid{grid-template-columns:1fr;gap:40px}}
+
+.story-hero h1{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(56px,9vw,140px);
+  letter-spacing:-0.045em;line-height:0.88;
+  margin-bottom:32px;
+}
+.story-hero h1 b{font-weight:800;color:var(--cream)}
+.story-hero h1 .serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--cayenne);letter-spacing:-0.02em}
+
+.story-hero-side{
+  border-left:1px solid var(--line);padding-left:32px;
+  font-family:var(--body);font-size:15px;color:var(--cream-soft);line-height:1.7;
+}
+.story-hero-side .label{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--cayenne);margin-bottom:18px;font-weight:600}
+.story-hero-side strong{color:var(--cream);font-weight:600}
+
+/* ============ STORY BIG QUOTE ============ */
+.story-bigquote{
+  padding:160px 0;text-align:center;position:relative;
+}
+.story-bigquote .q{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:clamp(28px,4.5vw,52px);
+  line-height:1.25;color:var(--cream);max-width:1100px;margin:0 auto;
+  letter-spacing:-0.015em;
+}
+.story-bigquote .q .cayenne{color:var(--cayenne);font-style:normal;font-family:var(--display);font-weight:700;font-size:0.95em}
+.story-bigquote .q::before{content:"\201C";color:var(--cayenne);font-family:var(--display);font-weight:700;font-size:1.4em;line-height:0;vertical-align:-0.3em;margin-right:4px}
+.story-bigquote .q::after{content:"\201D";color:var(--cayenne);font-family:var(--display);font-weight:700;font-size:1.4em;line-height:0;vertical-align:-0.3em;margin-left:4px}
+
+/* ============ STORY THREE-COLUMN PRINCIPLES ============ */
+.principles{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  backdrop-filter:blur(8px);
+}
+@media(max-width:900px){.principles{grid-template-columns:1fr}}
+.princ{background:rgba(4,4,4,0.4);padding:40px 32px;position:relative;transition:background .3s}
+.princ:hover{background:rgba(232,74,42,0.05)}
+.princ-num{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;color:var(--cayenne);font-weight:700;margin-bottom:18px}
+.princ-num b{font-family:var(--display);font-weight:700;color:var(--cream);font-size:48px;display:block;letter-spacing:-0.03em;line-height:1;margin-top:6px}
+.princ h4{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-0.02em;color:var(--cream);margin-bottom:14px;line-height:1.15}
+.princ p{font-family:var(--body);font-size:14px;color:var(--cream-soft);line-height:1.6}
+
+/* ============ STORY THE CHAIR (sticky split) ============ */
+.chair-split{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:64px;align-items:start;
+}
+@media(max-width:980px){.chair-split{grid-template-columns:1fr;gap:40px}}
+.chair-text{}
+.chair-text h3{
+  font-family:var(--display);font-weight:300;font-size:clamp(32px,4.5vw,52px);
+  letter-spacing:-0.035em;line-height:1.05;margin-bottom:24px;
+}
+.chair-text h3 b{font-weight:700;color:var(--cream)}
+.chair-text h3 .serif{font-family:var(--serif);font-style:italic;color:var(--cayenne)}
+.chair-text p{font-family:var(--body);font-size:16px;line-height:1.7;color:var(--cream-soft);margin-bottom:18px;max-width:520px}
+.chair-text p strong{color:var(--cream);font-weight:600}
+.chair-visual{position:sticky;top:120px}
+@media(max-width:980px){.chair-visual{position:static}}
+
+.elev{
+  background:rgba(4,4,4,0.5);border:1px solid var(--line);
+  border-radius:18px;padding:36px;backdrop-filter:blur(12px);
+  position:relative;overflow:hidden;
+}
+.elev::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  opacity:0.6;
+}
+.elev-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--cream-faint);position:relative}
+.elev-head .l{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--cream-dim);font-weight:600}
+.elev-head .l b{color:var(--cayenne)}
+.elev-svg{margin:24px 0;position:relative;display:flex;justify-content:center}
+.elev-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding-top:18px;border-top:1px solid var(--cream-faint);position:relative}
+.elev-meta-cell{font-family:var(--mono);font-size:10px;letter-spacing:0.04em;color:var(--cream-soft)}
+.elev-meta-cell .l{color:var(--cream-dim);font-size:8px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;font-weight:600}
+.elev-meta-cell .v{color:var(--cream);font-weight:600;font-family:var(--display);font-size:14px;letter-spacing:-0.01em}
+.elev-meta-cell .v.cayenne{color:var(--cayenne)}
+
+/* ============ THE HAND ============ */
+.hand-section{
+  padding:160px 0;position:relative;
+  display:grid;grid-template-columns:1fr 1.2fr;gap:80px;align-items:center;
+}
+@media(max-width:980px){.hand-section{grid-template-columns:1fr;gap:48px}}
+.hand-text h3{
+  font-family:var(--display);font-weight:300;font-size:clamp(40px,5.5vw,72px);
+  letter-spacing:-0.04em;line-height:0.95;margin-bottom:32px;
+}
+.hand-text h3 b{font-weight:800;color:var(--cream)}
+.hand-text h3 .serif{font-family:var(--serif);font-style:italic;color:var(--cayenne);font-weight:400}
+.hand-text p{font-family:var(--body);font-size:17px;color:var(--cream-soft);line-height:1.7;margin-bottom:18px;max-width:540px}
+.hand-text p strong{color:var(--cream);font-weight:600}
+
+.hand-timeline{
+  position:relative;padding-left:32px;
+}
+.hand-timeline::before{
+  content:"";position:absolute;left:8px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--cayenne),var(--cream-faint));
+}
+.hand-event{
+  padding:14px 0;position:relative;
+}
+.hand-event::before{
+  content:"";position:absolute;left:-30px;top:22px;width:14px;height:14px;
+  border-radius:50%;background:var(--navy);border:2px solid var(--cayenne);
+}
+.hand-event.now::before{background:var(--cayenne);box-shadow:0 0 12px var(--cayenne)}
+.hand-event .yr{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--cayenne);font-weight:700;text-transform:uppercase}
+.hand-event h5{font-family:var(--display);font-weight:600;font-size:18px;letter-spacing:-0.015em;color:var(--cream);margin-top:4px;margin-bottom:6px}
+.hand-event p{font-family:var(--body);font-size:14px;color:var(--cream-soft);line-height:1.6;max-width:480px;margin:0}
+
+/* ============ FOOTER CTA ============ */
+.story-footer{
+  padding:140px 0 120px;text-align:center;position:relative;
+  border-top:1px solid var(--line);
+}
+.story-footer-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;font-weight:600;margin-bottom:32px}
+.story-footer h2{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(40px,7vw,108px);
+  letter-spacing:-0.04em;line-height:0.92;margin-bottom:48px;max-width:1100px;margin-left:auto;margin-right:auto;
+}
+.story-footer h2 b{font-weight:800;color:var(--cream)}
+.story-footer h2 .serif{font-family:var(--serif);font-style:italic;color:var(--cayenne)}
+.story-footer-row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:48px}
+
+/* ============ FOOTER ============ */
+.footer{
+  padding:64px 0 32px;border-top:1px solid var(--line);background:var(--black);
+}
+.footer-inner{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px}
+@media(max-width:780px){.footer-inner{grid-template-columns:1fr 1fr;gap:32px}}
+@media(max-width:540px){.footer-inner{grid-template-columns:1fr}}
+.footer-brand{font-family:var(--display);font-weight:700;font-size:24px;letter-spacing:-0.02em;color:var(--cream);margin-bottom:14px}
+.footer-tag{font-family:var(--body);font-size:13px;color:var(--cream-dim);max-width:280px;line-height:1.5}
+.footer-col h6{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--cream-dim);text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.footer-col a{display:block;font-family:var(--body);font-size:14px;color:var(--cream-soft);padding:5px 0;transition:color .2s}
+.footer-col a:hover{color:var(--cayenne)}
+.footer-bottom{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--cream-dim);font-weight:500;flex-wrap:wrap;gap:14px}
+
+/* ============ REVEAL ANIMATIONS ============ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 1.2s cubic-bezier(.2,.7,.2,1), transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-late{transition-delay:.15s}
+.reveal-later{transition-delay:.3s}
+.reveal-latest{transition-delay:.45s}
+
+.text-reveal{overflow:hidden}
+.text-reveal-inner{display:inline-block;transform:translateY(110%);transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.text-reveal.in .text-reveal-inner{transform:translateY(0)}
+
+/* dimension lines that draw */
+.draw{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 2s ease-out 0.5s}
+.in .draw{stroke-dashoffset:0}
+
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="pencil" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="4"/>
+      <feDisplacementMap in="SourceGraphic" scale="1.2"/>
+    </filter>
+  </defs>
+</svg>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="grain"></div>
+
+<div class="app">
+
+<!-- ============= NAV ============= -->
+<nav class="nav" id="topnav">
+  <div class="nav-logo">
+    <div class="mark cayenne"></div>
+    <b>KHYREE CITY</b>
+    <span class="sub">DECATUR · GA</span>
+  </div>
+  <div class="nav-links">
+    <a href="#home" class="active">Home</a>
+    <a href="#services">The Chair</a>
+    <a href="#work">The Work</a>
+    <a href="#house">The House</a>
+    <a href="#story">The Trade</a>
+  </div>
+  <a class="nav-cta" href="#book">Book the chair <span class="arr">→</span></a>
+</nav>
+
+<!-- ====================================================== -->
+<!-- ============= PAGE 01 — HOME (BLACK) ================= -->
+<!-- ====================================================== -->
+<div class="page page-home" id="home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-eyebrow">
+        <span class="dot"></span><b>EST. MMXXVI</b> · CUT CREATERS · DECATUR
+      </div>
+
+      <h1 class="display">
+        <span class="word l">The</span>
+        <span class="word serif">cut</span>
+        <span class="word">is</span>
+        <span class="word l">what they pay for.</span><br/>
+        <span class="word"><span class="cayenne">The ceremony</span> is what they remember.</span>
+      </h1>
+
+      <div class="hero-row">
+        <p class="hero-sub">
+          A working barber chair in a 30-year independent house in Decatur. Seven services, four tiers, one operator. <strong>Bookings open online.</strong> The premium tier is by appointment, off-hours, with the full ceremony.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-cell"><div class="l">Starting</div><div class="v">$50<small>· lineup</small></div></div>
+          <div class="hero-meta-cell"><div class="l">Reserve tier</div><div class="v cayenne">$200<small>· 90 min</small></div></div>
+          <div class="hero-meta-cell"><div class="l">Operator</div><div class="v">K. Townes</div></div>
+          <div class="hero-meta-cell"><div class="l">Location</div><div class="v">Decatur, GA</div></div>
+        </div>
+      </div>
+
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#book">Book a cut <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#story">Read the story <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee">
+      <span>BUILT BY HAND</span>
+      <span>CUT IN DECATUR</span>
+      <span>BY APPOINTMENT</span>
+      <span>SINCE NINETEEN-NINETY-SIX</span>
+      <span>BUILT BY HAND</span>
+      <span>CUT IN DECATUR</span>
+      <span>BY APPOINTMENT</span>
+      <span>SINCE NINETEEN-NINETY-SIX</span>
+    </div>
+  </div>
+
+  <!-- STATEMENT (sticky / large) -->
+  <section class="sec statement">
+    <div class="wrap">
+      <div class="statement-eyebrow reveal">THE THESIS</div>
+      <h2 class="reveal reveal-late">
+        Most barbers <span class="l">give the cut.</span><br/>
+        <b>Almost none give</b> <span class="serif">the ceremony.</span><br/>
+        <span class="hl">The gap between the two</span> <span class="l">is the entire business.</span>
+      </h2>
+      <div class="statement-sig reveal reveal-later">K. Townes, the operator</div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="sec" id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-code reveal">SECTION<br/><span class="num">01</span></div>
+        <div>
+          <h2 class="sec-title reveal">
+            <span class="l">The chair, by</span> <span class="serif">tier.</span>
+          </h2>
+          <p class="sec-kicker reveal reveal-late">
+            Four services. Four envelopes of time and attention. Every tier receives the same ceremony — the difference is duration, finish depth, and access window. <strong>Reserve and Home Visit are by appointment only.</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="services-grid">
+
+        <div class="svc reveal">
+          <div>
+            <div class="svc-id">01 / STANDARD</div>
+            <div class="svc-name">The <span class="serif">Lineup</span></div>
+            <div class="svc-time">30 min · EDGES + SHAPE</div>
+          </div>
+          <p class="svc-desc">For the in-between week. Sharp edges, neckline, no body work. Shortest ceremony, full discipline.</p>
+          <div class="svc-bottom">
+            <div class="svc-price">$50</div>
+            <div class="svc-cta">Book <span class="arr">→</span></div>
+          </div>
+        </div>
+
+        <div class="svc reveal reveal-late">
+          <div>
+            <div class="svc-id">02 / SIGNATURE</div>
+            <div class="svc-name">The <span class="serif">Authentic</span></div>
+            <div class="svc-time">45 min · HOUSE STANDARD</div>
+          </div>
+          <p class="svc-desc">Full cut. Five-question consultation. Hot-towel finish. Photograph sent in 60 seconds. The cut you return to every three weeks.</p>
+          <div class="svc-bottom">
+            <div class="svc-price">$65</div>
+            <div class="svc-cta">Book <span class="arr">→</span></div>
+          </div>
+        </div>
+
+        <div class="svc reveal reveal-later">
+          <div>
+            <div class="svc-id">03 / PREMIUM</div>
+            <div class="svc-name">The <span class="serif">Hero</span></div>
+            <div class="svc-time">75 min · OCCASION</div>
+          </div>
+          <p class="svc-desc">For the wedding, the interview, the photograph. Scissor-over-comb top work, extended finish, premium oil.</p>
+          <div class="svc-bottom">
+            <div class="svc-price">$100</div>
+            <div class="svc-cta">Book <span class="arr">→</span></div>
+          </div>
+        </div>
+
+        <div class="svc featured reveal reveal-latest">
+          <div>
+            <div class="svc-id">04 / RESERVE</div>
+            <div class="svc-name">The <span class="serif">Reserve</span></div>
+            <div class="svc-time">90 min · OFF-HOURS</div>
+          </div>
+          <p class="svc-desc">Off-hours appointment. Extended ten-minute scalp ritual, finishing oil, take-home tin. Reserve cardholder priority.</p>
+          <div class="svc-bottom">
+            <div class="svc-price cayenne">$200</div>
+            <div class="svc-cta">Reserve <span class="arr">→</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- THE WORK -->
+  <section class="sec" id="work">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-code reveal">SECTION<br/><span class="num">02</span></div>
+        <div>
+          <h2 class="sec-title reveal">
+            <span class="l">The</span> <span class="serif">work</span><span class="l">, in</span> <span class="cayenne">portrait.</span>
+          </h2>
+          <p class="sec-kicker reveal reveal-late">
+            Every cut is photographed against the same matte black panel. Same light. Same angle. <strong>The body of work reads as one continuous portfolio</strong> — not a scrapbook of one-offs.
+          </p>
+        </div>
+      </div>
+
+      <div class="work">
+        <div class="work-tile lg reveal"><div class="bg"></div><div class="corner">FRAME 001 / FRONT</div><div class="center">FRESH WORK</div><div class="meta"><div class="ttl">The Authentic · M.J.</div><div class="tag">2026.05</div></div></div>
+        <div class="work-tile md reveal reveal-late"><div class="bg l1"></div><div class="corner">FRAME 002</div><div class="meta"><div class="ttl">Reserve · D.H.</div><div class="tag">2026.05</div></div></div>
+        <div class="work-tile sm reveal reveal-later"><div class="bg l3"></div><div class="corner">003</div><div class="meta"><div class="ttl">Hero · T.W.</div><div class="tag">.05</div></div></div>
+        <div class="work-tile sm reveal reveal-latest"><div class="bg l4"></div><div class="corner">004</div><div class="meta"><div class="ttl">Authentic · R.F.</div><div class="tag">.05</div></div></div>
+        <div class="work-tile md reveal"><div class="bg l2"></div><div class="corner">FRAME 005</div><div class="meta"><div class="ttl">Beard sculpt · A.L.</div><div class="tag">2026.05</div></div></div>
+        <div class="work-tile lg reveal reveal-late"><div class="bg l5"></div><div class="corner">FRAME 006 / PROFILE</div><div class="center">+</div><div class="meta"><div class="ttl">The Authentic · J.W.</div><div class="tag">2026.05</div></div></div>
+        <div class="work-tile sm reveal"><div class="bg l1"></div><div class="corner">007</div><div class="meta"><div class="ttl">Lineup · B.T.</div><div class="tag">.05</div></div></div>
+        <div class="work-tile sm reveal reveal-late"><div class="bg l3"></div><div class="corner">008</div><div class="meta"><div class="ttl">Authentic · L.C.</div><div class="tag">.05</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE HOUSE -->
+  <section class="sec" id="house">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-code reveal">SECTION<br/><span class="num">03</span></div>
+        <div>
+          <h2 class="sec-title reveal">
+            <span class="l">The chair sits inside a</span> <span class="serif">building.</span>
+          </h2>
+          <p class="sec-kicker reveal reveal-late">
+            <strong>Cut Creaters</strong> · Decatur, Georgia · 140 independent operators under one roof since 1996. The chair is in suite 47, on the second floor, by the south window.
+          </p>
+        </div>
+      </div>
+
+      <div class="house reveal">
+        <div class="house-left">
+          <div class="house-eyebrow">— THE HOUSE ·  CUT CREATERS</div>
+          <h3>A house that <span class="serif">existed</span> <b>before the chair did.</b></h3>
+          <p>Built in 1996, when the Decatur scene was a handful of corner shops and the building was an experiment. Three decades later — <strong>140 suites, one address, the longest-running independent operator house in the metro.</strong></p>
+          <p>The chair runs out of a single suite on the second floor. Most clients walk through the lobby past forty other working barbers, stylists, and braiders before the elevator. It is, on purpose, <strong>not a salon.</strong> It is a building of small businesses.</p>
+
+          <div class="house-stats">
+            <div class="hstat"><div class="v cayenne">30</div><div class="l">Years operating</div></div>
+            <div class="hstat"><div class="v">140</div><div class="l">Suites</div></div>
+            <div class="hstat"><div class="v">24k</div><div class="l">Sq feet</div></div>
+          </div>
+        </div>
+
+        <div class="house-right">
+          <div class="house-img">
+            <div class="house-img-svg">
+              <svg viewBox="0 0 360 440" fill="none">
+                <!-- building elevation -->
+                <g stroke="#f4ece0" stroke-width="1.2" fill="none" opacity="0.85" class="draw" style="stroke-dasharray:1400;stroke-dashoffset:1400">
+                  <rect x="40" y="80" width="280" height="320"/>
+                  <line x1="40" y1="140" x2="320" y2="140"/>
+                  <line x1="40" y1="200" x2="320" y2="200"/>
+                  <line x1="40" y1="260" x2="320" y2="260"/>
+                  <line x1="40" y1="320" x2="320" y2="320"/>
+                </g>
+                <!-- windows grid -->
+                <g fill="#f4ece0" opacity="0.18">
+                  <rect x="58" y="92" width="20" height="36"/><rect x="88" y="92" width="20" height="36"/><rect x="118" y="92" width="20" height="36"/><rect x="148" y="92" width="20" height="36"/><rect x="178" y="92" width="20" height="36"/><rect x="208" y="92" width="20" height="36"/><rect x="238" y="92" width="20" height="36"/><rect x="268" y="92" width="20" height="36"/><rect x="290" y="92" width="20" height="36" fill="#e84a2a" opacity="0.9"/>
+                  <rect x="58" y="152" width="20" height="36"/><rect x="88" y="152" width="20" height="36"/><rect x="118" y="152" width="20" height="36"/><rect x="148" y="152" width="20" height="36"/><rect x="178" y="152" width="20" height="36"/><rect x="208" y="152" width="20" height="36"/><rect x="238" y="152" width="20" height="36"/><rect x="268" y="152" width="20" height="36"/><rect x="290" y="152" width="20" height="36"/>
+                  <rect x="58" y="212" width="20" height="36"/><rect x="88" y="212" width="20" height="36"/><rect x="118" y="212" width="20" height="36"/><rect x="148" y="212" width="20" height="36"/><rect x="178" y="212" width="20" height="36"/><rect x="208" y="212" width="20" height="36"/><rect x="238" y="212" width="20" height="36"/><rect x="268" y="212" width="20" height="36"/><rect x="290" y="212" width="20" height="36"/>
+                  <rect x="58" y="272" width="20" height="36"/><rect x="88" y="272" width="20" height="36"/><rect x="118" y="272" width="20" height="36"/><rect x="148" y="272" width="20" height="36"/><rect x="178" y="272" width="20" height="36"/><rect x="208" y="272" width="20" height="36"/><rect x="238" y="272" width="20" height="36"/><rect x="268" y="272" width="20" height="36"/><rect x="290" y="272" width="20" height="36"/>
+                  <rect x="58" y="332" width="20" height="36"/><rect x="88" y="332" width="20" height="36"/><rect x="118" y="332" width="20" height="36"/><rect x="148" y="332" width="20" height="36"/><rect x="178" y="332" width="20" height="36"/><rect x="208" y="332" width="20" height="36"/><rect x="238" y="332" width="20" height="36"/><rect x="268" y="332" width="20" height="36"/><rect x="290" y="332" width="20" height="36"/>
+                </g>
+                <!-- door + base -->
+                <rect x="160" y="370" width="40" height="30" fill="none" stroke="#f4ece0" stroke-width="1.2" opacity="0.6"/>
+                <!-- dimension top -->
+                <g stroke="#e84a2a" stroke-width="1" fill="none">
+                  <line x1="40" y1="60" x2="320" y2="60"/>
+                  <line x1="40" y1="55" x2="40" y2="65"/>
+                  <line x1="320" y1="55" x2="320" y2="65"/>
+                </g>
+                <text x="180" y="52" fill="#e84a2a" font-family="Architects Daughter" font-size="13" text-anchor="middle">— 140 suites —</text>
+                <!-- callout arrow -->
+                <g stroke="#e84a2a" stroke-width="1" fill="none">
+                  <line x1="290" y1="110" x2="340" y2="60"/>
+                  <line x1="288" y1="108" x2="294" y2="114"/>
+                </g>
+                <text x="340" y="48" fill="#e84a2a" font-family="Architects Daughter" font-size="12" text-anchor="end">suite 47</text>
+              </svg>
+            </div>
+          </div>
+          <div class="house-callout c1">
+            second floor<br/>south window
+            <svg viewBox="0 0 80 40" width="80" height="40" style="margin-top:8px">
+              <path d="M 5 30 Q 30 10 70 25" stroke="#e84a2a" stroke-width="1" fill="none"/>
+              <polygon points="65,22 72,25 65,28" fill="#e84a2a"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK CTA -->
+  <section class="book-cta" id="book">
+    <div class="wrap">
+      <div class="book-cta-eyebrow reveal">— BOOK THE CHAIR —</div>
+      <h2 class="reveal reveal-late">
+        <span class="l">Next available</span> <span class="serif">slot</span><span class="l">,</span><br/>
+        <b>this Saturday at 11.</b>
+      </h2>
+      <div class="reveal reveal-later" style="margin-top:32px">
+        <a class="btn btn-primary" href="https://book.khyreecity.com">See the calendar <span class="arr">→</span></a>
+      </div>
+      <div class="reveal reveal-latest" style="margin-top:24px;font-family:var(--mono);font-size:11px;letter-spacing:0.18em;color:var(--cream-dim);text-transform:uppercase">
+        OR · TEXT 404 — XXX — XXXX · BY APPOINTMENT ONLY
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============= TRANSITION ============= -->
+<div class="page-transition">
+  <svg width="32" height="48" viewBox="0 0 32 48" fill="none">
+    <path d="M 16 4 L 16 40" stroke="#e84a2a" stroke-width="1.5"/>
+    <path d="M 6 30 L 16 44 L 26 30" stroke="#e84a2a" stroke-width="1.5" fill="none"/>
+  </svg>
+</div>
+
+<!-- ====================================================== -->
+<!-- ============= PAGE 02 — STORY (NAVY) ================= -->
+<!-- ====================================================== -->
+<div class="page page-story" id="story">
+
+  <!-- STORY HERO -->
+  <section class="story-hero">
+    <div class="wrap">
+      <div class="hero-eyebrow" style="margin-bottom:32px">
+        <span class="dot"></span><b>FOLIO II</b> · THE STORY · THE TRADE
+      </div>
+
+      <div class="story-hero-grid">
+        <h1>
+          <span class="text-reveal reveal"><span class="text-reveal-inner serif">Born</span></span>
+          <span class="text-reveal reveal reveal-late"><span class="text-reveal-inner">in the</span></span>
+          <span class="text-reveal reveal reveal-later"><span class="text-reveal-inner"><b>chair.</b></span></span><br/>
+          <span class="text-reveal reveal reveal-latest"><span class="text-reveal-inner serif">Raised</span></span>
+          <span class="text-reveal reveal" style="transition-delay:0.6s"><span class="text-reveal-inner">in the</span></span>
+          <span class="text-reveal reveal" style="transition-delay:0.75s"><span class="text-reveal-inner"><b>trade.</b></span></span>
+        </h1>
+
+        <div class="story-hero-side reveal" style="transition-delay:1s">
+          <div class="label">The Trade</div>
+          The chair was in the family before I was. <strong>I grew up around it.</strong> The smell of clipper oil, the snap of the cape, my father's voice calling the next name. I picked up the clippers at nine. I've cut professionally for two decades. <strong>This is the only thing I have ever done well.</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BIG QUOTE -->
+  <section class="story-bigquote">
+    <div class="wrap">
+      <p class="q reveal">
+        Quality is <span class="cayenne">remembered</span> long after the price is forgotten.
+      </p>
+      <div class="reveal reveal-late" style="margin-top:32px;font-family:var(--mono);font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--cream-dim);font-weight:600">— The thesis of the house —</div>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-code reveal">SECTION<br/><span class="num">01</span></div>
+        <div>
+          <h2 class="sec-title reveal">
+            <span class="l">Three things</span> <span class="serif">the work</span> <span class="l">runs on.</span>
+          </h2>
+          <p class="sec-kicker reveal reveal-late">
+            The chair is a small business. Small businesses survive on three disciplines done daily. <strong>Skip one, and the chair starts to lean.</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="principles reveal">
+        <div class="princ">
+          <div class="princ-num">PRINCIPLE<b>01</b></div>
+          <h4>The phone is face-down.</h4>
+          <p>Once the cape falls, the phone stays down. No calls. No checks. No glances. The hour the client paid for is the hour the client receives, undivided.</p>
+        </div>
+        <div class="princ">
+          <div class="princ-num">PRINCIPLE<b>02</b></div>
+          <h4>The client is named.</h4>
+          <p>Every client greeted by name within thirty seconds of entry. If memory fails, the notebook doesn't. There is no excuse for "what's up, man."</p>
+        </div>
+        <div class="princ">
+          <div class="princ-num">PRINCIPLE<b>03</b></div>
+          <h4>The finish is not optional.</h4>
+          <p>Hot towel. Scalp press. Finishing oil. Every cut. Every tier. The Lineup gets the same care as the Reserve — the tier difference is duration, not attention.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE CHAIR (sticky split) -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="sec-code reveal">SECTION<br/><span class="num">02</span></div>
+        <div>
+          <h2 class="sec-title reveal">
+            <span class="l">The</span> <span class="serif">chair</span> <span class="l">itself.</span>
+          </h2>
+          <p class="sec-kicker reveal reveal-late">
+            One station, three feet of clear floor, fluorescent natural-tone overhead, matte black photo panel at the back. Designed for the work, not the photograph. <strong>The photograph is a byproduct.</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="chair-split">
+        <div class="chair-text reveal">
+          <h3>The chair is a <span class="serif">station</span>, <b>not a stage.</b></h3>
+          <p>Built around the work the hands do, not the photograph the phone takes. The light is calibrated to read texture. The mirror is angled so the client sees the same face the operator does. The notebook lives at the right hand. <strong>The phone is on silent, face-down, the entire shift.</strong></p>
+          <p>The matte black panel at the back is not décor. It is the photo studio for every cut — same backdrop, same light, same angle. Frame 001 looks like frame 001,000 because the geometry of the room does not change.</p>
+          <p>The Reserve appointments happen after-hours. The lobby is quiet. The building is mostly empty. <strong>The client gets a different version of the chair than the daytime clients do</strong> — slower, longer, with a finishing oil that does not appear on the standard menu.</p>
+        </div>
+
+        <div class="chair-visual">
+          <div class="elev reveal reveal-late">
+            <div class="elev-head">
+              <div class="l">DRAWING <b>D—02</b> · ELEVATION · SUITE 47</div>
+              <div class="l">SCALE 1:24</div>
+            </div>
+            <div class="elev-svg">
+              <svg viewBox="0 0 320 280" fill="none">
+                <!-- floor -->
+                <line x1="20" y1="240" x2="300" y2="240" stroke="#f4ece0" stroke-width="1.5"/>
+                <!-- chair -->
+                <g stroke="#f4ece0" stroke-width="1.2" fill="none">
+                  <!-- base -->
+                  <rect x="120" y="230" width="80" height="10"/>
+                  <!-- post -->
+                  <line x1="155" y1="230" x2="155" y2="180"/>
+                  <line x1="165" y1="230" x2="165" y2="180"/>
+                  <!-- seat -->
+                  <rect x="120" y="170" width="80" height="20" rx="2"/>
+                  <!-- back -->
+                  <rect x="125" y="100" width="70" height="70" rx="4"/>
+                  <!-- headrest -->
+                  <rect x="135" y="80" width="50" height="14" rx="3"/>
+                  <!-- armrests -->
+                  <rect x="100" y="160" width="22" height="8" rx="2"/>
+                  <rect x="198" y="160" width="22" height="8" rx="2"/>
+                  <!-- foot ring -->
+                  <rect x="135" y="218" width="50" height="6" rx="2"/>
+                </g>
+                <!-- mirror behind -->
+                <rect x="55" y="60" width="40" height="120" stroke="#5b9eff" stroke-width="1" fill="none" stroke-dasharray="3 3" opacity="0.5"/>
+                <text x="75" y="55" fill="#5b9eff" font-family="JetBrains Mono" font-size="8" text-anchor="middle" letter-spacing="1">MIRROR</text>
+                <!-- photo panel -->
+                <rect x="220" y="70" width="60" height="160" stroke="#e84a2a" stroke-width="1.2" fill="none"/>
+                <text x="250" y="64" fill="#e84a2a" font-family="JetBrains Mono" font-size="8" text-anchor="middle" letter-spacing="1">PANEL</text>
+                <!-- dim line bottom -->
+                <g stroke="#e84a2a" stroke-width="1" fill="none">
+                  <line x1="20" y1="260" x2="300" y2="260"/>
+                  <line x1="20" y1="256" x2="20" y2="264"/>
+                  <line x1="300" y1="256" x2="300" y2="264"/>
+                </g>
+                <text x="160" y="274" fill="#e84a2a" font-family="Architects Daughter" font-size="13" text-anchor="middle">12'-0"</text>
+                <!-- height callout -->
+                <g stroke="#e84a2a" stroke-width="1" fill="none">
+                  <line x1="306" y1="80" x2="306" y2="240"/>
+                  <line x1="302" y1="80" x2="310" y2="80"/>
+                  <line x1="302" y1="240" x2="310" y2="240"/>
+                </g>
+                <text x="316" y="160" fill="#e84a2a" font-family="Architects Daughter" font-size="13" transform="rotate(90 316 160)">7'-2"</text>
+              </svg>
+            </div>
+            <div class="elev-meta">
+              <div class="elev-meta-cell"><div class="l">Floor</div><div class="v">02</div></div>
+              <div class="elev-meta-cell"><div class="l">Suite</div><div class="v cayenne">47</div></div>
+              <div class="elev-meta-cell"><div class="l">Exposure</div><div class="v">South</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE HAND (heritage rewritten) -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="hand-section">
+        <div class="hand-text reveal">
+          <h3>By <span class="serif">hand.</span><br/><b>For a long time.</b></h3>
+          <p>The work has been in the family since the building was opened in 1996. My father, Omar, has cut hair for thirty years. <strong>I'm not building from scratch.</strong> I'm taking a seat that was already warm.</p>
+          <p>Most barbers learn the trade as a job. <strong>I learned it as a household sound.</strong> The buzz of the clippers in the kitchen. The smell of the towel warmer. The way my father called the next client to the chair without raising his voice. That's the version of the work I'm trying to keep alive — slow, deliberate, owned.</p>
+          <p>The chair has a history. It does not have to mention it constantly. <strong>The work proves the lineage.</strong></p>
+        </div>
+
+        <div class="hand-timeline reveal reveal-late">
+          <div class="hand-event">
+            <div class="yr">1996</div>
+            <h5>Cut Creaters opens</h5>
+            <p>Omar Townes and Danielle Townes open the doors on a 24,000 sq ft building with twelve chairs. Decatur, Georgia.</p>
+          </div>
+          <div class="hand-event">
+            <div class="yr">2005</div>
+            <h5>I pick up the clippers</h5>
+            <p>Nine years old. First fade on a younger cousin. The cousin still has the photograph. The fade was not great.</p>
+          </div>
+          <div class="hand-event">
+            <div class="yr">2014</div>
+            <h5>License earned</h5>
+            <p>Two decades behind the chair beginning to look like a career. NJ cosmetology license. First independent clientele.</p>
+          </div>
+          <div class="hand-event">
+            <div class="yr">2024</div>
+            <h5>Khyree City built</h5>
+            <p>The brand, the booking system, the codex, the Reserve tier. A personal house inside the family house.</p>
+          </div>
+          <div class="hand-event now">
+            <div class="yr">2026 — NOW</div>
+            <h5>Operator seat at Cut Creaters</h5>
+            <p>Taking the second-floor suite. Running the chair. Helping fill the building's other 96 vacant suites. <strong>The work continues.</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY FOOTER -->
+  <section class="story-footer">
+    <div class="wrap">
+      <div class="story-footer-eyebrow reveal">— FOLIO II · END —</div>
+      <h2 class="reveal reveal-late">
+        <span class="l">Now</span> <span class="serif">that you know</span><br/>
+        <b>where it comes from —</b>
+      </h2>
+      <p style="font-family:var(--body);font-size:17px;color:var(--cream-soft);max-width:540px;margin:0 auto;line-height:1.6" class="reveal reveal-later">
+        Book a cut. Or read the rest of the codex — services, the chair ceremony, and the Reserve tier.
+      </p>
+      <div class="story-footer-row reveal reveal-latest">
+        <a class="btn btn-primary" href="https://book.khyreecity.com">Book the chair <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#services">See the services <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">KHYREE CITY</div>
+          <p class="footer-tag">A working barber chair in a 30-year independent house. Decatur, Georgia.</p>
+        </div>
+        <div class="footer-col">
+          <h6>The Chair</h6>
+          <a href="#services">Services</a>
+          <a href="#book">Book online</a>
+          <a href="#">Reserve tier</a>
+          <a href="#">Home visit</a>
+        </div>
+        <div class="footer-col">
+          <h6>The House</h6>
+          <a href="#house">Cut Creaters</a>
+          <a href="#story">The story</a>
+          <a href="#">Suite rentals</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h6>Follow</h6>
+          <a href="https://instagram.com/khyree_city">Instagram</a>
+          <a href="#">Email</a>
+          <a href="#">Google</a>
+          <a href="#">Yelp</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© KHYREE CITY · MMXXVI · CUT CREATERS · DECATUR GA</span>
+        <span>BY APPOINTMENT · ALL TIERS</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</div>
+
+<script>
+// Cursor follow
+const cg = document.getElementById('cursorGlow');
+let mx = 0, my = 0, cx = 0, cy = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function loop(){
+  cx += (mx - cx) * 0.12;
+  cy += (my - cy) * 0.12;
+  cg.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+  requestAnimationFrame(loop);
+}
+loop();
+
+// Nav scroll state
+const nav = document.getElementById('topnav');
+window.addEventListener('scroll', () => {
+  if(window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}, {passive:true});
+
+// Reveal on scroll
+const ro = new IntersectionObserver(es => {
+  es.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+}, {threshold:0.08, rootMargin:'0px 0px -8% 0px'});
+
+document.querySelectorAll('.reveal, .text-reveal').forEach(el => ro.observe(el));
+
+// Active nav link based on section
+const sections = ['home','services','work','house','story'].map(id => document.getElementById(id));
+const links = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 200;
+  let cur = 0;
+  sections.forEach((s,i) => { if(s && s.offsetTop <= y) cur = i; });
+  links.forEach((l,i) => l.classList.toggle('active', i === cur));
+}, {passive:true});
+
+// Subtle parallax on house image
+const houseImg = document.querySelector('.house-img');
+if(houseImg){
+  window.addEventListener('scroll', () => {
+    const rect = houseImg.getBoundingClientRect();
+    const center = rect.top + rect.height/2 - window.innerHeight/2;
+    houseImg.style.transform = `translateY(${center * -0.06}px)`;
+  }, {passive:true});
+}
+</script>
+</body>
+</html>

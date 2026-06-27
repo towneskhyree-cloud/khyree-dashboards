@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#09090b">
+<title>G's Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/prop-types@15/prop-types.min.js"></script>
+<script crossorigin src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  html, body { background: #09090b; color: #f4f4f5; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; font-family: "DM Sans", -apple-system, BlinkMacSystemFont, system-ui, sans-serif; }
+  input, button, select { font-family: inherit; }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #3b82f6; cursor: pointer; border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(59,130,246,0.5);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #3b82f6; cursor: pointer; border: 2px solid #fff;
+    box-shadow: 0 0 8px rgba(59,130,246,0.5);
+  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .font-mono { font-family: "JetBrains Mono", ui-monospace, monospace; }
+  .font-serif { font-family: "Instrument Serif", Georgia, serif; }
+  .loading { display: flex; align-items: center; justify-content: center; height: 100vh; color: #71717a; font-size: 14px; }
+</style>
+</head>
+<body>
+<div id="root"><div class="loading">Loading dashboard…</div></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+const { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } = Recharts;
+
+// =======================
+// INLINE SVG ICONS
+// =======================
+const I = {
+  TrendingUp: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+  TrendingDown: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>,
+  Plus: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  Trash: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>,
+  ChevronUp: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="18 15 12 9 6 15"/></svg>,
+  ChevronDown: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="6 9 12 15 18 9"/></svg>,
+  Reset: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>,
+  Target: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>,
+  Shield: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+  Info: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
+  Check: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}><polyline points="20 6 9 17 4 12"/></svg>,
+  Zap: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  Alert: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+  Warning: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+  Share: (p) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>,
+};
+
+// =======================
+// CONSTANTS / DATA
+// =======================
+const STORAGE_KEY = "g_financial_dashboard_v1";
+
+const INITIAL_EXPENSES = [
+  { id: "e1", name: "Rent — 2600 Cocklebur", amount: 2600, category: "Cocklebur Property" },
+  { id: "e2", name: "Water — Cocklebur", amount: 200, category: "Cocklebur Property" },
+  { id: "e3", name: "Electric — Cocklebur", amount: 400, category: "Cocklebur Property" },
+  { id: "e4", name: "WiFi — Cocklebur", amount: 150, category: "Cocklebur Property" },
+  { id: "e5", name: "Renters Ins. — Cocklebur", amount: 100, category: "Cocklebur Property" },
+  { id: "e6", name: "Lights — Porterdale", amount: 200, category: "Porterdale Property" },
+  { id: "e7", name: "Water — Porterdale", amount: 150, category: "Porterdale Property" },
+  { id: "e8", name: "Electrics — Porterdale", amount: 300, category: "Porterdale Property" },
+  { id: "e9", name: "Cable — Porterdale", amount: 200, category: "Porterdale Property" },
+  { id: "e10", name: "Rent — Store", amount: 2000, category: "Store" },
+  { id: "e11", name: "Electric — Store", amount: 500, category: "Store" },
+  { id: "e12", name: "Water — Store", amount: 500, category: "Store" },
+  { id: "e13", name: "Supplies & Inventory", amount: 5000, category: "Store" },
+  { id: "e14", name: "Storage Units", amount: 1000, category: "Store" },
+  { id: "e15", name: "Mortgages", amount: 2000, category: "Mortgages & Debt" },
+  { id: "e16", name: "Cars", amount: 500, category: "Mortgages & Debt" },
+  { id: "e17", name: "Verizon", amount: 400, category: "Communications" },
+  { id: "e18", name: "AT&T", amount: 400, category: "Communications" },
+  { id: "e19", name: "App, Cloud & Google Space", amount: 300, category: "Communications" },
+  { id: "e20", name: "Pay — Spencer, NY, Others", amount: 1600, category: "People & Payroll" },
+  { id: "e21", name: "Food (90 Daily)", amount: 2700, category: "Living" },
+  { id: "e22", name: "Food Shopping (300/Week)", amount: 1200, category: "Living" },
+];
+
+const INITIAL_INCOME = [
+  { id: "i1", name: "Air BNB", mode: "percent", value: 20 },
+  { id: "i2", name: "Facebook Sales of Inventory", mode: "percent", value: 50 },
+  { id: "i3", name: "Hair Styling", mode: "percent", value: 12 },
+  { id: "i4", name: "Store", mode: "percent", value: 22 },
+];
+
+const CATEGORY_ORDER = [
+  "Cocklebur Property", "Porterdale Property", "Store", "Mortgages & Debt",
+  "Communications", "People & Payroll", "Living", "Insurance", "Taxes",
+  "Vehicle", "Business Ops", "Property Maint.", "Reserves", "Family", "Often Missed",
+];
+
+const CATEGORY_COLORS = {
+  "Cocklebur Property": "#3b82f6", "Porterdale Property": "#06b6d4", "Store": "#8b5cf6",
+  "Mortgages & Debt": "#ef4444", "Communications": "#f59e0b", "People & Payroll": "#ec4899",
+  "Living": "#10b981", "Insurance": "#14b8a6", "Taxes": "#f97316", "Vehicle": "#6366f1",
+  "Business Ops": "#a855f7", "Property Maint.": "#84cc16", "Reserves": "#b8ff00",
+  "Family": "#f472b6", "Often Missed": "#fb923c",
+};
+
+const HIDDEN_EXPENSES = [
+  { name: "Auto Insurance", amount: 200, category: "Insurance", tip: "Required even if cars are paid off. Two vehicles in GA = $150–250/mo each." },
+  { name: "Health Insurance", amount: 600, category: "Insurance", tip: "Self-employed avg $450–800/mo. The bill that wipes a year of profit when it hits uncovered." },
+  { name: "Business Liability Insurance", amount: 100, category: "Insurance", tip: "Salon + store both need general liability. One slip, one claim, you're glad you had it." },
+  { name: "Property / Inventory Insurance", amount: 150, category: "Insurance", tip: "Different from renters. Covers the $5K of inventory you carry." },
+  { name: "Life Insurance", amount: 80, category: "Insurance", tip: "Term life on breadwinners. $30–100/mo. Estate planning basic." },
+  { name: "Dental Insurance", amount: 50, category: "Insurance", tip: "Skipped often. Family plans $40–80/mo. Cheaper than one root canal." },
+  { name: "Quarterly Self-Employment Tax", amount: 1500, category: "Taxes", tip: "IRS estimated. Set aside 25–30% of net profit. Skipping = penalties." },
+  { name: "Property Tax (Annual ÷ 12)", amount: 200, category: "Taxes", tip: "GA effective rate ~0.81% of home value. Smoothed monthly." },
+  { name: "Sales Tax Remittance", amount: 200, category: "Taxes", tip: "GA 4% state + local. Money is not yours — collect & remit." },
+  { name: "Vehicle Registration & TAVT", amount: 30, category: "Taxes", tip: "Annual fees averaged. Two cars in GA." },
+  { name: "Gas / Fuel", amount: 400, category: "Vehicle", tip: "Two vehicles, ATL driving. Hits $300–500/mo easily." },
+  { name: "Vehicle Maintenance Reserve", amount: 150, category: "Vehicle", tip: "Oil, tires, brakes. $100–200/mo per car or it bites you in repairs." },
+  { name: "Parking, Tolls, Peach Pass", amount: 50, category: "Vehicle", tip: "Atlanta toll lanes + parking. Small but real." },
+  { name: "Square / POS Processing Fees", amount: 200, category: "Business Ops", tip: "~2.6% + 10¢ per transaction. On $8K processed = ~$210/mo." },
+  { name: "Bookkeeping / Accountant", amount: 250, category: "Business Ops", tip: "Monthly bookkeeper $150–400. Pays for itself in tax savings." },
+  { name: "Tax Prep (Annual ÷ 12)", amount: 100, category: "Business Ops", tip: "CPA for business + personal: $1,000–1,500/yr." },
+  { name: "Business License & Permits", amount: 30, category: "Business Ops", tip: "GA business license + annual renewals." },
+  { name: "Marketing / Advertising", amount: 300, category: "Business Ops", tip: "FB ads, signage, boosted posts, flyers. Required to feed Facebook sales." },
+  { name: "Bank & Wire Fees", amount: 40, category: "Business Ops", tip: "Business account fees, transfer fees, NSF fees." },
+  { name: "Website Hosting & Domain", amount: 25, category: "Business Ops", tip: "Hosting + domain renewals. Cheap but easy to forget." },
+  { name: "Shipping & Postage", amount: 150, category: "Business Ops", tip: "Direct cost of Facebook sales fulfillment." },
+  { name: "Packaging Materials", amount: 100, category: "Business Ops", tip: "Boxes, tape, bubble wrap, mailers." },
+  { name: "Lawn Care / Landscaping", amount: 150, category: "Property Maint.", tip: "Three properties = real yard time or paid service." },
+  { name: "Pest Control", amount: 60, category: "Property Maint.", tip: "GA termite + general pest. $50–80/mo." },
+  { name: "HVAC Maintenance", amount: 50, category: "Property Maint.", tip: "Filter changes + annual service. Cheaper than a new unit." },
+  { name: "Repairs Reserve (1% rule)", amount: 300, category: "Property Maint.", tip: "1% of property value annually ÷ 12. Roof, plumbing, electrical surprises." },
+  { name: "Trash / Waste Removal", amount: 80, category: "Property Maint.", tip: "Often missed on the store property." },
+  { name: "AirBnB Turnover Cleaning", amount: 200, category: "Property Maint.", tip: "Charged to guests typically, but smooth out the gap." },
+  { name: "AirBnB Consumables", amount: 100, category: "Property Maint.", tip: "TP, soap, coffee, batteries. Guests expect it. 5★ depends on it." },
+  { name: "Emergency Fund Contribution", amount: 500, category: "Reserves", tip: "Target 3–6 months expenses. Pay yourself first." },
+  { name: "Retirement (SEP-IRA / Solo 401k)", amount: 400, category: "Reserves", tip: "Self-employed retirement. Tax-deductible." },
+  { name: "Equipment Replacement Reserve", amount: 100, category: "Reserves", tip: "Clippers, chairs, fixtures. They wear out — plan the replacement." },
+  { name: "Healthcare Co-pays & Rx", amount: 100, category: "Family", tip: "Even with insurance, out-of-pocket adds up." },
+  { name: "Personal Care / Grooming", amount: 80, category: "Family", tip: "Consistent monthly draw most people don't track." },
+  { name: "Subscriptions (Streaming, Apps)", amount: 60, category: "Family", tip: "Netflix, Hulu, Spotify, etc. Audit quarterly — they multiply." },
+  { name: "Gifts (Birthdays, Holidays)", amount: 100, category: "Family", tip: "Annual ÷ 12. Always forgotten until December." },
+  { name: "Travel / Vacation Reserve", amount: 200, category: "Family", tip: "One annual trip ÷ 12 months." },
+  { name: "Inventory Shrinkage / Loss", amount: 150, category: "Often Missed", tip: "~3% of inventory typically lost to damage, theft, returns." },
+  { name: "Annual Memberships", amount: 50, category: "Often Missed", tip: "Costco, AAA, gym, etc. Annual ÷ 12." },
+  { name: "Software Subscriptions (Business)", amount: 100, category: "Often Missed", tip: "Booking, scheduling, inventory mgmt apps." },
+  { name: "Charity / Sadaqah / Donations", amount: 200, category: "Often Missed", tip: "Voluntary giving. Budget it or it never happens." },
+  { name: "Continuing Education / Licenses", amount: 50, category: "Often Missed", tip: "Hair styling license renewal, CEUs, training." },
+  { name: "Cash Buffer / Sinking Fund", amount: 300, category: "Often Missed", tip: "For the surprises you can't predict. The line item that keeps you sane." },
+];
+
+const SCENARIO_PRESETS = [
+  { name: "Lean Mode", expense: -15, income: 0, desc: "Cut 15% of expenses, hold income flat." },
+  { name: "Recession", expense: 5, income: -25, desc: "Costs creep 5%, income drops 25%." },
+  { name: "Growth Push", expense: 15, income: 40, desc: "Invest — costs +15%, income +40%." },
+  { name: "Best Case", expense: 0, income: 50, desc: "Income up 50% with current cost base." },
+  { name: "Crisis", expense: 10, income: -40, desc: "Costs +10%, income -40%. Stress test." },
+];
+
+// =======================
+// HELPERS
+// =======================
+const fmtMoney = (n) => {
+  const v = Math.round(Number(n) || 0);
+  const sign = v < 0 ? "-" : "";
+  return sign + "$" + Math.abs(v).toLocaleString();
+};
+const fmtPctSigned = (n) => (n >= 0 ? "+" : "") + Math.round(n) + "%";
+const fmtPct = (n) => Math.round(n) + "%";
+
+const loadState = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+};
+const saveState = (state) => {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); return true; }
+  catch { return false; }
+};
+
+// =======================
+// SUB-COMPONENTS
+// =======================
+function KpiCard({ label, value, sub, accent = "#3b82f6", trend, big }) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-4">
+      <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-20 blur-2xl" style={{ background: accent }} />
+      <div className="relative">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-zinc-500 font-medium">{label}</div>
+        <div className="mt-2 font-serif tracking-tight" style={{ color: accent, fontSize: big ? "1.85rem" : "1.5rem", lineHeight: 1 }}>{value}</div>
+        {sub && <div className="mt-2 text-[10px] text-zinc-400 font-mono">{sub}</div>}
+        {trend !== undefined && (
+          <div className={"mt-1 inline-flex items-center gap-1 text-[10px] font-semibold " + (trend >= 0 ? "text-emerald-400" : "text-rose-400")}>
+            {trend >= 0 ? <I.TrendingUp width={12} height={12} /> : <I.TrendingDown width={12} height={12} />}
+            {fmtPctSigned(trend)} vs base
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Slider({ label, value, onChange, min = -50, max = 100, accent }) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs uppercase tracking-wider text-zinc-400 font-medium">{label}</span>
+        <span className="font-mono text-sm font-semibold" style={{ color: accent }}>{fmtPctSigned(value)}</span>
+      </div>
+      <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(Number(e.target.value))} className="w-full h-2 bg-zinc-800 rounded-full appearance-none cursor-pointer" style={{ accentColor: accent }} />
+      <div className="flex justify-between mt-1 text-[9px] text-zinc-600 font-mono">
+        <span>{min}%</span><span>0%</span><span>+{max}%</span>
+      </div>
+    </div>
+  );
+}
+
+function ExpenseRow({ exp, onUpdate, onDelete, onMove, isFirst, isLast }) {
+  return (
+    <div className="flex items-center gap-2 py-2 px-1 sm:px-2 rounded-lg hover:bg-zinc-900/50 group">
+      <div className="flex flex-col gap-0.5 flex-shrink-0">
+        <button onClick={() => onMove(exp.id, -1)} disabled={isFirst} className="text-zinc-600 hover:text-zinc-300 disabled:opacity-20 p-0.5">
+          <I.ChevronUp width={12} height={12} />
+        </button>
+        <button onClick={() => onMove(exp.id, 1)} disabled={isLast} className="text-zinc-600 hover:text-zinc-300 disabled:opacity-20 p-0.5">
+          <I.ChevronDown width={12} height={12} />
+        </button>
+      </div>
+      <input type="text" value={exp.name} onChange={(e) => onUpdate(exp.id, { name: e.target.value })} className="flex-1 min-w-0 bg-transparent text-xs sm:text-sm text-zinc-200 border-0 focus:outline-none focus:bg-zinc-900 rounded px-1.5 py-1" />
+      <select value={exp.category} onChange={(e) => onUpdate(exp.id, { category: e.target.value })} className="bg-zinc-900 text-[10px] text-zinc-400 border border-zinc-800 rounded px-1 py-1 max-w-[70px] sm:max-w-none flex-shrink-0">
+        {CATEGORY_ORDER.map((c) => <option key={c} value={c}>{c}</option>)}
+      </select>
+      <div className="flex items-center bg-zinc-900 rounded-lg border border-zinc-800 focus-within:border-blue-500 flex-shrink-0">
+        <span className="text-zinc-500 text-xs pl-1.5">$</span>
+        <input type="text" inputMode="decimal" value={exp.amount} onChange={(e) => {
+          const raw = e.target.value.replace(/[^\d.]/g, "");
+          onUpdate(exp.id, { amount: raw === "" ? 0 : Number(raw) });
+        }} className="w-16 sm:w-20 bg-transparent text-right font-mono text-xs sm:text-sm text-white border-0 focus:outline-none px-1 py-1" />
+      </div>
+      <button onClick={() => onDelete(exp.id)} className="text-zinc-600 hover:text-rose-400 p-1 flex-shrink-0">
+        <I.Trash width={14} height={14} />
+      </button>
+    </div>
+  );
+}
+
+function IncomeRow({ inc, expenseBase, onUpdate, onDelete }) {
+  const calcAmount = inc.mode === "percent" ? (expenseBase * (Number(inc.value) || 0)) / 100 : Number(inc.value) || 0;
+  const pctOfExpense = expenseBase > 0 ? (calcAmount / expenseBase) * 100 : 0;
+  return (
+    <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-3 group">
+      <div className="flex items-center gap-2 mb-2">
+        <input type="text" value={inc.name} onChange={(e) => onUpdate(inc.id, { name: e.target.value })} className="flex-1 bg-transparent text-sm font-medium text-white border-0 focus:outline-none focus:bg-zinc-900 rounded px-1 py-0.5" />
+        <button onClick={() => onDelete(inc.id)} className="text-zinc-600 hover:text-rose-400">
+          <I.Trash width={14} height={14} />
+        </button>
+      </div>
+      <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden text-[10px] font-semibold">
+          <button onClick={() => onUpdate(inc.id, { mode: "percent" })} className={"px-2 py-1 " + (inc.mode === "percent" ? "bg-blue-500 text-white" : "text-zinc-400")}>%</button>
+          <button onClick={() => onUpdate(inc.id, { mode: "dollar" })} className={"px-2 py-1 " + (inc.mode === "dollar" ? "bg-blue-500 text-white" : "text-zinc-400")}>$</button>
+        </div>
+        <div className="flex items-center bg-zinc-900 rounded-lg border border-zinc-800 focus-within:border-blue-500">
+          {inc.mode === "dollar" && <span className="text-zinc-500 text-sm pl-2">$</span>}
+          <input type="text" inputMode="decimal" value={inc.value} onChange={(e) => {
+            const raw = e.target.value.replace(/[^\d.]/g, "");
+            onUpdate(inc.id, { value: raw === "" ? 0 : Number(raw) });
+          }} className="w-16 bg-transparent text-right font-mono text-sm text-white border-0 focus:outline-none px-1.5 py-1" />
+          {inc.mode === "percent" && <span className="text-zinc-500 text-sm pr-2">%</span>}
+        </div>
+        <div className="flex-1 text-right min-w-[100px]">
+          <div className="font-mono text-base font-bold text-blue-400">{fmtMoney(calcAmount)}</div>
+          <div className="text-[10px] text-zinc-500 font-mono">covers {fmtPct(pctOfExpense)}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value, accent = "#3b82f6", big }) {
+  return (
+    <div className="flex items-baseline justify-between gap-2">
+      <span className="text-[11px] text-zinc-400">{label}</span>
+      <span className={"font-mono font-semibold " + (big ? "text-lg" : "text-sm")} style={{ color: accent }}>{value}</span>
+    </div>
+  );
+}
+
+function CalcCard({ title, accent = "#3b82f6", children, icon }) {
+  const Icon = icon;
+  return (
+    <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+      <div className="flex items-center gap-2 mb-4">
+        {Icon && <Icon width={16} height={16} style={{ color: accent }} />}
+        <h3 className="text-sm uppercase tracking-wider font-semibold text-white">{title}</h3>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function NumberInput({ value, onChange, prefix = "$", suffix = "" }) {
+  return (
+    <div className="flex items-center bg-zinc-900 rounded-lg border border-zinc-800 focus-within:border-blue-500 overflow-hidden">
+      {prefix && <span className="text-zinc-500 text-sm pl-2.5">{prefix}</span>}
+      <input type="text" inputMode="decimal" value={value} onChange={(e) => {
+        const raw = e.target.value.replace(/[^\d.]/g, "");
+        onChange(raw === "" ? 0 : Number(raw));
+      }} className="flex-1 bg-transparent font-mono text-sm text-white border-0 focus:outline-none px-2 py-2 min-w-0" />
+      {suffix && <span className="text-zinc-500 text-sm pr-2.5">{suffix}</span>}
+    </div>
+  );
+}
+
+// =======================
+// MAIN APP
+// =======================
+function App() {
+  const [expenses, setExpenses] = useState(INITIAL_EXPENSES);
+  const [income, setIncome] = useState(INITIAL_INCOME);
+  const [expenseAdjust, setExpenseAdjust] = useState(0);
+  const [incomeAdjust, setIncomeAdjust] = useState(0);
+  const [taxReservePct, setTaxReservePct] = useState(25);
+  const [savings, setSavings] = useState(10000);
+  const [profitGoal, setProfitGoal] = useState(3000);
+  const [calcSales, setCalcSales] = useState(50);
+  const [calcCuts, setCalcCuts] = useState(45);
+  const [tab, setTab] = useState("overview");
+  const [loaded, setLoaded] = useState(false);
+  const [saveStatus, setSaveStatus] = useState("Saved");
+  const [addedHidden, setAddedHidden] = useState({});
+
+  useEffect(() => {
+    const saved = loadState();
+    if (saved) {
+      if (Array.isArray(saved.expenses)) setExpenses(saved.expenses);
+      if (Array.isArray(saved.income)) setIncome(saved.income);
+      if (typeof saved.expenseAdjust === "number") setExpenseAdjust(saved.expenseAdjust);
+      if (typeof saved.incomeAdjust === "number") setIncomeAdjust(saved.incomeAdjust);
+      if (typeof saved.taxReservePct === "number") setTaxReservePct(saved.taxReservePct);
+      if (typeof saved.savings === "number") setSavings(saved.savings);
+      if (typeof saved.profitGoal === "number") setProfitGoal(saved.profitGoal);
+      if (saved.addedHidden) setAddedHidden(saved.addedHidden);
+    }
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!loaded) return;
+    setSaveStatus("Saving…");
+    const t = setTimeout(() => {
+      const ok = saveState({ expenses, income, expenseAdjust, incomeAdjust, taxReservePct, savings, profitGoal, addedHidden });
+      setSaveStatus(ok ? "Saved" : "Save failed");
+    }, 400);
+    return () => clearTimeout(t);
+  }, [expenses, income, expenseAdjust, incomeAdjust, taxReservePct, savings, profitGoal, addedHidden, loaded]);
+
+  const expenseBase = useMemo(() => expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0), [expenses]);
+  const incomeBase = useMemo(() => income.reduce((s, i) => {
+    if (i.mode === "percent") return s + (expenseBase * (Number(i.value) || 0)) / 100;
+    return s + (Number(i.value) || 0);
+  }, 0), [income, expenseBase]);
+  const expenseAdj = expenseBase * (1 + expenseAdjust / 100);
+  const incomeAdj = incomeBase * (1 + incomeAdjust / 100);
+  const netAdj = incomeAdj - expenseAdj;
+  const coverageAdj = expenseAdj > 0 ? (incomeAdj / expenseAdj) * 100 : 0;
+
+  const runwayMonths = netAdj >= 0 ? Infinity : savings / Math.max(expenseAdj - incomeAdj, 0.0001);
+  const dailyBurn = expenseAdj / 30;
+  const weeklyBurn = expenseAdj / 4.33;
+
+  const expensesByCat = useMemo(() => {
+    const map = {};
+    expenses.forEach((e) => {
+      if (!map[e.category]) map[e.category] = [];
+      map[e.category].push(e);
+    });
+    return map;
+  }, [expenses]);
+
+  const categoryTotals = useMemo(() => CATEGORY_ORDER.map((cat) => {
+    const total = (expensesByCat[cat] || []).reduce((s, e) => s + (Number(e.amount) || 0), 0);
+    return { name: cat, value: total, color: CATEGORY_COLORS[cat] || "#6b7280" };
+  }).filter((c) => c.value > 0), [expensesByCat]);
+
+  const topExpenses = useMemo(() => [...expenses]
+    .sort((a, b) => Number(b.amount) - Number(a.amount))
+    .slice(0, 10)
+    .map((e) => ({
+      name: e.name.length > 22 ? e.name.slice(0, 20) + "…" : e.name,
+      amount: Number(e.amount) || 0,
+      color: CATEGORY_COLORS[e.category] || "#6b7280",
+    })), [expenses]);
+
+  const incomePerStream = useMemo(() => income.map((i) => {
+    const amt = i.mode === "percent" ? (expenseBase * (Number(i.value) || 0)) / 100 : Number(i.value) || 0;
+    return { name: i.name, value: amt };
+  }), [income, expenseBase]);
+
+  // Handlers
+  const updateExpense = (id, patch) => setExpenses((arr) => arr.map((e) => (e.id === id ? { ...e, ...patch } : e)));
+  const deleteExpense = (id) => setExpenses((arr) => arr.filter((e) => e.id !== id));
+  const moveExpense = (id, dir) => setExpenses((arr) => {
+    const idx = arr.findIndex((e) => e.id === id);
+    if (idx < 0) return arr;
+    const newIdx = idx + dir;
+    if (newIdx < 0 || newIdx >= arr.length) return arr;
+    const copy = [...arr];
+    [copy[idx], copy[newIdx]] = [copy[newIdx], copy[idx]];
+    return copy;
+  });
+  const addExpense = (cat = "Often Missed") => {
+    const id = "e" + Date.now();
+    setExpenses((arr) => [...arr, { id, name: "New expense", amount: 0, category: cat }]);
+  };
+  const addHiddenExpense = (h, idx) => {
+    const id = "h" + Date.now() + "_" + idx;
+    setExpenses((arr) => [...arr, { id, name: h.name, amount: h.amount, category: h.category }]);
+    setAddedHidden((m) => ({ ...m, [h.category + "-" + h.name]: true }));
+  };
+  const updateIncome = (id, patch) => setIncome((arr) => arr.map((i) => (i.id === id ? { ...i, ...patch } : i)));
+  const deleteIncome = (id) => setIncome((arr) => arr.filter((i) => i.id !== id));
+  const addIncome = () => {
+    const id = "i" + Date.now();
+    setIncome((arr) => [...arr, { id, name: "New income source", mode: "percent", value: 0 }]);
+  };
+  const resetAll = () => {
+    if (!confirm("Reset everything back to the original sheet? Your edits will be lost.")) return;
+    setExpenses(INITIAL_EXPENSES);
+    setIncome(INITIAL_INCOME);
+    setExpenseAdjust(0); setIncomeAdjust(0);
+    setTaxReservePct(25); setSavings(10000); setProfitGoal(3000);
+    setAddedHidden({});
+  };
+  const applyPreset = (p) => { setExpenseAdjust(p.expense); setIncomeAdjust(p.income); };
+
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "expenses", label: "Expenses" },
+    { id: "income", label: "Income" },
+    { id: "calc", label: "Calc" },
+    { id: "library", label: "Missing" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+      {/* HEADER */}
+      <div className="sticky top-0 z-40 bg-zinc-950/95 backdrop-blur-md border-b border-zinc-800">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-blue-400 font-semibold">Townes Financial Ops · Decatur, GA</div>
+            <h1 className="text-xl sm:text-2xl text-white truncate font-serif">G's Command Center</h1>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className={"text-[10px] font-mono hidden sm:block " + (saveStatus === "Saved" ? "text-emerald-400" : saveStatus === "Saving…" ? "text-amber-400" : "text-rose-400")}>
+              ● {saveStatus}
+            </div>
+            <button onClick={resetAll} className="px-2.5 py-1.5 text-[11px] font-medium text-zinc-400 hover:text-white border border-zinc-800 rounded-lg hover:border-zinc-700">
+              <I.Reset width={12} height={12} className="inline mr-1" />Reset
+            </button>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 flex gap-1 overflow-x-auto no-scrollbar">
+          {tabs.map((t) => (
+            <button key={t.id} onClick={() => setTab(t.id)} className={"px-3 py-2 text-xs font-semibold rounded-t-md whitespace-nowrap " + (tab === t.id ? "text-white border-b-2 border-blue-500" : "text-zinc-500 hover:text-zinc-200 border-b-2 border-transparent")}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 space-y-5">
+        {/* KPIs */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <KpiCard label="Monthly Expenses" value={fmtMoney(expenseAdj)} accent="#ef4444" sub={"Base: " + fmtMoney(expenseBase)} trend={expenseAdjust} big />
+          <KpiCard label="Monthly Income" value={fmtMoney(incomeAdj)} accent="#3b82f6" sub={"Base: " + fmtMoney(incomeBase)} trend={incomeAdjust} big />
+          <KpiCard label="Net Position" value={fmtMoney(netAdj)} accent={netAdj >= 0 ? "#b8ff00" : "#fb7185"} sub={netAdj >= 0 ? "Surplus" : "Deficit"} big />
+          <KpiCard label="Coverage" value={fmtPct(coverageAdj)} accent={coverageAdj >= 100 ? "#b8ff00" : "#f59e0b"} sub={coverageAdj >= 100 ? "Fully covered" : "Income gap"} big />
+        </div>
+
+        {/* TAB CONTENT */}
+        {tab === "overview" && <OverviewTab {...{ expenseAdjust, setExpenseAdjust, incomeAdjust, setIncomeAdjust, categoryTotals, topExpenses, incomePerStream, expenseBase, incomeBase, applyPreset, dailyBurn, weeklyBurn }} />}
+        {tab === "expenses" && <ExpensesTab {...{ expensesByCat, updateExpense, deleteExpense, moveExpense, addExpense, expenseBase }} />}
+        {tab === "income" && <IncomeTab {...{ income, expenseBase, incomeBase, updateIncome, deleteIncome, addIncome }} />}
+        {tab === "calc" && <CalculatorsTab {...{ expenseAdj, incomeAdj, netAdj, taxReservePct, setTaxReservePct, savings, setSavings, profitGoal, setProfitGoal, calcSales, setCalcSales, calcCuts, setCalcCuts, runwayMonths, dailyBurn }} />}
+        {tab === "library" && <LibraryTab {...{ addHiddenExpense, addedHidden }} />}
+
+        <div className="pt-6 pb-12 text-center">
+          <div className="text-[10px] text-zinc-600 font-mono">Built for G · saves locally on this device</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =======================
+// TAB COMPONENTS
+// =======================
+function OverviewTab({ expenseAdjust, setExpenseAdjust, incomeAdjust, setIncomeAdjust, categoryTotals, topExpenses, incomePerStream, expenseBase, incomeBase, applyPreset, dailyBurn, weeklyBurn }) {
+  return (
+    <>
+      <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-blue-950/30 to-zinc-950 p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <I.Zap width={16} height={16} className="text-blue-400" />
+          <h2 className="text-sm uppercase tracking-wider font-semibold text-white">What-If Scenarios</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-5 mb-5">
+          <Slider label="Expense Change" value={expenseAdjust} onChange={setExpenseAdjust} accent="#ef4444" min={-50} max={100} />
+          <Slider label="Income Change" value={incomeAdjust} onChange={setIncomeAdjust} accent="#3b82f6" min={-50} max={100} />
+        </div>
+        <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Quick Scenarios</div>
+        <div className="flex flex-wrap gap-2">
+          {SCENARIO_PRESETS.map((p) => (
+            <button key={p.name} onClick={() => applyPreset(p)} title={p.desc} className="px-3 py-1.5 text-xs font-semibold bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-300 hover:border-blue-500 hover:text-white">
+              {p.name}
+            </button>
+          ))}
+          <button onClick={() => { setExpenseAdjust(0); setIncomeAdjust(0); }} className="px-3 py-1.5 text-xs font-semibold bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 hover:text-white">
+            <I.Reset width={12} height={12} className="inline mr-1" />Reset
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-2.5">
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+          <div className="text-[10px] uppercase tracking-wider text-zinc-500">Daily Burn</div>
+          <div className="font-serif text-xl text-rose-400">{fmtMoney(dailyBurn)}</div>
+        </div>
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+          <div className="text-[10px] uppercase tracking-wider text-zinc-500">Weekly Burn</div>
+          <div className="font-serif text-xl text-rose-400">{fmtMoney(weeklyBurn)}</div>
+        </div>
+        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+          <div className="text-[10px] uppercase tracking-wider text-zinc-500">Annual Burn</div>
+          <div className="font-serif text-xl text-rose-400">{fmtMoney(expenseBase * 12)}</div>
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-3">
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+          <h3 className="text-sm uppercase tracking-wider font-semibold text-white mb-3">Expense Mix</h3>
+          <ResponsiveContainer width="100%" height={260}>
+            <PieChart>
+              <Pie data={categoryTotals} cx="50%" cy="50%" innerRadius={50} outerRadius={90} paddingAngle={1} dataKey="value">
+                {categoryTotals.map((entry, i) => <Cell key={i} fill={entry.color} stroke="#0a0a0b" strokeWidth={2} />)}
+              </Pie>
+              <Tooltip contentStyle={{ backgroundColor: "#0a0a0b", border: "1px solid #27272a", borderRadius: "8px", fontSize: "12px" }} formatter={(value) => fmtMoney(value)} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] font-mono mt-2">
+            {categoryTotals.map((c) => (
+              <div key={c.name} className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: c.color }} />
+                <span className="text-zinc-400 truncate text-[9px]">{c.name}</span>
+                <span className="text-zinc-500 ml-auto">{fmtMoney(c.value)}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+          <h3 className="text-sm uppercase tracking-wider font-semibold text-white mb-3">Top 10 Expenses</h3>
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={topExpenses} layout="vertical" margin={{ left: 0, right: 25 }}>
+              <XAxis type="number" stroke="#52525b" tick={{ fontSize: 10 }} />
+              <YAxis type="category" dataKey="name" stroke="#52525b" tick={{ fontSize: 9 }} width={130} />
+              <Tooltip contentStyle={{ backgroundColor: "#0a0a0b", border: "1px solid #27272a", borderRadius: "8px", fontSize: "12px" }} formatter={(value) => fmtMoney(value)} cursor={{ fill: "rgba(59,130,246,0.1)" }} />
+              <Bar dataKey="amount" radius={[0, 4, 4, 0]}>
+                {topExpenses.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+        <h3 className="text-sm uppercase tracking-wider font-semibold text-white mb-3">Income → Coverage</h3>
+        <div className="space-y-2">
+          {incomePerStream.map((s, i) => {
+            const pct = expenseBase > 0 ? (s.value / expenseBase) * 100 : 0;
+            return (
+              <div key={i}>
+                <div className="flex items-center justify-between text-xs mb-1">
+                  <span className="text-zinc-300 font-medium truncate pr-2">{s.name}</span>
+                  <span className="font-mono text-blue-400 flex-shrink-0">{fmtMoney(s.value)} <span className="text-zinc-500">· {fmtPct(pct)}</span></span>
+                </div>
+                <div className="h-2 bg-zinc-900 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" style={{ width: Math.min(pct, 100) + "%" }} />
+                </div>
+              </div>
+            );
+          })}
+          <div className="border-t border-zinc-800 pt-3 mt-3 flex items-center justify-between text-sm">
+            <span className="text-white font-semibold">Total</span>
+            <span className={"font-mono font-bold " + (incomeBase >= expenseBase ? "text-emerald-400" : "text-amber-400")}>
+              {fmtMoney(incomeBase)} / {fmtMoney(expenseBase)} · {fmtPct(expenseBase > 0 ? (incomeBase / expenseBase) * 100 : 0)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ExpensesTab({ expensesByCat, updateExpense, deleteExpense, moveExpense, addExpense, expenseBase }) {
+  const [collapsedCats, setCollapsedCats] = useState({});
+  const toggleCat = (c) => setCollapsedCats((m) => ({ ...m, [c]: !m[c] }));
+  const usedCats = CATEGORY_ORDER.filter((c) => expensesByCat[c] && expensesByCat[c].length > 0);
+
+  return (
+    <div className="space-y-3">
+      <div className="rounded-xl border border-blue-900/50 bg-blue-950/20 p-3 flex items-start gap-2">
+        <I.Info width={16} height={16} className="text-blue-400 mt-0.5 flex-shrink-0" />
+        <div className="text-xs text-blue-100 leading-relaxed">
+          <strong className="text-white">Tap to edit anything.</strong> Use the arrows to reorder, the dropdown to recategorize, the trash to delete. Saves automatically.
+        </div>
+      </div>
+
+      {usedCats.map((cat) => {
+        const items = expensesByCat[cat] || [];
+        const total = items.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+        const pct = expenseBase > 0 ? (total / expenseBase) * 100 : 0;
+        const collapsed = collapsedCats[cat];
+        return (
+          <div key={cat} className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden">
+            <button onClick={() => toggleCat(cat)} className="w-full flex items-center gap-3 p-3 hover:bg-zinc-900/30">
+              <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ background: CATEGORY_COLORS[cat] || "#6b7280" }} />
+              <div className="flex-1 min-w-0 text-left">
+                <div className="text-sm font-semibold text-white">{cat}</div>
+                <div className="text-[10px] text-zinc-500 font-mono">{items.length} item{items.length !== 1 ? "s" : ""} · {fmtPct(pct)}</div>
+              </div>
+              <div className="font-serif text-xl" style={{ color: CATEGORY_COLORS[cat] || "#fff" }}>{fmtMoney(total)}</div>
+              <I.ChevronDown width={16} height={16} className={"text-zinc-500 " + (collapsed ? "" : "rotate-180")} style={{ transition: "transform 0.2s" }} />
+            </button>
+            {!collapsed && (
+              <div className="px-2 pb-2 border-t border-zinc-900">
+                {items.map((exp, i) => (
+                  <ExpenseRow key={exp.id} exp={exp} onUpdate={updateExpense} onDelete={deleteExpense} onMove={moveExpense} isFirst={i === 0} isLast={i === items.length - 1} />
+                ))}
+                <button onClick={() => addExpense(cat)} className="w-full mt-2 py-2 text-[11px] text-zinc-500 hover:text-blue-400 border border-dashed border-zinc-800 hover:border-blue-500/50 rounded-lg">
+                  <I.Plus width={12} height={12} className="inline mr-1" />Add to {cat}
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      <button onClick={() => addExpense("Often Missed")} className="w-full py-3 text-sm font-semibold text-blue-400 hover:text-blue-300 border-2 border-dashed border-blue-900 hover:border-blue-700 rounded-2xl">
+        <I.Plus width={16} height={16} className="inline mr-1" />Add new expense
+      </button>
+    </div>
+  );
+}
+
+function IncomeTab({ income, expenseBase, incomeBase, updateIncome, deleteIncome, addIncome }) {
+  const totalPct = expenseBase > 0 ? (incomeBase / expenseBase) * 100 : 0;
+  return (
+    <div className="space-y-3">
+      <div className="rounded-2xl border border-zinc-800 bg-gradient-to-br from-blue-950/40 to-zinc-950 p-5">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-zinc-500 mb-1">Total Estimated Monthly Income</div>
+        <div className="font-serif text-4xl text-blue-400">{fmtMoney(incomeBase)}</div>
+        <div className="text-xs text-zinc-400 mt-2 font-mono">
+          {fmtPct(totalPct)} of monthly expenses ({fmtMoney(expenseBase)})
+          {totalPct >= 100 ? <span className="text-emerald-400"> · Fully covered</span> : <span className="text-amber-400"> · Gap: {fmtMoney(expenseBase - incomeBase)}</span>}
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-blue-900/50 bg-blue-950/20 p-3 flex items-start gap-2">
+        <I.Info width={16} height={16} className="text-blue-400 mt-0.5 flex-shrink-0" />
+        <div className="text-xs text-blue-100 leading-relaxed">
+          Each stream: toggle <strong>%</strong> (formula model) or <strong>$</strong> (actual receipts).
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {income.map((inc) => (
+          <IncomeRow key={inc.id} inc={inc} expenseBase={expenseBase} onUpdate={updateIncome} onDelete={deleteIncome} />
+        ))}
+        <button onClick={addIncome} className="w-full py-3 text-sm font-semibold text-blue-400 hover:text-blue-300 border-2 border-dashed border-blue-900 hover:border-blue-700 rounded-xl">
+          <I.Plus width={16} height={16} className="inline mr-1" />Add income source
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CalculatorsTab({ expenseAdj, incomeAdj, netAdj, taxReservePct, setTaxReservePct, savings, setSavings, profitGoal, setProfitGoal, calcSales, setCalcSales, calcCuts, setCalcCuts, runwayMonths, dailyBurn }) {
+  const breakEvenMonthly = expenseAdj / (1 - taxReservePct / 100);
+  const taxOwed = breakEvenMonthly * (taxReservePct / 100);
+  const breakEvenDaily = breakEvenMonthly / 30;
+  const breakEvenWeekly = breakEvenMonthly / 4.33;
+  const gap = Math.max(expenseAdj - incomeAdj, 0);
+  const gapIncreasePct = incomeAdj > 0 ? (gap / incomeAdj) * 100 : 0;
+  const profitTargetIncome = (expenseAdj + profitGoal) / (1 - taxReservePct / 100);
+  const runwayDisplay = runwayMonths === Infinity || netAdj >= 0 ? "∞" : runwayMonths.toFixed(1) + " mo";
+
+  return (
+    <div className="grid md:grid-cols-2 gap-3">
+      <CalcCard title="Break-Even with Taxes" accent="#3b82f6" icon={I.Target}>
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-zinc-500 block mb-1">Tax Reserve %</label>
+            <NumberInput value={taxReservePct} onChange={setTaxReservePct} prefix="" suffix="%" />
+            <div className="text-[10px] text-zinc-500 mt-1 font-mono">IRS + GA state. Typical: 25–30%.</div>
+          </div>
+          <div className="border-t border-zinc-800 pt-3 space-y-1.5">
+            <Stat label="Gross monthly revenue needed" value={fmtMoney(breakEvenMonthly)} accent="#3b82f6" big />
+            <Stat label="Set aside for taxes" value={fmtMoney(taxOwed)} accent="#f97316" />
+            <Stat label="Net after taxes" value={fmtMoney(breakEvenMonthly - taxOwed)} accent="#10b981" />
+            <div className="border-t border-zinc-800 pt-2 mt-2 grid grid-cols-2 gap-2">
+              <Stat label="Per day" value={fmtMoney(breakEvenDaily)} accent="#3b82f6" />
+              <Stat label="Per week" value={fmtMoney(breakEvenWeekly)} accent="#3b82f6" />
+            </div>
+          </div>
+        </div>
+      </CalcCard>
+
+      <CalcCard title="Coverage Gap Closer" accent="#f59e0b" icon={I.Alert}>
+        {gap > 0 ? (
+          <div className="space-y-3">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-zinc-500">Monthly shortfall</div>
+              <div className="font-serif text-3xl text-amber-400">{fmtMoney(gap)}</div>
+            </div>
+            <div className="border-t border-zinc-800 pt-3 space-y-1.5">
+              <Stat label="% income lift needed" value={fmtPct(gapIncreasePct)} accent="#f59e0b" />
+              <Stat label="Extra/day" value={fmtMoney(gap / 30)} accent="#f59e0b" />
+              <Stat label="Extra/week" value={fmtMoney(gap / 4.33)} accent="#f59e0b" />
+            </div>
+            <div className="border-t border-zinc-800 pt-3">
+              <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Ways to close it</div>
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-zinc-400 flex items-center gap-1">Cuts @ $<input type="text" inputMode="decimal" value={calcCuts} onChange={(e) => { const r = e.target.value.replace(/[^\d.]/g, ""); setCalcCuts(r === "" ? 0 : Number(r)); }} className="w-12 bg-zinc-900 border border-zinc-800 rounded px-1 text-white text-xs" /></span>
+                  <span className="font-mono text-blue-400 font-semibold">{calcCuts > 0 ? Math.ceil(gap / calcCuts) : 0} cuts/mo</span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-zinc-400 flex items-center gap-1">FB sales @ $<input type="text" inputMode="decimal" value={calcSales} onChange={(e) => { const r = e.target.value.replace(/[^\d.]/g, ""); setCalcSales(r === "" ? 0 : Number(r)); }} className="w-12 bg-zinc-900 border border-zinc-800 rounded px-1 text-white text-xs" /></span>
+                  <span className="font-mono text-blue-400 font-semibold">{calcSales > 0 ? Math.ceil(gap / calcSales) : 0} sales/mo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="py-6 text-center">
+            <I.Check width={40} height={40} className="text-emerald-400 mx-auto mb-2" />
+            <div className="text-sm font-semibold text-emerald-400">No gap — income covers expenses</div>
+            <div className="text-xs text-zinc-500 mt-1">Surplus: {fmtMoney(-1 * (expenseAdj - incomeAdj))}</div>
+          </div>
+        )}
+      </CalcCard>
+
+      <CalcCard title="Profit Target" accent="#b8ff00" icon={I.TrendingUp}>
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-zinc-500 block mb-1">Profit you want to take home</label>
+            <NumberInput value={profitGoal} onChange={setProfitGoal} />
+          </div>
+          <div className="border-t border-zinc-800 pt-3 space-y-1.5">
+            <Stat label="Gross revenue needed" value={fmtMoney(profitTargetIncome)} accent="#b8ff00" big />
+            <Stat label="Above current income" value={fmtMoney(Math.max(profitTargetIncome - incomeAdj, 0))} accent="#f59e0b" />
+            <Stat label="% lift needed" value={incomeAdj > 0 ? fmtPct(Math.max(((profitTargetIncome - incomeAdj) / incomeAdj) * 100, 0)) : "—"} accent="#f59e0b" />
+          </div>
+        </div>
+      </CalcCard>
+
+      <CalcCard title="Cash Runway" accent="#a855f7" icon={I.Shield}>
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-zinc-500 block mb-1">Current cash savings</label>
+            <NumberInput value={savings} onChange={setSavings} />
+          </div>
+          <div className="border-t border-zinc-800 pt-3 space-y-1.5">
+            <Stat label="Months at current burn" value={runwayDisplay} accent={netAdj >= 0 ? "#b8ff00" : runwayMonths < 3 ? "#ef4444" : "#a855f7"} big />
+            <Stat label="Net monthly cash flow" value={fmtMoney(netAdj)} accent={netAdj >= 0 ? "#10b981" : "#ef4444"} />
+            <Stat label="6-month emergency fund" value={fmtMoney(expenseAdj * 6)} accent="#a855f7" />
+            <Stat label="Gap to recommended" value={fmtMoney(Math.max(expenseAdj * 6 - savings, 0))} accent="#f59e0b" />
+          </div>
+        </div>
+      </CalcCard>
+
+      <CalcCard title="12-Month Trajectory" accent="#06b6d4" icon={I.TrendingUp}>
+        <div className="space-y-1.5">
+          <Stat label="Annual expenses" value={fmtMoney(expenseAdj * 12)} accent="#ef4444" />
+          <Stat label="Annual income" value={fmtMoney(incomeAdj * 12)} accent="#3b82f6" />
+          <Stat label="Annual net" value={fmtMoney(netAdj * 12)} accent={netAdj >= 0 ? "#10b981" : "#ef4444"} big />
+          <Stat label={"Tax reserve (" + taxReservePct + "%)"} value={fmtMoney(incomeAdj * 12 * (taxReservePct / 100))} accent="#f97316" />
+          <Stat label="Net after tax reserve" value={fmtMoney(netAdj * 12 - incomeAdj * 12 * (taxReservePct / 100))} accent={(netAdj * 12 - incomeAdj * 12 * (taxReservePct / 100)) >= 0 ? "#b8ff00" : "#ef4444"} />
+        </div>
+      </CalcCard>
+
+      <CalcCard title="Daily Hustle" accent="#ec4899" icon={I.Zap}>
+        <div className="space-y-1.5">
+          <Stat label="Burn per day" value={fmtMoney(dailyBurn)} accent="#ef4444" />
+          <Stat label="Income per day" value={fmtMoney(incomeAdj / 30)} accent="#3b82f6" />
+          <Stat label="Net per day" value={fmtMoney(netAdj / 30)} accent={netAdj >= 0 ? "#10b981" : "#ef4444"} big />
+          <div className="border-t border-zinc-800 pt-2 mt-2">
+            <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1">One week of dry powder</div>
+            <div className="font-serif text-xl text-rose-400">{fmtMoney(expenseAdj / 4.33)}</div>
+          </div>
+        </div>
+      </CalcCard>
+    </div>
+  );
+}
+
+function LibraryTab({ addHiddenExpense, addedHidden }) {
+  const grouped = useMemo(() => {
+    const map = {};
+    HIDDEN_EXPENSES.forEach((h) => {
+      if (!map[h.category]) map[h.category] = [];
+      map[h.category].push(h);
+    });
+    return map;
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      <div className="rounded-2xl border border-amber-900/50 bg-amber-950/20 p-4 flex items-start gap-3">
+        <I.Warning width={20} height={20} className="text-amber-400 mt-0.5 flex-shrink-0" />
+        <div>
+          <h3 className="text-sm font-bold text-white mb-1">Expenses Most Operators Forget</h3>
+          <p className="text-xs text-amber-100 leading-relaxed">
+            Audit of line items that quietly drain real businesses. Tap any to add it to your sheet with a suggested amount — edit after.
+          </p>
+        </div>
+      </div>
+
+      {CATEGORY_ORDER.filter((c) => grouped[c]).map((cat) => {
+        const items = grouped[cat];
+        const subtotal = items.reduce((s, i) => s + i.amount, 0);
+        return (
+          <div key={cat} className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden">
+            <div className="flex items-center gap-3 p-3 border-b border-zinc-900">
+              <div className="w-1 h-7 rounded-full flex-shrink-0" style={{ background: CATEGORY_COLORS[cat] || "#6b7280" }} />
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-white">{cat}</div>
+                <div className="text-[10px] text-zinc-500 font-mono">{items.length} items · ~{fmtMoney(subtotal)}/mo total</div>
+              </div>
+            </div>
+            <div className="divide-y divide-zinc-900">
+              {items.map((h, idx) => {
+                const key = h.category + "-" + h.name;
+                const added = addedHidden[key];
+                return (
+                  <div key={idx} className="flex items-start gap-3 p-3 hover:bg-zinc-900/30">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium text-zinc-100">{h.name}</div>
+                      <div className="text-[10px] text-zinc-400 mt-0.5 leading-relaxed">{h.tip}</div>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <div className="font-mono text-sm font-semibold" style={{ color: CATEGORY_COLORS[cat] }}>~{fmtMoney(h.amount)}</div>
+                      <button onClick={() => addHiddenExpense(h, idx)} disabled={added} className={"mt-1 px-2 py-1 text-[10px] font-bold rounded " + (added ? "bg-emerald-900/50 text-emerald-400" : "bg-blue-600 text-white hover:bg-blue-500")}>
+                        {added ? <><I.Check width={12} height={12} className="inline" /> Added</> : <><I.Plus width={12} height={12} className="inline" /> Add</>}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Mount
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>

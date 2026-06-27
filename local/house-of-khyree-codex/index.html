@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The House of Khyree · A Codex of the Chair Ceremony · MMXXVI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Cormorant+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#0a0807;
+  --ink-2:#100c0a;
+  --ink-3:#181410;
+  --vellum:#e8dcc0;
+  --vellum-soft:rgba(232,220,192,0.78);
+  --vellum-dim:rgba(232,220,192,0.55);
+  --vellum-faint:rgba(232,220,192,0.28);
+  --vellum-trace:rgba(232,220,192,0.12);
+  --gold:#c9a961;
+  --gold-bright:#e4c373;
+  --gold-deep:#8d7034;
+  --gold-dark:#5a4620;
+  --gold-glow:rgba(201,169,97,0.5);
+  --oxblood:#8b1818;
+  --oxblood-deep:#5a0808;
+  --oxblood-bright:#b22020;
+  --shadow:rgba(0,0,0,0.6);
+  --serif-d:'Cinzel',serif;
+  --serif-b:'Cormorant Garamond',Georgia,serif;
+  --serif-sc:'Cormorant SC',Georgia,serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ink);color:var(--vellum);font-family:var(--serif-b);overflow-x:hidden;-webkit-font-smoothing:antialiased;font-size:18px;line-height:1.65;letter-spacing:0.005em}
+body{
+  background-image:
+    radial-gradient(ellipse 1600px 900px at 50% 0%, rgba(201,169,97,0.06), transparent 60%),
+    radial-gradient(ellipse 800px 600px at 80% 100%, rgba(139,24,24,0.05), transparent 60%),
+    radial-gradient(ellipse 1000px 700px at 0% 60%, rgba(201,169,97,0.04), transparent 60%);
+  background-attachment:fixed;
+  position:relative;
+  min-height:100vh;
+}
+/* film grain */
+body::before{
+  content:"";position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' seed='5'/%3E%3CfeColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.65 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23g)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;opacity:0.7;
+}
+/* vignette */
+body::after{
+  content:"";position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 120% 90% at 50% 50%,transparent 40%,rgba(0,0,0,0.5) 100%);
+}
+.app{position:relative;z-index:3}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ====== Layout ====== */
+.wrap{max-width:1100px;margin:0 auto;padding:0 40px;position:relative}
+@media(max-width:640px){.wrap{padding:0 22px}}
+section{padding:120px 0;position:relative;border-bottom:1px solid var(--vellum-trace)}
+@media(max-width:640px){section{padding:80px 0}}
+
+/* ====== Letterbox cinematic bars ====== */
+.letterbox-top,.letterbox-bottom{
+  position:fixed;left:0;right:0;height:42px;
+  background:linear-gradient(180deg,#000,rgba(0,0,0,0.85));
+  z-index:90;pointer-events:none;
+  display:flex;align-items:center;padding:0 32px;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.28em;color:var(--gold);
+}
+.letterbox-top{top:0;border-bottom:1px solid var(--gold-dark);justify-content:space-between}
+.letterbox-bottom{bottom:0;background:linear-gradient(0deg,#000,rgba(0,0,0,0.85));border-top:1px solid var(--gold-dark);justify-content:space-between}
+.letterbox-top .crest{display:flex;align-items:center;gap:10px}
+.letterbox-top .crest svg{width:18px;height:18px}
+.letterbox-top .info{display:flex;gap:18px;color:var(--vellum-dim);font-size:9px}
+.letterbox-top .info b{color:var(--gold)}
+.letterbox-bottom .roll{font-size:9px;color:var(--vellum-dim);letter-spacing:0.18em}
+@media(max-width:780px){
+  .letterbox-top,.letterbox-bottom{height:32px;padding:0 18px;font-size:8px}
+  .letterbox-top .info{display:none}
+  .letterbox-bottom .roll{display:none}
+}
+
+/* ====== Top breathing space ====== */
+.app{padding-top:42px;padding-bottom:42px}
+@media(max-width:780px){.app{padding-top:32px;padding-bottom:32px}}
+
+/* ====== Ornaments ====== */
+.ornament{display:flex;align-items:center;justify-content:center;gap:14px;margin:48px 0;color:var(--gold)}
+.ornament .line{flex:0 1 120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-deep),transparent)}
+.ornament .mark{flex:0 0 auto;font-family:var(--serif-d);font-weight:600;letter-spacing:0.4em;font-size:11px;color:var(--gold);text-transform:uppercase}
+.ornament svg{width:18px;height:18px}
+
+/* Art Deco fan */
+.fan{display:flex;justify-content:center;margin:32px 0}
+.fan svg{width:80px;height:auto;opacity:0.7}
+
+/* ====== Cover ====== */
+.cover{min-height:calc(100vh - 84px);display:flex;align-items:center;justify-content:center;padding:80px 0;position:relative;text-align:center;overflow:hidden}
+.cover-inner{max-width:780px;margin:0 auto;padding:0 32px;position:relative;z-index:2}
+.cover .imprint{font-family:var(--mono);font-size:10px;letter-spacing:0.4em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:48px}
+.cover .imprint span{color:var(--gold)}
+.cover .sigil{margin:0 auto 48px;width:140px;height:140px;filter:drop-shadow(0 0 32px rgba(201,169,97,0.25))}
+
+.cover h1{
+  font-family:var(--serif-d);
+  font-weight:700;
+  font-size:clamp(44px,7vw,84px);
+  line-height:1;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+  color:var(--vellum);
+  margin-bottom:14px;
+  position:relative;
+}
+.cover h1 .gold{color:var(--gold);font-weight:600}
+.cover .sub{
+  font-family:var(--serif-b);
+  font-style:italic;
+  font-size:clamp(18px,2.5vw,26px);
+  color:var(--vellum-soft);
+  margin:0 auto 48px;
+  font-weight:400;
+  max-width:540px;
+  letter-spacing:0.005em;
+  line-height:1.4;
+}
+.cover .sub::before,.cover .sub::after{content:"—";color:var(--gold);margin:0 12px}
+
+.cover-meta{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--vellum-faint);
+  border:1px solid var(--vellum-faint);
+  margin-top:64px;
+}
+@media(max-width:640px){.cover-meta{grid-template-columns:1fr}}
+.cover-meta .cell{padding:18px 14px;background:var(--ink);font-family:var(--serif-sc);font-size:12px;color:var(--vellum-dim);letter-spacing:0.16em;text-transform:uppercase}
+.cover-meta .cell b{display:block;color:var(--gold);font-size:11px;letter-spacing:0.22em;margin-bottom:4px;font-weight:600}
+
+/* ====== Wax Seal ====== */
+.wax-wrap{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);z-index:1;opacity:0.85;display:flex;justify-content:center}
+.wax{width:140px;height:140px;position:relative;filter:drop-shadow(0 6px 16px rgba(139,24,24,0.5))}
+@media(max-width:780px){.wax-wrap{display:none}}
+
+/* ====== Section frames ====== */
+.article{position:relative}
+.article-tag{font-family:var(--serif-sc);font-size:11px;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:18px;font-weight:600}
+.article-tag::before,.article-tag::after{content:"·";margin:0 14px;color:var(--gold-deep)}
+.article-num{font-family:var(--serif-d);font-size:14px;font-weight:700;letter-spacing:0.32em;color:var(--gold);text-align:center;margin-bottom:8px}
+.article-title{
+  font-family:var(--serif-d);
+  font-weight:700;
+  font-size:clamp(40px,6vw,68px);
+  letter-spacing:0.02em;
+  text-align:center;
+  color:var(--vellum);
+  text-transform:uppercase;
+  line-height:1;
+  margin-bottom:18px;
+}
+.article-title .it{font-family:var(--serif-b);font-style:italic;text-transform:none;font-weight:300;letter-spacing:-0.005em;color:var(--gold-bright)}
+.article-sub{
+  font-family:var(--serif-b);
+  font-style:italic;
+  font-size:20px;
+  color:var(--vellum-soft);
+  text-align:center;
+  max-width:620px;
+  margin:0 auto 64px;
+  line-height:1.4;
+  font-weight:400;
+}
+
+/* Drop cap */
+.dropcap::first-letter{
+  font-family:var(--serif-d);
+  font-weight:700;
+  font-size:5em;
+  float:left;
+  line-height:0.85;
+  padding:8px 14px 0 0;
+  color:var(--gold);
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold),var(--gold-deep));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.body-prose{font-family:var(--serif-b);font-size:19px;line-height:1.7;color:var(--vellum);font-weight:400;letter-spacing:0.005em;max-width:680px;margin:0 auto 32px}
+.body-prose+.body-prose{margin-top:0}
+.body-prose em{font-style:italic;color:var(--gold-bright)}
+.body-prose b{font-weight:600;color:var(--vellum)}
+.body-prose .sc{font-family:var(--serif-sc);font-size:0.88em;letter-spacing:0.06em;text-transform:uppercase;color:var(--gold)}
+
+/* ====== Protocol block (numbered acts/movements) ====== */
+.protocol{max-width:820px;margin:48px auto;border-top:1px solid var(--gold-deep);border-bottom:1px solid var(--gold-deep);padding:40px 0;position:relative}
+.protocol::before,.protocol::after{
+  content:"";position:absolute;left:50%;width:14px;height:14px;background:var(--gold);transform:translateX(-50%) rotate(45deg);
+}
+.protocol::before{top:-7px}
+.protocol::after{bottom:-7px}
+.protocol-head{text-align:center;margin-bottom:32px}
+.protocol-head .label{font-family:var(--serif-sc);font-size:10px;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold-deep);font-weight:600}
+.protocol-head .title{font-family:var(--serif-d);font-size:22px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--vellum);margin-top:6px}
+
+.movement{display:grid;grid-template-columns:80px 1fr 140px;gap:32px;padding:20px 32px;border-bottom:1px dotted var(--gold-deep);align-items:start}
+.movement:last-child{border-bottom:none}
+@media(max-width:780px){
+  .movement{grid-template-columns:56px 1fr;gap:14px;padding:18px 20px}
+  .movement .mvmt-meta{grid-column:2;border-top:1px dotted var(--gold-deep);padding-top:8px;margin-top:8px}
+}
+.movement .mvmt-num{font-family:var(--serif-d);font-size:36px;font-weight:300;color:var(--gold);line-height:1;letter-spacing:-0.02em;text-align:right}
+.movement .mvmt-num span{font-size:0.4em;display:block;color:var(--gold-deep);letter-spacing:0.2em;margin-top:4px;font-weight:600}
+.movement .mvmt-body h4{font-family:var(--serif-d);font-size:17px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--vellum);margin-bottom:6px}
+.movement .mvmt-body p{font-family:var(--serif-b);font-size:16px;line-height:1.55;color:var(--vellum-soft);font-style:italic}
+.movement .mvmt-body p+p{margin-top:8px}
+.movement .mvmt-body b{font-style:normal;color:var(--gold-bright);font-weight:500}
+.movement .mvmt-body .quote{
+  font-family:var(--serif-b);font-style:italic;color:var(--vellum);font-size:16px;
+  display:block;padding:8px 0 8px 16px;border-left:2px solid var(--oxblood);margin-top:10px;
+}
+.movement .mvmt-body .quote::before{content:"\201C";color:var(--gold);margin-right:2px}
+.movement .mvmt-body .quote::after{content:"\201D";color:var(--gold);margin-left:2px}
+.movement .mvmt-meta{font-family:var(--serif-sc);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);text-align:right;line-height:1.7;font-weight:600}
+.movement .mvmt-meta .row{display:block;margin-bottom:4px}
+.movement .mvmt-meta .row span{display:block;color:var(--vellum-dim);font-size:9px;font-weight:400}
+
+/* ====== Pull quote ====== */
+.pull-quote{
+  margin:80px auto;max-width:880px;text-align:center;
+  position:relative;padding:64px 32px;
+}
+.pull-quote::before{content:"";position:absolute;top:0;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pull-quote::after{content:"";position:absolute;bottom:0;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.pull-quote .q{
+  font-family:var(--serif-b);font-style:italic;
+  font-size:clamp(26px,4vw,42px);line-height:1.25;
+  color:var(--vellum);letter-spacing:-0.005em;
+}
+.pull-quote .q .gold{color:var(--gold);font-style:normal;font-family:var(--serif-d);font-size:0.85em;font-weight:600;letter-spacing:0.04em}
+.pull-quote .attribution{
+  font-family:var(--serif-sc);font-size:11px;letter-spacing:0.32em;
+  text-transform:uppercase;color:var(--gold);margin-top:32px;font-weight:600;
+}
+
+/* ====== House Rules ====== */
+.rules{max-width:860px;margin:0 auto}
+.rule{
+  display:grid;grid-template-columns:100px 1fr;
+  gap:32px;padding:32px 0;
+  border-bottom:1px solid var(--vellum-trace);
+  position:relative;
+}
+.rule:last-child{border-bottom:none}
+@media(max-width:780px){.rule{grid-template-columns:60px 1fr;gap:18px;padding:24px 0}}
+.rule-roman{
+  font-family:var(--serif-d);font-weight:700;
+  font-size:48px;color:var(--gold);
+  line-height:1;letter-spacing:-0.02em;
+  text-align:right;padding-top:4px;
+}
+@media(max-width:780px){.rule-roman{font-size:32px}}
+.rule-body h3{
+  font-family:var(--serif-d);font-weight:700;
+  font-size:22px;letter-spacing:0.06em;
+  text-transform:uppercase;color:var(--vellum);
+  margin-bottom:10px;line-height:1.15;
+}
+.rule-body p{
+  font-family:var(--serif-b);font-size:17px;line-height:1.6;
+  color:var(--vellum-soft);font-style:italic;
+}
+.rule-body p b{font-style:normal;color:var(--gold-bright);font-weight:500}
+
+/* ====== Pricing Ledger ====== */
+.ledger{
+  max-width:980px;margin:64px auto;
+  background:rgba(232,220,192,0.025);
+  border:1px solid var(--gold-deep);
+  position:relative;
+}
+.ledger::before,.ledger::after{content:"";position:absolute;width:24px;height:24px;background:var(--ink)}
+.ledger::before{top:-12px;left:-12px;border-top:1px solid var(--gold);border-left:1px solid var(--gold)}
+.ledger::after{bottom:-12px;right:-12px;border-bottom:1px solid var(--gold);border-right:1px solid var(--gold)}
+
+.ledger-head{
+  display:grid;grid-template-columns:1fr 140px 140px 1fr;
+  padding:20px 32px;border-bottom:1px solid var(--gold-deep);
+  font-family:var(--serif-sc);font-size:11px;letter-spacing:0.24em;
+  text-transform:uppercase;color:var(--gold);font-weight:600;
+}
+.ledger-row{
+  display:grid;grid-template-columns:1fr 140px 140px 1fr;
+  padding:22px 32px;border-bottom:1px dotted var(--gold-deep);
+  align-items:baseline;transition:background .3s;
+}
+.ledger-row:hover{background:rgba(201,169,97,0.05)}
+.ledger-row:last-child{border-bottom:none}
+.ledger-name{font-family:var(--serif-d);font-size:18px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--vellum)}
+.ledger-name .sub{display:block;font-family:var(--serif-b);font-style:italic;font-weight:400;text-transform:none;letter-spacing:0;color:var(--vellum-dim);font-size:13px;margin-top:2px}
+.ledger-time{font-family:var(--serif-sc);font-size:13px;letter-spacing:0.12em;color:var(--gold-bright);font-weight:600}
+.ledger-price{font-family:var(--serif-d);font-size:22px;font-weight:600;color:var(--gold);letter-spacing:0.02em}
+.ledger-desc{font-family:var(--serif-b);font-style:italic;font-size:14px;color:var(--vellum-soft);line-height:1.45}
+
+@media(max-width:780px){
+  .ledger-head{display:none}
+  .ledger-row{grid-template-columns:1fr auto;gap:8px;padding:18px 22px}
+  .ledger-row .ledger-time{grid-column:2;text-align:right}
+  .ledger-row .ledger-price{grid-column:2;text-align:right}
+  .ledger-row .ledger-desc{grid-column:1 / span 2;padding-top:6px;border-top:1px dotted var(--gold-deep);margin-top:6px}
+}
+
+.ledger-foot{padding:18px 32px;text-align:center;font-family:var(--serif-b);font-style:italic;font-size:14px;color:var(--vellum-dim);background:rgba(0,0,0,0.3)}
+
+/* ====== Member Card ====== */
+.cardstack{display:flex;justify-content:center;margin:64px auto;perspective:1200px}
+.card{
+  width:340px;height:540px;
+  background:linear-gradient(135deg,#0a0807 0%,#181410 50%,#0a0807 100%);
+  border:1px solid var(--gold-deep);position:relative;
+  padding:32px 28px;display:flex;flex-direction:column;
+  box-shadow:0 30px 80px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(201,169,97,0.15);
+  transform:rotateY(-8deg) rotateX(2deg);
+  transition:transform .6s ease;
+}
+.card:hover{transform:rotateY(0deg) rotateX(0deg)}
+.card-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:32px}
+.card-top .crest{width:56px;height:56px}
+.card-top .meta{font-family:var(--mono);font-size:8px;letter-spacing:0.24em;text-transform:uppercase;color:var(--gold);text-align:right;line-height:1.6}
+.card-top .meta b{color:var(--vellum);display:block;font-size:9px}
+.card h2{font-family:var(--serif-d);font-weight:700;font-size:26px;letter-spacing:0.06em;text-transform:uppercase;color:var(--vellum);line-height:1;margin-bottom:6px}
+.card h2 .gold{color:var(--gold)}
+.card .sub{font-family:var(--serif-b);font-style:italic;font-size:14px;color:var(--vellum-soft);margin-bottom:auto;line-height:1.5}
+.card .name-block{padding-top:24px;border-top:1px solid var(--gold-deep);margin-top:24px}
+.card .name-block .lbl{font-family:var(--serif-sc);font-size:9px;letter-spacing:0.32em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:6px}
+.card .name-block .name{font-family:var(--serif-d);font-size:18px;font-weight:600;color:var(--vellum);letter-spacing:0.06em;text-transform:uppercase}
+.card .num{font-family:var(--mono);font-size:11px;letter-spacing:0.2em;color:var(--gold-bright);margin-top:20px;display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid var(--vellum-trace)}
+.card .num b{color:var(--vellum);font-weight:500}
+.card-ornament{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);opacity:0.4}
+
+/* ====== Operator's Oath ====== */
+.oath{max-width:760px;margin:64px auto;text-align:center;padding:80px 32px;border:1px solid var(--gold-deep);position:relative;background:rgba(0,0,0,0.3)}
+.oath::before,.oath::after{content:"";position:absolute;width:36px;height:36px;border:1px solid var(--gold);}
+.oath::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.oath::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.oath-tag{font-family:var(--serif-sc);font-size:11px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;margin-bottom:24px;font-weight:600}
+.oath-body{font-family:var(--serif-b);font-style:italic;font-size:22px;line-height:1.6;color:var(--vellum);margin-bottom:48px}
+.oath-body p+p{margin-top:18px}
+.oath-body b{color:var(--gold-bright);font-style:normal;font-weight:500}
+.oath-sig{display:flex;justify-content:space-between;align-items:end;padding-top:32px;border-top:1px solid var(--gold-deep);flex-wrap:wrap;gap:24px;text-align:left}
+@media(max-width:540px){.oath-sig{flex-direction:column;align-items:center;text-align:center}}
+.oath-sig .signature{font-family:'Cormorant Garamond',cursive;font-style:italic;font-size:42px;color:var(--vellum);line-height:1;font-weight:300}
+.oath-sig .stamp{font-family:var(--serif-sc);font-size:10px;letter-spacing:0.24em;color:var(--gold);text-transform:uppercase;line-height:1.7;text-align:right;font-weight:600}
+@media(max-width:540px){.oath-sig .stamp{text-align:center}}
+.oath-sig .stamp b{color:var(--vellum);display:block;font-size:11px}
+
+/* ====== Transmission / Spec ====== */
+.transmission{max-width:1000px;margin:64px auto;border:1px solid var(--gold-deep);background:rgba(0,0,0,0.4)}
+.tx-head{padding:20px 32px;border-bottom:1px solid var(--gold-deep);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.tx-head h4{font-family:var(--serif-d);font-weight:600;font-size:17px;letter-spacing:0.08em;text-transform:uppercase;color:var(--vellum)}
+.tx-head .seal{font-family:var(--serif-sc);font-size:10px;letter-spacing:0.24em;color:var(--gold);font-weight:600}
+.tx-copy{padding:10px 22px;background:var(--gold);color:var(--ink);font-family:var(--serif-sc);font-size:11px;letter-spacing:0.24em;text-transform:uppercase;font-weight:700;cursor:pointer;border:1px solid var(--gold);transition:all .3s}
+.tx-copy:hover{background:var(--gold-bright);box-shadow:0 0 24px var(--gold-glow)}
+.tx-copy.ok{background:var(--oxblood);border-color:var(--oxblood);color:var(--vellum)}
+.tx-body{padding:32px;font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--vellum);white-space:pre-wrap;max-height:580px;overflow-y:auto;background:rgba(0,0,0,0.3)}
+.tx-body::selection{background:var(--gold);color:var(--ink)}
+
+/* ====== Finis ====== */
+.finis{padding:120px 0 80px;text-align:center}
+.finis-mark{margin:0 auto 32px;width:56px;height:auto;opacity:0.7}
+.finis-text{font-family:var(--serif-d);font-size:36px;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase;font-weight:600;margin-bottom:32px}
+.finis-meta{font-family:var(--serif-sc);font-size:10px;letter-spacing:0.32em;color:var(--vellum-dim);text-transform:uppercase;font-weight:600}
+.finis-meta .row{margin-bottom:8px}
+.finis-meta b{color:var(--gold)}
+
+/* ====== Reveal ====== */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 1.4s ease, transform 1.4s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.delay-1{transition-delay:.1s}
+.delay-2{transition-delay:.2s}
+.delay-3{transition-delay:.3s}
+
+/* Side rule */
+.siderule{position:fixed;left:14px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:var(--mono);font-size:9px;letter-spacing:0.32em;text-transform:uppercase;color:var(--gold-deep);z-index:10;opacity:0.6}
+@media(max-width:1100px){.siderule{display:none}}
+
+</style>
+</head>
+<body>
+
+<!-- ============ LETTERBOX BARS ============ -->
+<div class="letterbox-top">
+  <div class="crest">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#c9a961" stroke-width="1.2">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M 6 12 L 12 6 L 18 12 L 12 18 Z"/>
+      <circle cx="12" cy="12" r="2" fill="#c9a961"/>
+    </svg>
+    <span>THE HOUSE OF KHYREE</span>
+  </div>
+  <div class="info">
+    <span><b>FOLIO</b> · IV / VI</span>
+    <span><b>EDITION</b> · MMXXVI</span>
+    <span><b>STATUS</b> · SEALED</span>
+  </div>
+</div>
+
+<div class="letterbox-bottom">
+  <span>Codex of the Chair Ceremony · By His Hand, K. TOWNES</span>
+  <span class="roll">REEL · 04 OF 06 · ARTICLE I — XIII</span>
+</div>
+
+<div class="siderule">PREMIUM INTERACTIONS · A CINEMATIC CODEX · 2026</div>
+
+<div class="app">
+
+<!-- ============ COVER ============ -->
+<section class="cover">
+  <div class="cover-inner">
+    <div class="imprint">FOLIO IV · A WORKING DOCUMENT · <span>SEALED MMXXVI</span></div>
+
+    <!-- HOUSE SIGIL -->
+    <svg class="sigil" viewBox="0 0 200 200" fill="none">
+      <defs>
+        <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e4c373"/>
+          <stop offset="50%" stop-color="#c9a961"/>
+          <stop offset="100%" stop-color="#8d7034"/>
+        </linearGradient>
+      </defs>
+      <!-- outer circle -->
+      <circle cx="100" cy="100" r="92" stroke="url(#gold-grad)" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="84" stroke="#c9a961" stroke-width="0.5" opacity="0.6"/>
+      <!-- inner ornament: K monogram -->
+      <g stroke="url(#gold-grad)" stroke-width="2" fill="none" stroke-linecap="round">
+        <!-- K vertical stroke -->
+        <line x1="68" y1="50" x2="68" y2="150"/>
+        <!-- K diagonal up -->
+        <line x1="68" y1="100" x2="120" y2="50"/>
+        <!-- K diagonal down -->
+        <line x1="68" y1="100" x2="120" y2="150"/>
+        <!-- comb teeth across -->
+        <line x1="130" y1="78" x2="146" y2="78"/>
+        <line x1="130" y1="86" x2="146" y2="86"/>
+        <line x1="130" y1="94" x2="146" y2="94"/>
+        <line x1="130" y1="102" x2="146" y2="102"/>
+        <line x1="130" y1="110" x2="146" y2="110"/>
+        <line x1="130" y1="118" x2="146" y2="118"/>
+        <line x1="130" y1="122" x2="148" y2="122"/>
+      </g>
+      <!-- decorative dots -->
+      <g fill="url(#gold-grad)">
+        <circle cx="100" cy="18" r="2"/>
+        <circle cx="100" cy="182" r="2"/>
+        <circle cx="18" cy="100" r="2"/>
+        <circle cx="182" cy="100" r="2"/>
+      </g>
+      <!-- arc text -->
+      <defs>
+        <path id="sigil-arc-top" d="M 30 100 A 70 70 0 0 1 170 100"/>
+        <path id="sigil-arc-bot" d="M 170 100 A 70 70 0 0 1 30 100"/>
+      </defs>
+      <text font-family="Cinzel" font-size="9" font-weight="700" fill="#c9a961" letter-spacing="4">
+        <textPath href="#sigil-arc-top" startOffset="50%" text-anchor="middle">· THE HOUSE OF KHYREE ·</textPath>
+      </text>
+      <text font-family="Cinzel" font-size="7" font-weight="600" fill="#8d7034" letter-spacing="6">
+        <textPath href="#sigil-arc-bot" startOffset="50%" text-anchor="middle">EST · MMXXVI</textPath>
+      </text>
+    </svg>
+
+    <h1>The House <span class="gold">of</span> Khyree</h1>
+    <p class="sub">A codex of the chair ceremony</p>
+
+    <div class="ornament">
+      <span class="line"></span>
+      <span class="mark">XIII Articles · Sealed</span>
+      <span class="line"></span>
+    </div>
+
+    <p class="body-prose" style="text-align:center;font-style:italic;color:var(--vellum-soft);font-size:17px;max-width:560px">
+      Where the chair, the hour, and the manner of things are recorded — that no detail be left to memory, no movement to accident, and no client to forget. <em>Read once. Practice forever.</em>
+    </p>
+
+    <div class="cover-meta">
+      <div class="cell"><b>Author</b>By His Hand · K. Townes</div>
+      <div class="cell"><b>Witnessed</b>O. Townes · Founder</div>
+      <div class="cell"><b>House Seat</b>Cut Creaters · Decatur</div>
+    </div>
+  </div>
+
+  <!-- WAX SEAL -->
+  <div class="wax-wrap">
+    <svg class="wax" viewBox="0 0 140 140">
+      <defs>
+        <radialGradient id="wax-grad" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#c92020"/>
+          <stop offset="50%" stop-color="#8b1818"/>
+          <stop offset="100%" stop-color="#3a0606"/>
+        </radialGradient>
+      </defs>
+      <!-- drip splatters -->
+      <ellipse cx="70" cy="70" rx="64" ry="58" fill="url(#wax-grad)" opacity="0.95"/>
+      <path d="M 22 92 Q 18 110 28 116 Q 24 100 30 96 Z" fill="url(#wax-grad)" opacity="0.8"/>
+      <path d="M 110 100 Q 122 110 116 122 Q 114 108 106 102 Z" fill="url(#wax-grad)" opacity="0.7"/>
+      <!-- inner ring -->
+      <circle cx="70" cy="70" r="50" fill="none" stroke="#3a0606" stroke-width="1.5" opacity="0.5"/>
+      <circle cx="70" cy="70" r="44" fill="none" stroke="#3a0606" stroke-width="0.5" opacity="0.4"/>
+      <!-- K mark -->
+      <g stroke="#3a0606" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.9">
+        <line x1="56" y1="50" x2="56" y2="90"/>
+        <line x1="56" y1="70" x2="82" y2="50"/>
+        <line x1="56" y1="70" x2="82" y2="90"/>
+      </g>
+      <!-- highlight -->
+      <ellipse cx="50" cy="50" rx="20" ry="14" fill="#ff5050" opacity="0.18"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============ PREFACE ============ -->
+<section>
+  <div class="wrap">
+    <div class="article-tag">Preface</div>
+    <h2 class="article-title">Of the Chair, <span class="it">the Hour,</span><br/>and the Manner of Things</h2>
+
+    <div class="body-prose dropcap" style="margin-top:64px">
+      The cut takes forty-five minutes. The experience — what the client remembers two weeks later when a stranger asks where they get their hair done — that is built from <em>seven minutes total</em>, spread across the seven movements recorded in this codex. Every barber gives the cut. Almost none give the ceremony. The gap between the two is the entire business.
+    </div>
+
+    <div class="body-prose">
+      What follows is not a list of best practices. It is a <b>protocol</b> — a sequence of specific gestures, words, and small expenses, performed in a specific order, that turns the act of cutting hair into something a person tells other people about. <span class="sc">The unit of work is not the cut. It is the memory the client leaves with.</span>
+    </div>
+
+    <div class="body-prose">
+      Total added cost per client: <em>under two dollars</em>. Total added time: <em>under five minutes</em>. Net effect over twelve months: tips lift by 35–60%, in-chair rebook rate triples, word-of-mouth referral becomes the primary acquisition channel. <b>The ceremony is the cheapest revenue lever in the room.</b>
+    </div>
+
+    <div class="ornament">
+      <span class="line"></span>
+      <svg viewBox="0 0 20 20" fill="#c9a961"><path d="M 10 0 L 12 8 L 20 10 L 12 12 L 10 20 L 8 12 L 0 10 L 8 8 Z"/></svg>
+      <span class="line"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARTICLE I — THE WELCOME ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE I</div>
+    <h2 class="article-title">The <span class="it">Welcome</span></h2>
+    <p class="article-sub">T − 5 to T + 0. The first 90 seconds. Where the cut is won before it begins.</p>
+
+    <div class="body-prose dropcap">
+      Before any blade is drawn, the client crosses a threshold. What occurs in the ninety seconds that follow determines the tip, the rebook, and whether they will speak your name to a stranger. <em>Treat this minute as the first cut</em>, even though no hair has been touched.
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">Order of Movements</div>
+        <div class="title">The Threshold Protocol</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Greeting by Name</h4>
+          <p>The door opens. Before they have removed their jacket, you have spoken their name. Not "what's up" — <b>their name</b>. The Khyree City booking app surfaces the next client thirty seconds before arrival. There is no excuse to forget.</p>
+          <span class="quote">Marcus. Right on time. Take the right chair.</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">T-30 sec<span>seconds before arrival</span></span>
+          <span class="row">$0.00<span>cost</span></span>
+          <span class="row">+18% tip<span>measured lift</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Beverage Offer</h4>
+          <p>Cold water in a branded glass. Espresso if requested. Not a styrofoam cup — <em>real glass</em>. The beverage is not the point. The gesture is. Most barbershops ask for nothing. You give before you take.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">T+0<span>at seating</span></span>
+          <span class="row">$0.30<span>per client</span></span>
+          <span class="row">Pattern interrupt<span>vs. every other shop</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Cold Towel</h4>
+          <p>Pulled from the cooler. Pressed lightly into their palms while they take their seat. This is the first physical touch of the ceremony. <b>It signals: you are in care now.</b></p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">T+45 sec<span>after seating</span></span>
+          <span class="row">$0.10<span>per cloth</span></span>
+          <span class="row">Sensory anchor<span>strong recall</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-prose">
+      Three movements. Ninety seconds. Forty cents in total cost. The client has not yet been asked a single question about their hair — and they have already decided you are different from the last seven barbers they have sat in front of. <span class="sc">The welcome is the cheapest sale you will ever close.</span>
+    </p>
+
+    <div class="fan">
+      <svg viewBox="0 0 80 30" fill="none" stroke="#c9a961" stroke-width="1">
+        <path d="M 40 28 L 8 4"/><path d="M 40 28 L 20 2"/><path d="M 40 28 L 40 0"/><path d="M 40 28 L 60 2"/><path d="M 40 28 L 72 4"/>
+        <circle cx="40" cy="28" r="2" fill="#c9a961"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARTICLE II — THE CONSULTATION ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE II</div>
+    <h2 class="article-title">The <span class="it">Consultation</span></h2>
+    <p class="article-sub">T + 1 to T + 5. Five questions, asked before the cape falls. The questions that earn the upcharge.</p>
+
+    <div class="body-prose dropcap">
+      The cape goes on last, not first. Before it is draped, you ask. Most barbers ask one question — "what are we doing today" — and proceed. The Khyree City consultation is <em>five questions</em>, in order, with an outcome assigned to each. The cape comes off the hook only after the fifth answer is received.
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">The Five Questions</div>
+        <div class="title">Order of Inquiry</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>inquiry</span></div>
+        <div class="mvmt-body">
+          <h4>The Anchor</h4>
+          <p>You remember their last cut. <em>You bring it up.</em> The booking app surfaces the prior note before they sit. This question is not for information — it is for theatre. The theatre of memory.</p>
+          <span class="quote">Last time we went two on top, faded mid. Same direction today, or are we changing it?</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">T+60 sec<span>after consultation begins</span></span>
+          <span class="row">Memory<span>perceived value</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>inquiry</span></div>
+        <div class="mvmt-body">
+          <h4>The Occasion</h4>
+          <p>You learn what they are cutting <b>for</b>. A wedding. A job interview. A date. A funeral. The occasion calibrates the cut — and unlocks the upgrade conversation when warranted.</p>
+          <span class="quote">Anything coming up this week that you want to look right for?</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">+$15 avg<span>upgrade trigger</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>inquiry</span></div>
+        <div class="mvmt-body">
+          <h4>The Hair Concern</h4>
+          <p>You ask what bothers them about their hair today. Thinning. Scalp dryness. Cowlick. <em>This is a diagnostic, not a sale</em>. Naming the problem earns the right to recommend the product later.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">Product hook<span>sets up post-cut sale</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">IV<span>inquiry</span></div>
+        <div class="mvmt-body">
+          <h4>The Return</h4>
+          <p>Before any cut begins, you ask when they want to return. This pre-loads the rebook conversation that will close the ceremony in Article VII. It also reveals frequency, which signals tier.</p>
+          <span class="quote">Are you a three-week guy or a four-week guy lately?</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">Pre-rebook<span>plants the seed</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">V<span>inquiry</span></div>
+        <div class="mvmt-body">
+          <h4>The Mood</h4>
+          <p>The final question, asked while reaching for the cape. <em>Are we talking or are we resting?</em> This single question is what separates a barber from a craftsman. You ask their permission to give them silence. Many will choose silence — and remember you for it.</p>
+          <span class="quote">You wanna talk or you wanna disappear for an hour?</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">Highest signal<span>defines the cut</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-prose">
+      Five questions. Four minutes. <b>The cape falls on the fifth answer</b>, not the first. Every client now knows they are receiving something different than a haircut — and the average ticket on a five-question consultation is fifteen dollars higher than the no-consultation one. The numbers are not theoretical. The numbers are the questions.
+    </p>
+  </div>
+</section>
+
+<!-- Pull quote -->
+<div class="pull-quote">
+  <p class="q">The cut is what they pay for. The <span class="gold">ceremony</span> is what they tell other people about.</p>
+  <div class="attribution">— Thesis of the Codex · MMXXVI</div>
+</div>
+
+<!-- ============ ARTICLE III — THE FINISH ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE III</div>
+    <h2 class="article-title">The <span class="it">Finish</span></h2>
+    <p class="article-sub">T + 40 to T + 43. Three minutes that justify the upgrade. The cheapest luxury in the building.</p>
+
+    <div class="body-prose dropcap">
+      The cut concludes. Most barbers brush, uncape, swipe payment. The Khyree City ceremony adds three minutes of finishing ritual — hot towel, scalp pressure, oil — that costs the house under fifty cents and lifts the perceived value of the service by an order of magnitude. <em>This is where the tip is built.</em>
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">Closing Sequence</div>
+        <div class="title">The Three-Minute Finish</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Hot Towel</h4>
+          <p>Pulled from the warmer at exactly 140°F. Wrapped at the nape first, then across the face, leaving the eyes covered. Held for sixty seconds. <b>You do not speak during this minute</b>. The towel does the work. The silence is part of the gift.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">60 sec<span>silent</span></span>
+          <span class="row">$0.15<span>per towel</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Scalp Press</h4>
+          <p>Thumbs at the temples, fingers at the crown. Firm pressure for thirty seconds, then release. Repeat twice. This is not a massage — it is a <em>release</em>. The client breathes deeper. You can hear it.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">90 sec total<span>three holds</span></span>
+          <span class="row">$0<span>cost</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>movement</span></div>
+        <div class="mvmt-body">
+          <h4>The Finishing Oil</h4>
+          <p>Two drops, rubbed between palms. Worked through the hair from scalp out. The product is calibrated to the diagnosis from Article II, question three. <em>The sale closes here without a single sentence about buying it.</em> A small bottle on the counter does the rest.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">$0.20<span>per use</span></span>
+          <span class="row">+$18 take-home avg<span>upsell</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-prose">
+      Three movements. Three minutes. Forty cents. The client steps out of the chair feeling like they have left a spa, not a barbershop. <span class="sc">The average tip on a finished cut is 23% higher than an unfinished one.</span> The math is in the towel.
+    </p>
+  </div>
+</section>
+
+<!-- ============ ARTICLE IV — THE PHOTOGRAPH ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE IV</div>
+    <h2 class="article-title">The <span class="it">Photograph</span></h2>
+    <p class="article-sub">T + 43 to T + 45. Three frames. One backdrop. Sent in sixty seconds. Posted by Sunday.</p>
+
+    <div class="body-prose dropcap">
+      Every cut produces three photographs. <em>Front, left profile, right profile.</em> Same backdrop, same light, same angle each time, so that the body of work across hundreds of clients reads as one continuous portfolio rather than a scrapbook. The frames are sent to the client within sixty seconds — before they leave the chair. <b>They post the photograph. Their network sees you. You did not pay for that reach.</b>
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">The Capture Protocol</div>
+        <div class="title">Three Frames in Sixty Seconds</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>frame</span></div>
+        <div class="mvmt-body">
+          <h4>The Backdrop</h4>
+          <p>Matte black panel mounted at the suite. <em>Always the same panel.</em> No window light. No fluorescent. A single ring light positioned camera-left at forty-five degrees. The portfolio reads as cohesive because the lighting is identical from frame one to frame one thousand.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">One-time<span>setup cost</span></span>
+          <span class="row">$340<span>panel + light</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>frame</span></div>
+        <div class="mvmt-body">
+          <h4>The Send</h4>
+          <p>Photographs are sent to the client via the booking app within sixty seconds of capture. Caption pre-filled: <em>"Tagged @khyree_city if you post."</em> Most do. Each post reaches an average of 340 people who do not yet know the chair exists.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">60 sec<span>auto-send</span></span>
+          <span class="row">~340 reach<span>per repost</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>frame</span></div>
+        <div class="mvmt-body">
+          <h4>The Sunday Post</h4>
+          <p>The week's best three cuts are posted by the house every Sunday at 7pm. Carousel. Backdrop consistent. Captions short. The audience sees a body of work compounding week after week, which is what turns a barber into <b>a name</b>.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">Weekly cadence<span>locked</span></span>
+          <span class="row">Brand compounder<span>over 12 months</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARTICLE V — THE REBOOKING ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE V</div>
+    <h2 class="article-title">The <span class="it">Re-Booking</span></h2>
+    <p class="article-sub">T + 44. Before the cape lifts. The highest-intent moment of the entire client lifetime.</p>
+
+    <div class="body-prose dropcap">
+      The client has just received the towel, the scalp press, the oil, the photographs. They are still in the chair. <em>This is the moment</em>. Not when they reach for their wallet. Not when they stand at the door. <b>Before the cape lifts.</b> The next slot — four weeks, same day, same time — is offered in a single sentence, with your phone already open to the calendar.
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">The Closing Sentence</div>
+        <div class="title">Article V · Single Movement</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>final</span></div>
+        <div class="mvmt-body">
+          <h4>The Offer</h4>
+          <p>Phone in hand. Calendar already on the day four weeks out. One sentence, no upsell tone, no hesitation. The client either says yes — and you lock the slot before they breathe — or they say not yet, and you write the date down on the back of their card for next time. <em>Either way, you have planted the next visit.</em></p>
+          <span class="quote">Same time, four weeks? I've got Thursday the eleventh open.</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">10 seconds<span>total</span></span>
+          <span class="row">+60% rebook<span>vs. wait-and-text</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-prose">
+      The in-chair rebook rate at most barbershops is below twenty percent. The Khyree City protocol — offered before the cape lifts, calendar already open — runs above sixty. <span class="sc">Every locked rebook is a quarter of next month's revenue already in the books.</span> Sixty cuts that rebook in-chair equals forty-five guaranteed cuts four weeks out. The chair fills itself.
+    </p>
+  </div>
+</section>
+
+<!-- ============ ARTICLE VI — THE DEPARTURE ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE VI</div>
+    <h2 class="article-title">The <span class="it">Departure</span></h2>
+    <p class="article-sub">T + 45. They are walked to the door. They are handed something. They are remembered.</p>
+
+    <div class="body-prose dropcap">
+      The cut has ended. They have paid. They have rebooked. The temptation is to release them at the chair. <em>Do not.</em> The departure is the final scene — what they replay on the drive home. Walk them to the door. Hand them something. Speak the rebook out loud, one more time, into the air between you. <b>This is how a service becomes a relationship.</b>
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">The Closing Movements</div>
+        <div class="title">Three Gestures at the Threshold</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>gesture</span></div>
+        <div class="mvmt-body">
+          <h4>The Card</h4>
+          <p>A printed card, handed at the door. On it: their next appointment date, the booking link, and a single line of thanks. Real card stock, not receipt paper. <em>They will put it in their wallet.</em> Every time they open the wallet, you are there.</p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">$0.40<span>per card</span></span>
+          <span class="row">Wallet residency<span>brand recall</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>gesture</span></div>
+        <div class="mvmt-body">
+          <h4>The Mint</h4>
+          <p>A branded mint, offered with the card. Small. Quiet. Costs nothing. Says <em>I thought about every step of your day, not just the one where you sat in my chair.</em></p>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">$0.05<span>per mint</span></span>
+        </div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>gesture</span></div>
+        <div class="mvmt-body">
+          <h4>The Doorway Line</h4>
+          <p>You hold the door. You speak the rebook one final time. <b>Thursday the eleventh, I'll see you.</b> Then a beat, and: <em>thank you, brother.</em> The door closes. The relationship has been sealed without a single transactional word.</p>
+          <span class="quote">Thursday the eleventh. Thank you, brother.</span>
+        </div>
+        <div class="mvmt-meta">
+          <span class="row">5 sec<span>at threshold</span></span>
+          <span class="row">Final scene<span>they replay</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARTICLE VII — THE MEMORY ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTICLE VII</div>
+    <h2 class="article-title">The <span class="it">Memory</span></h2>
+    <p class="article-sub">T + 45 to ∞. The notebook. What you record. Why memory is the most expensive luxury you can give.</p>
+
+    <div class="body-prose dropcap">
+      The cut has ended. The client has departed. The ceremony is not over. <em>The final movement happens after they leave.</em> You return to the chair, open the booking app, and record three lines in their profile that have nothing to do with their hair. <b>This is the most undervalued act in the trade.</b>
+    </div>
+
+    <div class="body-prose">
+      Their kids' names. The trip they mentioned. The promotion they were nervous about. The book they were reading. None of it is for sale. All of it is for memory. <em>Six weeks from now, when they return, you mention one of those three details by name.</em> The look on their face is the entire return on the thirty seconds you spent writing it down.
+    </div>
+
+    <div class="protocol">
+      <div class="protocol-head">
+        <div class="label">The Notebook Protocol</div>
+        <div class="title">Three Lines, Always</div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">I<span>line</span></div>
+        <div class="mvmt-body">
+          <h4>Something Personal</h4>
+          <p>One detail about their life that has nothing to do with hair. Kids. Work. The trip. The fight with their brother. The thing they said off-handedly that most barbers forget by the next client.</p>
+          <span class="quote">Daughter named Naomi, 7. Wife pregnant, due in November.</span>
+        </div>
+        <div class="mvmt-meta"><span class="row">30 sec<span>per profile</span></span></div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">II<span>line</span></div>
+        <div class="mvmt-body">
+          <h4>Something Technical</h4>
+          <p>One detail about their hair that you will need next time. The way the cowlick goes. The thinning spot. The product they liked. The length they asked you to leave on top.</p>
+          <span class="quote">Cowlick crown right side · two on top · no oil, sensitive scalp.</span>
+        </div>
+        <div class="mvmt-meta"><span class="row">10 sec<span>per profile</span></span></div>
+      </div>
+
+      <div class="movement">
+        <div class="mvmt-num">III<span>line</span></div>
+        <div class="mvmt-body">
+          <h4>Something Future</h4>
+          <p>One detail to follow up on next time. <em>"Ask about the job interview."</em> "Ask if the trip went well." "Ask how Naomi's birthday went." Written today. Read aloud six weeks from now. The client believes you have a memory like an elephant. You have a notebook like a craftsman.</p>
+        </div>
+        <div class="mvmt-meta"><span class="row">10 sec<span>per profile</span></span></div>
+      </div>
+    </div>
+
+    <p class="body-prose">
+      Three lines. Fifty seconds. <span class="sc">The memory is the most expensive luxury you can give a client, and it costs nothing</span>. The Khyree City booking app reserves a notes field on every client record for exactly this purpose. <b>Fill it. Every time. Without exception.</b>
+    </p>
+  </div>
+</section>
+
+<!-- ============ MEMBER CARD ============ -->
+<section class="article">
+  <div class="wrap">
+    <div class="article-num">ARTIFACT</div>
+    <h2 class="article-title">The <span class="it">Reserve Card</span></h2>
+    <p class="article-sub">Hand-numbered. Issued to the first fifty clients of the chair. Bearer holds priority booking for life.</p>
+
+    <div class="cardstack">
+      <div class="card">
+        <div class="card-top">
+          <svg class="crest" viewBox="0 0 56 56" fill="none">
+            <circle cx="28" cy="28" r="26" stroke="#c9a961" stroke-width="1"/>
+            <circle cx="28" cy="28" r="22" stroke="#c9a961" stroke-width="0.5" opacity="0.5"/>
+            <g stroke="#c9a961" stroke-width="1.5" fill="none" stroke-linecap="round">
+              <line x1="20" y1="16" x2="20" y2="40"/>
+              <line x1="20" y1="28" x2="36" y2="16"/>
+              <line x1="20" y1="28" x2="36" y2="40"/>
+            </g>
+          </svg>
+          <div class="meta">
+            <b>No. XIV / L</b>
+            FOLIO IV
+            MMXXVI
+          </div>
+        </div>
+        <h2>The <span class="gold">Reserve</span></h2>
+        <p class="sub">Bearer of this card retains priority booking, fixed pricing, and access to the off-hours room for the duration of the house.</p>
+        <div class="name-block">
+          <div class="lbl">Issued to</div>
+          <div class="name">Marcus J. ——</div>
+        </div>
+        <div class="num">
+          <span>SEAT · <b>02</b></span>
+          <span>SINCE · <b>VI · MMXXVI</b></span>
+        </div>
+        <div class="card-ornament">
+          <svg viewBox="0 0 60 8" fill="none" stroke="#c9a961" stroke-width="0.5">
+            <line x1="0" y1="4" x2="22" y2="4"/>
+            <line x1="38" y1="4" x2="60" y2="4"/>
+            <circle cx="30" cy="4" r="2"/>
+            <circle cx="30" cy="4" r="0.5" fill="#c9a961"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-prose" style="text-align:center;max-width:580px;margin-top:32px">
+      <em>The card is a token. The privilege is real.</em> Reserve cardholders are seen first, charged the price they were issued, and called by name from across the room. They become the house's own ambassadors. <b>You will never market to the first fifty again.</b>
+    </p>
+  </div>
+</section>
+
+<!-- ============ PRICING LEDGER ============ -->
+<section>
+  <div class="wrap">
+    <div class="article-num">FOLIO IV · APPENDIX A</div>
+    <h2 class="article-title">The <span class="it">Pricing Ledger</span></h2>
+    <p class="article-sub">Six services. Six tiers. Each calibrated to a different need. The Reserve tier exists to make the others feel correct.</p>
+
+    <div class="ledger">
+      <div class="ledger-head">
+        <div>Service</div>
+        <div>Duration</div>
+        <div>Investment</div>
+        <div>Position</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Lineup<span class="sub">edge & shape only</span></div>
+        <div class="ledger-time">30 min</div>
+        <div class="ledger-price">$50</div>
+        <div class="ledger-desc">For the in-between week. Sharp edges, no clipper work on the body. The shortest ceremony.</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Authentic<span class="sub">the house standard</span></div>
+        <div class="ledger-time">45 min</div>
+        <div class="ledger-price">$65</div>
+        <div class="ledger-desc">Full cut. Welcome through departure. Photo included. The cut a man returns to every three to four weeks for the rest of his life.</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Authentic + Beard<span class="sub">cut and sculpt</span></div>
+        <div class="ledger-time">60 min</div>
+        <div class="ledger-price">$80</div>
+        <div class="ledger-desc">Full cut plus the beard sculpt with hot-towel finish. Two crafts, one ceremony.</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Hero<span class="sub">for the occasion</span></div>
+        <div class="ledger-time">75 min</div>
+        <div class="ledger-price">$100</div>
+        <div class="ledger-desc">Scissor-over-comb top work, full ceremony, extended finish. For the wedding, the interview, the photograph.</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Reserve<span class="sub">the premium tier</span></div>
+        <div class="ledger-time">90 min</div>
+        <div class="ledger-price">$200</div>
+        <div class="ledger-desc">Off-hours appointment. Full ceremony plus a 10-minute extended scalp ritual, finishing oil, and a take-home tin. <b>The card.</b></div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="ledger-name">The Home Visit<span class="sub">private chair</span></div>
+        <div class="ledger-time">120 min</div>
+        <div class="ledger-price">$300</div>
+        <div class="ledger-desc">The full ceremony travels to the client. Discreet. By referral or Reserve only. Limited slots.</div>
+      </div>
+
+      <div class="ledger-foot">
+        All prices fixed for the holder of <em>The Reserve Card</em>. House reserves the right to introduce a seventh tier in folios to come.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOUSE RULES ============ -->
+<section>
+  <div class="wrap">
+    <div class="article-num">FOLIO IV · APPENDIX B</div>
+    <h2 class="article-title">The <span class="it">House Rules</span></h2>
+    <p class="article-sub">Nine standards. Non-negotiable. The contract between the chair and the work performed in it.</p>
+
+    <div class="rules">
+      <div class="rule">
+        <div class="rule-roman">I</div>
+        <div class="rule-body">
+          <h3>The Phone Is Face-Down</h3>
+          <p><b>Once the cape falls, the phone stays down.</b> No calls. No checks. No glances. The hour the client paid for is the hour the client receives — undivided.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">II</div>
+        <div class="rule-body">
+          <h3>The Client Is Named</h3>
+          <p>Every client is greeted by name within thirty seconds of entry. <b>If you do not remember the name, the app does.</b> There is no excuse.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">III</div>
+        <div class="rule-body">
+          <h3>The Consultation Precedes The Cape</h3>
+          <p>Five questions, in order. The cape does not fall until the fifth answer is received. The questions are the work.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">IV</div>
+        <div class="rule-body">
+          <h3>The Finish Is Not Optional</h3>
+          <p>Hot towel, scalp press, finishing oil. <b>Every cut. Every tier.</b> The Authentic gets the same finish as the Reserve. The tier difference is duration, not care.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">V</div>
+        <div class="rule-body">
+          <h3>The Photograph Is Within Sixty Seconds</h3>
+          <p>Three frames. Same backdrop. Sent before the cape lifts. <b>No exception.</b> The chair's marketing is built one photograph at a time.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">VI</div>
+        <div class="rule-body">
+          <h3>The Rebook Is Offered In-Chair</h3>
+          <p>Phone open to the calendar. Next slot offered before the cape lifts. <b>Not at the door. Not in a follow-up text.</b> In the chair, while the towel is still warm.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">VII</div>
+        <div class="rule-body">
+          <h3>The Memory Is Recorded</h3>
+          <p>Three lines, every client, every cut. Personal, technical, future. The notebook is not optional — it is the difference between a barber and a craftsman.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">VIII</div>
+        <div class="rule-body">
+          <h3>The House Is Halal</h3>
+          <p>No false testimonials. No invented numbers. No urgency manipulation. <b>The work earns the next booking, or it does not.</b> What is real, stays. What is fabricated, never enters.</p>
+        </div>
+      </div>
+      <div class="rule">
+        <div class="rule-roman">IX</div>
+        <div class="rule-body">
+          <h3>The Client Is Walked To The Door</h3>
+          <p>You do not release the client at the chair. You walk with them. You hold the door. You speak the rebook one final time. <em>The departure is the final scene they replay.</em></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERATOR'S OATH ============ -->
+<section>
+  <div class="wrap">
+    <div class="article-num">SEAL OF THE HOUSE</div>
+    <h2 class="article-title">The <span class="it">Operator's Oath</span></h2>
+
+    <div class="oath">
+      <div class="oath-tag">By His Hand · Sealed · MMXXVI</div>
+
+      <div class="oath-body">
+        <p>I will receive each client by name.</p>
+        <p>I will ask five questions before the cape.</p>
+        <p>I will give the finish whether the tier requires it or not.</p>
+        <p>I will record three lines after they leave.</p>
+        <p>I will walk them to the door.</p>
+        <p><b>I will treat the chair as the inheritance it is.</b></p>
+      </div>
+
+      <div class="oath-sig">
+        <div class="signature">Khyree Townes</div>
+        <div class="stamp">
+          <b>Khyree Townes</b>
+          By His Hand<br/>
+          The House of Khyree<br/>
+          Cut Creaters · Decatur GA<br/>
+          MMXXVI · SEALED
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRANSMISSION ============ -->
+<section>
+  <div class="wrap">
+    <div class="article-num">APPENDIX C · TRANSMISSION</div>
+    <h2 class="article-title">For the <span class="it">Build Chat</span></h2>
+    <p class="article-sub">The ceremony made real in the booking app. Hand this transmission to your other Claude. It is the technical instrument that turns this codex into running code.</p>
+
+    <div class="transmission">
+      <div class="tx-head">
+        <h4>TX-002 · The Chair Ceremony · Build Spec</h4>
+        <span class="seal">SEALED · K. TOWNES · MMXXVI</span>
+        <button class="tx-copy" id="copyBtn" onclick="copySpec()">Copy Transmission</button>
+      </div>
+      <div class="tx-body" id="specBody">CONTEXT
+This is a Khyree City booking app extension. Existing file: ~/khyree-city/khyree_city_v13.html. Base44 backend app 6a0184f59acaca258c6faf49. Extends the in-chair experience layer based on the House of Khyree codex (folio IV).
+
+Two prior builds must ship first:
+1. Suite Funnel (TX-001 from suite-funnel-strategy.html)
+2. Mission Decatur-30 ops layer (TX from mission-decatur-30.html)
+
+This is build #3. ONE BUILD AT A TIME.
+
+GOAL
+Encode the chair ceremony into the booking app so the operator (Khyree, or any bench operator using the app) cannot accidentally skip a movement. The app becomes the silent stage manager for the ceremony.
+
+NEW BASE44 ENTITY FIELDS (extend existing User entity)
+
+User (extend):
+- personal_note (text) · Article VII line 1
+- technical_note (text) · Article VII line 2
+- future_followup (text) · Article VII line 3
+- last_cut_summary (text) · auto-generated from previous Booking
+- frequency_target (enum: 2w, 3w, 4w, 5w, 6w, occasional)
+- tier_pref (enum: Lineup, Authentic, Hero, Reserve, HomeVisit)
+- reserve_card_no (string, nullable · "XIV/L" format)
+
+Booking (extend):
+- consult_anchor (text) · question 1 answer
+- consult_occasion (text) · question 2 answer
+- consult_concern (text) · question 3 answer
+- consult_return (string) · question 4 answer
+- consult_mood (enum: talk, rest)
+- photo_sent_at (datetime)
+- rebook_offered (boolean)
+- rebook_accepted_at (datetime, nullable)
+- finish_steps_completed (multi-select: hot_towel, scalp_press, oil)
+
+NEW BASE44 ENTITY: ReserveCard
+- card_no (string · "XIV/L")
+- issued_to_user (ref User)
+- issued_at (datetime)
+- seat_number (integer)
+- active (boolean)
+- price_locked (boolean)
+
+NEW ROUTES (under admin auth)
+
+/chair · the in-chair operator view (mobile-optimized)
+  - Replaces existing client detail view during active appointment
+  - Locked to today's bookings
+  - Single-tap progression through the ceremony
+
+/chair/[bookingId]/preflight (T-30 sec)
+  - Surfaces name, last cut summary, last 3 notes
+  - "Greet by name" prompt
+
+/chair/[bookingId]/consult
+  - 5-question form, one at a time
+  - Cannot advance to next without answer
+  - Mood question gates the cut start
+
+/chair/[bookingId]/cutting
+  - Timer running
+  - Music control widget (if integrated)
+  - Phone-down indicator
+  - One-tap "client wanted to talk" or "client wanted to rest" recall
+
+/chair/[bookingId]/finish
+  - 3-step checklist: hot towel · scalp press · oil
+  - Each step has a 60-second / 90-second / 30-second guided timer
+  - Photo capture flow at end
+
+/chair/[bookingId]/rebook
+  - Calendar opens to +4 weeks at same day/time
+  - "Offer the slot" with prefilled SMS to client phone
+  - One-tap accept
+
+/chair/[bookingId]/memory
+  - 3-line notes form
+  - Cannot mark booking complete without filling all 3
+
+/chair/[bookingId]/depart
+  - Card print preview · next appointment + booking link
+  - "Departed" tap closes booking
+
+AUTOMATIONS
+
+1. T-30 sec preflight:
+   - When next booking is 30 sec from start, push notification to operator
+   - "Next: [NAME] · last cut: [SUMMARY] · note: [PERSONAL_NOTE]"
+
+2. Photo capture flow:
+   - At /finish, after 3 movements complete, photo flow opens
+   - Capture 3 frames (front, left, right)
+   - Auto-upload to Cloudflare R2 or Base44 file store
+   - Auto-send to client phone via Telnyx
+   - Caption: "Tagged @khyree_city if you post."
+
+3. In-chair rebook:
+   - On rebook accept, Booking created for +4 weeks same time same service
+   - SMS to client: "Locked in for [DATE]. See you then."
+   - Reserve cardholders get an extra "+priority slot guaranteed" line
+
+4. Card printer integration:
+   - Phase 2 · physical card print at chair via small thermal printer
+   - For now: SMS the card image to client phone
+
+5. Memory enforcement:
+   - Booking cannot reach status=complete unless all 3 memory fields have content
+   - This is a hard requirement, not a soft one
+   - Empty fields surface as orange warning on operator view
+
+CLIENT-FACING TOUCHES
+
+Booking confirmation email (extend existing):
+- "We will photograph your cut at the end. Tag @khyree_city if you post."
+- "Reserve cardholders: your card number is [NO] — please mention it if asked."
+
+24h reminder SMS (extend):
+- "Tomorrow's cut: [TIME]. Park spot A4. Door code 4421. Beverage preference reply BEV [WATER/COFFEE]."
+
+Post-cut SMS (new, T+60min):
+- "Hope the cut sat right. Your photos are in this thread. We're locked for [REBOOK_DATE]."
+
+ACCEPTANCE CRITERIA
+- Operator can run an entire ceremony in /chair/[id] without leaving the screen
+- The 7 movements (preflight, consult, cutting, finish, rebook, memory, depart) each take ≤ a single tap to advance
+- Memory enforcement is hard · no booking marked complete without 3 notes
+- Photo capture and SMS-send completes in &lt;90 seconds
+- Reserve card data renders on booking detail view
+- All new fields visible in existing admin client list
+
+OUT OF SCOPE
+- Physical card printing (Phase 2)
+- Music control (Phase 2)
+- Audio "the towel is hot" voice prompts (Phase 3)
+- AI-suggested next-question phrasing (Phase 3)
+- Customer-facing "I just got cut" share template (Phase 2)
+
+CONFIRM SCOPE. BUILD THE OPERATOR VIEW FIRST. THEN AUTOMATIONS. THEN CLIENT-FACING. STOP AT ACCEPTANCE CRITERIA.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINIS ============ -->
+<section>
+  <div class="wrap">
+    <div class="finis">
+      <svg class="finis-mark" viewBox="0 0 56 56" fill="none">
+        <circle cx="28" cy="28" r="26" stroke="#c9a961" stroke-width="1"/>
+        <g stroke="#c9a961" stroke-width="1.2" fill="none" stroke-linecap="round">
+          <line x1="20" y1="16" x2="20" y2="40"/>
+          <line x1="20" y1="28" x2="36" y2="16"/>
+          <line x1="20" y1="28" x2="36" y2="40"/>
+        </g>
+      </svg>
+      <div class="finis-text">~ Finis ~</div>
+      <div class="finis-meta">
+        <div class="row">FOLIO IV · COMPLETE · XIII ARTICLES</div>
+        <div class="row">SEALED BY HAND · <b>K. TOWNES</b></div>
+        <div class="row">MMXXVI · CUT CREATERS · DECATUR</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+// reveal on scroll
+const ro = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') });
+},{threshold:0.06});
+document.querySelectorAll('.article, .protocol, .movement, .rule, .ledger-row, .body-prose, .pull-quote, .card, .oath, .transmission').forEach(el=>{
+  el.classList.add('reveal'); ro.observe(el);
+});
+
+// copy spec
+function copySpec(){
+  const t = document.getElementById('specBody').innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const b = document.getElementById('copyBtn');
+    b.textContent = 'TRANSMITTED ✓';
+    b.classList.add('ok');
+    setTimeout(()=>{b.textContent='Copy Transmission';b.classList.remove('ok')},2200);
+  });
+}
+
+// Subtle parallax on the wax seal
+const wax = document.querySelector('.wax-wrap');
+if(wax){
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY;
+    if(y < 800){
+      wax.style.transform = 'translateX(-50%) translateY('+ (y * 0.2) +'px)';
+      wax.style.opacity = Math.max(0, 0.85 - y/600);
+    }
+  }, {passive:true});
+}
+</script>
+</body>
+</html>

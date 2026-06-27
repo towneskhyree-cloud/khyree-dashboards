@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khyree Vault — Every Dashboard You've Ever Built</title>
+<meta name="description" content="One door for every dashboard, site, codex, and brief Khyree has built. Live + local, curated, searchable.">
+<meta name="theme-color" content="#08090c">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Anton&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: oklch(13% 0.018 250);
+  --bg-1: oklch(17% 0.025 250);
+  --bg-2: oklch(22% 0.032 250);
+  --surface: color-mix(in oklab, white 4%, transparent);
+  --surface-2: color-mix(in oklab, white 7%, transparent);
+  --border: color-mix(in oklab, white 10%, transparent);
+  --border-hot: color-mix(in oklab, var(--accent) 50%, transparent);
+  --text: oklch(96% 0.005 250);
+  --muted: oklch(68% 0.012 250);
+  --dim: oklch(52% 0.015 250);
+  --accent: #b8ff00;
+  --accent-2: #3b82f6;
+  --accent-warm: #ff9d3b;
+  --radius: 18px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg-0); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-feature-settings: 'cv11', 'ss01'; -webkit-font-smoothing: antialiased; }
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% -10%, color-mix(in oklab, var(--accent-2) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 5%, color-mix(in oklab, var(--accent) 8%, transparent), transparent 50%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 60%, var(--bg-0));
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .06; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+::selection { background: var(--accent); color: var(--bg-0); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+/* HERO */
+.hero { padding: clamp(28px, 6vw, 80px) clamp(20px, 5vw, 64px) clamp(20px, 4vw, 36px); position: relative; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.8); } }
+h1.title { font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(56px, 12vw, 180px); line-height: .88; letter-spacing: -.02em; margin: 24px 0 18px; text-transform: uppercase; }
+h1.title em { font-style: normal; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 80%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { font-size: clamp(15px, 1.6vw, 19px); color: var(--muted); max-width: 56ch; line-height: 1.55; margin-bottom: 28px; }
+.stats { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 12px; }
+.stat { padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); backdrop-filter: blur(20px); }
+.stat .n { font-family: 'Anton', sans-serif; font-size: 28px; letter-spacing: .02em; display: block; line-height: 1; }
+.stat .l { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .14em; margin-top: 6px; }
+.stat.live-now { border-color: color-mix(in oklab, var(--accent) 40%, transparent); background: color-mix(in oklab, var(--accent) 6%, var(--surface)); }
+.stat.live-now .n { color: var(--accent); }
+
+/* CONTROLS */
+.controls { position: sticky; top: 0; z-index: 50; padding: 14px clamp(20px, 5vw, 64px); background: color-mix(in oklab, var(--bg-0) 78%, transparent); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); border-bottom: 1px solid var(--border); }
+.controls-inner { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.search { flex: 1 1 240px; min-width: 200px; height: 44px; padding: 0 16px 0 42px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color .15s, background .15s; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23a6acba' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>"); background-repeat: no-repeat; background-position: 14px center; }
+.search:focus { border-color: var(--border-hot); background: var(--surface-2); }
+.search::placeholder { color: var(--dim); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-size: 13px; font-weight: 500; transition: all .15s ease; white-space: nowrap; }
+.chip:hover { border-color: var(--border-hot); color: var(--text); }
+.chip.active { background: var(--accent); border-color: var(--accent); color: #050505; }
+.chip .n { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 6px; border-radius: 5px; background: color-mix(in oklab, currentColor 10%, transparent); }
+.chip.active .n { background: rgba(0,0,0,.15); }
+.chip.special::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); animation: pulse 2.4s ease-in-out infinite; }
+.chip.special.active::before { background: #050505; box-shadow: none; }
+
+/* GRID */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr)); gap: 18px; padding: 24px clamp(20px, 5vw, 64px) 80px; }
+.section-head { grid-column: 1/-1; display: flex; align-items: baseline; gap: 14px; padding: 24px 0 4px; }
+.section-head h2 { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 28px; letter-spacing: .01em; text-transform: uppercase; color: var(--text); }
+.section-head .count { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: .12em; }
+.section-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+/* CARD */
+.card { position: relative; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; transition: transform .25s cubic-bezier(.2,.7,.2,1), border-color .2s, background .2s; display: flex; flex-direction: column; isolation: isolate; }
+.card::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 0%, transparent), color-mix(in oklab, var(--accent) 40%, transparent) 50%, color-mix(in oklab, var(--accent-2) 30%, transparent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 2; }
+.card:hover { transform: translateY(-4px); background: var(--surface-2); }
+.card:hover::before { opacity: 1; }
+.card a.full { position: absolute; inset: 0; z-index: 3; }
+.preview { position: relative; aspect-ratio: 16/10; overflow: hidden; background: linear-gradient(135deg, var(--bg-2), var(--bg-1)); border-bottom: 1px solid var(--border); }
+.preview iframe { position: absolute; top: 0; left: 0; width: 1366px; height: 854px; border: 0; transform: scale(0.32); transform-origin: top left; pointer-events: none; background: var(--bg-2); }
+.preview .fade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 60%, color-mix(in oklab, var(--bg-1) 60%, transparent)); pointer-events: none; }
+.preview .skel { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--dim); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.body { padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.badges { display: flex; flex-wrap: wrap; gap: 6px; }
+.badge { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 8px; border-radius: 5px; border: 1px solid var(--border); color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+.badge.live { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 35%, transparent); background: color-mix(in oklab, var(--accent) 8%, transparent); }
+.badge.local { color: var(--accent-2); border-color: color-mix(in oklab, var(--accent-2) 35%, transparent); background: color-mix(in oklab, var(--accent-2) 6%, transparent); }
+.badge.hot { color: var(--accent-warm); border-color: color-mix(in oklab, var(--accent-warm) 40%, transparent); background: color-mix(in oklab, var(--accent-warm) 10%, transparent); }
+.badge.active-now { color: var(--accent); border-color: color-mix(in oklab, var(--accent) 55%, transparent); background: color-mix(in oklab, var(--accent) 14%, transparent); font-weight: 700; }
+.badge.active-now::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: pulse 2s ease-in-out infinite; }
+.badge.ref { color: var(--muted); border-color: color-mix(in oklab, white 14%, transparent); opacity: .85; }
+.card h3 { font-size: 17px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
+.card .url { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card .meta { display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--dim); margin-top: auto; padding-top: 6px; }
+.card .meta .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--dim); }
+.card .open-arrow { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: color-mix(in oklab, var(--bg-0) 70%, transparent); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); z-index: 4; opacity: 0; transform: translateY(-4px); transition: all .25s ease; }
+.card:hover .open-arrow { opacity: 1; transform: translateY(0); }
+.card .open-arrow svg { width: 14px; height: 14px; stroke: var(--text); }
+
+/* Active card: subtle green left rail */
+.card.is-active { border-color: color-mix(in oklab, var(--accent) 28%, var(--border)); }
+.card.is-active::after { content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; background: var(--accent); box-shadow: 0 0 14px color-mix(in oklab, var(--accent) 70%, transparent); border-radius: 0 3px 3px 0; z-index: 4; }
+
+/* PINNED highlight for featured */
+.card.pin { border-color: color-mix(in oklab, var(--accent-warm) 40%, transparent); }
+.card.pin .preview { background: linear-gradient(135deg, color-mix(in oklab, var(--accent-warm) 8%, var(--bg-2)), var(--bg-1)); }
+
+.card.hide { display: none; }
+.section-head.hide { display: none; }
+.empty { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--muted); }
+.empty h3 { font-family: 'Anton', sans-serif; font-size: 32px; margin-bottom: 8px; color: var(--text); }
+
+footer { padding: 40px clamp(20px, 5vw, 64px) 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; line-height: 1.6; }
+footer code { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 6px; background: var(--surface-2); border-radius: 4px; color: var(--text); }
+footer a { color: var(--accent-2); }
+
+@supports (animation-timeline: view()) {
+  .card { animation: card-in linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(24px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+@media (max-width: 640px) {
+  .preview iframe { transform: scale(0.26); }
+  .controls { padding: 12px 18px; }
+  .chips { width: 100%; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .chips::-webkit-scrollbar { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="hero">
+  <span class="kicker">KHYREE VAULT · v1.2 · ACTIVELY USING</span>
+  <h1 class="title">Every<br>dashboard.<br><em>One door.</em></h1>
+  <p class="lede">Every site you've shipped to the web, every dashboard sitting on your Mac — curated, deduped, status-tagged, searchable, all in one place. Tap <b style="color:var(--accent)">Active Now</b> to see only what you're actually using.</p>
+  <div class="stats">
+    <div class="stat"><span class="n" id="stat-total">—</span><span class="l">Total Builds</span></div>
+    <div class="stat live-now"><span class="n" id="stat-active">—</span><span class="l">Active Right Now</span></div>
+    <div class="stat"><span class="n" id="stat-live">—</span><span class="l">Live on the Web</span></div>
+    <div class="stat"><span class="n" id="stat-local">—</span><span class="l">Bundled From Mac</span></div>
+    <div class="stat"><span class="n" id="stat-cats">—</span><span class="l">Categories</span></div>
+  </div>
+</header>
+
+<nav class="controls" role="search">
+  <div class="controls-inner">
+    <input id="search" class="search" type="search" placeholder="search any dashboard…" autocomplete="off" spellcheck="false">
+    <div class="chips" id="chips"></div>
+  </div>
+</nav>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  <p>Updated 2026-06-14 · v1.2 · 31 local + 12 live = <b>43 builds</b> · trimmed to what you're <b>actively using</b>. Pulled: shakurstevenson (504 broken — flag it), khyreecity.surge.sh (duplicate mirror of .com), 5 stale Content/Brand editor briefs. Added: <b>book.khyreecity.com</b> (your booking site) + townes-salon-suites (refreshed today by another session). Live URL: <a href="https://khyree-vault.surge.sh">khyree-vault.surge.sh</a>. Free static hosting · no API cost · separate from BB.</p>
+</footer>
+
+<script>
+const ITEMS = [
+  { slug: "khyree-runway", title: "🥃 The Runway — 12 Reels, Scripted (luxe)", cat: "Content / Brand", kind: "live", url: "https://khyree-runway.surge.sh", date: "today", pin: true, status: "active", note: "Full scripts + breakdowns, new CTA, your voice" },
+  { slug: "khyree-playbook", title: "🎬 Content Playbook — Lane · Scripts · Algorithm", cat: "Khyree City", kind: "live", url: "https://khyree-playbook.surge.sh", date: "today", pin: true, status: "active", note: "Your reel scripts + lane + algorithm — one door" },
+  // ── FAMILY / MOVE (pinned) ──
+  { slug: "townes-pre-move-kit", title: "Going In Legit — Pre-Move Kit", cat: "Family / Move", kind: "local", url: "./local/townes-pre-move-kit/", path: "Downloads/townes-pre-move-kit.html", size: 49827, date: "2026-05-21", pin: true },
+  { slug: "townes-plan", title: "Townes Master Plan", cat: "Family / Move", kind: "local", url: "./local/townes-plan/", path: "Downloads/townes-plan.html", size: 64578, date: "2026-05-21", pin: true },
+  { slug: "townes-atlas", title: "Townes Family Atlas", cat: "Family / Move", kind: "local", url: "./local/townes-atlas/", path: "Downloads/townes-atlas.html", size: 70550, date: "2026-05-20", pin: true },
+
+  // ── CUT CREATERS ──
+
+  // ── KHYREE CITY ──
+  { slug: "book-khyreecity", title: "Khyree City — Booking App", cat: "Khyree City", kind: "live", url: "https://book.khyreecity.com", date: "live", pin: true, status: "active", note: "Where clients actually book you" },
+  { slug: "khyreecity-com", title: "Khyree City — Marketing Site (khyreecity.com)", cat: "Khyree City", kind: "live", url: "https://khyreecity.com", date: "4 days ago", pin: true, status: "active" },
+  { slug: "khyree-hq", title: "Khyree HQ — Daily Operating System", cat: "Khyree City", kind: "live", url: "https://khyree-hq.surge.sh", date: "3 weeks ago", status: "active" },
+  { slug: "khyree-city-visual-system", title: "Khyree City — Visual System v3 · Full Campaign", cat: "Khyree City", kind: "local", url: "./local/khyree-city-visual-system/", path: "Downloads/khyree_city_visual_system_v3_full.html", size: 53067, date: "2026-05-21" },
+  { slug: "khyree-city-four-directions", title: "Khyree City — Four Directions", cat: "Khyree City", kind: "local", url: "./local/khyree-city-four-directions/", path: "Downloads/khyree_city_four_directions.html", size: 32578, date: "2026-05-21" },
+  { slug: "khyree-city-market-analysis", title: "Khyree City — Barber Digital Opportunity / Market Analysis 2026", cat: "Khyree City", kind: "local", url: "./local/khyree-city-market-analysis/", path: "Downloads/2026-05/khyree_city_market_analysis.html", size: 67680, date: "2026-05-05" },
+  { slug: "khyree-city-command-center", title: "Khyree City · Operator Command Center", cat: "Khyree City", kind: "local", url: "./local/khyree-city-command-center/", path: "Downloads/2026-05/khyree_city_command_center.html", size: 140339, date: "2026-05-01" },
+  { slug: "khyreecity-cinematic", title: "Khyree City · Cinematic Redesign v.01", cat: "Khyree City", kind: "local", url: "./local/khyreecity-cinematic/", path: "iCloud/Khyree-CC-Relay/khyreecity-cinematic-v01.html", size: 63478, date: "2026-05-15" },
+  { slug: "khyreecity-v02", title: "Khyree City · The Chair (v.02)", cat: "Khyree City", kind: "local", url: "./local/khyreecity-v02/", path: "iCloud/Khyree-CC-Relay/khyreecity-v02.html", size: 59766, date: "2026-05-15" },
+  { slug: "logo-brief", title: "Logo Brief · Khyree City Identity Direction v.01", cat: "Khyree City", kind: "local", url: "./local/logo-brief/", path: "iCloud/Khyree-CC-Relay/logo-brief.html", size: 60826, date: "2026-05-14" },
+  { slug: "khyree-city-marks", title: "Khyree City · Logo Marks · v.01", cat: "Khyree City", kind: "local", url: "./local/khyree-city-marks/", path: "iCloud/Khyree-CC-Relay/khyree-city-marks.html", size: 20919, date: "2026-05-14" },
+
+  // ── CONTENT / BRAND (trimmed to what you're ACTIVELY USING) ──
+  { slug: "khyree-story-engine", title: "Story Engine HQ — The Story Desk", cat: "Content / Brand", kind: "live", url: "https://khyree-story-engine.surge.sh", date: "1 week ago", pin: true, status: "active", note: "Auto-daily story approval queue · the desk you've been building" },
+  { slug: "khyree-stories", title: "Daily Story System", cat: "Content / Brand", kind: "live", url: "https://khyree-stories.surge.sh", date: "2 weeks ago", status: "active" },
+  { slug: "khyree-teleprompter", title: "Teleprompter — On-Camera Tool", cat: "Content / Brand", kind: "live", url: "https://khyree-teleprompter.surge.sh", date: "2 weeks ago", status: "active", note: "Open while you record" },
+
+  // ── STRATEGY / CODEX ──
+  { slug: "house-of-khyree-codex", title: "The House of Khyree · Codex of the Chair Ceremony", cat: "Strategy / Codex", kind: "local", url: "./local/house-of-khyree-codex/", path: "iCloud/Khyree-CC-Relay/", size: 69017, date: "2026-05-14" },
+  { slug: "the-levelup-blueprint", title: "The Level-Up · Blueprint for the Independent Barber", cat: "Strategy / Codex", kind: "local", url: "./local/the-levelup-blueprint/", path: "iCloud/Khyree-CC-Relay/", size: 85408, date: "2026-05-14" },
+  { slug: "master-key-system", title: "The Master Key System — Full Breakdown", cat: "Strategy / Codex", kind: "local", url: "./local/master-key-system/", path: "Downloads/master_key_system_breakdown.html", size: 41698, date: "2026-06-12" },
+  { slug: "carnegie-playbook", title: "Carnegie — The Operator's Translation", cat: "Strategy / Codex", kind: "local", url: "./local/carnegie-playbook/", path: "Downloads/carnegie-playbook.html", size: 24691, date: "2026-05-21" },
+  { slug: "emyth-codex", title: "The E-Myth Revisited — Operator's Codex", cat: "Strategy / Codex", kind: "local", url: "./local/emyth-codex/", path: "Downloads/2026-05/emyth_codex.html", size: 69610, date: "2026-05-08" },
+  { slug: "rdpd-codex", title: "Rich Dad Poor Dad — Operator's Codex", cat: "Strategy / Codex", kind: "local", url: "./local/rdpd-codex/", path: "Downloads/2026-05/rdpd_codex.html", size: 57102, date: "2026-05-07" },
+
+  // ── MONEY / FINANCE ──
+  { slug: "financial-iq-deck", title: "The 4 Pillars of Financial IQ — Study Deck", cat: "Money / Finance", kind: "local", url: "./local/financial-iq-deck/", path: "Downloads/2026-05/financial-iq-4-pillars-deck.html", size: 37702, date: "2026-05-08" },
+  { slug: "cashflow-patterns", title: "Cash Flow Patterns — Rich Dad's Diagrams", cat: "Money / Finance", kind: "local", url: "./local/cashflow-patterns/", path: "Downloads/2026-05/cashflow_patterns.html", size: 12055, date: "2026-05-07" },
+
+  // ── UCO ──
+
+  // ── PRODUCT ──
+  { slug: "khyree-pomade-os", title: "Khyree City — Product Launch OS", cat: "Product", kind: "local", url: "./local/khyree-pomade-os/", path: "Downloads/2026-05/khyree_pomade_os.html", size: 55360, date: "2026-05-06" },
+
+  // ── CLIENTS / DEMOS ──
+  { slug: "fade-house-barber", title: "Fade House — Barber Demo Template", cat: "Clients / Demos", kind: "live", url: "https://fade-house-barber.surge.sh", date: "1 week ago" },
+  { slug: "g-command-center", title: "G's Command Center (live)", cat: "Clients / Demos", kind: "live", url: "https://g-command-center.surge.sh", date: "3 weeks ago" },
+  { slug: "shaq-tire-delivery", title: "SHAQ'S Tire Delivery · Operations Command", cat: "Clients / Demos", kind: "local", url: "./local/shaq-tire-delivery/", path: "Downloads/2026-05/shaq_tire_delivery_dashboard.html", size: 97514, date: "2026-05-01" },
+  { slug: "g-dashboard", title: "G's Command Center (source)", cat: "Clients / Demos", kind: "local", url: "./local/g-dashboard/", path: "Downloads/g_dashboard.html", size: 56255, date: "2026-05-26" },
+];
+
+const CAT_ORDER = ["Family / Move", "Cut Creaters", "Khyree City", "Content / Brand", "Strategy / Codex", "Money / Finance", "UCO", "Product", "Clients / Demos"];
+
+const total = ITEMS.length;
+const live = ITEMS.filter(i => i.kind === "live").length;
+const local = total - live;
+const active = ITEMS.filter(i => i.status === "active").length;
+const cats = new Set(ITEMS.map(i => i.cat)).size;
+document.getElementById("stat-total").textContent = total;
+document.getElementById("stat-active").textContent = active;
+document.getElementById("stat-live").textContent = live;
+document.getElementById("stat-local").textContent = local;
+document.getElementById("stat-cats").textContent = cats;
+
+const chipDefs = [
+  { id: "all", label: "All", count: total },
+  { id: "active", label: "Active Now", count: active, special: true },
+  { id: "live", label: "Live", count: live },
+  { id: "local", label: "Local", count: local },
+  ...CAT_ORDER.map(c => ({ id: "cat:" + c, label: c, count: ITEMS.filter(i => i.cat === c).length }))
+];
+const chipsEl = document.getElementById("chips");
+chipDefs.forEach((c, i) => {
+  const b = document.createElement("button");
+  b.className = "chip" + (i === 0 ? " active" : "") + (c.special ? " special" : "");
+  b.dataset.id = c.id;
+  b.innerHTML = `${c.label} <span class="n">${c.count}</span>`;
+  b.addEventListener("click", () => {
+    chipsEl.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+    b.classList.add("active");
+    render();
+  });
+  chipsEl.appendChild(b);
+});
+
+const grid = document.getElementById("grid");
+function bytes(n) {
+  if (!n) return "";
+  if (n > 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + " MB";
+  if (n > 1024) return Math.round(n / 1024) + " KB";
+  return n + " B";
+}
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function render() {
+  const activeChip = chipsEl.querySelector(".chip.active").dataset.id;
+  const q = document.getElementById("search").value.trim().toLowerCase();
+  const filtered = ITEMS.filter(i => {
+    if (activeChip === "active" && i.status !== "active") return false;
+    if (activeChip === "live" && i.kind !== "live") return false;
+    if (activeChip === "local" && i.kind !== "local") return false;
+    if (activeChip.startsWith("cat:") && i.cat !== activeChip.slice(4)) return false;
+    if (q && !((i.title + " " + i.cat + " " + (i.url || "") + " " + (i.path || "") + " " + (i.note || "")).toLowerCase().includes(q))) return false;
+    return true;
+  });
+  grid.innerHTML = "";
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty"><h3>Nothing matches.</h3><p>Try a different search or clear the filter.</p></div>';
+    return;
+  }
+  const byCat = {};
+  filtered.forEach(i => { (byCat[i.cat] = byCat[i.cat] || []).push(i); });
+  const orderedCats = [...CAT_ORDER.filter(c => byCat[c]), ...Object.keys(byCat).filter(c => !CAT_ORDER.includes(c))];
+
+  orderedCats.forEach(cat => {
+    const list = byCat[cat];
+    const head = document.createElement("div");
+    head.className = "section-head";
+    head.innerHTML = `<h2>${escapeHtml(cat)}</h2><span class="count">${list.length}</span><div class="rule"></div>`;
+    grid.appendChild(head);
+    list.forEach(i => {
+      const card = document.createElement("article");
+      card.className = "card" + (i.pin ? " pin" : "") + (i.status === "active" ? " is-active" : "");
+      const subtitle = i.kind === "live"
+        ? `<div class="url">${escapeHtml(i.url.replace(/^https?:\/\//, ""))}</div>`
+        : `<div class="url">${escapeHtml(i.path || i.url)}</div>`;
+      const sizeStr = i.size ? bytes(i.size) : "";
+      const dateStr = i.date || "";
+      const metaBits = [sizeStr, dateStr].filter(Boolean).map(escapeHtml).join('<span class="dot"></span>');
+      const statusBadge = i.status === "active"
+        ? '<span class="badge active-now">ACTIVE NOW</span>'
+        : i.status === "reference"
+        ? '<span class="badge ref">REFERENCE</span>'
+        : '';
+      const noteLine = i.note ? `<div class="url" style="color:var(--accent);opacity:.9">${escapeHtml(i.note)}</div>` : '';
+      card.innerHTML = `
+        <div class="preview">
+          <div class="skel">loading preview…</div>
+          <iframe loading="lazy" src="${i.url}" title="${escapeHtml(i.title)}" sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer"></iframe>
+          <div class="fade"></div>
+        </div>
+        <div class="open-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </div>
+        <div class="body">
+          <div class="badges">
+            ${statusBadge}
+            <span class="badge ${i.kind}">${i.kind === "live" ? "● LIVE" : "▢ LOCAL"}</span>
+            <span class="badge">${escapeHtml(i.cat)}</span>
+            ${i.pin ? '<span class="badge hot">★ HEADLINER</span>' : ''}
+          </div>
+          <h3>${escapeHtml(i.title)}</h3>
+          ${subtitle}
+          ${noteLine}
+          <div class="meta">${metaBits}</div>
+        </div>
+        <a class="full" href="${i.url}" target="_blank" rel="noopener" aria-label="Open ${escapeHtml(i.title)}"></a>
+      `;
+      grid.appendChild(card);
+    });
+  });
+}
+document.getElementById("search").addEventListener("input", render);
+render();
+</script>
+</body>
+</html>

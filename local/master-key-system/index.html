@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Master Key System — A Full Breakdown for Muhammad & Khyree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-2: #121212;
+    --bg-3: #1a1a1a;
+    --line: #262626;
+    --cream: #f5e6c8;
+    --cream-dim: #a89e8c;
+    --green: #b8ff00;
+    --blue: #3b82f6;
+    --red: #ef4444;
+    --muted: #6b7280;
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Geist', -apple-system, sans-serif;
+    --mono: 'Geist Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
+  .narrow { max-width: 680px; margin: 0 auto; padding: 0 22px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 70px 0 60px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 30px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 1px; background: var(--green);
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(44px, 9vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  h1 em {
+    color: var(--green);
+    font-style: italic;
+  }
+  .sub {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(18px, 3.6vw, 22px);
+    color: var(--cream-dim);
+    text-align: center;
+    max-width: 540px;
+    margin: 0 auto 32px;
+    line-height: 1.4;
+  }
+  .meta {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+  }
+  .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 4px; height: 4px; background: var(--green); border-radius: 50%; }
+
+  /* ===== SECTION ===== */
+  section { padding: 70px 0; border-bottom: 1px solid var(--line); }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--green);
+    margin-bottom: 14px;
+    display: block;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(34px, 6vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+    color: var(--cream);
+  }
+  h2 em { color: var(--green); font-style: italic; }
+  h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 30px 0 12px;
+    color: var(--cream);
+  }
+  p {
+    font-size: 17px;
+    color: var(--cream);
+    margin-bottom: 18px;
+    font-weight: 300;
+  }
+  p.lede {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 24px;
+  }
+  .muted { color: var(--cream-dim); }
+  strong { color: var(--green); font-weight: 500; }
+  em.serif { font-family: var(--serif); font-style: italic; color: var(--cream); }
+
+  /* ===== PULL QUOTE ===== */
+  .pull {
+    margin: 36px 0;
+    padding: 28px 26px;
+    border-left: 2px solid var(--green);
+    background: linear-gradient(90deg, rgba(184,255,0,0.04), transparent);
+  }
+  .pull p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.35;
+    color: var(--cream);
+    margin: 0 0 10px;
+  }
+  .pull cite {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+    font-style: normal;
+  }
+
+  /* ===== J PRINCE CARD ===== */
+  .figure-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 26px;
+    margin: 30px 0;
+    border-radius: 4px;
+  }
+  .figure-card .label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .figure-card h4 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .figure-card p { font-size: 15.5px; margin-bottom: 10px; }
+  .figure-card p:last-child { margin-bottom: 0; }
+
+  /* ===== 24 PARTS GRID ===== */
+  .parts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+  }
+  .part {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+  .part-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--green);
+    padding-top: 4px;
+  }
+  .part-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: var(--cream);
+  }
+  .part-body {
+    font-size: 15.5px;
+    color: var(--cream);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+  .part-practice {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--cream-dim);
+    letter-spacing: 0.02em;
+  }
+  .part-practice span { color: var(--green); }
+
+  /* ===== APPLICATION BOX ===== */
+  .apply {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 32px 26px;
+    margin: 28px 0;
+    border-radius: 4px;
+    position: relative;
+  }
+  .apply::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--green);
+  }
+  .apply.blue::before { background: var(--blue); }
+  .apply-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .apply.blue .apply-label { color: var(--blue); }
+  .apply h3 {
+    font-family: var(--serif);
+    font-size: 28px;
+    margin-bottom: 18px;
+    line-height: 1.2;
+  }
+  .apply ul { list-style: none; padding: 0; }
+  .apply li {
+    padding: 12px 0 12px 22px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    font-size: 15.5px;
+    line-height: 1.5;
+  }
+  .apply li:last-child { border-bottom: none; }
+  .apply li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 500;
+  }
+  .apply.blue li::before { color: var(--blue); }
+
+  /* ===== TAKE/LEAVE TABLE ===== */
+  .filter {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 30px;
+  }
+  @media (min-width: 640px) {
+    .filter { grid-template-columns: 1fr 1fr; }
+  }
+  .filter-col {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 24px;
+    border-radius: 4px;
+  }
+  .filter-col h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .filter-col.take h4 { color: var(--green); }
+  .filter-col.leave h4 { color: var(--red); }
+  .filter-col ul { list-style: none; padding: 0; }
+  .filter-col li {
+    padding: 10px 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--cream);
+    border-bottom: 1px solid var(--line);
+  }
+  .filter-col li:last-child { border-bottom: none; }
+  .filter-col li strong { font-weight: 500; }
+  .filter-col.take li strong { color: var(--green); }
+  .filter-col.leave li strong { color: var(--red); }
+
+  /* ===== TIMELINE PRACTICE ===== */
+  .practice {
+    margin: 30px 0;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 20px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .step:last-child { border-bottom: none; }
+  .step-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 36px;
+    color: var(--green);
+    line-height: 1;
+  }
+  .step-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .step-body {
+    font-size: 15.5px;
+    color: var(--cream);
+    line-height: 1.55;
+  }
+
+  /* ===== CLOSING ===== */
+  .closing {
+    padding: 80px 0 60px;
+    text-align: center;
+  }
+  .closing h2 {
+    font-size: clamp(36px, 7vw, 56px);
+    margin-bottom: 24px;
+  }
+  .closing .sub { margin-bottom: 0; }
+  .signoff {
+    margin-top: 40px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+  }
+  .signoff span { color: var(--green); }
+
+  /* ===== AMBIENT ===== */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  @media (max-width: 480px) {
+    .part { grid-template-columns: 36px 1fr; gap: 14px; }
+    .step { grid-template-columns: 48px 1fr; gap: 14px; }
+    .wrap, .narrow { padding: 0 18px; }
+    section { padding: 50px 0; }
+    .apply { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="narrow">
+    <div class="eyebrow">For Muhammad · From Khyree · Cairo → Houston</div>
+    <h1>The Master <em>Key</em> System</h1>
+    <p class="sub">A full breakdown of the book J Prince put in your hand — and how to use it without losing your deen.</p>
+    <div class="meta">
+      <span><span class="dot"></span>Charles F. Haanel · 1912</span>
+      <span><span class="dot"></span>24 Parts</span>
+      <span><span class="dot"></span>Read · Filter · Apply</span>
+    </div>
+  </div>
+</header>
+
+<!-- WHAT IT IS -->
+<section>
+  <div class="narrow">
+    <span class="section-num">01 — WHAT IT IS</span>
+    <h2>The book is <em>old</em>, but the technology inside it is timeless.</h2>
+    <p class="lede">The Master Key System was written by Charles F. Haanel in 1912 and originally sold as a 24-week correspondence course for $1,500 in today's money. Only the wealthy and the curious had access to it.</p>
+    <p>It's the book Napoleon Hill read before writing <em class="serif">Think and Grow Rich</em>. The book Bill Gates is rumored to have read at Harvard before dropping out. The book that — quietly — circulates among operators who play long games. Athletes. Executives. Bosses. People who win without explaining why.</p>
+
+    <div class="figure-card">
+      <div class="label">Why J Prince passed it to you</div>
+      <h4>James Prince — Houston. Rap-A-Lot. Respect.</h4>
+      <p>J Prince built a record label, a boxing empire, and a reputation in the streets of Houston that even federal investigators couldn't dismantle. In his book <em class="serif">The Art &amp; Science of Respect</em>, he points to <em class="serif">The Master Key System</em> as a foundational text for how he thinks.</p>
+      <p>He doesn't give it to people he doesn't see something in. If he handed it to Muhammad, he's saying: <strong>you have the raw material — now learn how to direct your mind so the millionaires around you stop being your ceiling and start being your floor.</strong></p>
+    </div>
+
+    <p>The book is structured as <strong>24 weekly lessons</strong>. Haanel said don't read them all at once. Read one, sit with it for seven days, do the exercise at the end, then move to the next. He claimed real results require this pace.</p>
+    <p>That said — for the purpose of this breakdown, you're going to see all 24 at once. Use it as the map. Then go back to the actual book and walk one part per week.</p>
+  </div>
+</section>
+
+<!-- THE BIG IDEA -->
+<section>
+  <div class="narrow">
+    <span class="section-num">02 — THE BIG IDEA</span>
+    <h2>Strip away the language — here's <em>the whole book</em> in one paragraph.</h2>
+
+    <div class="pull">
+      <p>"What you think about, with focus and emotion and repetition, organizes your nervous system, your behavior, and your environment in a direction. Most people think in scattered, fearful, reactive loops — so they get scattered, fearful, reactive lives. A small number of people learn to think on purpose. They get on-purpose lives. The mind is a tool. Most people are tools of their mind. The Master Key flips that relationship."</p>
+      <cite>The Whole Book in One Breath</cite>
+    </div>
+
+    <p>That's it. Everything else is mechanics, exercises, and reframes designed to drive that one truth into your bones until you stop thinking like an employee of your own life and start thinking like the architect of it.</p>
+
+    <p>The book uses 1912 language. You'll see phrases like <em class="serif">"the Universal Mind"</em> and <em class="serif">"infinite supply"</em> and <em class="serif">"vibration."</em> Don't get caught up in the religious-sounding parts — there's an Islamic filter at the end of this for you and Khyree both. Strip the language. Take the mechanics.</p>
+  </div>
+</section>
+
+<!-- ALL 24 PARTS -->
+<section>
+  <div class="narrow">
+    <span class="section-num">03 — ALL 24 PARTS, BROKEN DOWN</span>
+    <h2>The full <em>map</em>. One per week is the prescribed pace.</h2>
+    <p class="lede muted">Each part has a teaching, a principle, and one practical exercise. The exercises are the whole point — the reading without the exercise is just entertainment.</p>
+
+    <div class="parts">
+
+      <div class="part">
+        <div class="part-num">01</div>
+        <div>
+          <div class="part-title">The World Within</div>
+          <div class="part-body">Your inner world creates your outer world. Cause is inside; effect is outside. Stop trying to fix the outside without first fixing the inside.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Sit perfectly still for 15 minutes. No phone. No movement. Just sit. Most people can't.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">02</div>
+        <div>
+          <div class="part-title">Conscious and Subconscious Mind</div>
+          <div class="part-body">You have two minds. The conscious one decides; the subconscious one executes. Most people give their subconscious mind garbage instructions all day, then wonder why their life is garbage.</div>
+          <div class="part-practice"><span>PRACTICE:</span> In the same still sitting, inhibit all thought. Refuse every thought that comes. Master the door before you master the room.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">03</div>
+        <div>
+          <div class="part-title">Mental and Physical Relaxation</div>
+          <div class="part-body">You can't control your thoughts in a tense body. Relaxation is the door to real focus. The solar plexus — the gut — is what he calls "the brain of the body."</div>
+          <div class="part-practice"><span>PRACTICE:</span> Sit still and consciously relax every muscle. Toes to scalp. Until you're so loose you almost float.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">04</div>
+        <div>
+          <div class="part-title">I Am</div>
+          <div class="part-body">You are not your body. You are not your thoughts. You are the awareness behind them. The "I" that watches. Knowing this kills fear because fear is something you have — not something you are.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Eliminate every thought of fear, anxiety, sadness. Refuse them entry. Hold the line.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">05</div>
+        <div>
+          <div class="part-title">The Subconscious Mind</div>
+          <div class="part-body">Your subconscious doesn't argue. Whatever you feed it — through repeated thought, image, feeling — it builds. Conditions in your life are the receipt for the thoughts you've been depositing.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Hold one constructive thought for 15 minutes. Notice how hard that is.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">06</div>
+        <div>
+          <div class="part-title">The Brain</div>
+          <div class="part-body">The brain is the instrument. Mind is the operator. Every cell of your body is in communication with your thinking — which is why chronic worry shows up as chronic illness.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on a friend until you can see their face, hear their voice, feel their presence in the room.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">07</div>
+        <div>
+          <div class="part-title">Visualization</div>
+          <div class="part-body">You must see the result before the result is real. Not vague hoping — sharp, detailed mental images, held with repetition. The blueprint precedes the building.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Visualize a battleship — color, length, weight, weapons, crew. Build it in your mind down to the rivets.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">08</div>
+        <div>
+          <div class="part-title">Imagination</div>
+          <div class="part-body">Imagination is the workshop where the future is built. Daydreamers waste it. Practical dreamers harness it. There's no business, building, or movement on earth that wasn't first a picture in someone's mind.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Visualize a place you love. Walk through it mentally. Smell, sound, light, temperature.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">09</div>
+        <div>
+          <div class="part-title">Affirmation</div>
+          <div class="part-body">Words are seeds. What you say to yourself, especially under stress, programs the subconscious. Haanel's line: <em class="serif">"I am whole, perfect, strong, powerful, loving, harmonious, and happy."</em></div>
+          <div class="part-practice"><span>PRACTICE:</span> Repeat one constructive affirmation with conviction. Daily. Until it stops being words and becomes identity.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">10</div>
+        <div>
+          <div class="part-title">Causation</div>
+          <div class="part-body">Stop chasing effects. Chase causes. Most people try to fix the symptom — broke, sick, anxious — without fixing what's producing it. The cause is always upstream of the effect, and the cause always starts in thought.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on the concept of <em class="serif">insight</em> — the ability to see beneath what's on the surface.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">11</div>
+        <div>
+          <div class="part-title">Inductive Reasoning</div>
+          <div class="part-body">Reason from facts, not from feelings. Observe → hypothesize → test. The same method science uses to crack the physical world, you apply to your inner world.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on truth — the willingness to see things as they actually are, not as you'd prefer them to be.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">12</div>
+        <div>
+          <div class="part-title">Concentration</div>
+          <div class="part-body">The single most important skill in the entire book. Concentration is sustained attention on one thing until it yields its secrets. The scattered mind never wins. The focused mind cannot lose.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Choose one subject. Hold your attention on it without drift for as long as you can. Build the muscle.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">13</div>
+        <div>
+          <div class="part-title">The Dreamer of Dreams</div>
+          <div class="part-body">Every civilization, every empire, every business started in someone's head. Visionaries shape reality. The deed is downstream of the dream — but only if the dream is held with discipline.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Read Tennyson's <em class="serif">In Memoriam</em>. Sit with how thought operates as creative force.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">14</div>
+        <div>
+          <div class="part-title">Constructive Thought</div>
+          <div class="part-body">Build, don't tear down. Destructive thought tears down your own house from the inside. Critical, hateful, envious thinking eats you before it touches anyone else.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on harmony. Refuse to entertain a destructive thought for one full day. See what's left of your stress.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">15</div>
+        <div>
+          <div class="part-title">Insight</div>
+          <div class="part-body">Insight is the ability to see the principle behind the appearance. Surface-level people get manipulated by surfaces. Insightful people see causes and act on them before others see what's happening.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Continue concentrating on insight. Ask yourself daily: what's the principle beneath what I'm seeing right now?</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">16</div>
+        <div>
+          <div class="part-title">Spiritual Seed</div>
+          <div class="part-body">Spiritual wealth precedes material wealth. Get the inner life right and the outer life follows. Skip this step and any money you get will leave through the same door it came in.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on spiritual truth — that the material is downstream of the immaterial.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">17</div>
+        <div>
+          <div class="part-title">Concentration, Deeper</div>
+          <div class="part-body">True concentration isn't strained effort — it's the opposite. It's becoming so absorbed in the subject that the line between you and it disappears.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Hold sustained focus on a chosen object until you forget yourself in it.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">18</div>
+        <div>
+          <div class="part-title">The Law of Attraction</div>
+          <div class="part-body">Like attracts like — at the level of mental state. Your state, repeated, becomes your identity. Your identity attracts the people, deals, and circumstances that match it. This is why broke-thinking rich kids end up broke and rich-thinking broke kids end up rich.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Realize you exist in an environment of infinite supply. Refuse the mental atmosphere of scarcity.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">19</div>
+        <div>
+          <div class="part-title">Fear</div>
+          <div class="part-body">Fear is the root of failure. Knowledge dissolves fear. When you understand the law, the law works for you — when you don't, it works against you. Most people are afraid because they don't know.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on the fact that you are spirit — and spirit cannot be threatened by circumstance.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">20</div>
+        <div>
+          <div class="part-title">Spirit and the Word</div>
+          <div class="part-body">The word is creative. What you speak — repeatedly, with conviction — shapes the field of your life. Loose talk creates a loose life. Disciplined speech creates a disciplined life.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on the truth that you are a spiritual being moving through a material world — not the other way around.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">21</div>
+        <div>
+          <div class="part-title">Big Thinking</div>
+          <div class="part-body">Small thoughts produce small results. Big thoughts — held with the same discipline — produce big results. The work is the same. The mental atmosphere is what determines the size of the harvest.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Choose a big idea. Sit with it. Refuse to shrink it to fit your current life.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">22</div>
+        <div>
+          <div class="part-title">Health</div>
+          <div class="part-body">Health is largely mental. Thoughts of disease produce disease; thoughts of harmony produce health. This isn't magic — it's the nervous system, the immune system, and the hormonal system responding to what you keep telling them.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on harmony as the natural state of the body.</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">23</div>
+        <div>
+          <div class="part-title">Money — The Law of Wealth</div>
+          <div class="part-body">Wealth is the result of service. You get paid in proportion to the value you create for others. The law of compensation: <strong>giving is the secret of receiving.</strong> Most people try to receive without giving and wonder why nothing flows.</div>
+          <div class="part-practice"><span>PRACTICE:</span> Concentrate on the law of compensation. What value can you put into the world that didn't exist before you touched it?</div>
+        </div>
+      </div>
+
+      <div class="part">
+        <div class="part-num">24</div>
+        <div>
+          <div class="part-title">The Truth</div>
+          <div class="part-body">The whole system converges here. Knowledge that isn't applied is just entertainment. The master key isn't reading the book — it's <em class="serif">living the book.</em></div>
+          <div class="part-practice"><span>PRACTICE:</span> Apply what you've learned. Knowledge does not apply itself.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- THE MASTER PATTERN -->
+<section>
+  <div class="narrow">
+    <span class="section-num">04 — THE MASTER PATTERN</span>
+    <h2>If you only remember <em>five</em> things from all 24 weeks — remember these.</h2>
+
+    <div class="practice">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Cause is inside. Effect is outside.</div>
+          <div class="step-body">Stop wasting your energy fighting effects. Identify the cause — almost always a habit of thought — and operate there.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Concentration is the whole game.</div>
+          <div class="step-body">Sustained, undisturbed focus on a single object. Build this muscle and you become dangerous in any field.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Visualize the result with detail.</div>
+          <div class="step-body">Not vague hope. Sharp, repeated, emotional, sensory images. The blueprint must exist in mind before it can exist in matter.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Build, don't tear down.</div>
+          <div class="step-body">Constructive thought builds your life. Destructive thought — envy, criticism, fear — burns it down silently while you sleep.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-title">Wealth is service made visible.</div>
+          <div class="step-body">You get paid for the value you put into the world. Want more? Serve more. Want big? Serve big. There's no other route that lasts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR MUHAMMAD -->
+<section>
+  <div class="narrow">
+    <span class="section-num">05 — FOR MUHAMMAD</span>
+    <h2>You're around millionaires who haven't <em>figured it out</em>. Here's the move.</h2>
+    <p class="lede">Being in the room with people who have money but haven't figured out their lives is a strange position. They look like they're winning. Some of them feel like they're losing. You're watching it up close and trying to figure out where you fit.</p>
+    <p>Here's how the book applies to you, right now, in that exact environment:</p>
+
+    <div class="apply blue">
+      <div class="apply-label">Muhammad's Playbook</div>
+      <h3>Don't absorb their atmosphere — build your own.</h3>
+      <ul>
+        <li><strong>Their mental state is contagious.</strong> Part 18 — Law of Attraction. If they're scattered, fearful, reactive with their money, sitting in that field every day pulls you in. Protect your inner atmosphere like a Muslim protects his wudu. Sit still. Read. Pray. Reset your state daily so theirs doesn't become yours.</li>
+        <li><strong>Watch causes, not displays.</strong> Part 10 — Causation. The watches, the cars, the rooms — those are effects. The cause is how they think. Watch how they think about decisions, money, fear, women, time. That's the actual education. The receipts are downstream.</li>
+        <li><strong>Insight is your competitive edge.</strong> Part 15 — Insight. You don't have their money yet, so your edge is seeing what they can't see. Most "figured" millionaires are actually unfigured — they have money and chaos at the same time. If you can see the principle beneath their appearance, you can position yourself to serve them in ways they don't even know they need.</li>
+        <li><strong>Serve before you scheme.</strong> Part 23 — Money. Don't try to extract from them. Don't try to look like them. Find the real value you can put into their world — discretion, intelligence, calm, useful information, follow-through — and become indispensable through service. The law of compensation will handle the rest.</li>
+        <li><strong>Concentrate on one thing.</strong> Part 12 — Concentration. The temptation in rooms full of moving money is to chase every opportunity. Don't. Pick one focused direction and walk it down. Most of those millionaires lose because they couldn't say no. Be the one who can.</li>
+        <li><strong>Refuse the small thought.</strong> Part 21 — Big Thinking. Don't let their ceiling become yours. If they topped out at a million and stalled, that's their ceiling — not the law. Hold a bigger picture in your head than the room you're in. Quietly. Don't announce it.</li>
+      </ul>
+    </div>
+
+    <div class="pull">
+      <p>"The book isn't telling you to think like them. The book is telling you to think on purpose — and most of them aren't. That's your opening."</p>
+      <cite>Khyree → Muhammad</cite>
+    </div>
+  </div>
+</section>
+
+<!-- FOR KHYREE -->
+<section>
+  <div class="narrow">
+    <span class="section-num">06 — FOR KHYREE</span>
+    <h2>Your situation — Cut Creaters, the return, the rebuild.</h2>
+    <p class="lede">You're 60 days from landing in Atlanta. 24,000 sq ft, 140 suites, ~40 filled, deeply negative. Reputation work to do. A father who's been in it for 30 years. A long game.</p>
+
+    <div class="apply">
+      <div class="apply-label">Khyree's Playbook</div>
+      <h3>The same five principles — different theater.</h3>
+      <ul>
+        <li><strong>See the rehabilitated brand before you walk in the door.</strong> Part 7 — Visualization. Don't show up reacting to what Cut Creaters is. Show up holding a vivid, detailed picture of what it becomes — the filled suites, the brand reputation, the operator culture inside it. Hold that picture for the full 24 months. The dream precedes the deed (Part 13).</li>
+        <li><strong>Operate on the cause, not the symptom.</strong> Part 10 — Causation. Empty suites are an effect. The cause is positioning, perception, and operator culture. Don't waste energy on the empty seats — fix the cause and the seats fill.</li>
+        <li><strong>Constructive thought with your father.</strong> Part 14 — Constructive Thought. Birrul walidayn is in the book without naming it. You build, you don't tear down. Even when you see what needs fixing, the energy you carry into the room is constructive — not corrective. He has 30 years in. You have systems. Both are real. Hold both.</li>
+        <li><strong>Concentration in a noisy season.</strong> Part 12. You have Cut Creaters, content, the agency, the deen, and a family. The temptation to split attention will be enormous. The book is clear: scattered focus kills harvests. Operator Mode Locked already lines up with this. Stay there.</li>
+        <li><strong>Wealth follows service — not strategy.</strong> Part 23. Cut Creaters wins when it serves barbers better than any other suite in Atlanta. Not through marketing. Through the actual product. Brand rehab is downstream of real value delivered. Get the service right; the reputation rehabilitates itself.</li>
+        <li><strong>Refuse the destructive thought about the city.</strong> Part 14, again. Atlanta has its own atmosphere. The "ghetto reputation" frame is a destructive thought field around the business. Your job isn't to absorb it or argue with it — it's to build something so visibly excellent the frame breaks on contact.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ISLAMIC LENS -->
+<section>
+  <div class="narrow">
+    <span class="section-num">07 — ISLAMIC LENS · SALAFI FILTER</span>
+    <h2>What to <em>take</em>, what to <em>leave</em>.</h2>
+    <p class="lede">The book was written by a non-Muslim in 1912. It uses New Thought language — "Universal Mind," "infinite intelligence," "vibration." Some of that conflicts with tawheed if taken literally. Some of it overlaps with what our scholars taught us in different language.</p>
+    <p>This is the filter. Take the operational technology. Leave the metaphysics.</p>
+
+    <div class="filter">
+      <div class="filter-col take">
+        <h4>✓ Take — Compatible with the Sunnah</h4>
+        <ul>
+          <li><strong>Niyyah</strong> — The Prophet ﷺ said actions are by intentions. The book's emphasis on focused, repeated thought is niyyah operationalized.</li>
+          <li><strong>Tafakkur</strong> — Ibn al-Qayyim and Ibn Taymiyyah wrote extensively on deep, sustained thought as a form of worship. Concentration = tafakkur.</li>
+          <li><strong>Sabr</strong> — The 24-week pacing of the book mirrors sabr. Slow, deliberate, no skipping ahead.</li>
+          <li><strong>Self-mastery</strong> — Controlling the nafs is the whole project of the deen. Inhibit destructive thought = jihad an-nafs.</li>
+          <li><strong>Service is the path to provision</strong> — Allah is Ar-Razzaq. He provides through means. Creating real value for people is one of those means. The law of compensation is a created law, not the source.</li>
+          <li><strong>Visualizing outcomes</strong> — The Sahaba visualized victory before Badr. Salahuddin visualized Jerusalem returned for years. Operators have always done this. Just attach it to dua and tawakkul.</li>
+        </ul>
+      </div>
+      <div class="filter-col leave">
+        <h4>✗ Leave — Conflicts with Tawheed</h4>
+        <ul>
+          <li><strong>"Universal Mind"</strong> as God-substitute. The book speaks of a universal intelligence you tap into. We say Allah is Al-Khaliq, the only Creator. Don't tap into the universe — make dua to its Maker.</li>
+          <li><strong>You as co-creator</strong> — The book leans into a pantheistic idea that your mind shares in divinity. La. We are abdullah — slaves of Allah. He creates. We are means.</li>
+          <li><strong>Thoughts <em>must</em> manifest</strong> — The book sometimes implies a mechanical law: think it and it must come. We believe in qadar. Allah gives or withholds. Our job is sincere effort, dua, and tawakkul — the outcome belongs to Him.</li>
+          <li><strong>New Age spirituality</strong> — Any "vibration," "energy field," "law of the universe as deity" framing. Strip it. Replace the explanation with: <em class="serif">Allah has made the world responsive to sincere, focused, sustained effort — by His permission.</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pull">
+      <p>"Allah gave us minds and made us responsible for what we put in them. The book is a manual for using the gift. Just don't worship the gift instead of the One who gave it."</p>
+      <cite>The Filter, in one line</cite>
+    </div>
+
+    <p class="muted" style="font-size: 14.5px; margin-top: 24px;">If a passage in the book makes you uncomfortable, that's your fitrah doing its job. Skip it. The 24 exercises and the five core principles in this breakdown are the part worth keeping. The rest is 1912 New England theology you can leave on the shelf.</p>
+  </div>
+</section>
+
+<!-- THE PRACTICE -->
+<section>
+  <div class="narrow">
+    <span class="section-num">08 — THE PRACTICE</span>
+    <h2>How to actually <em>use</em> the book — starting this week.</h2>
+
+    <div class="practice">
+      <div class="step">
+        <div class="step-num">i</div>
+        <div>
+          <div class="step-title">Read one part per week. Just one.</div>
+          <div class="step-body">Haanel was emphatic about this. Speed-reading the book kills the book. One part, seven days, then move.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">ii</div>
+        <div>
+          <div class="step-title">Do the exercise every day for those seven days.</div>
+          <div class="step-body">Same exercise. Same room. Same time if you can. The repetition is the whole technology. Skipping the exercise = not reading the book.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">iii</div>
+        <div>
+          <div class="step-title">Pair every session with dua and dhikr.</div>
+          <div class="step-body">Before you concentrate, say bismillah and make a brief dua. After, end with alhamdulillah. This locks the practice into the deen and prevents the mind drifting into New Age framing.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">iv</div>
+        <div>
+          <div class="step-title">Journal one line at the end of each week.</div>
+          <div class="step-body">One sentence. What shifted? What didn't? Don't write a novel. The book changes you — track the changes.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">v</div>
+        <div>
+          <div class="step-title">After 24 weeks — re-read. Don't move on.</div>
+          <div class="step-body">J Prince doesn't keep this book on rotation for nothing. Real operators come back to it. The book reveals different layers depending on where you are in your life.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull">
+      <p>"24 weeks is six months. Six months from when you start, you're a different operator. Six months of scrolling, you're the same person in slightly worse shape. Pick the trade."</p>
+      <cite>The Trade</cite>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="narrow">
+    <span class="section-num">09 — CLOSING</span>
+    <h2>Muhammad. <em>Brother.</em></h2>
+    <p class="lede" style="text-align:center;">J Prince didn't put this in your hand by accident. The book isn't a magic trick — it's a 24-week training program for the only muscle that actually matters in your situation: <strong>your mind.</strong></p>
+    <p style="text-align:center;">Read it slow. Do the work. Filter it through the deen. And when you finish, send it back to me and tell me which part hit the hardest. I'll be in Atlanta by then — and we'll be building.</p>
+
+    <div class="signoff">
+      Khyree <span>·</span> Cairo <span>·</span> Allahumma barik
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

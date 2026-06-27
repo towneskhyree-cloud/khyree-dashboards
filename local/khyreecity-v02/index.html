@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Khyree City · The Chair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600;700;800;900&family=Caveat:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --black:#000000;
+  --black-1:#050608;
+  --black-2:#080a0d;
+  --navy:#0a1628;
+  --navy-1:#0d1a30;
+  --navy-2:#10203a;
+  --navy-3:#152949;
+  --paper:#f5f1e8;
+  --paper-soft:rgba(245,241,232,0.78);
+  --paper-dim:rgba(245,241,232,0.5);
+  --paper-faint:rgba(245,241,232,0.22);
+  --line:rgba(245,241,232,0.18);
+  --line-bright:rgba(245,241,232,0.4);
+  --grid:rgba(245,241,232,0.045);
+  --grid-major:rgba(245,241,232,0.085);
+  --cayenne:#d8451f;
+  --cayenne-bright:#f05a2c;
+  --cayenne-soft:rgba(216,69,31,0.18);
+  --cayenne-glow:rgba(240,90,44,0.5);
+  --gold:#c9a961;
+  --display:'Fraunces',Georgia,serif;
+  --sans:'Inter Tight',-apple-system,sans-serif;
+  --hand:'Caveat',cursive;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+html,body{background:var(--black);color:var(--paper);font-family:var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased;letter-spacing:-0.005em;cursor:none}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:none}
+
+/* ==================== CUSTOM CURSOR ==================== */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:difference}
+.cursor-dot{width:6px;height:6px;background:var(--paper);border-radius:50%;transform:translate(-50%,-50%);transition:transform .12s ease-out, background .2s}
+.cursor-ring{width:36px;height:36px;border:1px solid var(--paper);border-radius:50%;transform:translate(-50%,-50%);transition:transform .3s ease-out, width .3s, height .3s, border-color .2s}
+.cursor-ring.hover{width:60px;height:60px;border-color:var(--cayenne);mix-blend-mode:normal}
+.cursor-dot.hover{background:var(--cayenne);mix-blend-mode:normal}
+@media(hover:none){.cursor-dot,.cursor-ring{display:none}html,body,button,a{cursor:auto}}
+
+/* ==================== FILM GRAIN ==================== */
+body::before{
+  content:"";position:fixed;inset:0;z-index:2;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.94 0 0 0 0 0.91 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;opacity:0.55;
+}
+
+/* ==================== FLOATING NAV ==================== */
+.nav{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:80;display:flex;align-items:center;gap:0;padding:8px;background:rgba(10,22,40,0.55);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--line);border-radius:99px;transition:all .5s ease;font-family:var(--mono);font-size:11px;letter-spacing:0.12em}
+.nav-brand{padding:8px 16px;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:-0.015em;border-right:1px solid var(--line);margin-right:6px}
+.nav-brand span{color:var(--cayenne)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:8px 14px;border-radius:99px;text-transform:uppercase;color:var(--paper-soft);transition:all .25s;font-weight:500}
+.nav-links a:hover{color:var(--paper);background:rgba(245,241,232,0.06)}
+.nav-links a.active{color:var(--cayenne);background:var(--cayenne-soft)}
+.nav-cta{margin-left:6px;padding:8px 16px;background:var(--cayenne);color:var(--paper);border-radius:99px;font-weight:600;letter-spacing:0.14em;transition:all .25s;text-transform:uppercase}
+.nav-cta:hover{background:var(--cayenne-bright);box-shadow:0 0 24px var(--cayenne-glow)}
+@media(max-width:780px){.nav-links{display:none}.nav-brand{border-right:none;margin:0}}
+
+/* ==================== FLOATING SCROLL PROGRESS ==================== */
+.scroll-rail{position:fixed;top:0;left:0;right:0;height:2px;z-index:90;background:transparent;pointer-events:none}
+.scroll-rail-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--cayenne),var(--cayenne-bright));transition:width .1s}
+
+/* ==================== FLOATING SIDE INDICATOR ==================== */
+.side-indicator{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:70;display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--paper-dim)}
+.side-dot{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:none;transition:all .3s}
+.side-dot .l{transition:color .3s,opacity .3s;opacity:0;writing-mode:vertical-rl;transform:rotate(180deg)}
+.side-dot .d{width:8px;height:8px;border:1px solid var(--paper-dim);border-radius:50%;transition:all .3s}
+.side-dot.active .d{background:var(--cayenne);border-color:var(--cayenne);box-shadow:0 0 12px var(--cayenne-glow)}
+.side-dot.active .l{color:var(--cayenne);opacity:1}
+.side-dot:hover .l{opacity:1;color:var(--paper)}
+@media(max-width:980px){.side-indicator{display:none}}
+
+/* ==================== FLOATING BOOK BUTTON ==================== */
+.float-book{position:fixed;bottom:24px;right:24px;z-index:80;display:flex;align-items:center;gap:0;background:var(--cayenne);color:var(--paper);border-radius:99px;padding:14px 8px 14px 24px;font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;transition:all .4s;box-shadow:0 10px 40px rgba(216,69,31,0.4);transform:translateY(80px);opacity:0}
+.float-book.in{transform:translateY(0);opacity:1}
+.float-book:hover{padding-right:24px;background:var(--cayenne-bright)}
+.float-book .arrow{display:inline-block;width:32px;height:32px;background:var(--paper);color:var(--cayenne);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-left:14px;font-size:14px;transition:transform .3s}
+.float-book:hover .arrow{transform:rotate(-45deg)}
+
+/* ==================== SECTIONS ==================== */
+section{position:relative;overflow:hidden}
+.wrap{max-width:1320px;margin:0 auto;padding:0 32px;position:relative}
+@media(max-width:640px){.wrap{padding:0 20px}}
+
+/* ==================== HERO · BLACK ==================== */
+.hero{
+  min-height:100vh;background:var(--black);
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;padding:120px 0 80px;
+}
+.hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 30% 30%, rgba(216,69,31,0.07), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 70%, rgba(10,22,40,0.4), transparent 60%);
+  pointer-events:none;
+}
+.hero-grid-bg{position:absolute;inset:0;opacity:0.35;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask:radial-gradient(ellipse 80% 70% at 50% 50%,#000,transparent 80%);
+  -webkit-mask:radial-gradient(ellipse 80% 70% at 50% 50%,#000,transparent 80%);
+}
+.hero-meta-top{position:absolute;top:140px;left:32px;font-family:var(--mono);font-size:10px;letter-spacing:0.24em;color:var(--paper-dim);text-transform:uppercase;display:flex;align-items:center;gap:14px}
+.hero-meta-top::before{content:"";width:32px;height:1px;background:var(--cayenne)}
+.hero-meta-top b{color:var(--paper);font-weight:500}
+@media(max-width:640px){.hero-meta-top{left:20px;top:90px;font-size:9px}}
+
+.hero-meta-right{position:absolute;top:140px;right:32px;font-family:var(--mono);font-size:10px;letter-spacing:0.24em;color:var(--paper-dim);text-transform:uppercase;text-align:right;line-height:1.8}
+.hero-meta-right b{color:var(--cayenne);font-weight:500}
+@media(max-width:640px){.hero-meta-right{display:none}}
+
+.hero-inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;flex:1}
+
+.hero-pre{font-family:var(--mono);font-size:11px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:14px}
+.hero-pre::before{content:"";width:48px;height:1px;background:var(--cayenne)}
+.hero-pre::after{content:"//";color:var(--paper-dim);letter-spacing:0;margin-left:14px}
+
+.hero h1{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(56px,11vw,180px);
+  line-height:0.86;letter-spacing:-0.045em;
+  margin-bottom:48px;
+  position:relative;
+}
+.hero h1 .strong{font-weight:700;font-style:italic;font-variation-settings:"opsz" 144}
+.hero h1 .cayenne{color:var(--cayenne)}
+.hero h1 .outline{
+  -webkit-text-stroke:1px var(--paper);
+  -webkit-text-fill-color:transparent;
+  color:transparent;
+  font-weight:400;
+}
+.hero h1 .row{display:block;overflow:hidden}
+.hero h1 .row span{display:inline-block;transform:translateY(110%);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.hero.loaded h1 .row span{transform:translateY(0)}
+.hero h1 .row:nth-child(1) span{transition-delay:.1s}
+.hero h1 .row:nth-child(2) span{transition-delay:.2s}
+.hero h1 .row:nth-child(3) span{transition-delay:.3s}
+
+.hero-deck{
+  display:grid;grid-template-columns:1fr 380px;gap:64px;align-items:end;
+  max-width:1240px;
+}
+@media(max-width:980px){.hero-deck{grid-template-columns:1fr;gap:32px}}
+
+.hero-sub{
+  font-family:var(--display);font-weight:300;font-style:italic;
+  font-size:clamp(20px,2.4vw,26px);line-height:1.4;color:var(--paper-soft);
+  max-width:580px;letter-spacing:-0.005em;
+  opacity:0;transform:translateY(20px);transition:opacity 1.2s .5s ease, transform 1.2s .5s ease;
+}
+.hero.loaded .hero-sub{opacity:1;transform:translateY(0)}
+.hero-sub b{color:var(--paper);font-style:normal;font-weight:500;font-family:var(--sans)}
+.hero-sub .cayenne{color:var(--cayenne);font-style:normal;font-weight:500;font-family:var(--sans);font-size:0.95em}
+
+.hero-stats{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line);opacity:0;transform:translateY(20px);transition:opacity 1.4s .7s ease, transform 1.4s .7s ease}
+.hero.loaded .hero-stats{opacity:1;transform:translateY(0)}
+.hstat{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--line);gap:16px}
+.hstat .l{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--paper-dim);text-transform:uppercase}
+.hstat .v{font-family:var(--display);font-weight:600;font-size:24px;letter-spacing:-0.02em;color:var(--paper)}
+.hstat .v.cayenne{color:var(--cayenne)}
+
+.hero-scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(--paper-dim);
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  z-index:2;
+}
+.hero-scroll-hint::after{
+  content:"";width:1px;height:48px;
+  background:linear-gradient(180deg,var(--cayenne),transparent);
+  animation:scrolldrip 2s ease-in-out infinite;
+}
+@keyframes scrolldrip{0%,100%{height:24px;opacity:0.4}50%{height:64px;opacity:1}}
+
+/* ==================== HAND-DRAWN ANNOTATION ==================== */
+.note-hand{font-family:var(--hand);color:var(--cayenne);font-size:24px;line-height:1.2;letter-spacing:0;display:inline-block;transform:rotate(-2deg)}
+.note-hand::before{content:"→ ";color:var(--paper-dim)}
+.note-hand.small{font-size:18px}
+
+/* ==================== DIMENSION LINE ==================== */
+.dim-line{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--paper-dim);
+  margin:20px 0;
+}
+.dim-line .l{flex:1;height:1px;background:var(--line-bright);position:relative}
+.dim-line .l::before,.dim-line .l::after{content:"";position:absolute;width:1px;height:8px;background:var(--line-bright);top:-4px}
+.dim-line .l::before{left:0}
+.dim-line .l::after{right:0}
+.dim-line b{color:var(--cayenne);font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:0;padding:0 6px}
+
+/* ==================== BLUEPRINT GRID OVERLAY (subtle) ==================== */
+.bp-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+  background-size:24px 24px, 24px 24px, 120px 120px, 120px 120px;
+  mask:radial-gradient(ellipse 110% 90% at 50% 50%,#000 40%,transparent 100%);
+  -webkit-mask:radial-gradient(ellipse 110% 90% at 50% 50%,#000 40%,transparent 100%);
+  opacity:0.6;
+}
+
+/* ==================== THESIS · NAVY ==================== */
+.thesis{
+  background:var(--navy);padding:160px 0 180px;position:relative;
+}
+.thesis::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cayenne),transparent);
+}
+.thesis-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:14px}
+.thesis-eyebrow::before{content:"01";color:var(--paper-dim);font-weight:600;font-size:13px}
+.thesis-eyebrow::after{content:"";flex:0 1 80px;height:1px;background:var(--line-bright)}
+
+.thesis-body{
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(28px,4vw,52px);
+  line-height:1.18;letter-spacing:-0.025em;
+  max-width:1000px;color:var(--paper);
+}
+.thesis-body .it{font-style:italic;font-weight:400;color:var(--paper-soft)}
+.thesis-body .cayenne{color:var(--cayenne);font-weight:500}
+.thesis-body .word{display:inline-block;opacity:0;transform:translateY(20px);transition:opacity .9s ease, transform .9s ease}
+.thesis-body.in .word{opacity:1;transform:translateY(0)}
+
+.thesis-foot{margin-top:80px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;padding-top:32px;border-top:1px dashed var(--line)}
+@media(max-width:780px){.thesis-foot{grid-template-columns:1fr;gap:20px}}
+.tf-item{display:flex;flex-direction:column;gap:6px}
+.tf-item .l{font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:var(--paper-dim);text-transform:uppercase}
+.tf-item .v{font-family:var(--display);font-weight:500;font-size:18px;color:var(--paper);letter-spacing:-0.01em;line-height:1.3}
+.tf-item .v .cayenne{color:var(--cayenne)}
+
+/* ==================== SERVICES · NAVY DARKER ==================== */
+.services{background:var(--navy-1);padding:140px 0 160px;position:relative}
+.services-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:32px;margin-bottom:80px;padding-bottom:32px;border-bottom:1px solid var(--line)}
+@media(max-width:780px){.services-head{grid-template-columns:1fr;gap:18px}}
+.services-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.services-eyebrow::before{content:"02";color:var(--paper-dim);font-weight:600;font-size:13px}
+.services-eyebrow::after{content:"";flex:0 1 60px;height:1px;background:var(--line-bright)}
+.services-title{font-family:var(--display);font-weight:400;font-size:clamp(40px,6vw,72px);letter-spacing:-0.035em;line-height:1;color:var(--paper)}
+.services-title .it{font-style:italic;color:var(--paper-soft);font-weight:300}
+.services-title .cayenne{color:var(--cayenne)}
+.services-meta{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--paper-dim);text-transform:uppercase;text-align:right;line-height:1.8}
+.services-meta b{color:var(--paper);font-weight:500}
+
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);position:relative}
+@media(max-width:1100px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.svc-grid{grid-template-columns:1fr}}
+
+.svc{
+  background:var(--navy);padding:36px 28px;
+  display:flex;flex-direction:column;gap:18px;
+  min-height:380px;position:relative;
+  transition:all .5s cubic-bezier(.2,.7,.2,1);
+  cursor:none;
+}
+.svc::before{
+  content:"";position:absolute;top:0;left:0;width:0%;height:2px;
+  background:var(--cayenne);transition:width .5s ease;
+}
+.svc:hover::before{width:100%}
+.svc:hover{background:var(--navy-2);transform:translateY(-2px)}
+.svc-code{font-family:var(--mono);font-size:10px;letter-spacing:0.18em;color:var(--paper-dim);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.svc-code .num{color:var(--cayenne)}
+.svc-name{font-family:var(--display);font-weight:500;font-size:30px;letter-spacing:-0.025em;line-height:1.05}
+.svc-name .it{font-style:italic;font-weight:300;color:var(--paper-soft)}
+.svc-desc{font-family:var(--sans);font-size:13px;color:var(--paper-soft);line-height:1.6;flex:1}
+.svc-foot{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px;border-top:1px dashed var(--line)}
+.svc-time{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--paper-dim);text-transform:uppercase}
+.svc-price{font-family:var(--display);font-weight:600;font-size:28px;letter-spacing:-0.02em;color:var(--paper)}
+.svc-price .cayenne{color:var(--cayenne)}
+
+/* ==================== THE HOUSE · architectural elevation ==================== */
+.house{background:var(--navy);padding:160px 0 180px;position:relative}
+.house-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.32em;color:var(--cayenne);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:14px}
+.house-eyebrow::before{content:"03";color:var(--paper-dim);font-weight:600;font-size:13px}
+.house-eyebrow::after{content:"";flex:0 1 80px;height:1px;background:var(--line-bright)}
+
+.house-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:80px;align-items:center}
+@media(max-width:980px){.house-grid{grid-template-columns:1fr;gap:48px}}
+
+.house-text h2{font-family:var(--display);font-weight:400;font-size:clamp(40px,5.5vw,72px);letter-spacing:-0.035em;line-height:1;color:var(--paper);margin-bottom:32px}
+.house-text h2 .it{font-style:italic;color:var(--paper-soft);font-weight:300}
+.house-text h2 .cayenne{color:var(--cayenne)}
+.house-text p{font-family:var(--display);font-weight:300;font-size:20px;line-height:1.5;color:var(--paper-soft);max-width:480px;margin-bottom:22px}
+.house-text p b{color:var(--paper);font-weight:500;font-style:italic}
+
+.house-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:32px}
+.hstat-cell{background:var(--navy);padding:22px 20px}
+.hstat-cell .l{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--paper-dim);text-transform:uppercase;margin-bottom:8px}
+.hstat-cell .v{font-family:var(--display);font-weight:500;font-size:32px;letter-spacing:-0.02em;color:var(--paper);line-height:1}
+.hstat-cell .v.cayenne{color:var(--cayenne)}
+.hstat-cell .sub{font-family:var(--mono);font-size:10px;color:var(--paper-dim);margin-top:4px;letter-spacing:0.04em}
+
+.house-drawing{position:relative;background:var(--navy-1);padding:48px 32px;border:1px solid var(--line);min-height:480px}
+.house-drawing::before{
+  content:"";position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:20px 20px;
+  pointer-events:none;
+}
+.drawing-title{position:absolute;top:14px;left:18px;right:18px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--paper-dim);text-transform:uppercase;font-weight:500}
+.drawing-title b{color:var(--cayenne)}
+.drawing-svg{margin:30px auto 0;display:block;width:100%;max-width:420px;height:auto}
+
+/* ==================== BOOK CTA ==================== */
+.cta{background:var(--black-1);padding:160px 0 180px;position:relative;overflow:hidden}
+.cta::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(216,69,31,0.15),transparent 70%);
+  pointer-events:none;
+}
+.cta-inner{position:relative;text-align:center}
+.cta h2{font-family:var(--display);font-weight:300;font-size:clamp(56px,10vw,160px);letter-spacing:-0.045em;line-height:0.9;margin-bottom:40px}
+.cta h2 .strong{font-weight:700;font-style:italic;color:var(--cayenne)}
+.cta h2 .row{display:block;overflow:hidden}
+.cta-sub{font-family:var(--display);font-weight:300;font-style:italic;font-size:24px;color:var(--paper-soft);max-width:560px;margin:0 auto 56px;line-height:1.4}
+.cta-btn{display:inline-flex;align-items:center;gap:18px;padding:22px 36px;border:1.5px solid var(--cayenne);background:transparent;color:var(--paper);font-family:var(--mono);font-size:12px;letter-spacing:0.24em;text-transform:uppercase;font-weight:600;border-radius:999px;transition:all .4s;position:relative}
+.cta-btn:hover{background:var(--cayenne);transform:translateY(-2px);box-shadow:0 20px 60px var(--cayenne-glow)}
+.cta-btn .ar{display:inline-block;transition:transform .3s}
+.cta-btn:hover .ar{transform:translateX(6px)}
+
+/* ==================== PAGE BREAK / TRANSITION ==================== */
+.pagebreak{height:120px;background:linear-gradient(180deg,var(--black-1),var(--navy));position:relative}
+.pagebreak::before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cayenne),transparent)}
+.pagebreak::after{
+  content:"PAGE II";
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:var(--black-1);padding:0 24px;
+  font-family:var(--mono);font-size:10px;letter-spacing:0.4em;color:var(--cayenne);font-weight:600;
+}
+
+/* ==================== STORY HERO · NAVY ==================== */
+.story-hero{
+  background:var(--navy);min-height:90vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:140px 0 100px;position:relative;
+}
+.story-hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.4em;color:var(--cayenne);text-transform:uppercase;margin-bottom:36px;display:flex;align-items:center;gap:14px}
+.story-hero-eyebrow::before{content:"";width:32px;height:1px;background:var(--cayenne)}
+.story-hero h2{font-family:var(--display);font-weight:300;font-size:clamp(48px,9vw,140px);letter-spacing:-0.045em;line-height:0.88;margin-bottom:40px}
+.story-hero h2 .strong{font-weight:700;font-style:italic}
+.story-hero h2 .cayenne{color:var(--cayenne)}
+.story-hero h2 .outline{-webkit-text-stroke:1px var(--paper);-webkit-text-fill-color:transparent;color:transparent;font-weight:400}
+.story-hero h2 .row{display:block;overflow:hidden}
+.story-hero h2 .row span{display:inline-block;transform:translateY(110%);transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.story-hero.in h2 .row span{transform:translateY(0)}
+.story-hero h2 .row:nth-child(1) span{transition-delay:.1s}
+.story-hero h2 .row:nth-child(2) span{transition-delay:.2s}
+.story-hero h2 .row:nth-child(3) span{transition-delay:.3s}
+
+.story-hero-sub{font-family:var(--display);font-weight:300;font-style:italic;font-size:24px;color:var(--paper-soft);max-width:680px;line-height:1.4;opacity:0;transform:translateY(20px);transition:opacity 1s .5s ease, transform 1s .5s ease}
+.story-hero.in .story-hero-sub{opacity:1;transform:translateY(0)}
+
+/* ==================== STORY · CHAPTERS ==================== */
+.chapter{padding:140px 0;background:var(--navy);position:relative;border-top:1px solid var(--line)}
+.chapter:nth-child(even){background:var(--navy-1)}
+.ch-grid{display:grid;grid-template-columns:200px 1fr;gap:64px;align-items:start}
+@media(max-width:900px){.ch-grid{grid-template-columns:1fr;gap:24px}}
+
+.ch-side{position:sticky;top:120px;display:flex;flex-direction:column;gap:20px}
+@media(max-width:900px){.ch-side{position:relative;top:0;flex-direction:row;align-items:baseline;gap:18px}}
+.ch-num{font-family:var(--display);font-weight:200;font-size:96px;letter-spacing:-0.04em;line-height:1;color:var(--cayenne)}
+.ch-id{font-family:var(--mono);font-size:10px;letter-spacing:0.28em;color:var(--paper-dim);text-transform:uppercase;font-weight:600}
+
+.ch-body h3{font-family:var(--display);font-weight:400;font-size:clamp(36px,5vw,68px);letter-spacing:-0.035em;line-height:1.04;margin-bottom:36px;color:var(--paper)}
+.ch-body h3 .it{font-style:italic;font-weight:300;color:var(--paper-soft)}
+.ch-body h3 .cayenne{color:var(--cayenne)}
+
+.ch-body p{font-family:var(--display);font-weight:300;font-size:21px;line-height:1.55;color:var(--paper-soft);max-width:680px;margin-bottom:24px;letter-spacing:-0.005em}
+.ch-body p b{color:var(--paper);font-weight:500;font-style:italic}
+.ch-body p .cayenne{color:var(--cayenne);font-weight:500;font-style:normal}
+
+.ch-pull{font-family:var(--display);font-weight:400;font-style:italic;font-size:30px;line-height:1.3;color:var(--paper);margin:40px 0;padding:24px 0 24px 32px;border-left:3px solid var(--cayenne);max-width:760px;letter-spacing:-0.015em}
+
+.ch-meta{margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+@media(max-width:780px){.ch-meta{grid-template-columns:1fr}}
+.ch-meta-cell{padding:24px 24px 24px 0;border-right:1px dashed var(--line)}
+.ch-meta-cell:last-child{border-right:none}
+@media(max-width:780px){.ch-meta-cell{border-right:none;border-bottom:1px dashed var(--line);padding:18px 0}.ch-meta-cell:last-child{border-bottom:none}}
+.ch-meta-cell .l{font-family:var(--mono);font-size:9px;letter-spacing:0.24em;color:var(--paper-dim);text-transform:uppercase;margin-bottom:8px}
+.ch-meta-cell .v{font-family:var(--display);font-weight:500;font-size:22px;letter-spacing:-0.015em;color:var(--paper)}
+.ch-meta-cell .v .cayenne{color:var(--cayenne)}
+
+/* ==================== STORY DRAWING / FIGURE ==================== */
+.ch-fig{margin:48px 0;padding:32px;border:1px solid var(--line);background:rgba(245,241,232,0.02);position:relative;max-width:760px}
+.ch-fig::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(var(--grid) 1px, transparent 1px),linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:16px 16px;
+  pointer-events:none;
+}
+.ch-fig-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:0.18em;color:var(--paper-dim);text-transform:uppercase;margin-bottom:18px;font-weight:500}
+.ch-fig-head b{color:var(--cayenne)}
+.ch-fig-svg{display:block;margin:0 auto;width:100%;max-width:520px;height:auto;position:relative}
+
+/* ==================== STORY CTA ==================== */
+.story-cta{padding:160px 0 100px;background:var(--navy-1);text-align:center;position:relative;border-top:1px solid var(--line)}
+.story-cta h2{font-family:var(--display);font-weight:300;font-size:clamp(40px,6vw,80px);letter-spacing:-0.035em;line-height:1;margin-bottom:36px}
+.story-cta h2 .it{font-style:italic;color:var(--cayenne)}
+.story-cta-sub{font-family:var(--display);font-weight:300;font-style:italic;font-size:22px;color:var(--paper-soft);max-width:520px;margin:0 auto 48px;line-height:1.4}
+
+/* ==================== FOOTER ==================== */
+footer{background:var(--black);padding:80px 0 48px;border-top:1px solid var(--line)}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:64px}
+@media(max-width:780px){.foot-grid{grid-template-columns:1fr;gap:32px}}
+.foot-brand{font-family:var(--display);font-weight:700;font-size:32px;letter-spacing:-0.025em;margin-bottom:16px}
+.foot-brand span{color:var(--cayenne)}
+.foot-tag{font-family:var(--display);font-weight:300;font-style:italic;font-size:18px;color:var(--paper-soft);line-height:1.4;max-width:380px}
+.foot-col h4{font-family:var(--mono);font-size:10px;letter-spacing:0.24em;color:var(--cayenne);text-transform:uppercase;margin-bottom:18px;font-weight:600}
+.foot-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.foot-col li a{font-family:var(--display);font-size:16px;color:var(--paper-soft);transition:color .2s}
+.foot-col li a:hover{color:var(--cayenne)}
+.foot-foot{display:flex;justify-content:space-between;align-items:center;padding-top:32px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10px;letter-spacing:0.16em;color:var(--paper-dim);text-transform:uppercase;flex-wrap:wrap;gap:14px}
+
+/* ==================== REVEAL ==================== */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1), transform 1.1s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+.draw-line{stroke-dasharray:1000;stroke-dashoffset:1000;transition:stroke-dashoffset 1.6s ease-out}
+.draw-line.in{stroke-dashoffset:0}
+
+/* float drift animation */
+@keyframes drift1{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes drift2{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+.drift1{animation:drift1 6s ease-in-out infinite}
+.drift2{animation:drift2 7s ease-in-out infinite}
+
+</style>
+</head>
+<body>
+
+<!-- ==================== ELEGANT LOADER ==================== -->
+<div class="loader" id="loader">
+  <div class="loader-stage">
+    <div class="loader-mono">KC · MMXXVI</div>
+    <div class="loader-line"><span></span></div>
+    <div class="loader-word">
+      <span style="--d:.05s">K</span><span style="--d:.10s">H</span><span style="--d:.15s">Y</span><span style="--d:.20s">R</span><span style="--d:.25s">E</span><span style="--d:.30s">E</span><span style="--d:.42s">·</span><span style="--d:.52s">C</span><span style="--d:.57s">I</span><span style="--d:.62s">T</span><span style="--d:.67s">Y</span>
+    </div>
+    <div class="loader-status" id="loaderStatus">ENTERING THE CHAIR</div>
+  </div>
+</div>
+
+<!-- ==================== CURSOR SPOTLIGHT ==================== -->
+<div class="spotlight" id="spotlight"></div>
+
+<!-- ==================== CUSTOM CURSOR ==================== -->
+<div class="cursor-dot" id="cd"></div>
+<div class="cursor-ring" id="cr"></div>
+
+<!-- ==================== SCROLL RAIL ==================== -->
+<div class="scroll-rail"><div class="scroll-rail-fill" id="srf"></div></div>
+
+<!-- ==================== FLOATING NAV ==================== -->
+<nav class="nav">
+  <div class="nav-brand">KHYREE<span>·</span>CITY</div>
+  <div class="nav-links">
+    <a href="#home" class="active">Home</a>
+    <a href="#story">Story</a>
+    <a href="#services">The Chair</a>
+    <a href="#house">The House</a>
+  </div>
+  <a href="#book" class="nav-cta">Book</a>
+</nav>
+
+<!-- ==================== FLOATING SIDE INDICATOR ==================== -->
+<div class="side-indicator">
+  <a href="#home" class="side-dot active" data-target="home"><span class="l">HOME</span><span class="d"></span></a>
+  <a href="#thesis" class="side-dot" data-target="thesis"><span class="l">CRAFT</span><span class="d"></span></a>
+  <a href="#services" class="side-dot" data-target="services"><span class="l">CHAIR</span><span class="d"></span></a>
+  <a href="#house" class="side-dot" data-target="house"><span class="l">HOUSE</span><span class="d"></span></a>
+  <a href="#book" class="side-dot" data-target="book"><span class="l">BOOK</span><span class="d"></span></a>
+  <a href="#story" class="side-dot" data-target="story"><span class="l">STORY</span><span class="d"></span></a>
+</div>
+
+<!-- ==================== FLOATING BOOK BUTTON ==================== -->
+<a href="#book" class="float-book" id="floatBook">Book the Chair<span class="arrow">→</span></a>
+
+<!-- ============================================================
+     PAGE I · HOME
+============================================================ -->
+
+<!-- ==================== HERO · BLACK ==================== -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-meta-top">DOC · KC.001 · <b>HOME</b></div>
+  <div class="hero-meta-right">DECATUR · GA<br/><b>EST. 1996 · MMXXVI</b></div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-pre">A craft made by hand · Decatur, GA</div>
+
+    <h1>
+      <span class="row"><span><span class="cayenne">Sharp</span> lines.</span></span>
+      <span class="row"><span class="strong">Quiet</span> <span>hours.</span></span>
+      <span class="row"><span class="outline">A clean </span><span class="strong">cut.</span></span>
+    </h1>
+
+    <div class="hero-deck">
+      <p class="hero-sub">
+        Premium barbering by <b>K. Townes</b> at Cut Creaters in Decatur. <span class="cayenne">Trained in the chair since the age of nine.</span> Built for the man who's done explaining what he wants — and ready for someone who already knows.
+      </p>
+
+      <div class="hero-stats">
+        <div class="hstat"><span class="l">Service Range</span><span class="v cayenne">$50 — $300</span></div>
+        <div class="hstat"><span class="l">House Standard</span><span class="v">45–90 min</span></div>
+        <div class="hstat"><span class="l">Bookings</span><span class="v">By Calendar Only</span></div>
+        <div class="hstat"><span class="l">Status</span><span class="v cayenne">● TAKING NEW CLIENTS</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">SCROLL</div>
+</section>
+
+<!-- ==================== THESIS · NAVY ==================== -->
+<section class="thesis" id="thesis">
+  <div class="bp-grid"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="thesis-eyebrow">The craft</div>
+
+    <div class="dim-line"><div class="l"></div><b>1996 — 2026</b><div class="l"></div></div>
+
+    <p class="thesis-body">
+      <span class="word">There</span> <span class="word">are</span> <span class="word">a</span> <span class="word">thousand</span> <span class="word">barbers</span> <span class="word">in</span> <span class="word">Atlanta.</span>
+      <span class="word it">Most</span> <span class="word it">give</span> <span class="word it">you</span> <span class="word it">a</span> <span class="word it">cut.</span>
+      <span class="word">The</span> <span class="word">house</span> <span class="word cayenne">gives</span> <span class="word cayenne">you</span> <span class="word cayenne">an</span> <span class="word cayenne">hour.</span>
+    </p>
+
+    <div class="thesis-foot">
+      <div class="tf-item"><span class="l">Position</span><span class="v">A chair, not a shop. <span class="cayenne">One operator.</span></span></div>
+      <div class="tf-item"><span class="l">Standard</span><span class="v">Same finish for every tier. <span class="cayenne">Difference is duration.</span></span></div>
+      <div class="tf-item"><span class="l">House Rule</span><span class="v">Phone face-down. <span class="cayenne">The hour belongs to you.</span></span></div>
+    </div>
+
+    <div style="margin-top:60px"><span class="note-hand">the cut is what they pay for. the ceremony is what they tell people about.</span></div>
+  </div>
+</section>
+
+<!-- ==================== SERVICES · CHAIR ==================== -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="services-head">
+      <div>
+        <div class="services-eyebrow">The chair</div>
+        <h2 class="services-title">Six <span class="it">services.</span><br/>Each calibrated.</h2>
+      </div>
+      <div class="services-meta">FOLIO · KC.002<br/>FIXED · <b>2026</b><br/>UPDATED · <b>MMXXVI.V</b></div>
+    </div>
+
+    <div class="dim-line"><div class="l"></div><b>30 MIN — 120 MIN</b><div class="l"></div></div>
+
+    <div class="svc-grid">
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/01</span><span>LINEUP</span></div>
+        <div class="svc-name">The <span class="it">Lineup</span></div>
+        <p class="svc-desc">Edge work and shape, no clipper across the body. For the in-between week. Cleanest tier of the house.</p>
+        <div class="svc-foot"><span class="svc-time">30 MIN</span><span class="svc-price"><span class="cayenne">$</span>50</span></div>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/02</span><span>AUTHENTIC</span></div>
+        <div class="svc-name">The <span class="it">Authentic</span></div>
+        <p class="svc-desc">House standard. Full cut, hot-towel finish, photograph. The cut a man returns to every three to four weeks for the rest of his life.</p>
+        <div class="svc-foot"><span class="svc-time">45 MIN</span><span class="svc-price"><span class="cayenne">$</span>65</span></div>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/03</span><span>+ BEARD</span></div>
+        <div class="svc-name">+ <span class="it">Beard</span></div>
+        <p class="svc-desc">The Authentic, plus full beard sculpt with hot-towel ritual. Two crafts, one ceremony. The most-requested upgrade.</p>
+        <div class="svc-foot"><span class="svc-time">60 MIN</span><span class="svc-price"><span class="cayenne">$</span>80</span></div>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/04</span><span>HERO</span></div>
+        <div class="svc-name">The <span class="it">Hero</span></div>
+        <p class="svc-desc">Scissor-over-comb top, extended finish, full ceremony. For the wedding, the interview, the day that matters.</p>
+        <div class="svc-foot"><span class="svc-time">75 MIN</span><span class="svc-price"><span class="cayenne">$</span>100</span></div>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/05</span><span>RESERVE</span></div>
+        <div class="svc-name">The <span class="it">Reserve</span></div>
+        <p class="svc-desc">Off-hours, premium tier. Full ceremony plus extended scalp ritual, finishing oil, take-home tin. Card included.</p>
+        <div class="svc-foot"><span class="svc-time">90 MIN</span><span class="svc-price"><span class="cayenne">$</span>200</span></div>
+      </div>
+      <div class="svc reveal">
+        <div class="svc-code"><span class="num">/06</span><span>HOME VISIT</span></div>
+        <div class="svc-name">Home <span class="it">Visit</span></div>
+        <p class="svc-desc">The full chair travels to the client. Discreet. By referral or Reserve only. Limited slots monthly.</p>
+        <div class="svc-foot"><span class="svc-time">120 MIN</span><span class="svc-price"><span class="cayenne">$</span>300</span></div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;text-align:right"><span class="note-hand small">walked, not released.</span></div>
+  </div>
+</section>
+
+<!-- ==================== THE HOUSE ==================== -->
+<section class="house" id="house">
+  <div class="wrap">
+    <div class="house-eyebrow">The house</div>
+
+    <div class="house-grid">
+      <div class="house-text">
+        <h2>Cut <span class="it">Creaters.</span><br/>Decatur, <span class="cayenne">since '96.</span></h2>
+        <p>The chair sits inside a <b>24,000 sq ft</b> independent salon-suite building in Decatur, GA — opened by Omar and Danielle Townes in 1996 and run continuously since.</p>
+        <p>140 private suites. 40 independent operators. The Khyree City chair holds <b>one of them.</b></p>
+        <p style="color:var(--paper-dim);font-size:16px"><b style="color:var(--cayenne);font-style:normal">→</b> Address shared on confirmation. Discreet entrance. Parking on-site.</p>
+
+        <div class="house-stats">
+          <div class="hstat-cell"><div class="l">In Operation</div><div class="v cayenne">30 YRS</div><div class="sub">since 1996</div></div>
+          <div class="hstat-cell"><div class="l">Building</div><div class="v">24,000 ft²</div><div class="sub">decatur, ga</div></div>
+          <div class="hstat-cell"><div class="l">Suites</div><div class="v">140</div><div class="sub">private operators</div></div>
+          <div class="hstat-cell"><div class="l">The Chair</div><div class="v cayenne">01</div><div class="sub">of 140</div></div>
+        </div>
+      </div>
+
+      <div class="house-drawing reveal">
+        <div class="drawing-title">
+          <span>FIG · A-01 — ELEVATION</span>
+          <b>1 : 200</b>
+        </div>
+        <svg class="drawing-svg" viewBox="0 0 420 360">
+          <defs>
+            <pattern id="hatch1" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#f5f1e8" stroke-width="0.8" opacity="0.25"/>
+            </pattern>
+          </defs>
+          <!-- ground line -->
+          <line x1="10" y1="320" x2="410" y2="320" stroke="#f5f1e8" stroke-width="1.5" class="draw-line"/>
+          <rect x="10" y="320" width="400" height="14" fill="url(#hatch1)"/>
+          <!-- main building -->
+          <rect x="60" y="120" width="300" height="200" fill="none" stroke="#f5f1e8" stroke-width="1.5" class="draw-line"/>
+          <!-- roof -->
+          <line x1="60" y1="120" x2="210" y2="60" stroke="#f5f1e8" stroke-width="1.5" class="draw-line"/>
+          <line x1="210" y1="60" x2="360" y2="120" stroke="#f5f1e8" stroke-width="1.5" class="draw-line"/>
+          <!-- windows grid -->
+          <g stroke="#f5f1e8" stroke-width="0.8" fill="none" opacity="0.6">
+            <rect x="80" y="150" width="22" height="30"/>
+            <rect x="120" y="150" width="22" height="30"/>
+            <rect x="160" y="150" width="22" height="30"/>
+            <rect x="200" y="150" width="22" height="30"/>
+            <rect x="240" y="150" width="22" height="30"/>
+            <rect x="280" y="150" width="22" height="30"/>
+            <rect x="320" y="150" width="22" height="30"/>
+            <rect x="80" y="200" width="22" height="30"/>
+            <rect x="120" y="200" width="22" height="30"/>
+            <rect x="160" y="200" width="22" height="30"/>
+            <rect x="200" y="200" width="22" height="30"/>
+            <rect x="240" y="200" width="22" height="30"/>
+            <rect x="280" y="200" width="22" height="30"/>
+            <rect x="320" y="200" width="22" height="30"/>
+          </g>
+          <!-- highlighted window (the chair) -->
+          <rect x="200" y="200" width="22" height="30" fill="#d8451f" opacity="0.95"/>
+          <text x="211" y="252" fill="#d8451f" font-family="JetBrains Mono" font-size="8" letter-spacing="2" text-anchor="middle">CHAIR</text>
+          <line x1="211" y1="232" x2="211" y2="244" stroke="#d8451f" stroke-width="1"/>
+          <!-- door -->
+          <rect x="190" y="280" width="40" height="40" fill="none" stroke="#f5f1e8" stroke-width="1.2"/>
+          <!-- dimension lines -->
+          <g stroke="#f5f1e8" stroke-width="0.6" opacity="0.5">
+            <line x1="60" y1="340" x2="360" y2="340"/>
+            <line x1="60" y1="335" x2="60" y2="345"/>
+            <line x1="360" y1="335" x2="360" y2="345"/>
+          </g>
+          <text x="210" y="355" fill="#f5f1e8" opacity="0.7" font-family="JetBrains Mono" font-size="8" letter-spacing="2" text-anchor="middle">24,000 FT²</text>
+          <!-- annotation -->
+          <g>
+            <line x1="222" y1="215" x2="380" y2="180" stroke="#d8451f" stroke-width="0.6" stroke-dasharray="3 3"/>
+            <text x="380" y="172" fill="#d8451f" font-family="Caveat" font-size="14" text-anchor="end">the chair</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BOOK CTA ==================== -->
+<section class="cta" id="book">
+  <div class="wrap">
+    <div class="cta-inner">
+      <h2>
+        <span class="row">Book</span>
+        <span class="row"><span class="strong">the chair.</span></span>
+      </h2>
+      <p class="cta-sub">By appointment only. Calendar opens four weeks at a time. Reserve cardholders see slots first.</p>
+      <a href="https://book.khyreecity.com" class="cta-btn">Open the Calendar <span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PAGE BREAK ==================== -->
+<div class="pagebreak"></div>
+
+<!-- ============================================================
+     PAGE II · STORY
+============================================================ -->
+
+<section class="story-hero" id="story">
+  <div class="bp-grid"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="story-hero-eyebrow">Page II · The Story</div>
+    <h2>
+      <span class="row"><span class="outline">A craft</span></span>
+      <span class="row"><span>made by</span></span>
+      <span class="row"><span class="strong cayenne">hand.</span></span>
+    </h2>
+    <p class="story-hero-sub">
+      Not a brand story. A working document. Five short chapters on where this chair came from, what it stands on, and how a forty-five minute haircut becomes the most expensive luxury in the room.
+    </p>
+
+    <div class="dim-line" style="margin-top:60px;max-width:480px"><div class="l"></div><b>V CHAPTERS · 8 MIN READ</b><div class="l"></div></div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 01 ==================== -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="ch-grid">
+      <aside class="ch-side">
+        <div class="ch-num">01</div>
+        <div class="ch-id">CH · ORIGIN</div>
+      </aside>
+      <div class="ch-body">
+        <h3>The <span class="it">first cut</span> happened<br/>at <span class="cayenne">nine years old.</span></h3>
+        <p>The clippers were borrowed. The chair was a kitchen stool. The client was a cousin who needed a lineup before school. The cut was uneven. The cousin paid in three dollars and a handshake. <b>The business began that afternoon.</b></p>
+        <p>Two decades later, the clippers are no longer borrowed. The chair sits in a 24,000 sq ft building in Decatur. The lineup is precise. The ticket has gone up. <span class="cayenne">The work has not changed.</span></p>
+
+        <div class="ch-pull">
+          "Cutting since I was nine. Refining ever since."
+        </div>
+
+        <div class="ch-meta">
+          <div class="ch-meta-cell"><div class="l">First cut</div><div class="v">Age <span class="cayenne">9</span></div></div>
+          <div class="ch-meta-cell"><div class="l">In the trade</div><div class="v"><span class="cayenne">20+</span> years</div></div>
+          <div class="ch-meta-cell"><div class="l">Cuts to date</div><div class="v">3,000+</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 02 ==================== -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="ch-grid">
+      <aside class="ch-side">
+        <div class="ch-num">02</div>
+        <div class="ch-id">CH · CRAFT</div>
+      </aside>
+      <div class="ch-body">
+        <h3>The cut is <span class="it">forty-five</span> minutes.<br/>The <span class="cayenne">ceremony</span> is the rest.</h3>
+        <p>Anyone who has held clippers for ten years can deliver the cut. The difference is what happens around it. <b>The welcome by name.</b> The cold towel before the cape. The five-question consultation that earns the upcharge before the first pass. The hot towel at the finish. The photograph before the cape lifts. The handwritten note in their pocket on the way out.</p>
+        <p>Total added cost: <span class="cayenne">under two dollars.</span> Total added time: under five minutes. Tip lift over twelve months: 35–60%. Word-of-mouth referral becomes the entire acquisition channel.</p>
+
+        <div class="ch-fig reveal">
+          <div class="ch-fig-head">
+            <span>FIG · B-02 — CEREMONY · ELEVATION</span>
+            <b>T-5 → T+45</b>
+          </div>
+          <svg class="ch-fig-svg" viewBox="0 0 520 220">
+            <!-- timeline -->
+            <line x1="40" y1="120" x2="480" y2="120" stroke="#f5f1e8" stroke-width="1.5" class="draw-line"/>
+            <!-- ticks -->
+            <g stroke="#f5f1e8" stroke-width="1">
+              <line x1="60" y1="112" x2="60" y2="128"/>
+              <line x1="140" y1="112" x2="140" y2="128"/>
+              <line x1="240" y1="112" x2="240" y2="128"/>
+              <line x1="380" y1="112" x2="380" y2="128"/>
+              <line x1="460" y1="112" x2="460" y2="128"/>
+            </g>
+            <!-- labels under -->
+            <g font-family="JetBrains Mono" font-size="9" letter-spacing="1" fill="#f5f1e8" opacity="0.65" text-anchor="middle">
+              <text x="60" y="148">T-5</text>
+              <text x="140" y="148">T+0</text>
+              <text x="240" y="148">T+5</text>
+              <text x="380" y="148">T+40</text>
+              <text x="460" y="148">T+45</text>
+            </g>
+            <!-- labels above -->
+            <g font-family="Caveat" font-size="13" fill="#d8451f">
+              <text x="60" y="100" text-anchor="middle">welcome</text>
+              <text x="140" y="100" text-anchor="middle">cape</text>
+              <text x="240" y="100" text-anchor="middle">cut</text>
+              <text x="380" y="100" text-anchor="middle">finish</text>
+              <text x="460" y="100" text-anchor="middle">depart</text>
+            </g>
+            <!-- arc from welcome to depart -->
+            <path d="M 60 120 Q 260 50 460 120" fill="none" stroke="#d8451f" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+            <!-- dots -->
+            <g fill="#d8451f">
+              <circle cx="60" cy="120" r="4"/>
+              <circle cx="140" cy="120" r="3"/>
+              <circle cx="240" cy="120" r="3"/>
+              <circle cx="380" cy="120" r="3"/>
+              <circle cx="460" cy="120" r="4"/>
+            </g>
+            <!-- dim line bottom -->
+            <g stroke="#f5f1e8" stroke-width="0.6" opacity="0.4">
+              <line x1="60" y1="190" x2="460" y2="190"/>
+              <line x1="60" y1="185" x2="60" y2="195"/>
+              <line x1="460" y1="185" x2="460" y2="195"/>
+            </g>
+            <text x="260" y="205" fill="#f5f1e8" opacity="0.65" font-family="JetBrains Mono" font-size="9" letter-spacing="2" text-anchor="middle">50 MIN · END TO END</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 03 ==================== -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="ch-grid">
+      <aside class="ch-side">
+        <div class="ch-num">03</div>
+        <div class="ch-id">CH · CHAIR</div>
+      </aside>
+      <div class="ch-body">
+        <h3>One <span class="it">chair.</span><br/>By <span class="cayenne">design.</span></h3>
+        <p>Most barbershops run on volume — six chairs, eight chairs, walk-ins from open to close, no two visits the same. The Khyree City chair is <b>singular by design.</b> One operator. One calendar. One client at a time. No upsell from a stranger at the front desk.</p>
+        <p>The trade-off is honest. The calendar is smaller. The ticket is higher. <span class="cayenne">The client is remembered.</span> Three lines recorded in the notebook after every cut — something personal, something technical, something to follow up on. Six weeks later, the door opens, and you're called by name.</p>
+        <div class="ch-pull">"You aren't a haircut. You're a notebook entry, a slot on Thursday, and a hand on the door when you leave."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 04 ==================== -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="ch-grid">
+      <aside class="ch-side">
+        <div class="ch-num">04</div>
+        <div class="ch-id">CH · HOUSE</div>
+      </aside>
+      <div class="ch-body">
+        <h3>Inside a <span class="it">30-year</span> building.<br/>In <span class="cayenne">Decatur.</span></h3>
+        <p>Cut Creaters opened in 1996. Twenty-four thousand square feet. One hundred and forty private suites. Opened by Omar and Danielle Townes and run continuously by them since the doors first unlocked. The Khyree City chair sits inside, holds one of the suites, and operates under the house standard.</p>
+        <p>The building has its own gravity. Forty independent barbers, stylists, braiders, and beauty operators run their own books out of the same address. <span class="cayenne">A neighborhood of craft, under one roof.</span></p>
+
+        <div class="ch-meta">
+          <div class="ch-meta-cell"><div class="l">Opened</div><div class="v"><span class="cayenne">1996</span></div></div>
+          <div class="ch-meta-cell"><div class="l">Operators</div><div class="v">40 active</div></div>
+          <div class="ch-meta-cell"><div class="l">The Chair</div><div class="v"><span class="cayenne">01</span> of 140</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CHAPTER 05 ==================== -->
+<section class="chapter">
+  <div class="wrap">
+    <div class="ch-grid">
+      <aside class="ch-side">
+        <div class="ch-num">05</div>
+        <div class="ch-id">CH · NOW</div>
+      </aside>
+      <div class="ch-body">
+        <h3>The calendar is <span class="it">open.</span><br/>The chair is <span class="cayenne">cold.</span></h3>
+        <p>This is not a relaunch announcement and it isn't a wait-list. The calendar takes bookings the way it always has — by appointment, four weeks at a time. Standard tier is $65. Reserve tier is $200 and includes the card. <b>If the slot you want isn't there, message the house.</b></p>
+        <p>The page you're reading is a working document. It will be revised. The chair won't be.</p>
+
+        <div style="margin-top:48px"><span class="note-hand">— see you thursday.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STORY CTA ==================== -->
+<section class="story-cta">
+  <div class="wrap">
+    <h2>The <span class="it">door</span> is open.</h2>
+    <p class="story-cta-sub">Calendar opens in four-week blocks. Reserve cardholders see slots first. Walk-ins, by appointment.</p>
+    <a href="https://book.khyreecity.com" class="cta-btn">Book the Chair <span class="ar">→</span></a>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Khyree<span>·</span>City</div>
+        <p class="foot-tag">A craft made by hand, in a building that's been doing it for thirty years. Decatur, Georgia. By appointment only.</p>
+      </div>
+      <div class="foot-col">
+        <h4>The House</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">The Chair</a></li>
+          <li><a href="#house">The House</a></li>
+          <li><a href="#story">The Story</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Reach Out</h4>
+        <ul>
+          <li><a href="https://book.khyreecity.com">Book Online</a></li>
+          <li><a href="#">@khyree_city · IG</a></li>
+          <li><a href="#">khyree@khyreecity.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-foot">
+      <span>© MMXXVI · Khyree City · Decatur, GA</span>
+      <span>Cut Creaters Salon Suites · Est. 1996</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ============ CUSTOM CURSOR ============
+const cd = document.getElementById('cd');
+const cr = document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+window.addEventListener('mousemove', e=>{mx=e.clientX;my=e.clientY;cd.style.left=mx+'px';cd.style.top=my+'px'});
+function loop(){rx+=(mx-rx)*0.18;ry+=(my-ry)*0.18;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(loop)}
+loop();
+document.querySelectorAll('a, button, .svc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cd.classList.add('hover');cr.classList.add('hover')});
+  el.addEventListener('mouseleave',()=>{cd.classList.remove('hover');cr.classList.remove('hover')});
+});
+
+// ============ HERO LOAD ANIMATION ============
+const hero = document.querySelector('.hero');
+const storyHero = document.querySelector('.story-hero');
+setTimeout(()=>{hero.classList.add('loaded')}, 80);
+
+// ============ SCROLL RAIL ============
+const srf = document.getElementById('srf');
+function updateRail(){
+  const h = document.documentElement;
+  const pct = (h.scrollTop || document.body.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  srf.style.width = Math.min(100, pct) + '%';
+}
+window.addEventListener('scroll', updateRail, {passive:true});
+
+// ============ FLOATING BOOK BUTTON (appears past hero) ============
+const fb = document.getElementById('floatBook');
+window.addEventListener('scroll', ()=>{
+  if(window.scrollY > window.innerHeight * 0.6){ fb.classList.add('in') } else { fb.classList.remove('in') }
+},{passive:true});
+
+// ============ SIDE INDICATOR SCROLLSPY ============
+const dots = document.querySelectorAll('.side-dot');
+const targets = Array.from(dots).map(d=>document.getElementById(d.dataset.target));
+function updateSpy(){
+  const y = window.scrollY + window.innerHeight * 0.35;
+  let cur = 0;
+  targets.forEach((t,i)=>{ if(t && t.offsetTop <= y) cur = i });
+  dots.forEach((d,i)=> d.classList.toggle('active', i===cur));
+  // nav links
+  const links = document.querySelectorAll('.nav-links a');
+  links.forEach(a=>{
+    const href = a.getAttribute('href').replace('#','');
+    const tgt = document.getElementById(href);
+    if(tgt && tgt.offsetTop <= y && y < tgt.offsetTop + tgt.offsetHeight){
+      links.forEach(x=>x.classList.remove('active'));
+      a.classList.add('active');
+    }
+  });
+}
+window.addEventListener('scroll', updateSpy, {passive:true});
+updateSpy();
+
+// ============ REVEAL ON SCROLL ============
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in') } });
+},{threshold:0.12});
+document.querySelectorAll('.reveal, .draw-line, .thesis-body').forEach(el=>obs.observe(el));
+
+// ============ STORY HERO REVEAL ============
+const sho = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in') } });
+},{threshold:0.2});
+sho.observe(storyHero);
+
+// ============ WORD-BY-WORD THESIS REVEAL ============
+const thesisBody = document.querySelector('.thesis-body');
+const tobs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const words = e.target.querySelectorAll('.word');
+      words.forEach((w,i)=>{
+        setTimeout(()=>{w.style.opacity='1';w.style.transform='translateY(0)'}, i*55);
+      });
+    }
+  });
+},{threshold:0.3});
+if(thesisBody) tobs.observe(thesisBody);
+
+// ============ PARALLAX HERO META ============
+window.addEventListener('scroll', ()=>{
+  const y = window.scrollY;
+  if(y < window.innerHeight){
+    const grid = document.querySelector('.hero-grid-bg');
+    if(grid) grid.style.transform = 'translateY(' + (y * 0.3) + 'px)';
+    const sh = document.querySelector('.hero-scroll-hint');
+    if(sh) sh.style.opacity = Math.max(0, 1 - y/300);
+  }
+},{passive:true});
+
+// ============ SUBTLE PARALLAX SECTIONS ============
+const parallaxEls = document.querySelectorAll('.bp-grid');
+window.addEventListener('scroll', ()=>{
+  parallaxEls.forEach(el=>{
+    const rect = el.getBoundingClientRect();
+    if(rect.bottom > 0 && rect.top < window.innerHeight){
+      const offset = (rect.top - window.innerHeight/2) * 0.08;
+      el.style.transform = 'translateY(' + offset + 'px)';
+    }
+  });
+},{passive:true});
+
+</script>
+</body>
+</html>
