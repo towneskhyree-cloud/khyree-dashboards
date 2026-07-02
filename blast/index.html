@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Khyree · Client Blast Console</title>
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#141414; --card:#1a1a1a; --card2:#212121;
+    --line:#2a2a2a; --txt:#f4f4f4; --muted:#8d8d8d;
+    --green:#b8ff00; --blue:#3b82f6; --cream:#f5e6c8; --red:#ff5b5b;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  body{padding:0 0 90px}
+  a{color:var(--blue)}
+  .wrap{max-width:560px;margin:0 auto;padding:0 16px}
+
+  header{padding:18px 0 10px;text-align:center;position:relative}
+  header .logo{font-weight:800;font-size:13px;letter-spacing:.18em;color:var(--green);text-transform:uppercase}
+  header h1{margin:4px 0 2px;font-size:22px;font-weight:800;letter-spacing:-.01em}
+  header .sub{color:var(--muted);font-size:12.5px}
+  .gear{position:absolute;right:0;top:18px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+
+  .privacy{display:flex;align-items:center;gap:8px;justify-content:center;
+    background:#10240a;border:1px solid #234d12;color:#cdffa0;border-radius:10px;
+    padding:8px 10px;font-size:11.5px;margin:8px 0 4px}
+  .privacy b{color:var(--green)}
+
+  /* stat strip */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 6px;text-align:center}
+  .stat .n{font-size:19px;font-weight:800;line-height:1}
+  .stat .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+  .stat.green .n{color:var(--green)} .stat.blue .n{color:var(--blue)} .stat.cream .n{color:var(--cream)}
+
+  /* tabs */
+  .tabs{display:flex;gap:6px;background:var(--bg2);border:1px solid var(--line);
+    border-radius:14px;padding:5px;position:sticky;top:8px;z-index:30}
+  .tab{flex:1;text-align:center;padding:10px 4px;border-radius:10px;font-size:12.5px;
+    font-weight:700;color:var(--muted);cursor:pointer;border:none;background:none;transition:.15s}
+  .tab.active{background:var(--green);color:#0a0a0a}
+  .tab .step{display:block;font-size:9px;opacity:.7;font-weight:600}
+
+  section{display:none;animation:fade .2s} section.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+  h2{font-size:16px;margin:18px 0 8px}
+  p.lead{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 14px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    border:none;border-radius:11px;padding:13px 16px;font-size:14px;font-weight:700;
+    cursor:pointer;width:100%;transition:.12s;font-family:inherit}
+  .btn:active{transform:scale(.98)}
+  .btn-green{background:var(--green);color:#0a0a0a}
+  .btn-blue{background:var(--blue);color:#fff}
+  .btn-ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+  .btn-sm{padding:10px 12px;font-size:13px;width:auto}
+  .row{display:flex;gap:8px}
+
+  label.file{display:block;border:2px dashed #333;border-radius:14px;padding:26px 16px;
+    text-align:center;cursor:pointer;background:var(--card);transition:.15s}
+  label.file:hover{border-color:var(--green)}
+  label.file .big{font-size:30px} label.file .t{font-weight:700;margin-top:6px}
+  label.file .s{color:var(--muted);font-size:12px;margin-top:3px}
+  input[type=file]{display:none}
+  textarea,input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line);
+    color:var(--txt);border-radius:10px;padding:11px;font-size:14px;font-family:inherit}
+  textarea{min-height:90px;resize:vertical}
+
+  details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px}
+  details summary{padding:13px 15px;cursor:pointer;font-weight:700;font-size:13.5px;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"＋";float:right;color:var(--green)}
+  details[open] summary::after{content:"－"}
+  details .body{padding:0 15px 15px;color:var(--muted);font-size:13px;line-height:1.6}
+  details .body ol{padding-left:18px;margin:6px 0} details .body li{margin:4px 0}
+  details .body b{color:var(--cream)}
+
+  /* triage */
+  .progress{height:6px;background:var(--card2);border-radius:99px;overflow:hidden;margin:6px 0 16px}
+  .progress > i{display:block;height:100%;background:var(--green);width:0;transition:.25s}
+  .tcard{background:linear-gradient(160deg,#1f1f1f,#161616);border:1px solid var(--line);
+    border-radius:18px;padding:34px 18px;text-align:center;margin-bottom:14px;min-height:170px;
+    display:flex;flex-direction:column;justify-content:center}
+  .tcard .avatar{width:64px;height:64px;border-radius:50%;background:var(--card2);
+    display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;
+    color:var(--green);margin:0 auto 12px;border:1px solid var(--line)}
+  .tcard .nm{font-size:23px;font-weight:800;line-height:1.15}
+  .tcard .ph{color:var(--muted);font-size:14px;margin-top:6px;font-variant-numeric:tabular-nums}
+  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tgrid .btn{padding:18px}
+  .kbd-hint{text-align:center;color:#666;font-size:11px;margin-top:10px}
+  .kbd-hint b{color:#999;background:#222;padding:1px 6px;border-radius:5px;border:1px solid #333}
+
+  /* send */
+  .batchbar{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:12px}
+  .batchbar .who{font-weight:700;font-size:14px}
+  .batchbar .navs{display:flex;gap:6px}
+  .batchbar button{background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;width:34px;height:34px;font-size:16px;cursor:pointer}
+  .cap{font-size:11.5px;border-radius:8px;padding:7px 10px;text-align:center;margin-bottom:12px}
+  .cap.ok{background:#10240a;color:#cdffa0;border:1px solid #234d12}
+  .cap.warn{background:#2a1d05;color:#ffd479;border:1px solid #5a420c}
+
+  .scard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:11px}
+  .scard.done{opacity:.5}
+  .scard .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .scard .top .nm{font-weight:700;font-size:15px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .scard .top .ph{color:var(--muted);font-size:12px}
+  .nametoggle{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:12.5px;color:var(--muted)}
+  .nametoggle input[type=text]{flex:1;padding:7px 9px;font-size:13px}
+  .switch{position:relative;width:42px;height:24px;flex:none}
+  .switch input{display:none}
+  .switch .sl{position:absolute;inset:0;background:#333;border-radius:99px;transition:.2s}
+  .switch .sl:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;
+    background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .sl{background:var(--green)}
+  .switch input:checked + .sl:before{transform:translateX(18px)}
+  .preview{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    font-size:13px;line-height:1.5;color:#dcdcdc;margin-bottom:10px;white-space:pre-wrap}
+  .scard .acts{display:grid;grid-template-columns:1fr 1.3fr;gap:8px;margin-bottom:8px}
+  .markrow{display:flex;align-items:center;gap:8px}
+  .markrow label{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;width:100%;
+    justify-content:center;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px}
+  .markrow input{width:18px;height:18px;accent-color:var(--green)}
+  .markrow .sent{color:var(--green);font-weight:700}
+
+  .empty{text-align:center;color:var(--muted);padding:40px 16px}
+  .empty .big{font-size:40px;margin-bottom:8px}
+
+  .pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:99px;
+    padding:3px 10px;font-size:11px;color:var(--cream);margin:0 4px 4px 0}
+
+  /* modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-end;
+    justify-content:center;z-index:100;padding:0}
+  .modal.on{display:flex}
+  .sheet{background:var(--bg2);border:1px solid var(--line);border-radius:18px 18px 0 0;
+    width:100%;max-width:560px;max-height:88vh;overflow:auto;padding:18px 16px 30px}
+  .sheet h3{margin:0 0 4px;font-size:17px}
+  .sheet .mlbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:14px 0 5px;font-weight:700}
+  .sheet .hint{font-size:11.5px;color:#777;margin-top:4px}
+  .sheet .closebar{display:flex;justify-content:space-between;align-items:center}
+  .num{display:flex;align-items:center;gap:10px}
+  .num input{width:80px;text-align:center}
+  .danger{color:var(--red);background:none;border:none;font-size:12.5px;cursor:pointer;padding:8px 0;text-decoration:underline}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--green);color:#0a0a0a;font-weight:700;font-size:13px;padding:11px 18px;
+    border-radius:99px;opacity:0;transition:.25s;z-index:200;pointer-events:none}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .footnote{color:#666;font-size:11px;text-align:center;line-height:1.6;margin:18px 0 4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">💈 Khyree City</div>
+    <h1>Client Blast Console</h1>
+    <div class="sub">text your people · July 10 · book.khyreecity.com</div>
+    <button class="gear" onclick="openSettings()">⚙︎</button>
+  </header>
+
+  <div class="privacy">🔒 <span><b>100% on your phone.</b> Your contacts never get uploaded anywhere.</span></div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="n" id="s-total">0</div><div class="l">Loaded</div></div>
+    <div class="stat green"><div class="n" id="s-client">0</div><div class="l">Clients</div></div>
+    <div class="stat blue"><div class="n" id="s-today">0</div><div class="l">Sent today</div></div>
+    <div class="stat cream"><div class="n" id="s-left">0</div><div class="l">Left</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="import" onclick="go('import')"><span class="step">STEP 1</span>Import</button>
+    <button class="tab" data-tab="triage" onclick="go('triage')"><span class="step">STEP 2</span>Flag clients</button>
+    <button class="tab" data-tab="send" onclick="go('send')"><span class="step">STEP 3</span>Send</button>
+  </div>
+
+  <!-- ===== IMPORT ===== -->
+  <section id="import" class="on">
+    <h2>Load your contacts</h2>
+    <p class="lead">Export your contacts once, drop the file here. Everything stays on this device.</p>
+
+    <label class="file">
+      <input type="file" id="vcf" accept=".vcf,.vcard,text/vcard,text/x-vcard,text/plain" onchange="onFile(event)">
+      <div class="big">📇</div>
+      <div class="t">Tap to load your <b>.vcf</b> file</div>
+      <div class="s">the file you exported from Contacts</div>
+    </label>
+
+    <details>
+      <summary>How do I export my contacts? (4 steps)</summary>
+      <div class="body">
+        <b>Easiest — on your Mac:</b>
+        <ol>
+          <li>Open the <b>Contacts</b> app</li>
+          <li>Click any contact, press <b>⌘ + A</b> (selects all)</li>
+          <li>Menu: <b>File → Export → Export vCard…</b></li>
+          <li>Save it, then load that file up top ↑ (AirDrop it to your phone first if you want to do this on your phone)</li>
+        </ol>
+        <b>Or from iCloud.com (works from phone):</b>
+        <ol>
+          <li>Go to <b>iCloud.com</b> → <b>Contacts</b></li>
+          <li>Tap the gear / "•••" → <b>Select All</b></li>
+          <li>Gear again → <b>Export vCard</b> → save to Files</li>
+          <li>Load that file up top ↑</li>
+        </ol>
+      </div>
+    </details>
+
+    <details>
+      <summary>No file? Paste names + numbers instead</summary>
+      <div class="body">
+        One per line. Any format — <b>Mike 555-123-4567</b> or <b>+1 555 123 4567, Mike</b>.
+        <textarea id="paste" placeholder="Mike  555-123-4567&#10;Reggie  +1 678 555 0199&#10;loyal client  470-555-0142"></textarea>
+        <div style="height:10px"></div>
+        <button class="btn btn-green" onclick="onPaste()">Load these</button>
+      </div>
+    </details>
+
+    <div id="loaded-note"></div>
+  </section>
+
+  <!-- ===== TRIAGE ===== -->
+  <section id="triage">
+    <h2>Who'd you cut before?</h2>
+    <p class="lead">One at a time. Tap <b>✂️ Client</b> if you've cut them (or want them in your chair). <b>Skip</b> everyone else. Mom, plug, random — skip.</p>
+    <div id="triage-body"></div>
+  </section>
+
+  <!-- ===== SEND ===== -->
+  <section id="send">
+    <h2>Send the batch</h2>
+    <div id="send-body"></div>
+  </section>
+
+  <div class="footnote">
+    built for Khyree · texts send from <b>your own number</b> through Messages · you tap send on every one
+  </div>
+</div>
+
+<!-- settings modal -->
+<div class="modal" id="settings" onclick="if(event.target===this)closeSettings()">
+  <div class="sheet">
+    <div class="closebar"><h3>⚙︎ Your texts &amp; settings</h3><button class="btn btn-ghost btn-sm" onclick="closeSettings()">Done</button></div>
+    <p class="hint">These are the exact words that go out. Edit anything — it saves automatically. <b>{name}</b> = their first name.</p>
+
+    <div class="mlbl">First text — when you have their name</div>
+    <textarea id="m-named" oninput="saveMsg()"></textarea>
+
+    <div class="mlbl">First text — no name saved</div>
+    <textarea id="m-noname" oninput="saveMsg()"></textarea>
+
+    <div class="mlbl">Follow-up (only if no reply ~3 days later — then stop)</div>
+    <textarea id="m-follow" oninput="saveMsg()"></textarea>
+
+    <div class="mlbl">Names</div>
+    <label style="display:flex;align-items:center;gap:11px;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer">
+      <span class="switch"><input type="checkbox" id="m-forcenoname" onchange="DB.msg.forceNoName=this.checked;save();renderSend()"><span class="sl"></span></span>
+      <span>Use the <b>no-name</b> text for everyone — you said you mostly won't have names</span>
+    </label>
+    <div class="hint">On = every text opens "yo! it's khyree". Off = drops in a first name when one happens to be saved.</div>
+
+    <div class="mlbl">Daily cap (protect your number)</div>
+    <div class="num">
+      <input type="text" id="m-cap" inputmode="numeric" oninput="saveMsg()">
+      <span class="hint" style="margin:0">texts per day · 25–30 is the safe zone</span>
+    </div>
+    <div class="mlbl">Batch size</div>
+    <div class="num">
+      <input type="text" id="m-batch" inputmode="numeric" oninput="saveMsg()">
+      <span class="hint" style="margin:0">how many show per batch</span>
+    </div>
+
+    <div style="margin-top:18px;text-align:center">
+      <button class="danger" onclick="resetAll()">Erase everything &amp; start over</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- state ---------- */
+var DEFAULTS = {
+  named:  "yo {name}! it's khyree 💈 been a minute — how you been? i'm back behind the chair in atlanta startin july 10. if you tryna get right, here's my link: book.khyreecity.com — wanted to reach out to my day 1's and loyal clients first 🙏",
+  noname: "yo! it's khyree 💈 been a minute — how you been? i'm back behind the chair in atlanta startin july 10. if you tryna get right, here's my link: book.khyreecity.com — wanted to reach out to my day 1's and loyal clients first 🙏",
+  follow: "yo you good? 🙏 just checkin in — did that link come through? if you still tryna get with me for july, i got you. either way, appreciate you 💈",
+  cap: 30, batch: 25, forceNoName: true
+};
+var KEY = "khyreeBlast_v1";
+var DB = load();
+function load(){
+  try{ var d = JSON.parse(localStorage.getItem(KEY)); if(d&&d.contacts){ d.msg=Object.assign({},DEFAULTS,d.msg||{}); return d; } }catch(e){}
+  return {contacts:[], cursor:0, batchIdx:0, msg:Object.assign({},DEFAULTS)};
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(DB)); }
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id)}
+function todayKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function toast(t){var el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(el._t);el._t=setTimeout(function(){el.classList.remove("on")},1500)}
+var STOP = ["client","clients","barber","shop","cut","cuts","fade","customer","customers","work","the","guy","dude","bro","man","plug","loyal","regular","new","old","mr","mrs","ms","dr"];
+function plausibleName(n){
+  if(!n) return false;
+  n=n.trim();
+  if(!/^[A-Za-z][A-Za-z'’.\-]{0,19}$/.test(n)) return false;
+  if(STOP.indexOf(n.toLowerCase())>=0) return false;
+  return true;
+}
+function cap1(s){return s? s.charAt(0).toUpperCase()+s.slice(1):s}
+function normPhone(raw){
+  var p=(raw||"").trim(); var plus=p.charAt(0)==="+";
+  var d=p.replace(/[^0-9]/g,"");
+  if(plus) return "+"+d;
+  if(d.length===10) return "+1"+d;
+  if(d.length===11 && d.charAt(0)==="1") return "+"+d;
+  return d? "+"+d : "";
+}
+function prettyPhone(p){
+  var d=p.replace(/[^0-9]/g,"");
+  if(d.length===11&&d.charAt(0)==="1") d=d.slice(1);
+  if(d.length===10) return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);
+  return p;
+}
+function uid(){return "c"+Math.abs(Math.floor((performance.now()*1000)))+"_"+(DB.contacts.length)}
+
+/* ---------- vCard parse ---------- */
+function afterColon(line){var i=line.indexOf(":");return i<0?"":line.slice(i+1).trim()}
+function parseVCards(text){
+  var blocks=text.split(/END:VCARD/i); var out=[];
+  for(var b=0;b<blocks.length;b++){
+    var c=blocks[b]; if(!/BEGIN:VCARD/i.test(c)) continue;
+    var raw=c.replace(/\r\n/g,"\n").replace(/\n[ \t]/g,""); // unfold
+    var lines=raw.split("\n"); var fn="",given="",tels=[];
+    for(var i=0;i<lines.length;i++){
+      var line=lines[i]; var up=line.toUpperCase();
+      if(up.indexOf("FN")===0){ fn=decodeVal(line); }
+      else if(up.indexOf("N:")===0||up.indexOf("N;")===0){
+        var parts=decodeVal(line).split(";"); given=(parts[1]||"").trim();
+      } else if(up.indexOf("TEL")===0){
+        var num=afterColon(line); if(num) tels.push({num:num, mobile:(up.indexOf("CELL")>=0||up.indexOf("MOBILE")>=0||up.indexOf("IPHONE")>=0)});
+      }
+    }
+    if(!fn && !tels.length) continue;
+    var phone=""; for(var t=0;t<tels.length;t++){ if(tels[t].mobile){phone=tels[t].num;break} }
+    if(!phone && tels.length) phone=tels[0].num;
+    out.push({fullName:fn||"", given:given, phone:phone});
+  }
+  return out;
+}
+function decodeVal(line){
+  var v=afterColon(line);
+  if(/ENCODING=QUOTED-PRINTABLE/i.test(line)){
+    try{ v=v.replace(/=([0-9A-F]{2})/gi,function(m,h){return String.fromCharCode(parseInt(h,16))}); }catch(e){}
+  }
+  return v;
+}
+
+/* ---------- ingest ---------- */
+function ingest(rawList){
+  var seen={}; for(var i=0;i<DB.contacts.length;i++) seen[DB.contacts[i].phone]=1;
+  var added=0, skipped=0;
+  for(var j=0;j<rawList.length;j++){
+    var r=rawList[j]; var phone=normPhone(r.phone);
+    if(!phone||phone.length<11){ skipped++; continue; }
+    if(seen[phone]){ skipped++; continue; }
+    seen[phone]=1;
+    var first = r.given && r.given.trim() ? r.given.trim() : (r.fullName? r.fullName.trim().split(/\s+/)[0] : "");
+    first = cap1(first);
+    DB.contacts.push({
+      id:uid(), full:(r.fullName||"").trim(), first:first, phone:phone,
+      status:"pending", useName:plausibleName(first), sentAt:null, followAt:null, done:false
+    });
+    added++;
+  }
+  save(); render();
+  $("loaded-note").innerHTML='<div class="card" style="border-color:#234d12;background:#10240a;color:#cdffa0">'+
+    '✅ Loaded <b>'+added+'</b> new contacts'+(skipped?' · skipped '+skipped+' (no number / duplicate)':'')+
+    '.<br><br>Next: tap <b>Step 2 · Flag clients</b> and start tapping ✂️.</div>';
+  if(added) setTimeout(function(){go('triage')}, 700);
+}
+function onFile(e){
+  var f=e.target.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){ var list=parseVCards(rd.result);
+    if(!list.length){ toast("No contacts found in that file"); return; }
+    ingest(list);
+  };
+  rd.readAsText(f);
+}
+function onPaste(){
+  var raw=$("paste").value.split("\n"); var list=[];
+  for(var i=0;i<raw.length;i++){
+    var ln=raw[i].trim(); if(!ln) continue;
+    var m=ln.match(/(\+?\d[\d\s().\-]{7,}\d)/);
+    if(!m) continue;
+    var phone=m[1]; var name=ln.replace(phone,"").replace(/[,;|]/g," ").trim();
+    list.push({fullName:name, given:"", phone:phone});
+  }
+  if(!list.length){ toast("Couldn't find numbers — check the format"); return; }
+  ingest(list);
+}
+
+/* ---------- nav ---------- */
+function go(tab){
+  var secs=document.querySelectorAll("section"); for(var i=0;i<secs.length;i++) secs[i].classList.toggle("on", secs[i].id===tab);
+  var tabs=document.querySelectorAll(".tab"); for(var j=0;j<tabs.length;j++) tabs[j].classList.toggle("active", tabs[j].dataset.tab===tab);
+  if(tab==="triage") renderTriage();
+  if(tab==="send") renderSend();
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ---------- stats ---------- */
+function clientsList(){return DB.contacts.filter(function(c){return c.status==="client"})}
+function sentTodayCount(){var tk=todayKey();return DB.contacts.filter(function(c){return c.sentAt&&new Date(c.sentAt).getFullYear()+"-"+(new Date(c.sentAt).getMonth()+1)+"-"+new Date(c.sentAt).getDate()===tk}).length}
+function render(){
+  $("s-total").textContent=DB.contacts.length;
+  $("s-client").textContent=clientsList().length;
+  $("s-today").textContent=sentTodayCount();
+  $("s-left").textContent=clientsList().filter(function(c){return !c.sentAt}).length;
+}
+
+/* ---------- triage ---------- */
+function nextPending(from){
+  for(var i=from;i<DB.contacts.length;i++) if(DB.contacts[i].status==="pending") return i;
+  return -1;
+}
+function renderTriage(){
+  var body=$("triage-body");
+  if(!DB.contacts.length){ body.innerHTML='<div class="empty"><div class="big">📇</div>Load your contacts first.<br><br><button class="btn btn-green" onclick="go(\'import\')">Go to Step 1</button></div>'; return; }
+  var pend=DB.contacts.filter(function(c){return c.status==="pending"}).length;
+  if(pend===0){
+    body.innerHTML='<div class="empty"><div class="big">✅</div>All sorted! <b>'+clientsList().length+'</b> clients flagged.<br><br><button class="btn btn-green" onclick="go(\'send\')">Go send the batch →</button>'+
+      '<div style="height:10px"></div><button class="btn btn-ghost" onclick="reTriage()">Review skipped again</button></div>';
+    return;
+  }
+  if(DB.cursor>=DB.contacts.length||DB.contacts[DB.cursor].status!=="pending"){ DB.cursor=nextPending(0); }
+  var c=DB.contacts[DB.cursor];
+  var done=DB.contacts.length-pend; var pct=Math.round(done/DB.contacts.length*100);
+  var initial=(c.first||c.full||"?").charAt(0).toUpperCase();
+  body.innerHTML=
+    '<div class="progress"><i style="width:'+pct+'%"></i></div>'+
+    '<div style="text-align:center;color:#777;font-size:12px;margin-bottom:8px">'+done+' / '+DB.contacts.length+' sorted</div>'+
+    '<div class="tcard"><div class="avatar">'+initial+'</div>'+
+      '<div class="nm">'+esc(c.full||c.first||"(no name saved)")+'</div>'+
+      '<div class="ph">'+esc(prettyPhone(c.phone))+'</div></div>'+
+    '<div class="tgrid">'+
+      '<button class="btn btn-ghost" onclick="judge(\'skip\')">Skip</button>'+
+      '<button class="btn btn-green" onclick="judge(\'client\')">✂️ Client</button>'+
+    '</div>'+
+    '<div class="row" style="margin-top:10px">'+
+      '<button class="btn btn-ghost btn-sm" style="flex:1" onclick="undo()">← Back</button>'+
+    '</div>'+
+    '<div class="kbd-hint">on a keyboard: <b>C</b> client · <b>X</b> skip · <b>←</b> back</div>';
+}
+function judge(v){
+  var c=DB.contacts[DB.cursor]; if(!c) return;
+  c.status=v; if(v!=="client"){c.useName=c.useName;}
+  var nx=nextPending(DB.cursor+1); if(nx<0) nx=nextPending(0);
+  DB.cursor= nx<0? DB.cursor : nx;
+  save(); render(); renderTriage();
+}
+function undo(){
+  // step back to previous non-pending contact and reopen it
+  for(var i=DB.cursor-1;i>=0;i--){ if(DB.contacts[i].status!=="pending"){ DB.contacts[i].status="pending"; DB.cursor=i; save(); render(); renderTriage(); return; } }
+  toast("Nothing to undo");
+}
+function reTriage(){
+  for(var i=0;i<DB.contacts.length;i++) if(DB.contacts[i].status==="skip") DB.contacts[i].status="pending";
+  DB.cursor=nextPending(0); save(); render(); renderTriage();
+}
+document.addEventListener("keydown",function(e){
+  if($("triage").classList.contains("on")){
+    if(e.key==="c"||e.key==="C") judge("client");
+    else if(e.key==="x"||e.key==="X") judge("skip");
+    else if(e.key==="ArrowLeft") undo();
+  }
+});
+
+/* ---------- send ---------- */
+function buildMsg(c, follow){
+  var useN = !DB.msg.forceNoName && c.useName && c.first;
+  var t = follow ? DB.msg.follow : (useN ? DB.msg.named : DB.msg.noname);
+  return t.replace(/\{name\}/g, c.first||"");
+}
+function smsHref(c, follow){ return "sms:"+c.phone+"?&body="+encodeURIComponent(buildMsg(c,follow)); }
+
+function renderSend(){
+  var body=$("send-body");
+  var clients=clientsList();
+  if(!clients.length){ body.innerHTML='<div class="empty"><div class="big">✂️</div>No clients flagged yet.<br><br><button class="btn btn-green" onclick="go(\'triage\')">Go to Step 2</button></div>'; return; }
+
+  // follow-ups due: sent >=3 days ago, not replied(=not done), no follow yet
+  var now=Date.now(), DAY=86400000;
+  var due=clients.filter(function(c){return c.sentAt && !c.followAt && !c.done && (now-c.sentAt)>=3*DAY});
+
+  // un-sent queue, batched
+  var queue=clients.filter(function(c){return !c.sentAt});
+  var bs=parseInt(DB.msg.batch)||25;
+  var batches=Math.max(1,Math.ceil(queue.length/bs));
+  if(DB.batchIdx>=batches) DB.batchIdx=0;
+  var start=DB.batchIdx*bs, slice=queue.slice(start,start+bs);
+
+  var st=sentTodayCount(), cap=parseInt(DB.msg.cap)||30;
+  var capCls= st>=cap? "warn":"ok";
+  var capMsg= st>=cap? "⚠︎ "+st+" sent today — you hit your cap. Rest your number, finish tomorrow."
+                     : "✅ "+st+" sent today · "+(cap-st)+" left in today's safe zone ("+cap+")";
+
+  var html="";
+
+  if(due.length){
+    html+='<div class="mlbl" style="color:var(--cream);font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin:4px 0 8px">⏰ Follow-ups due ('+due.length+') — no reply in 3 days</div>';
+    for(var d=0;d<due.length;d++) html+=sendCard(due[d], true);
+    html+='<div style="height:18px;border-bottom:1px solid var(--line);margin-bottom:18px"></div>';
+  }
+
+  html+='<div class="cap '+capCls+'">'+capMsg+'</div>';
+
+  if(!queue.length){
+    html+='<div class="empty"><div class="big">🔥</div>Every client texted. Now just reply to anyone who hits back.</div>';
+    body.innerHTML=html; return;
+  }
+
+  html+='<div class="batchbar"><div class="who">Batch '+(DB.batchIdx+1)+' / '+batches+' <span style="color:var(--muted);font-weight:400">· '+slice.length+' people</span></div>'+
+        '<div class="navs"><button onclick="batchNav(-1)">‹</button><button onclick="batchNav(1)">›</button></div></div>';
+
+  for(var i=0;i<slice.length;i++) html+=sendCard(slice[i], false);
+
+  html+='<div class="footnote" style="margin-top:14px">tap <b>💬 Open Messages</b> → it opens with the text ready → you hit send.<br>space them out over the morning. text anyone back who replies — that keeps your number clean.</div>';
+  body.innerHTML=html;
+}
+function sendCard(c, follow){
+  var msg=buildMsg(c,follow);
+  var nameBlock = (follow || DB.msg.forceNoName) ? "" :
+    '<div class="nametoggle">'+
+      '<label class="switch"><input type="checkbox" '+(c.useName?"checked":"")+' onchange="toggleName(\''+c.id+'\',this.checked)"><span class="sl"></span></label>'+
+      '<input type="text" value="'+esc(c.first||"")+'" placeholder="first name (optional)" oninput="editName(\''+c.id+'\',this.value)">'+
+      '<span style="font-size:11px;white-space:nowrap">use name</span>'+
+    '</div>';
+  var sentTag = c.sentAt? '<span class="sent">'+(follow?"":"✓ sent")+'</span>' : '';
+  return '<div class="scard '+(c.done?"done":"")+'" id="card-'+c.id+'">'+
+    '<div class="top"><div class="nm">'+esc(c.full||c.first||"(no name)")+'</div><div class="ph">'+esc(prettyPhone(c.phone))+'</div></div>'+
+    nameBlock+
+    '<div class="preview" id="prev-'+c.id+'">'+esc(msg)+'</div>'+
+    '<div class="acts">'+
+      '<button class="btn btn-ghost btn-sm" onclick="copyMsg(\''+c.id+'\','+(follow?"true":"false")+')">📋 Copy</button>'+
+      '<a class="btn btn-blue btn-sm" href="'+smsHref(c,follow)+'" onclick="markFromOpen(\''+c.id+'\','+(follow?"true":"false")+')">💬 Open Messages</a>'+
+    '</div>'+
+    '<div class="markrow">'+ (follow?
+        '<label><input type="checkbox" '+(c.done?"checked":"")+' onchange="markDone(\''+c.id+'\',this.checked)">followed up — done with them</label>'
+       :'<label><input type="checkbox" '+(c.sentAt?"checked":"")+' onchange="markSent(\''+c.id+'\',this.checked)"><span>'+(c.sentAt?'<span class="sent">✓ sent</span>':'mark sent')+'</span></label>')+
+    '</div></div>';
+}
+function refreshPrev(id){var c=byId(id); if(c&&$("prev-"+id)) $("prev-"+id).textContent=buildMsg(c,false); var a=document.querySelector('#card-'+id+' a.btn-blue'); if(a&&c) a.href=smsHref(c,false);}
+function byId(id){for(var i=0;i<DB.contacts.length;i++) if(DB.contacts[i].id===id) return DB.contacts[i]; return null}
+function toggleName(id,v){var c=byId(id);if(c){c.useName=v;save();refreshPrev(id)}}
+function editName(id,v){var c=byId(id);if(c){c.first=v.trim();if(v.trim())c.useName=true;save();refreshPrev(id)}}
+function copyMsg(id,follow){var c=byId(id);if(!c)return;var m=buildMsg(c,follow);
+  if(navigator.clipboard){navigator.clipboard.writeText(m).then(function(){toast("Copied")},function(){fallbackCopy(m)})}else fallbackCopy(m);}
+function fallbackCopy(m){var ta=document.createElement("textarea");ta.value=m;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Copied")}catch(e){toast("Copy failed")}document.body.removeChild(ta);}
+function markFromOpen(id,follow){ /* auto-mark after they open Messages */
+  var c=byId(id);if(!c)return;
+  setTimeout(function(){ if(follow){c.followAt=Date.now();} else if(!c.sentAt){c.sentAt=Date.now();} save(); render(); },400);
+}
+function markSent(id,v){var c=byId(id);if(!c)return;c.sentAt=v?Date.now():null;save();render();renderSend();}
+function markDone(id,v){var c=byId(id);if(!c)return;c.done=v;if(v&&!c.followAt)c.followAt=Date.now();save();render();renderSend();}
+function batchNav(d){var clients=clientsList().filter(function(c){return !c.sentAt});var bs=parseInt(DB.msg.batch)||25;var n=Math.max(1,Math.ceil(clients.length/bs));DB.batchIdx=(DB.batchIdx+d+n)%n;save();renderSend();window.scrollTo(0,0);}
+
+/* ---------- settings ---------- */
+function openSettings(){
+  $("m-named").value=DB.msg.named; $("m-noname").value=DB.msg.noname; $("m-follow").value=DB.msg.follow;
+  $("m-cap").value=DB.msg.cap; $("m-batch").value=DB.msg.batch;
+  $("m-forcenoname").checked=!!DB.msg.forceNoName;
+  $("settings").classList.add("on");
+}
+function closeSettings(){$("settings").classList.remove("on");renderSend();}
+function saveMsg(){
+  DB.msg.named=$("m-named").value; DB.msg.noname=$("m-noname").value; DB.msg.follow=$("m-follow").value;
+  DB.msg.cap=($("m-cap").value||"").replace(/[^0-9]/g,"")||30; DB.msg.batch=($("m-batch").value||"").replace(/[^0-9]/g,"")||25;
+  save();
+}
+function resetAll(){ if(confirm("Erase all loaded contacts and progress? This can't be undone.")){ localStorage.removeItem(KEY); DB=load(); $("loaded-note").innerHTML=""; closeSettings(); go("import"); render(); toast("Cleared"); } }
+
+/* ---------- util ---------- */
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+/* ---------- boot ---------- */
+render();
+if(DB.contacts.length && DB.contacts.some(function(c){return c.status==="pending"})) {/* stay on import; user navigates */}
+</script>
+</body>
+</html>
