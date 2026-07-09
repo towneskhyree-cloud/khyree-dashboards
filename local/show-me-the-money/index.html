@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Show Me The Money — Every Account In One Place</title>
+<meta name="description" content="Where your actual earnings live on each app — Instagram, Facebook, TikTok, YouTube — plus one board that adds up your total across all of them.">
+<meta name="theme-color" content="#08090c">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Anton&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: oklch(13% 0.018 250);
+  --bg-1: oklch(17% 0.025 250);
+  --bg-2: oklch(22% 0.032 250);
+  --surface: color-mix(in oklab, white 4%, transparent);
+  --surface-2: color-mix(in oklab, white 7%, transparent);
+  --border: color-mix(in oklab, white 10%, transparent);
+  --border-hot: color-mix(in oklab, var(--accent) 50%, transparent);
+  --text: oklch(96% 0.005 250);
+  --muted: oklch(68% 0.012 250);
+  --dim: oklch(52% 0.015 250);
+  --accent: #b8ff00;
+  --accent-2: #3b82f6;
+  --accent-warm: #ff9d3b;
+  --money: #34d399;
+  --ig: #e1306c;
+  --fb: #1877f2;
+  --tt: #25f4ee;
+  --yt: #ff3b3b;
+  --radius: 18px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg-0); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-feature-settings: 'cv11','ss01'; -webkit-font-smoothing: antialiased; }
+body {
+  background:
+    radial-gradient(ellipse 80% 50% at 15% -10%, color-mix(in oklab, var(--money) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 92% 3%, color-mix(in oklab, var(--accent) 8%, transparent), transparent 50%),
+    linear-gradient(180deg, var(--bg-0), var(--bg-1) 60%, var(--bg-0));
+  min-height: 100vh; overflow-x: hidden;
+}
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .05; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+::selection { background: var(--accent); color: var(--bg-0); }
+a { color: var(--accent); text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(18px, 5vw, 56px); }
+.backlink { display: inline-flex; align-items: center; gap: 7px; margin: 22px 0 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+.backlink:hover { color: var(--accent); }
+
+/* HERO */
+.hero { padding: 14px 0 clamp(10px,3vw,20px); }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+.kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--money); box-shadow: 0 0 12px var(--money); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .5; transform: scale(.8); } }
+h1.title { font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(46px, 10vw, 116px); line-height: .9; letter-spacing: -.02em; margin: 20px 0 16px; text-transform: uppercase; }
+h1.title em { font-style: normal; background: linear-gradient(135deg, var(--money) 0%, var(--accent) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lede { font-size: clamp(15px,1.7vw,19px); color: var(--muted); max-width: 62ch; line-height: 1.6; }
+.lede b { color: var(--text); }
+.note { margin: 20px 0 4px; border: 1px dashed color-mix(in oklab, var(--accent-warm) 50%, var(--border)); background: color-mix(in oklab, var(--accent-warm) 6%, transparent); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+.note b { color: var(--accent-warm); }
+
+/* TOTAL BAR */
+.totalbar { margin: 28px 0 8px; border: 1px solid var(--border-hot); border-radius: var(--radius); background: linear-gradient(135deg, color-mix(in oklab, var(--money) 12%, var(--surface)), var(--surface)); padding: 26px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 32px; }
+.totalbar .tlabel { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); width: 100%; }
+.totalbar .tnum { font-family: 'Anton', sans-serif; font-size: clamp(44px, 9vw, 84px); line-height: 1; color: var(--money); letter-spacing: -.01em; }
+.totalbar .tside { display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: var(--muted); }
+.totalbar .tside b { color: var(--text); font-size: 15px; }
+.totalbar .updated { width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--dim); margin-top: 4px; }
+
+/* SECTION */
+section { padding: clamp(26px,5vw,44px) 0 6px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+.sec-head h2 { font-family: 'Anton', sans-serif; font-weight: 400; font-size: clamp(24px,4.5vw,36px); text-transform: uppercase; letter-spacing: .01em; }
+.sec-head .rule { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+.sec-sub { color: var(--muted); font-size: 15px; line-height: 1.55; max-width: 70ch; margin-bottom: 22px; }
+
+/* BOARD */
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px,100%), 1fr)); gap: 16px; }
+.tile { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
+.tile .th { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border); position: relative; }
+.tile .th::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--pc); }
+.tile .badge { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; font-family: 'Anton', sans-serif; font-size: 19px; color: #08090c; background: var(--pc); }
+.tile .tname { font-size: 18px; font-weight: 700; }
+.tile .tsub { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); letter-spacing: .06em; margin-top: 1px; }
+.tile .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+
+.money-in { display: flex; flex-direction: column; gap: 6px; }
+.money-in label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.money-field { display: flex; align-items: center; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-0); overflow: hidden; transition: border-color .15s; }
+.money-field:focus-within { border-color: var(--border-hot); }
+.money-field .cur { padding: 0 4px 0 14px; font-family: 'Anton', sans-serif; font-size: 26px; color: var(--money); }
+.money-field input { flex: 1; border: 0; background: transparent; color: var(--text); font-family: 'Anton', sans-serif; font-size: 30px; padding: 12px 14px 12px 2px; outline: none; width: 100%; letter-spacing: -.01em; }
+.money-field input::placeholder { color: var(--dim); }
+.money-field input::-webkit-outer-spin-button, .money-field input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.stats2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.statin { display: flex; flex-direction: column; gap: 5px; }
+.statin label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+.statin input { border: 1px solid var(--border); border-radius: 8px; background: var(--bg-0); color: var(--text); font-size: 15px; font-weight: 600; padding: 9px 11px; outline: none; width: 100%; }
+.statin input:focus { border-color: var(--border-hot); }
+
+.wtf { border-top: 1px dashed var(--border); padding-top: 12px; }
+.wtf summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.wtf summary::-webkit-details-marker { display: none; }
+.wtf summary .chev { transition: transform .2s; font-size: 11px; }
+.wtf[open] summary .chev { transform: rotate(90deg); }
+.wtf .guide { margin-top: 12px; display: flex; flex-direction: column; gap: 14px; }
+.pathblock .pt { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--money); margin-bottom: 7px; }
+.pathblock.warn .pt { color: var(--accent-warm); }
+.steps { display: flex; flex-direction: column; gap: 0; }
+.stp { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.4; padding: 5px 0; }
+.stp .num { flex-shrink: 0; width: 20px; height: 20px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 1px; }
+.stp b { color: var(--text); }
+.stp .tap { color: var(--accent); font-weight: 600; }
+.landing { font-size: 12.5px; color: var(--muted); line-height: 1.5; background: var(--surface-2); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--money); }
+.landing b { color: var(--money); }
+.landing.warn { border-left-color: var(--accent-warm); }
+.landing.warn b { color: var(--accent-warm); }
+
+footer { padding: 44px 0 70px; margin-top: 30px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; line-height: 1.65; }
+footer b { color: var(--text); }
+footer a { color: var(--accent-2); }
+.reset { margin-top: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--dim); border: 1px solid var(--border); padding: 8px 14px; border-radius: 8px; }
+.reset:hover { color: var(--accent-warm); border-color: color-mix(in oklab, var(--accent-warm) 40%, var(--border)); }
+@media (prefers-reduced-motion: reduce){ * { animation:none!important; transition:none!important; } }
+@media (max-width:560px){ h1.title{ font-size: clamp(42px,14vw,80px);} }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="wrap">
+<a class="backlink" href="../../index.html">← Back to the Vault</a>
+
+<header class="hero">
+  <div><span class="kicker">SHOW ME THE MONEY · ALL ACCOUNTS, ONE BOARD</span></div>
+  <h1 class="title">Show me<br><em>the money.</em></h1>
+  <p class="lede">Your dad saw <b>$4 on his phone</b> because he was on the exact right screen. You couldn't see yours because nobody showed you which screen it is. This board fixes both: <b>every tile tells you exactly where to tap to find your number</b> on Instagram, Facebook, TikTok and YouTube — then you type it in and it <b>adds up your total across all of them</b> in one place.</p>
+  <div class="note"><b>Why you type it in instead of it showing automatically:</b> the real dollar figures live locked inside each app — the platforms don't hand your earnings to any outside tool, not even a dashboard. So the honest way to see it all in one spot is: open each app (I show you the exact taps), read your number, drop it in here. It <b>saves on this phone</b>, so next time you open this page your totals are still here.</p>
+</header>
+
+<div class="totalbar">
+  <span class="tlabel">Total showing across all your accounts</span>
+  <span class="tnum" id="grandtotal">$0</span>
+  <div class="tside">
+    <span>from <b id="accts-filled">0 of 4</b> accounts entered</span>
+    <span id="followers-total">— total followers</span>
+  </div>
+  <span class="updated" id="updated">nothing entered yet</span>
+</div>
+
+<section>
+  <div class="sec-head"><h2>Your money board</h2><div class="rule"></div></div>
+  <p class="sec-sub">For each app: open the <b>"▸ Where do I tap to find this?"</b> line, follow the taps on your phone, then type the dollar amount you see. Followers/views are optional — but nice to have it all in one view.</p>
+  <div class="board" id="board"></div>
+  <button class="reset" id="reset">↺ Clear the board</button>
+</section>
+
+<footer>
+  <p><b>Khyree · Show Me The Money · v1.0</b> — built Jul 2026. Tap-paths are the current (mid-2026) screens for Instagram, Facebook, TikTok &amp; YouTube. Apps move menus around, so if a label's slightly different, the <b>order</b> (profile → dashboard → monetization) still holds — and your own app is always the final word. Your entries stay on this device only; nothing is uploaded. Earnings you see are usually <b>estimates</b> until the platform finalizes and pays out — the "how the money lands" details are on your <a href="../monetization-command/">Money Map</a>.</p>
+</footer>
+</div>
+
+<script>
+const PLATFORMS = [
+  {
+    id:"ig", name:"Instagram", glyph:"IG", color:"var(--ig)", sub:"Gifts · Subscriptions · Bonuses",
+    stat1:{key:"followers", label:"Followers"}, stat2:{key:"views", label:"Views (30d)"},
+    guide:[
+      { kind:"money", title:"Find your money", steps:[
+        ["Open <span class='tap'>Instagram</span> → tap your <b>profile</b> (bottom-right)"],
+        ["Tap <span class='tap'>Professional dashboard</span>"],
+        ["Under <b>Your tools</b> tap <span class='tap'>Gifts</span> — this shows Stars earned on Reels (1¢ each)"],
+        ["For the full total: <span class='tap'>Monetization → Earnings</span>"]],
+        landing:"The dollar number sits on the <b>Gifts</b> screen and under <b>Monetization → Earnings</b>. Instagram pays out once you pass <b>$25</b>." },
+      { kind:"check", warn:true, title:"Is it even on? ($0 vs not set up)", steps:[
+        ["<span class='tap'>Professional dashboard → Monetization → Status</span>"],
+        ["If you see <b>“Set up payout account”</b> → it's <b>not set up</b> (that's why you see nothing)"],
+        ["If status says <b>Eligible/On</b> and it's still $0 → you're on, just <b>no earnings yet</b>"]],
+        landingWarn:"No payout account = the money has nowhere to go. Set it up first." },
+      { kind:"stats", title:"Find your stats", steps:[
+        ["<span class='tap'>Professional dashboard → Insights</span>"],
+        ["Three tabs: <b>Overview · Engagement · Audience</b> — followers &amp; views live here"]],
+        landing:"<b>Views</b> is now the main number Instagram shows you." }
+    ]
+  },
+  {
+    id:"fb", name:"Facebook", glyph:"f", color:"var(--fb)", sub:"Stars · Content Monetization",
+    stat1:{key:"followers", label:"Followers"}, stat2:{key:"views", label:"Views (28d)"},
+    guide:[
+      { kind:"money", title:"Find your money  (this is the “$4” screen)", steps:[
+        ["Open <span class='tap'>Facebook</span> → tap the <b>☰ menu</b> (top-right) or your <b>profile</b>"],
+        ["Tap <span class='tap'>Professional dashboard</span>"],
+        ["Tap the <span class='tap'>Monetization</span> tab"],
+        ["Tap <span class='tap'>Stars</span> to see Stars money (1¢ each) — or <span class='tap'>Content Monetization</span> for reels/video/photo earnings"]],
+        landing:"Your running total shows under the <b>Insights</b> view inside the dashboard, and Stars under <b>Stars</b>. A small total like <b>$4</b> usually lives right here. Facebook pays out at <b>$100</b>." },
+      { kind:"check", warn:true, title:"Is it even on? ($0 vs not set up)", steps:[
+        ["<span class='tap'>Professional dashboard → Monetization</span>"],
+        ["Not eligible → you'll see a <b>requirements list</b> (followers, views, country)"],
+        ["Eligible but empty → a <b>“Set up payouts”</b> prompt means the money isn't flowing yet"]],
+        landingWarn:"Set up the payout once — it covers <b>both</b> Facebook and Instagram." },
+      { kind:"stats", title:"Find your stats", steps:[
+        ["<span class='tap'>Professional dashboard → Insights</span> (reach, engagement, net followers)"],
+        ["Or <span class='tap'>Meta Business Suite → Insights → Content</span> for the Page view"]],
+        landing:"The old “Facebook Analytics” is gone — everything's under <b>Insights</b> now." }
+    ]
+  },
+  {
+    id:"tt", name:"TikTok", glyph:"TT", color:"var(--tt)", sub:"Creator Rewards · LIVE Gifts · Shop",
+    stat1:{key:"followers", label:"Followers"}, stat2:{key:"views", label:"Views (28d)"},
+    guide:[
+      { kind:"money", title:"Find your money (all programs in one place)", steps:[
+        ["Open <span class='tap'>TikTok</span> → tap <b>Profile</b> (bottom-right)"],
+        ["Tap the <span class='tap'>☰ menu</span> (top-right)"],
+        ["Tap <span class='tap'>Balance</span>"],
+        ["The big number is <b>“Estimated balance”</b> — tap <span class='tap'>View</span> to see each program (Rewards, LIVE Gifts, Subs)"]],
+        landing:"<b>Balance</b> is your master money screen — everything rolls up into <b>“Estimated balance.”</b> TikTok pays around the <b>15th</b> of the next month." },
+      { kind:"money", title:"TikTok Shop money (separate wallet!)", steps:[
+        ["<span class='tap'>Profile → ☰ menu → TikTok Studio</span>"],
+        ["Open <span class='tap'>TikTok Shop / Affiliate</span> → commission dashboard"]],
+        landing:"Shop/affiliate commission is a <b>separate wallet</b> — it does NOT show on the Balance screen. Add it as a second line if you sell products." },
+      { kind:"check", warn:true, title:"Is it even on? ($0 vs not set up)", steps:[
+        ["<span class='tap'>TikTok Studio → Monetization</span>"],
+        ["A program with a dashboard = <b>you're enrolled</b>. An <b>“Apply”</b> prompt = not on yet"],
+        ["On Balance: $0 <b>with</b> programs listed under View = on, no earnings. No programs = not enrolled"]],
+        landingWarn:"Creator Rewards needs <b>10K followers + 100K views/30 days</b> and videos over 1 minute." },
+      { kind:"stats", title:"Find your stats", steps:[
+        ["<span class='tap'>Profile → ☰ menu → TikTok Studio → Analytics → View all</span>"],
+        ["Tabs: <b>Overview · Content · Followers · LIVE</b>"]],
+        landing:"Note: “Creator Tools” is now called <b>TikTok Studio</b>." }
+    ]
+  },
+  {
+    id:"yt", name:"YouTube", glyph:"YT", color:"var(--yt)", sub:"Ad revenue · Memberships · Supers",
+    stat1:{key:"subs", label:"Subscribers"}, stat2:{key:"views", label:"Views (28d)"},
+    guide:[
+      { kind:"money", title:"Find your estimated money", steps:[
+        ["Open the <span class='tap'>YouTube Studio</span> app (the blue one — not regular YouTube)"],
+        ["Bottom menu → tap <span class='tap'>Analytics</span>"],
+        ["Top menu → tap <span class='tap'>Revenue</span>"]],
+        landing:"Top card = <b>“Estimated revenue”</b> + your estimated monthly revenue, broken down by ads, Shorts, memberships and Supers." },
+      { kind:"money", title:"Find the money that actually gets PAID", steps:[
+        ["Go to <span class='tap'>adsense.google.com</span> (or the AdSense app), sign in with your channel's Google account"],
+        ["Left menu → tap <span class='tap'>Payments</span>"]],
+        landing:"Shows your <b>real balance</b>. YouTube pays once you clear <b>$100</b>, around the <b>21st–26th</b>. Studio only shows estimates — AdSense is the real money." },
+      { kind:"check", warn:true, title:"Is it monetized yet?", steps:[
+        ["<span class='tap'>YouTube Studio → Earn</span> tab"],
+        ["Shows your <b>YPP status</b> — a progress tracker if you're not in yet, or <b>Apply</b> if eligible"]],
+        landingWarn:"Full ads need <b>1,000 subs + 4,000 watch hours</b> (or 10M Shorts views). A smaller tip/membership tier opens at <b>500 subs</b>." },
+      { kind:"stats", title:"Find your stats", steps:[
+        ["<span class='tap'>YouTube Studio → Analytics</span> → tabs <b>Overview · Content · Audience</b>"]],
+        landing:"Views, watch time and subscribers all live on the <b>Overview</b> tab." }
+    ]
+  }
+];
+
+/* ---- render ---- */
+const board = document.getElementById("board");
+const LS = "khyree_money_board_v1";
+let store = JSON.parse(localStorage.getItem(LS) || "{}");
+
+function fmt(n){ return "$" + (Math.round(n*100)/100).toLocaleString(undefined,{minimumFractionDigits: n%1?2:0, maximumFractionDigits:2}); }
+function num(v){ const n = parseFloat(String(v).replace(/[^0-9.]/g,"")); return isNaN(n)?0:n; }
+
+function guideHTML(g){
+  return g.map(blk => {
+    const steps = blk.steps.map((s,i)=>`<div class="stp"><span class="num">${i+1}</span><span>${s[0]}</span></div>`).join("");
+    const land = blk.landingWarn
+      ? `<div class="landing warn">${blk.landingWarn}</div>`
+      : blk.landing ? `<div class="landing">${blk.landing}</div>` : "";
+    return `<div class="pathblock ${blk.warn?'warn':''}">
+      <div class="pt">${blk.title}</div>
+      <div class="steps">${steps}</div>
+      ${land}
+    </div>`;
+  }).join("");
+}
+
+PLATFORMS.forEach(p => {
+  const d = store[p.id] || {};
+  const t = document.createElement("div");
+  t.className = "tile"; t.style.setProperty("--pc", p.color);
+  t.innerHTML = `
+    <div class="th">
+      <div class="badge">${p.glyph}</div>
+      <div><div class="tname">${p.name}</div><div class="tsub">${p.sub}</div></div>
+    </div>
+    <div class="body">
+      <div class="money-in">
+        <label>Money showing right now</label>
+        <div class="money-field"><span class="cur">$</span><input type="text" inputmode="decimal" data-p="${p.id}" data-f="earnings" placeholder="0" value="${d.earnings??""}"></div>
+      </div>
+      <div class="stats2">
+        <div class="statin"><label>${p.stat1.label}</label><input type="text" inputmode="numeric" data-p="${p.id}" data-f="${p.stat1.key}" placeholder="—" value="${d[p.stat1.key]??""}"></div>
+        <div class="statin"><label>${p.stat2.label}</label><input type="text" inputmode="numeric" data-p="${p.id}" data-f="${p.stat2.key}" placeholder="—" value="${d[p.stat2.key]??""}"></div>
+      </div>
+      <details class="wtf">
+        <summary><span class="chev">▶</span> Where do I tap to find this?</summary>
+        <div class="guide">${guideHTML(p.guide)}</div>
+      </details>
+    </div>`;
+  board.appendChild(t);
+});
+
+function recalc(){
+  let total=0, filled=0, followers=0;
+  PLATFORMS.forEach(p=>{
+    const d = store[p.id]||{};
+    const e = num(d.earnings);
+    if (d.earnings!==undefined && d.earnings!=="") filled++;
+    total += e;
+    followers += num(d.followers) + num(d.subs);
+  });
+  document.getElementById("grandtotal").textContent = fmt(total);
+  document.getElementById("accts-filled").textContent = `${filled} of ${PLATFORMS.length}`;
+  document.getElementById("followers-total").textContent = followers>0
+    ? `${followers.toLocaleString()} total followers + subscribers` : "— total followers";
+  document.getElementById("updated").textContent = store._updated
+    ? "last updated " + store._updated : "nothing entered yet";
+}
+
+board.addEventListener("input", e=>{
+  const el = e.target; if(!el.dataset.p) return;
+  store[el.dataset.p] = store[el.dataset.p] || {};
+  store[el.dataset.p][el.dataset.f] = el.value;
+  store._updated = new Date().toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+  localStorage.setItem(LS, JSON.stringify(store));
+  recalc();
+});
+
+document.getElementById("reset").addEventListener("click", ()=>{
+  if(!confirm("Clear every number you've entered on this board?")) return;
+  store = {}; localStorage.removeItem(LS);
+  document.querySelectorAll(".board input").forEach(i=>i.value="");
+  recalc();
+});
+
+recalc();
+</script>
+</body>
+</html>
