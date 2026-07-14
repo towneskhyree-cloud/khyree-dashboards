@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cut Creaters · Loctician & Braider Onboarding</title>
+<meta name="description" content="The foundation. Onboarding system + digital welcome packet for locticians, braiders & natural hairstylists coming into Cut Creaters — Townes Salon Suites.">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="color-scheme" content="dark">
+<style>
+  :root{
+    --bg:#0d0d0d; --bg2:#141414; --card:#1a1a1a; --card2:#212121;
+    --line:#2a2a2a; --txt:#f4f4f4; --muted:#8d8d8d; --dim:#666;
+    --green:#b8ff00; --blue:#3b82f6; --cream:#f5e6c8; --gold:#e0b155; --red:#ff5b5b;
+    --r:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  body{padding:0 0 70px}
+  a{color:var(--blue)}
+  .wrap{max-width:620px;margin:0 auto;padding:0 16px}
+  ::selection{background:var(--green);color:#0a0a0a}
+
+  /* ---- header ---- */
+  header.top{padding:20px 0 12px;text-align:center;position:relative}
+  header.top .brand{font-weight:800;font-size:12px;letter-spacing:.22em;color:var(--green);text-transform:uppercase}
+  header.top h1{margin:6px 0 3px;font-size:24px;font-weight:800;letter-spacing:-.01em;line-height:1.12}
+  header.top .sub{color:var(--muted);font-size:12.5px;line-height:1.4}
+  header.top .entity{color:var(--dim);font-size:11px;margin-top:4px;letter-spacing:.04em}
+
+  .foundation{display:flex;gap:9px;align-items:flex-start;
+    background:linear-gradient(160deg,#141d05,#101401);border:1px solid #2e4010;
+    border-radius:12px;padding:11px 13px;font-size:12.5px;color:#d7ffa4;line-height:1.5;margin:6px 0 2px}
+  .foundation .ic{font-size:16px;line-height:1.2}
+  .foundation b{color:var(--green)}
+
+  /* ---- progress strip ---- */
+  .prog-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:14px 0}
+  .prog-wrap .lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);margin-bottom:9px}
+  .prog-wrap .lbl b{color:var(--txt);font-size:14px}
+  .prog-wrap .lbl .pct{color:var(--green);font-weight:800;font-size:16px}
+  .bar{height:8px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#7dd000);width:0;transition:width .4s cubic-bezier(.2,.7,.2,1)}
+  .prog-wrap .hint{font-size:11px;color:var(--dim);margin-top:9px}
+
+  /* ---- tabs ---- */
+  .tabs{display:flex;gap:5px;background:var(--bg2);border:1px solid var(--line);
+    border-radius:14px;padding:5px;position:sticky;top:8px;z-index:30;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1 0 auto;text-align:center;padding:9px 11px;border-radius:10px;font-size:12px;
+    font-weight:700;color:var(--muted);cursor:pointer;border:none;background:none;transition:.15s;white-space:nowrap}
+  .tab.active{background:var(--green);color:#0a0a0a}
+
+  section{display:none;animation:fade .22s} section.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+
+  h2{font-size:18px;margin:20px 0 4px;letter-spacing:-.01em}
+  .eyebrow{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin-top:18px}
+  p.lead{color:var(--muted);font-size:13.5px;line-height:1.55;margin:6px 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px}
+  .card h3{margin:0 0 8px;font-size:15px}
+  .card p{margin:0 0 8px;font-size:13.5px;line-height:1.55;color:#d8d8d8}
+  .card p:last-child{margin-bottom:0}
+
+  .quote{border-left:3px solid var(--green);padding:2px 0 2px 13px;margin:14px 0;
+    color:var(--cream);font-size:14px;line-height:1.5;font-style:italic}
+  .quote .who{display:block;font-style:normal;font-size:11px;color:var(--dim);margin-top:6px;letter-spacing:.05em}
+
+  /* ---- step flow ---- */
+  .step{display:flex;gap:13px;position:relative;padding-bottom:18px}
+  .step:last-child{padding-bottom:0}
+  .step:not(:last-child)::before{content:"";position:absolute;left:17px;top:38px;bottom:-2px;width:2px;background:var(--line)}
+  .step .num{flex:none;width:36px;height:36px;border-radius:50%;background:var(--card2);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:var(--green);z-index:2}
+  .step .txt{padding-top:5px}
+  .step .txt h4{margin:0 0 4px;font-size:14.5px}
+  .step .txt p{margin:0;font-size:12.8px;color:var(--muted);line-height:1.5}
+  .step .txt .who{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:700;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--gold);background:#2a2205;border:1px solid #4a3a0a;border-radius:6px;padding:3px 8px}
+
+  /* ---- checklist ---- */
+  .check{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:.15s}
+  .check:hover{border-color:#3a3a3a}
+  .check.done{background:#12180a;border-color:#2e4010}
+  .check .box{flex:none;width:24px;height:24px;border-radius:7px;border:2px solid #3a3a3a;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:#0a0a0a;transition:.15s;margin-top:1px}
+  .check.done .box{background:var(--green);border-color:var(--green)}
+  .check .box svg{width:14px;height:14px;opacity:0;transition:.15s}
+  .check.done .box svg{opacity:1}
+  .check .c-txt{flex:1}
+  .check .c-txt .t{font-weight:700;font-size:14px;line-height:1.35}
+  .check.done .c-txt .t{color:var(--muted);text-decoration:line-through;text-decoration-color:#3a5010}
+  .check .c-txt .d{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .check .tag{flex:none;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:3px 7px;margin-top:1px}
+
+  /* ---- doc list ---- */
+  .doc{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:9px}
+  .doc .ic{flex:none;width:38px;height:38px;border-radius:10px;background:var(--card2);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:18px}
+  .doc .d-txt{flex:1;min-width:0}
+  .doc .d-txt .t{font-weight:700;font-size:14px}
+  .doc .d-txt .d{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+  .doc .pill{flex:none;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:99px;padding:4px 9px}
+  .pill.req{background:#2a0f0f;color:#ff9a9a;border:1px solid #5a1c1c}
+  .pill.rec{background:#0f1a2a;color:#9ac4ff;border:1px solid #1c3a5a}
+  .pill.sign{background:#1a1405;color:#ffd479;border:1px solid #4a3a0a}
+
+  /* ---- workshop ---- */
+  .ws{background:linear-gradient(160deg,#1c1c1c,#151515);border:1px solid var(--line);border-radius:16px;
+    padding:16px;margin-bottom:12px;position:relative;overflow:hidden}
+  .ws.next{border-color:#3a5010}
+  .ws .flag{position:absolute;top:0;right:0;background:var(--green);color:#0a0a0a;font-size:9.5px;font-weight:800;
+    letter-spacing:.08em;padding:4px 11px;border-bottom-left-radius:10px;text-transform:uppercase}
+  .ws .date{font-size:11px;color:var(--green);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .ws h4{margin:5px 0 3px;font-size:16px}
+  .ws .time{color:var(--muted);font-size:13px;margin-bottom:9px}
+  .ws .meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+  .ws .meta b{color:var(--txt)}
+  .ws .seats{color:var(--gold);font-weight:700}
+  .ws.full{opacity:.55}
+  .ws.full .seats{color:var(--red)}
+
+  .warn{display:flex;gap:9px;background:#241a05;border:1px solid #5a420c;border-radius:12px;
+    padding:12px 13px;font-size:12.5px;color:#ffd479;line-height:1.5;margin:12px 0}
+  .warn .ic{font-size:16px}
+  .warn b{color:#ffe9b0}
+
+  /* ---- office hours ---- */
+  .oh-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:12px 0}
+  .oh-day{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 4px}
+  .oh-day.open{background:#12180a;border-color:#2e4010}
+  .oh-day .dn{font-size:11px;font-weight:800;color:var(--muted)}
+  .oh-day.open .dn{color:var(--green)}
+  .oh-day .st{font-size:9px;color:var(--dim);margin-top:5px;line-height:1.2}
+  .oh-day.open .st{color:#a8d878}
+
+  /* ---- buttons ---- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:11px;
+    padding:13px 16px;font-size:14px;font-weight:700;cursor:pointer;width:100%;transition:.12s;font-family:inherit;text-decoration:none}
+  .btn:active{transform:scale(.98)}
+  .btn-green{background:var(--green);color:#0a0a0a}
+  .btn-ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+  .row{display:flex;gap:9px;margin-top:4px}
+  .row .btn{width:auto;flex:1}
+
+  ul.clean{list-style:none;padding:0;margin:6px 0}
+  ul.clean li{position:relative;padding:5px 0 5px 22px;font-size:13.5px;color:#d8d8d8;line-height:1.5}
+  ul.clean li::before{content:"→";position:absolute;left:0;color:var(--green);font-weight:700}
+
+  .banner{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:13px;
+    font-size:12px;color:var(--muted);line-height:1.55;text-align:center;margin-top:10px}
+  .banner b{color:var(--cream)}
+
+  footer{padding:26px 0 10px;text-align:center;color:var(--dim);font-size:11px;line-height:1.6}
+
+  @media print{
+    .tabs,.prog-wrap .hint,.row,footer{display:none}
+    section{display:block!important}
+    body{background:#fff;color:#000;padding:0}
+    .card,.check,.doc,.ws,.step .num{border-color:#ccc}
+    *{color:#000!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">Cut Creaters · The Standard</div>
+    <h1>Loctician &amp; Braider Onboarding</h1>
+    <div class="sub">The foundation for locticians, braiders &amp; natural hairstylists coming into the house.</div>
+    <div class="entity">Operated under Townes Salon Suites</div>
+  </header>
+
+  <div class="foundation">
+    <span class="ic">🧱</span>
+    <span><b>This is the foundation.</b> No more rush situations. No more dropped balls. Everybody who comes in gets the same welcome packet, the same paperwork, the same clear path — because we can't tell people how to get their act together if ours isn't together first.</span>
+  </div>
+
+  <div class="prog-wrap">
+    <div class="lbl"><b>Your onboarding progress</b><span class="pct" id="pct">0%</span></div>
+    <div class="bar"><i id="barfill"></i></div>
+    <div class="hint" id="proghint">Tap the checklist as you go — it saves on this device automatically.</div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-t="start">Start Here</button>
+    <button class="tab" data-t="system">The System</button>
+    <button class="tab" data-t="checklist">Checklist</button>
+    <button class="tab" data-t="packet">Welcome Packet</button>
+    <button class="tab" data-t="compliance">Compliance</button>
+    <button class="tab" data-t="workshops">Workshops</button>
+    <button class="tab" data-t="office">Office Hours</button>
+  </nav>
+
+  <!-- ============ START HERE ============ -->
+  <section class="on" data-s="start">
+    <h2>Welcome to the house.</h2>
+    <p class="lead">If you're a loctician, a braider, or a natural hairstylist and you want a seat at Cut Creaters — this is where it starts. Read this first. It tells you exactly what we're building, what we need from you, and how you get in the right way.</p>
+
+    <div class="quote">
+      "We have to show that we're following what the state, city, and county require of us. If we're not following, we can't expect nobody else to follow. We can't tell people how to get together if we don't have our act together."
+      <span class="who">— Ange · the reason this exists</span>
+    </div>
+
+    <div class="eyebrow">Who this is for</div>
+    <div class="card">
+      <p><b style="color:var(--cream)">Locticians</b> — starter locs, retwists, maintenance, loc styling.</p>
+      <p><b style="color:var(--cream)">Braiders</b> — box braids, knotless, cornrows, feed-ins, protective styles.</p>
+      <p><b style="color:var(--cream)">Natural hairstylists</b> — natural hair care, silk press, twist-outs, treatments.</p>
+    </div>
+
+    <div class="eyebrow">The honest truth about where we are</div>
+    <div class="card">
+      <p>We're being straight with you: <b style="color:var(--green)">the full welcome packet and the fully-digital system aren't 100% finished yet.</b> That's exactly why this exists. We're laying the foundation right now, in the open, so the ball stops getting dropped.</p>
+      <p>What you're looking at <i>is</i> the start of that system. Work through it top to bottom and you'll know more than most people who've been here for months.</p>
+    </div>
+
+    <div class="eyebrow">What "getting in the right way" means</div>
+    <ul class="clean">
+      <li>You come through onboarding — not a rushed "here's a seat, here's the price, go find an application" handoff.</li>
+      <li>You get the welcome packet and you know what paperwork is needed <b>before</b> your first day.</li>
+      <li>You hold the standard: state, city, and county. We follow it so we can ask others to.</li>
+      <li>Communication doesn't get dropped — there's one clear path, and this is it.</li>
+    </ul>
+
+    <div class="row">
+      <button class="btn btn-green" data-go="system">See the System →</button>
+      <button class="btn btn-ghost" data-go="checklist">Start my checklist</button>
+    </div>
+  </section>
+
+  <!-- ============ THE SYSTEM ============ -->
+  <section data-s="system">
+    <h2>The System</h2>
+    <p class="lead">Right now, when someone walks in it can be a rush: "he's got your seat, this is how much it is, go find an application." That can't be the way. Here's the system that replaces it — the same path for everyone, every time.</p>
+
+    <div class="step">
+      <div class="num">1</div>
+      <div class="txt"><h4>First contact &amp; interest</h4>
+        <p>A stylist reaches out or comes by. Instead of an on-the-spot scramble, they get pointed to this onboarding hub and the next workshop date.</p>
+        <span class="who">House sets the tone</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="txt"><h4>Welcome packet goes out</h4>
+        <p>Everybody gets the same packet — what Cut Creaters is, what's expected, the paperwork list, the standards. No "she gives you at least that" and hopes for the best.</p>
+        <span class="who">Same for everyone</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="txt"><h4>Onboarding workshop / class</h4>
+        <p>They attend the next scheduled session. This is where the foundation is laid in person: expectations, paperwork walk-through, standards, Q&amp;A. If you miss it, you catch the next one.</p>
+        <span class="who">Scheduled, not on-demand</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div class="txt"><h4>Paperwork &amp; documents</h4>
+        <p>Application filled, agreements signed, IDs and any certifications on file. Everything available on the office computer — not "go find it yourself."</p>
+        <span class="who">On file before day one</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <div class="txt"><h4>Seat confirmed</h4>
+        <p>A seat is offered <i>through</i> the system — not handed off in a rush. You know the terms, the price, and the expectations before you say yes.</p>
+        <span class="who">No rush handoffs</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">6</div>
+      <div class="txt"><h4>Fully digital (where we're headed)</h4>
+        <p>The goal is everyone self-serve — apply, sign, and onboard on their own. But we build the system first and stay consistent. It's not an overnight process; everybody has to do the work.</p>
+        <span class="who">The destination</span>
+      </div>
+    </div>
+
+    <div class="warn"><span class="ic">⚠️</span><span><b>Consistency is the whole thing.</b> A system only works if everyone runs it the same way, every time. One dropped ball and we're back to the rush. This is the plan we agreed on — this is what we start doing.</span></div>
+
+    <div class="row">
+      <button class="btn btn-green" data-go="checklist">Run the checklist →</button>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section data-s="checklist">
+    <h2>Onboarding Checklist</h2>
+    <p class="lead">Your step-by-step path in. Tap each one as you complete it — your progress saves right here on your phone. Bring the unchecked items to office hours or the next workshop.</p>
+    <div id="checklist"></div>
+    <button class="btn btn-ghost" id="resetChk" style="margin-top:6px">Reset my checklist</button>
+    <div class="banner">Stuck on any item? That's what <b>office hours</b> and the <b>workshop</b> are for. Nobody gets left figuring it out alone.</div>
+  </section>
+
+  <!-- ============ WELCOME PACKET ============ -->
+  <section data-s="packet">
+    <h2>The Welcome Packet</h2>
+    <p class="lead">This is what everybody gets — the same packet, in the same order. Print it, save it, or read it here. These are the documents and pieces that make up "getting in the right way."</p>
+
+    <div class="doc"><div class="ic">📄</div><div class="d-txt"><div class="t">Stylist Application</div><div class="d">Name, contact, specialty (loc / braid / natural), experience, references.</div></div><span class="pill req">Required</span></div>
+    <div class="doc"><div class="ic">✍️</div><div class="d-txt"><div class="t">Suite / Seat License Agreement</div><div class="d">Terms, rate, what's included, house rules, start date. Read before you sign.</div></div><span class="pill sign">Sign</span></div>
+    <div class="doc"><div class="ic">🪪</div><div class="d-txt"><div class="t">Government-Issued ID</div><div class="d">A copy on file for the record.</div></div><span class="pill req">Required</span></div>
+    <div class="doc"><div class="ic">🧾</div><div class="d-txt"><div class="t">W-9 / Independent Contractor Form</div><div class="d">You run your own book — this keeps the tax side clean.</div></div><span class="pill sign">Sign</span></div>
+    <div class="doc"><div class="ic">🎓</div><div class="d-txt"><div class="t">Certification / Training (if any)</div><div class="d">Not required by the state today for natural hair — but if you have it, it goes on file. See Compliance.</div></div><span class="pill rec">Recommended</span></div>
+    <div class="doc"><div class="ic">🛡️</div><div class="d-txt"><div class="t">Liability / Insurance Acknowledgment</div><div class="d">Understanding of coverage and responsibility while working out of the suite.</div></div><span class="pill sign">Sign</span></div>
+    <div class="doc"><div class="ic">📋</div><div class="d-txt"><div class="t">House Standards &amp; Code of Conduct</div><div class="d">Sanitation, professionalism, how we carry ourselves. The standard we hold so we can ask others to.</div></div><span class="pill req">Required</span></div>
+    <div class="doc"><div class="ic">📞</div><div class="d-txt"><div class="t">Emergency Contact &amp; Key Info Sheet</div><div class="d">Who to call, hours, access, and the one communication channel that doesn't get dropped.</div></div><span class="pill rec">Recommended</span></div>
+
+    <div class="warn"><span class="ic">🚧</span><span><b>Still in the works.</b> The final printed packet with all forms attached is being built. This is the master list it's built from — nothing here is a surprise on day one.</span></div>
+
+    <div class="row">
+      <button class="btn btn-green" onclick="window.print()">🖨️ Print / Save this packet</button>
+    </div>
+  </section>
+
+  <!-- ============ COMPLIANCE ============ -->
+  <section data-s="compliance">
+    <h2>Licensing &amp; Compliance</h2>
+    <p class="lead">Where Georgia stands right now for natural hair — and why Cut Creaters holds a standard either way.</p>
+
+    <div class="card" style="border-color:#2e4010;background:#12180a">
+      <h3 style="color:var(--green)">✅ Where it stands today</h3>
+      <p>As of right now, <b style="color:var(--cream)">natural hairstylists, locticians, and braiders do not have to hold a state cosmetology license to operate in Georgia.</b> You can work without one today.</p>
+    </div>
+
+    <div class="card" style="border-color:#4a3a0a;background:#1a1405">
+      <h3 style="color:var(--gold)">⏳ What's coming</h3>
+      <p>Georgia is moving toward <b style="color:var(--cream)">some form of certification requirement</b> for natural hairstyles going forward. It's still in talks with the politicians — not final. But we'd rather give you the basis <i>now</i> and be ready than get caught flat when it lands.</p>
+    </div>
+
+    <div class="card">
+      <h3>🏛️ Why we hold the standard anyway</h3>
+      <p>License or no license, Cut Creaters follows what the state, city, and county require of us. That's the point: <b style="color:var(--cream)">if we follow it, we can ask everyone else in the house to follow it too.</b></p>
+      <p>We don't want to be known as cappers — saying one thing and doing another. We hold our act together first. Then the standard means something.</p>
+    </div>
+
+    <div class="eyebrow">What that means for you</div>
+    <ul class="clean">
+      <li>You can start now — no state license needed today for natural hair.</li>
+      <li>Keep any training or certification you do have; put it on file.</li>
+      <li>Follow the house standards (sanitation, conduct) — that's non-negotiable.</li>
+      <li>When GA sets the certification rule, we help you get ahead of it, not scramble.</li>
+    </ul>
+
+    <div class="warn"><span class="ic">📌</span><span><b>Always verify current rules.</b> Requirements change. Confirm the latest with the Georgia State Board of Cosmetology &amp; Barbers and your city/county before relying on any of this. This hub reflects our current understanding, not legal advice.</span></div>
+  </section>
+
+  <!-- ============ WORKSHOPS ============ -->
+  <section data-s="workshops">
+    <h2>Workshops &amp; Classes</h2>
+    <p class="lead">This is where the foundation gets laid in person. Onboarding runs on scheduled sessions — not on-demand. Take a seat when it's open.</p>
+
+    <div class="ws next">
+      <span class="flag">Next up</span>
+      <div class="date">Onboarding Workshop · Class 01</div>
+      <h4>The Foundation — Getting In The Right Way</h4>
+      <div class="time" id="ws1-time">Date &amp; time — set at the planning meeting</div>
+      <div class="meta"><span>📍 <b>Cut Creaters</b></span><span class="seats">Seats limited</span><span>🎥 Recorded</span></div>
+    </div>
+
+    <div class="ws">
+      <div class="date">Onboarding Workshop · Class 02</div>
+      <h4>Paperwork, Standards &amp; Your Book</h4>
+      <div class="time">To be scheduled</div>
+      <div class="meta"><span>📍 <b>Cut Creaters</b></span><span class="seats">TBA</span></div>
+    </div>
+
+    <div class="warn"><span class="ic">🪑</span><span><b>If you miss the opportunity, you miss it.</b> Seats are limited and it can be a rush when everybody comes at once — so the seat goes to whoever's in the system and shows up. Catch the next class if you miss one.</span></div>
+
+    <div class="card">
+      <h3>🎥 Every session is recorded</h3>
+      <p>These meetings get recorded so nothing said "just goes anywhere." Everything we lay out becomes the packet, the system, the record — so we're not rebuilding the foundation from memory every time.</p>
+    </div>
+
+    <div class="banner">Workshop dates get set at the planning meeting and posted here. Check back — or ask at office hours.</div>
+  </section>
+
+  <!-- ============ OFFICE HOURS ============ -->
+  <section data-s="office">
+    <h2>Office Hours</h2>
+    <p class="lead">Like a leasing office. Come sit with us, get the documents, get your questions answered face to face while the fully-digital system is still being built.</p>
+
+    <div class="card">
+      <h3>🗓️ When the office is open</h3>
+      <p>The plan: hold set hours <b style="color:var(--cream)">early in the week — Monday through Wednesday</b> — sitting at Cut Creaters like a leasing office, with the documents and the computer set up and ready. (The house also runs Thursday–Saturday.)</p>
+    </div>
+
+    <div class="oh-grid">
+      <div class="oh-day open"><div class="dn">MON</div><div class="st">Office</div></div>
+      <div class="oh-day open"><div class="dn">TUE</div><div class="st">Office</div></div>
+      <div class="oh-day open"><div class="dn">WED</div><div class="st">Office</div></div>
+      <div class="oh-day"><div class="dn">THU</div><div class="st">House open</div></div>
+      <div class="oh-day"><div class="dn">FRI</div><div class="st">House open</div></div>
+      <div class="oh-day"><div class="dn">SAT</div><div class="st">House open</div></div>
+      <div class="oh-day"><div class="dn">SUN</div><div class="st">—</div></div>
+    </div>
+    <div class="banner">Exact hours get locked at the planning meeting and posted here.</div>
+
+    <div class="eyebrow">What you can do at office hours</div>
+    <ul class="clean">
+      <li>Fill out your application on the office computer.</li>
+      <li>Read and sign your agreement — no rushing.</li>
+      <li>Get every question answered in person.</li>
+      <li>Get set up before your first day so nothing's dropped.</li>
+    </ul>
+
+    <div class="card" style="margin-top:12px">
+      <h3>🧭 Where we're headed</h3>
+      <p>We know we want to go fully digital — everyone on their own, self-serve. But we create the system first. It's not overnight. Everybody has to be consistent and do the work. This hub is step one.</p>
+    </div>
+  </section>
+
+  <footer>
+    Cut Creaters · Loctician &amp; Braider Onboarding — the foundation.<br>
+    Operated under Townes Salon Suites · Built from the planning conversation · Living document, still in the works.
+  </footer>
+
+</div>
+
+<script>
+  // ---------- tab switching ----------
+  var tabs = document.getElementById('tabs');
+  function show(t){
+    document.querySelectorAll('.tab').forEach(function(b){ b.classList.toggle('active', b.dataset.t===t); });
+    document.querySelectorAll('section').forEach(function(s){ s.classList.toggle('on', s.dataset.s===t); });
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  tabs.addEventListener('click', function(e){ var b=e.target.closest('.tab'); if(b) show(b.dataset.t); });
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click', function(){ show(b.dataset.go); }); });
+
+  // ---------- checklist ----------
+  var CHECK_ITEMS = [
+    { id:'read',    t:'Read Start Here + The System',        d:'Know what we\'re building and how you get in.', tag:'Step 1' },
+    { id:'workshop',t:'Sign up for the next onboarding workshop', d:'Scheduled sessions only — grab a seat.', tag:'Step 2' },
+    { id:'packet',  t:'Get / read the welcome packet',        d:'The same packet everyone gets.', tag:'Step 3' },
+    { id:'app',     t:'Fill out the Stylist Application',     d:'Name, specialty, experience, references.', tag:'Doc' },
+    { id:'id',      t:'Turn in a copy of your ID',            d:'Government-issued, for the record.', tag:'Doc' },
+    { id:'agree',   t:'Read + sign the Seat License Agreement', d:'Terms, rate, house rules — read before signing.', tag:'Sign' },
+    { id:'w9',      t:'Complete W-9 / Contractor form',       d:'Keeps the tax side clean — you run your own book.', tag:'Sign' },
+    { id:'standards',t:'Sign House Standards & Code of Conduct', d:'Sanitation, professionalism, the standard.', tag:'Sign' },
+    { id:'cert',    t:'Put any certification on file',        d:'Not required today — but get ahead of what\'s coming.', tag:'Optional' },
+    { id:'seat',    t:'Confirm your seat through the system', d:'Terms known up front — no rush handoff.', tag:'Final' }
+  ];
+  var KEY = 'cc_onboard_v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ state = {}; }
+
+  var listEl = document.getElementById('checklist');
+  function renderList(){
+    listEl.innerHTML = '';
+    CHECK_ITEMS.forEach(function(it){
+      var done = !!state[it.id];
+      var d = document.createElement('div');
+      d.className = 'check' + (done?' done':'');
+      d.innerHTML =
+        '<div class="box"><svg viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+        '<div class="c-txt"><div class="t">'+it.t+'</div><div class="d">'+it.d+'</div></div>'+
+        '<span class="tag">'+it.tag+'</span>';
+      d.addEventListener('click', function(){
+        state[it.id] = !state[it.id];
+        localStorage.setItem(KEY, JSON.stringify(state));
+        renderList(); updateProgress();
+      });
+      listEl.appendChild(d);
+    });
+  }
+  function updateProgress(){
+    var total = CHECK_ITEMS.length;
+    var done = CHECK_ITEMS.filter(function(i){ return state[i.id]; }).length;
+    var pct = Math.round(done/total*100);
+    document.getElementById('pct').textContent = pct + '%';
+    document.getElementById('barfill').style.width = pct + '%';
+    var hint = document.getElementById('proghint');
+    if(pct===0) hint.textContent = 'Tap the checklist as you go — it saves on this device automatically.';
+    else if(pct===100) hint.textContent = '✅ You\'re fully onboarded on paper. Confirm your seat and you\'re in.';
+    else hint.textContent = done + ' of ' + total + ' done — bring the rest to office hours or the workshop.';
+  }
+  document.getElementById('resetChk').addEventListener('click', function(){
+    if(confirm('Reset your onboarding checklist on this device?')){
+      state = {}; localStorage.setItem(KEY, JSON.stringify(state));
+      renderList(); updateProgress();
+    }
+  });
+  renderList(); updateProgress();
+</script>
+</body>
+</html>
