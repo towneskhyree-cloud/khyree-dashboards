@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cut Creaters Salon Suites — Licensing &amp; Compliance</title>
+<style>
+:root{
+  --ink:#08080a;
+  --panel:#101016;
+  --cream:#f3e8d2;
+  --white:#ffffff;
+  --gold:#e3ba74;
+  --gold-hi:#fff0cf;
+  --mute:rgba(243,232,210,.58);
+  --line:rgba(243,232,210,.11);
+  --line-hi:rgba(227,186,116,.42);
+  --pad:clamp(22px,3.4vw,62px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--ink)}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  color:var(--cream);font-feature-settings:"kern","liga";
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── ambient field ───────────────────────────── */
+.field{position:fixed;inset:0;overflow:hidden;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none}
+.o1{width:58vmax;height:58vmax;background:radial-gradient(circle,rgba(227,186,116,.22),transparent 68%);top:-24vmax;left:-16vmax;animation:drift 22s ease-in-out infinite}
+.o2{width:46vmax;height:46vmax;background:radial-gradient(circle,rgba(96,140,255,.15),transparent 68%);bottom:-20vmax;right:-12vmax;animation:drift 26s ease-in-out infinite reverse}
+.o3{width:32vmax;height:32vmax;background:radial-gradient(circle,rgba(227,186,116,.10),transparent 70%);top:40%;left:52%;animation:drift 18s ease-in-out infinite}
+@keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(4vmax,-3vmax,0) scale(1.12)}}
+.grain{position:absolute;inset:0;opacity:.16;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.5) .5px,transparent .5px);
+  background-size:3px 3px;mix-blend-mode:overlay}
+.vign{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 45%,transparent 42%,rgba(0,0,0,.72) 100%)}
+
+/* ── deck frame (the "squared" slide) ────────── */
+.deck{position:fixed;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:clamp(14px,2vh,34px)}
+.frame{
+  position:relative;width:100%;height:100%;max-width:min(96vw,calc(94vh*16/9));max-height:min(94vh,calc(96vw*9/16));
+  border:1px solid var(--line);border-radius:clamp(14px,1.4vw,24px);
+  background:linear-gradient(155deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  backdrop-filter:blur(14px);
+  box-shadow:0 40px 120px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);
+  overflow:hidden;display:flex;flex-direction:column;
+}
+/* corner ticks */
+.frame::before,.frame::after{content:"";position:absolute;width:26px;height:26px;pointer-events:none;opacity:.55}
+.frame::before{top:14px;left:14px;border-top:1.5px solid var(--gold);border-left:1.5px solid var(--gold);border-radius:4px 0 0 0}
+.frame::after{bottom:14px;right:14px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-radius:0 0 4px 0}
+
+/* header rail */
+.rail{
+  flex:none;display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(12px,1.6vh,22px) var(--pad);
+  border-bottom:1px solid var(--line);
+  font-size:clamp(9px,.86vw,12.5px);letter-spacing:.3em;text-transform:uppercase;font-weight:700;
+}
+.rail .lhs{color:var(--gold)}
+.rail .rhs{color:rgba(243,232,210,.34);font-variant-numeric:tabular-nums;letter-spacing:.2em}
+
+/* body */
+.body{flex:1;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;padding:clamp(18px,3.2vh,44px) var(--pad);
+  display:none;flex-direction:column;justify-content:center;overflow-y:auto;overscroll-behavior:contain;
+}
+.slide.on{display:flex}
+.slide.on > *{animation:rise .7s cubic-bezier(.16,.84,.24,1) both}
+.slide.on > *:nth-child(1){animation-delay:.04s}
+.slide.on > *:nth-child(2){animation-delay:.13s}
+.slide.on > *:nth-child(3){animation-delay:.22s}
+.slide.on > *:nth-child(4){animation-delay:.31s}
+.slide.on > *:nth-child(5){animation-delay:.40s}
+@keyframes rise{from{opacity:0;transform:translateY(32px) scale(.978);filter:blur(9px)}to{opacity:1;transform:none;filter:blur(0)}}
+
+/* type */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:clamp(9.5px,.92vw,13px);letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:clamp(10px,1.8vh,20px)}
+.eyebrow::before{content:"";width:clamp(20px,2.6vw,44px);height:1.5px;background:linear-gradient(90deg,var(--gold),transparent)}
+h1{font-size:clamp(30px,5.6vw,86px);line-height:1.0;font-weight:850;letter-spacing:-.032em;color:var(--white)}
+h1 .sh{display:block;background:linear-gradient(96deg,var(--gold) 8%,var(--gold-hi) 42%,var(--gold) 78%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% 100%;animation:shine 5.5s ease-in-out infinite}
+@keyframes shine{0%,100%{background-position:0% 0}50%{background-position:100% 0}}
+h2{font-size:clamp(22px,3.5vw,54px);line-height:1.06;font-weight:850;letter-spacing:-.028em;color:var(--white);
+  margin-bottom:clamp(12px,2.2vh,28px);max-width:20ch}
+.lede{font-size:clamp(13px,1.5vw,22px);line-height:1.5;color:var(--mute);max-width:34ch;margin-top:clamp(12px,2vh,22px)}
+
+/* grid + cards */
+.cols{display:grid;gap:clamp(10px,1.3vw,20px)}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(158deg,rgba(255,255,255,.062),rgba(255,255,255,.018));
+  border:1px solid var(--line);border-radius:clamp(12px,1.2vw,18px);
+  padding:clamp(14px,1.9vw,28px);
+  transition:transform .45s cubic-bezier(.16,.84,.24,1),border-color .45s,box-shadow .45s,background .45s;
+}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.12) 48%,transparent 62%);
+  transform:translateX(-120%);transition:transform .9s cubic-bezier(.16,.84,.24,1)}
+.card:hover{transform:translateY(-6px);border-color:var(--line-hi);
+  box-shadow:0 22px 60px rgba(0,0,0,.55),0 0 0 1px rgba(227,186,116,.16)}
+.card:hover::after{transform:translateX(120%)}
+.badge{display:inline-flex;align-items:center;justify-content:center;
+  width:clamp(26px,2.5vw,38px);height:clamp(26px,2.5vw,38px);border-radius:11px;
+  background:linear-gradient(140deg,rgba(227,186,116,.28),rgba(227,186,116,.08));
+  border:1px solid rgba(227,186,116,.34);color:var(--gold);font-weight:850;
+  font-size:clamp(11px,1.1vw,16px);margin-bottom:clamp(8px,1.3vh,14px)}
+.card h3{font-size:clamp(14.5px,1.75vw,26px);font-weight:800;color:var(--white);line-height:1.18;
+  letter-spacing:-.014em;margin-bottom:6px}
+.card p{font-size:clamp(11.5px,1.12vw,17px);line-height:1.55;color:var(--mute)}
+.card p + p{margin-top:8px}
+.card p b,.card p strong{color:var(--cream);font-weight:700}
+
+/* note strip */
+.note{margin-top:clamp(12px,2vh,24px);display:flex;gap:clamp(10px,1.2vw,16px);align-items:flex-start;
+  border:1px solid rgba(227,186,116,.24);border-radius:clamp(10px,1.1vw,16px);
+  padding:clamp(11px,1.35vw,20px) clamp(13px,1.5vw,24px);
+  background:linear-gradient(120deg,rgba(227,186,116,.10),rgba(227,186,116,.03));
+  font-size:clamp(11.5px,1.15vw,17.5px);line-height:1.5;color:var(--cream)}
+.note .k{flex:none;color:var(--gold);font-weight:850}
+
+/* link buttons — the money element */
+.links{display:grid;gap:clamp(7px,.85vw,12px);margin-top:clamp(9px,1.4vh,15px)}
+a.lnk{
+  position:relative;display:flex;align-items:center;gap:clamp(9px,1vw,14px);
+  text-decoration:none;color:var(--cream);
+  border:1px solid rgba(227,186,116,.26);border-radius:100px;
+  padding:clamp(8px,.92vw,14px) clamp(13px,1.35vw,22px);
+  background:linear-gradient(110deg,rgba(227,186,116,.09),rgba(227,186,116,.03));
+  font-size:clamp(11px,1.08vw,16.5px);font-weight:700;letter-spacing:-.005em;
+  transition:transform .35s cubic-bezier(.16,.84,.24,1),background .35s,border-color .35s,box-shadow .35s;
+  overflow:hidden;
+}
+a.lnk .ic{flex:none;width:clamp(20px,1.9vw,28px);height:clamp(20px,1.9vw,28px);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:var(--gold);color:#0b0b0d;
+  font-size:clamp(10px,1vw,14px);font-weight:900;transition:transform .4s}
+a.lnk .tx{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+a.lnk .go{flex:none;font-size:clamp(9px,.82vw,11.5px);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);opacity:.65;transition:opacity .35s,transform .35s}
+a.lnk:hover{transform:translateY(-3px);border-color:var(--gold);
+  background:linear-gradient(110deg,rgba(227,186,116,.22),rgba(227,186,116,.08));
+  box-shadow:0 14px 34px rgba(0,0,0,.5),0 0 0 1px rgba(227,186,116,.3)}
+a.lnk:hover .ic{transform:rotate(45deg) scale(1.08)}
+a.lnk:hover .go{opacity:1;transform:translateX(3px)}
+a.lnk:active{transform:translateY(-1px) scale(.99)}
+
+/* steps */
+.steps{list-style:none;display:grid;gap:clamp(8px,1.2vh,15px);margin-top:clamp(4px,.8vh,10px)}
+.steps li{display:flex;gap:clamp(10px,1.2vw,17px);align-items:flex-start;
+  font-size:clamp(12.5px,1.4vw,21px);line-height:1.42;color:var(--cream)}
+.steps li .n{flex:none;width:clamp(21px,2.05vw,30px);height:clamp(21px,2.05vw,30px);border-radius:9px;
+  background:linear-gradient(140deg,var(--gold),#c99a4e);color:#0b0b0d;font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-size:clamp(10px,1vw,15px);margin-top:3px;
+  box-shadow:0 4px 14px rgba(227,186,116,.28)}
+.steps li b{color:var(--white);font-weight:800}
+
+/* pills */
+.pills{display:flex;flex-wrap:wrap;gap:clamp(6px,.75vw,11px);margin-top:clamp(12px,2vh,24px)}
+.pill{border:1px solid var(--line);border-radius:100px;padding:clamp(6px,.7vw,11px) clamp(11px,1.15vw,20px);
+  font-size:clamp(10.5px,1.02vw,15.5px);color:var(--mute);background:rgba(255,255,255,.035);font-weight:600;
+  transition:all .35s}
+.pill:hover{color:var(--cream);border-color:var(--line-hi);transform:translateY(-2px)}
+.pill.hot{border-color:rgba(227,186,116,.44);color:var(--gold);background:rgba(227,186,116,.09)}
+
+/* footer rail */
+.foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:clamp(9px,1.3vh,17px) var(--pad);border-top:1px solid var(--line)}
+.mark{font-size:clamp(8.5px,.82vw,12px);letter-spacing:.26em;text-transform:uppercase;
+  color:rgba(243,232,210,.3);font-weight:700;white-space:nowrap}
+.dots{display:flex;gap:8px;align-items:center}
+.dt{width:7px;height:7px;border-radius:50%;background:rgba(243,232,210,.2);cursor:pointer;border:0;padding:0;
+  transition:all .45s cubic-bezier(.16,.84,.24,1)}
+.dt:hover{background:rgba(243,232,210,.45)}
+.dt.on{background:var(--gold);width:26px;border-radius:100px;box-shadow:0 0 12px rgba(227,186,116,.55)}
+.nav{display:flex;gap:8px}
+.nb{width:clamp(30px,3vw,40px);height:clamp(30px,3vw,40px);border-radius:11px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--cream);
+  font-size:clamp(13px,1.3vw,17px);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .32s}
+.nb:hover{background:var(--gold);color:#0b0b0d;border-color:var(--gold);transform:translateY(-2px)}
+.nb:disabled{opacity:.28;cursor:default;transform:none;background:rgba(255,255,255,.05);color:var(--cream);border-color:var(--line)}
+
+/* progress */
+.prog{position:absolute;top:0;left:0;height:2px;z-index:9;
+  background:linear-gradient(90deg,#c99a4e,var(--gold),var(--gold-hi));
+  transition:width .6s cubic-bezier(.16,.84,.24,1);box-shadow:0 0 16px rgba(227,186,116,.7)}
+
+/* return toast */
+.toast{position:fixed;left:50%;bottom:clamp(18px,4vh,44px);transform:translate(-50%,26px);
+  z-index:60;opacity:0;pointer-events:none;
+  background:rgba(16,16,22,.94);border:1px solid var(--line-hi);border-radius:100px;
+  padding:11px 22px;font-size:clamp(11px,1.05vw,15px);font-weight:700;color:var(--cream);
+  backdrop-filter:blur(16px);box-shadow:0 18px 44px rgba(0,0,0,.6);
+  transition:opacity .5s,transform .5s cubic-bezier(.16,.84,.24,1);white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast b{color:var(--gold)}
+
+@media (max-width:860px){
+  .frame{max-width:100%;max-height:100%;border-radius:16px}
+  .c2{grid-template-columns:1fr}
+  h2{max-width:none}
+  .lede{max-width:none}
+  .mark{display:none}
+  a.lnk .go{display:none}
+  .rail{letter-spacing:.2em}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="field">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="grain"></div><div class="vign"></div>
+</div>
+
+<div class="deck">
+ <div class="frame">
+  <div class="prog" id="prog"></div>
+
+  <div class="rail">
+    <div class="lhs" id="railL">Cut Creaters Salon Suites</div>
+    <div class="rhs" id="railR">01 / 05</div>
+  </div>
+
+  <div class="body">
+
+    <!-- 1 ─────────────────────────────────────── -->
+    <section class="slide on" data-label="Welcome">
+      <div class="eyebrow">Decatur, Georgia · Tenant Briefing</div>
+      <h1>Operating Your Business<span class="sh">The Right Way</span></h1>
+      <p class="lede">What DeKalb County requires, what Cut Creaters already covers for you, and the exact steps to get fully licensed.</p>
+      <div class="pills">
+        <div class="pill hot">Certificate of Occupancy</div>
+        <div class="pill hot">Business License</div>
+        <div class="pill">Secretary of State</div>
+        <div class="pill">Federal EIN</div>
+        <div class="pill">State Board</div>
+      </div>
+    </section>
+
+    <!-- 2 ─────────────────────────────────────── -->
+    <section class="slide" data-label="The Requirement">
+      <div class="eyebrow">01 · The Requirement</div>
+      <h2>To operate a business in DeKalb County, you need two things.</h2>
+      <div class="cols c2">
+        <div class="card">
+          <div class="badge">A</div>
+          <h3>Certificate of Occupancy</h3>
+          <p>Permission for the <b>space</b> to be used for business.</p>
+          <div class="links">
+            <a class="lnk" href="https://www.dekalbcountyga.gov/planning-sustainability/certificate-occupancy" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">DeKalb County — Certificate of Occupancy</span><span class="go">Open</span></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">B</div>
+          <h3>Business License</h3>
+          <p>Permission for <b>you</b> to do business in the county.</p>
+          <div class="links">
+            <a class="lnk" href="https://www.dekalbcountyga.gov/finance/business-license" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">DeKalb County — Business License</span><span class="go">Open</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="note"><span class="k">Simple version:</span><span>The C.O. covers the building. The business license covers the person. You need both — and Cut Creaters already handles one of them for you.</span></div>
+    </section>
+
+    <!-- 3 ─────────────────────────────────────── -->
+    <section class="slide" data-label="What You Need Here">
+      <div class="eyebrow">02 · What You Need At Cut Creaters</div>
+      <h2>We cover the building. You cover your license.</h2>
+      <div class="cols c2">
+        <div class="card">
+          <div class="badge">✓</div>
+          <h3>C.O. — covered by us</h3>
+          <p><b>Braiders, locticians, hair stylists, barbers, nail techs, lash techs and makeup artists do not need their own C.O.</b> You operate under the Cut Creaters Certificate of Occupancy.</p>
+          <p>Other services may also be allowed under our C.O. — <b>reviewed case by case.</b></p>
+        </div>
+        <div class="card">
+          <div class="badge">!</div>
+          <h3>Your license — required</h3>
+          <p>Every suite owner must carry their <b>own business license.</b></p>
+          <p><b>Nail techs, lash techs and estheticians</b> must also hold a current <b>Georgia State Board license.</b></p>
+          <div class="links">
+            <a class="lnk" href="https://sos.ga.gov/georgia-state-board-cosmetology-and-barbers" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">GA State Board of Cosmetology &amp; Barbers</span><span class="go">Open</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 ─────────────────────────────────────── -->
+    <section class="slide" data-label="How To Get It">
+      <div class="eyebrow">03 · Getting Your Business License</div>
+      <h2>Two steps. Both can be done online.</h2>
+      <div class="cols c2">
+        <div class="card">
+          <div class="badge">A</div>
+          <h3>Register with the Secretary of State</h3>
+          <p>Your business must be registered and in <b>active</b> standing with Georgia.</p>
+          <div class="links">
+            <a class="lnk" href="https://sos.ga.gov/how-to-guide/how-file-annual-registration" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">How to File Annual Registration</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://ecorp.sos.ga.gov/BusinessSearch" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Check if your business is active</span><span class="go">Open</span></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">B</div>
+          <h3>Get your Federal EIN</h3>
+          <p>Free, online, and issued the <b>same day</b> from the IRS.</p>
+          <div class="links">
+            <a class="lnk" href="https://www.irs.gov/businesses/employer-identification-number" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">IRS — Employer Identification Number</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://sa.www4.irs.gov/modiein/individual/index.jsp" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Apply for an EIN online</span><span class="go">Open</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="note"><span class="k">Order matters:</span><span>Register the business first, then apply for the EIN. The EIN application asks for your registered business name.</span></div>
+    </section>
+
+    <!-- 5 ─────────────────────────────────────── -->
+    <section class="slide" data-label="Start Here">
+      <div class="eyebrow">04 · Not Registered Yet? Start Here</div>
+      <h2>Every link you need, in order.</h2>
+      <div class="cols c2">
+        <div class="card">
+          <div class="badge">1</div>
+          <h3>Never registered / no EIN</h3>
+          <ul class="steps">
+            <li><span class="n">1</span><span>Reserve your <b>business name</b></span></li>
+            <li><span class="n">2</span><span>Once approved, <b>register the business</b></span></li>
+            <li><span class="n">3</span><span>Once registered, <b>apply for the EIN</b></span></li>
+          </ul>
+          <div class="links">
+            <a class="lnk" href="https://sos.ga.gov/how-to-guide/how-guide-how-reserve-name" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Reserve a Business Name</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://ecorp.sos.ga.gov/Account/Login" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Register your business (eCorp)</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://sa.www4.irs.gov/modiein/individual/index.jsp" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Apply for your EIN</span><span class="go">Open</span></a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge">2</div>
+          <h3>Business dissolved? Reinstate it.</h3>
+          <p>If your entity was administratively dissolved, you can bring it back into active standing.</p>
+          <div class="links">
+            <a class="lnk" href="https://sos.ga.gov/how-to-guide/how-guide-reinstate-entity" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">How to Reinstate an Entity</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://sos.ga.gov/sites/default/files/forms/Reference%20-%20Filing%20Fees_0.pdf" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">Secretary of State Filing Fees (PDF)</span><span class="go">Open</span></a>
+            <a class="lnk" href="https://sos.ga.gov/how-to-guide" target="_blank" rel="noopener">
+              <span class="ic">↗</span><span class="tx">All GA SOS How-To Guides</span><span class="go">Open</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="note"><span class="k">Questions?</span><span>Ask the office about your suite or what's allowed under our C.O. — we'll walk you through it.</span></div>
+    </section>
+
+  </div>
+
+  <div class="foot">
+    <div class="mark">Cut Creaters Salon Suites</div>
+    <div class="dots" id="dots"></div>
+    <div class="nav">
+      <button class="nb" id="prev" aria-label="Previous slide">‹</button>
+      <button class="nb" id="next" aria-label="Next slide">›</button>
+    </div>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var total=slides.length, i=0;
+  var dots=document.getElementById('dots'),prog=document.getElementById('prog');
+  var railL=document.getElementById('railL'),railR=document.getElementById('railR');
+  var prev=document.getElementById('prev'),next=document.getElementById('next');
+  var toast=document.getElementById('toast'),tTimer;
+
+  slides.forEach(function(_,n){
+    var b=document.createElement('button');
+    b.className='dt'; b.setAttribute('aria-label','Slide '+(n+1));
+    b.onclick=function(){go(n)};
+    dots.appendChild(b);
+  });
+  var dEls=[].slice.call(dots.children);
+  var pad=function(n){return (n<10?'0':'')+n};
+
+  function paint(){
+    dEls.forEach(function(d,k){d.classList.toggle('on',k===i)});
+    prog.style.width=((i+1)/total*100)+'%';
+    railR.textContent=pad(i+1)+' / '+pad(total);
+    railL.textContent=slides[i].dataset.label||'Cut Creaters Salon Suites';
+    prev.disabled=(i===0); next.disabled=(i===total-1);
+  }
+  function go(n,silent){
+    if(n<0||n>=total) return;
+    if(n!==i){slides[i].classList.remove('on');i=n;slides[i].classList.add('on')}
+    slides[i].scrollTop=0;
+    paint();
+    try{ sessionStorage.setItem('cc_slide',i); }catch(e){}
+    if(!silent && history.replaceState) history.replaceState(null,'','#s'+(i+1));
+    else if(!silent) location.hash='#s'+(i+1);
+  }
+  function nx(){go(i+1)} function pv(){go(i-1)}
+
+  next.onclick=nx; prev.onclick=pv;
+
+  document.addEventListener('keydown',function(e){
+    var k=e.key;
+    if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){e.preventDefault();nx()}
+    else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){e.preventDefault();pv()}
+    else if(k==='Home'){e.preventDefault();go(0)}
+    else if(k==='End'){e.preventDefault();go(total-1)}
+    else if(k==='f'||k==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+    else if(/^[1-9]$/.test(k)){var n=+k-1; if(n<total)go(n)}
+  });
+
+  // swipe
+  var x0=null,y0=null;
+  document.addEventListener('touchstart',function(e){x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(x0===null)return;
+    var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>52&&Math.abs(dx)>Math.abs(dy)*1.4){dx<0?nx():pv()}
+    x0=null;
+  },{passive:true});
+
+  // click edges to advance (ignores links/buttons)
+  document.addEventListener('click',function(e){
+    if(e.target.closest('a,button'))return;
+    if(e.clientX>window.innerWidth*0.66)nx();
+    else if(e.clientX<window.innerWidth*0.34)pv();
+  });
+
+  function say(html,ms){
+    toast.innerHTML=html; toast.classList.add('show');
+    clearTimeout(tTimer); tTimer=setTimeout(function(){toast.classList.remove('show')},ms||3400);
+  }
+
+  // every link opens in a new tab, and we remember where she was
+  document.querySelectorAll('a.lnk').forEach(function(a){
+    a.addEventListener('click',function(){
+      try{ sessionStorage.setItem('cc_slide',i); }catch(e){}
+      say('Opened in a new tab — <b>close it to come right back here</b>');
+    });
+  });
+
+  // restore position: #hash wins, then the remembered slide
+  function restore(){
+    var m=(location.hash||'').match(/^#s(\d+)$/);
+    if(m){var n=+m[1]-1; if(n>=0&&n<total){go(n,true);return}}
+    var s=null; try{ s=sessionStorage.getItem('cc_slide'); }catch(e){}
+    if(s!==null){var n2=+s; if(n2>0&&n2<total){go(n2,true);setTimeout(function(){say('Welcome back — picked up on <b>slide '+(n2+1)+'</b>')},650)}}
+  }
+  window.addEventListener('hashchange',function(){
+    var m=(location.hash||'').match(/^#s(\d+)$/);
+    if(m)go(+m[1]-1,true);
+  });
+  // coming back from a link (bfcache or tab refocus) re-syncs
+  window.addEventListener('pageshow',function(e){ if(e.persisted) paint(); });
+
+  paint(); restore();
+})();
+</script>
+</body>
+</html>
