@@ -227,11 +227,16 @@ a.lnk:active{transform:translateY(-1px) scale(.99)}
 .toast b{color:var(--gold)}
 
 /* ── inline QR strip (slide 5) ───────────────── */
-.qrstrip{margin-top:clamp(10px,1.6vh,20px);display:flex;align-items:center;gap:clamp(12px,1.6vw,24px);
+.qrstrip{margin-top:clamp(8px,1.2vh,16px);display:flex;align-items:center;gap:clamp(10px,1.3vw,20px);
   border:1px solid var(--line-hi);border-radius:clamp(10px,1.1vw,16px);
-  padding:clamp(10px,1.15vw,18px) clamp(12px,1.4vw,22px);
+  padding:clamp(8px,.85vw,13px) clamp(11px,1.2vw,18px);
   background:linear-gradient(120deg,var(--tint),var(--tint-2))}
-.qrmini{flex:none;width:clamp(62px,7vw,104px);height:clamp(62px,7vw,104px);
+.slide[data-label="Start Here"] h2{margin-bottom:clamp(7px,1.1vh,15px)}
+.slide[data-label="Start Here"] .card{padding:clamp(11px,1.45vw,21px)}
+.slide[data-label="Start Here"] .links{gap:clamp(5px,.6vw,9px);margin-top:clamp(7px,1vh,11px)}
+.slide[data-label="Start Here"] .steps{gap:clamp(5px,.75vh,10px)}
+.slide[data-label="Start Here"] .cols{gap:clamp(9px,1.1vw,17px)}
+.qrmini{flex:none;width:clamp(54px,5.6vw,84px);height:clamp(54px,5.6vw,84px);
   padding:clamp(4px,.5vw,8px);background:#fffaf0;border-radius:clamp(7px,.8vw,12px);
   border:1px solid var(--line-hi);color:#191209;box-shadow:var(--shadow-card)}
 .qrmini svg{width:100%;height:100%;display:block}
