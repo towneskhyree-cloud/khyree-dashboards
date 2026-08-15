@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cut Creaters Salon Suites — Suite Rules</title>
+<style>
+/* ── LIGHT (default) ─────────────────────────── */
+:root{
+  --ink:#f0e2c4;
+  --cream:#3d3122;
+  --white:#191209;
+  --gold:#84570f;
+  --gold-hi:#bd8c28;
+  --gold-fill:#cfa03c;
+  --on-gold:#241906;
+  --mute:rgba(61,49,34,.72);
+  --line:rgba(95,71,33,.22);
+  --line-hi:rgba(132,87,15,.48);
+  --surface:linear-gradient(158deg,#fdf5e4 0%,#f4e6c9 100%);
+  --frame:linear-gradient(155deg,#f6ead0 0%,#eddcba 100%);
+  --panel:#f4e7c9;
+  --shadow:0 34px 90px rgba(84,60,22,.22),inset 0 1px 0 rgba(255,250,238,.85);
+  --shadow-card:0 16px 34px rgba(84,60,22,.16),0 0 0 1px rgba(132,87,15,.18);
+  --grain-op:.14;
+  --grain-blend:multiply;
+  --grain-dot:rgba(104,78,38,.6);
+  --orb-a:rgba(206,152,52,.40);
+  --orb-b:rgba(186,116,80,.24);
+  --tint:rgba(132,87,15,.11);
+  --tint-2:rgba(132,87,15,.04);
+  --tint-hi:rgba(132,87,15,.24);
+  --yes:#2f6d3f;      --yes-bg:rgba(47,109,63,.12);   --yes-line:rgba(47,109,63,.34);
+  --ask:#9a6a10;      --ask-bg:rgba(154,106,16,.13);  --ask-line:rgba(154,106,16,.36);
+  --no:#a32f28;       --no-bg:rgba(163,47,40,.11);    --no-line:rgba(163,47,40,.32);
+  --pad:clamp(18px,3.2vw,54px);
+}
+/* ── DARK ────────────────────────────────────── */
+:root[data-theme="dark"]{
+  --ink:#08080a;
+  --cream:#f3e8d2;
+  --white:#ffffff;
+  --gold:#e3ba74;
+  --gold-hi:#fff0cf;
+  --gold-fill:#e3ba74;
+  --on-gold:#0b0b0d;
+  --mute:rgba(243,232,210,.58);
+  --line:rgba(243,232,210,.11);
+  --line-hi:rgba(227,186,116,.42);
+  --surface:linear-gradient(158deg,rgba(255,255,255,.062),rgba(255,255,255,.018));
+  --frame:linear-gradient(155deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+  --panel:rgba(13,13,17,.94);
+  --shadow:0 40px 120px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);
+  --shadow-card:0 18px 44px rgba(0,0,0,.5),0 0 0 1px rgba(227,186,116,.14);
+  --grain-op:.16;
+  --grain-blend:overlay;
+  --grain-dot:rgba(255,255,255,.5);
+  --orb-a:rgba(227,186,116,.20);
+  --orb-b:rgba(96,140,255,.13);
+  --tint:rgba(227,186,116,.09);
+  --tint-2:rgba(227,186,116,.03);
+  --tint-hi:rgba(227,186,116,.22);
+  --yes:#7fd39a;      --yes-bg:rgba(127,211,154,.10);  --yes-line:rgba(127,211,154,.30);
+  --ask:#e8c46e;      --ask-bg:rgba(232,196,110,.10);  --ask-line:rgba(232,196,110,.32);
+  --no:#f08a80;       --no-bg:rgba(240,138,128,.09);   --no-line:rgba(240,138,128,.30);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--ink);transition:background .5s ease;scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  color:var(--cream);background:var(--ink);
+  -webkit-font-smoothing:antialiased;transition:color .5s ease;
+  min-height:100%;
+}
+
+/* ── ambient ─────────────────────────────────── */
+.field{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(110px);transition:background .5s ease}
+.o1{width:58vmax;height:58vmax;background:radial-gradient(circle,var(--orb-a),transparent 68%);top:-26vmax;left:-18vmax}
+.o2{width:46vmax;height:46vmax;background:radial-gradient(circle,var(--orb-b),transparent 68%);bottom:-22vmax;right:-14vmax}
+.grain{position:absolute;inset:0;opacity:var(--grain-op);
+  background-image:radial-gradient(var(--grain-dot) .5px,transparent .5px);
+  background-size:3px 3px;mix-blend-mode:var(--grain-blend)}
+
+.wrap{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 var(--pad) clamp(60px,10vh,120px)}
+
+/* ── top bar ─────────────────────────────────── */
+.bar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:clamp(10px,1.6vh,16px) 0;margin-bottom:clamp(10px,2vh,18px);
+  background:linear-gradient(180deg,var(--ink) 62%,transparent);backdrop-filter:blur(6px)}
+.bar .id{font-size:clamp(9px,.86vw,12px);letter-spacing:.3em;text-transform:uppercase;font-weight:800;color:var(--gold)}
+.bar .tools{display:flex;gap:8px;align-items:center}
+.nb{height:clamp(32px,3vw,38px);min-width:clamp(32px,3vw,38px);padding:0 12px;border-radius:11px;
+  border:1px solid var(--line);background:var(--surface);color:var(--cream);
+  font-family:inherit;font-size:clamp(11px,1.05vw,13.5px);font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;transition:all .3s}
+.nb:hover{background:linear-gradient(140deg,var(--gold-fill),var(--gold));color:var(--on-gold);border-color:var(--gold);transform:translateY(-2px)}
+
+/* ── masthead ────────────────────────────────── */
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:clamp(9.5px,.92vw,12.5px);letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:clamp(10px,1.6vh,18px)}
+.eyebrow::before{content:"";width:clamp(20px,2.6vw,44px);height:1.5px;background:linear-gradient(90deg,var(--gold),transparent)}
+h1{font-size:clamp(31px,5.4vw,72px);line-height:1.02;font-weight:850;letter-spacing:-.032em;color:var(--white)}
+h1 .sh{display:block;background:linear-gradient(96deg,var(--gold) 8%,var(--gold-hi) 42%,var(--gold) 78%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:clamp(14px,1.5vw,20px);line-height:1.55;color:var(--mute);max-width:56ch;margin-top:clamp(12px,2vh,20px)}
+
+/* ── the three-lane key ──────────────────────── */
+.key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(9px,1.2vw,16px);margin-top:clamp(20px,3vh,34px)}
+.keycard{border-radius:15px;padding:clamp(13px,1.6vw,22px);border:1px solid;background:var(--surface)}
+.keycard.k-yes{border-color:var(--yes-line);background:var(--yes-bg)}
+.keycard.k-ask{border-color:var(--ask-line);background:var(--ask-bg)}
+.keycard.k-no{border-color:var(--no-line);background:var(--no-bg)}
+.keycard .lbl{font-size:clamp(11px,1.15vw,15px);font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.k-yes .lbl{color:var(--yes)} .k-ask .lbl{color:var(--ask)} .k-no .lbl{color:var(--no)}
+.keycard p{font-size:clamp(11.5px,1.05vw,14.5px);line-height:1.5;color:var(--mute)}
+
+/* ── controls ────────────────────────────────── */
+.controls{position:sticky;top:clamp(50px,7vh,70px);z-index:15;
+  margin:clamp(26px,4vh,44px) 0 clamp(14px,2vh,22px);
+  padding:clamp(10px,1.3vw,15px);border:1px solid var(--line-hi);border-radius:16px;
+  background:var(--panel);backdrop-filter:blur(18px);box-shadow:var(--shadow-card);
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:190px;display:flex;align-items:center;gap:9px;
+  border:1px solid var(--line);border-radius:100px;padding:9px 15px;background:var(--tint-2)}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--cream);font-family:inherit;
+  font-size:clamp(12.5px,1.15vw,15px);font-weight:600;outline:none}
+.search input::placeholder{color:var(--mute)}
+.search .mag{color:var(--gold);font-size:14px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:100px;padding:9px 16px;background:var(--surface);
+  font-family:inherit;font-size:clamp(11px,1.02vw,14px);font-weight:750;color:var(--mute);cursor:pointer;transition:all .28s}
+.chip:hover{color:var(--cream);border-color:var(--line-hi);transform:translateY(-2px)}
+.chip.on{background:linear-gradient(140deg,var(--gold-fill),var(--gold));color:var(--on-gold);border-color:var(--gold)}
+.chip.on.c-yes{background:var(--yes);border-color:var(--yes);color:#fff}
+.chip.on.c-ask{background:var(--ask);border-color:var(--ask);color:#fff}
+.chip.on.c-no{background:var(--no);border-color:var(--no);color:#fff}
+
+/* ── sections ────────────────────────────────── */
+.sec{margin-top:clamp(30px,5vh,58px);scroll-margin-top:clamp(120px,17vh,170px)}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:clamp(6px,1vh,12px)}
+.sec-n{font-size:clamp(10px,.95vw,13px);font-weight:900;letter-spacing:.24em;color:var(--gold);opacity:.85}
+h2{font-size:clamp(21px,3vw,40px);line-height:1.08;font-weight:850;letter-spacing:-.026em;color:var(--white)}
+.sec-sub{font-size:clamp(12.5px,1.22vw,17px);line-height:1.55;color:var(--mute);max-width:62ch;margin-bottom:clamp(12px,2vh,20px)}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:clamp(9px,1.15vw,15px)}
+.rule{position:relative;border:1px solid var(--line);border-left-width:3px;border-radius:14px;
+  padding:clamp(13px,1.5vw,20px);background:var(--surface);box-shadow:var(--shadow-card);
+  transition:transform .35s cubic-bezier(.16,.84,.24,1),border-color .35s,box-shadow .35s}
+.rule:hover{transform:translateY(-3px);border-color:var(--line-hi)}
+.rule.r-yes{border-left-color:var(--yes)}
+.rule.r-ask{border-left-color:var(--ask)}
+.rule.r-no{border-left-color:var(--no)}
+.vtag{display:inline-flex;align-items:center;gap:6px;font-size:clamp(9px,.88vw,11.5px);font-weight:900;
+  letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:100px;margin-bottom:9px;border:1px solid}
+.r-yes .vtag{color:var(--yes);background:var(--yes-bg);border-color:var(--yes-line)}
+.r-ask .vtag{color:var(--ask);background:var(--ask-bg);border-color:var(--ask-line)}
+.r-no  .vtag{color:var(--no); background:var(--no-bg); border-color:var(--no-line)}
+.rule h3{font-size:clamp(14px,1.42vw,19px);font-weight:800;color:var(--white);line-height:1.22;letter-spacing:-.012em;margin-bottom:6px}
+.rule p{font-size:clamp(12px,1.12vw,15.5px);line-height:1.55;color:var(--mute)}
+.rule p b,.rule p strong{color:var(--cream);font-weight:750}
+.why{margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:clamp(9.5px,.9vw,12px);
+  font-weight:700;letter-spacing:.04em;color:var(--gold);opacity:.9;
+  border-top:1px dashed var(--line-hi);padding-top:9px;width:100%}
+.why span{color:var(--mute);font-weight:600}
+
+/* ── numbered steps / plain list blocks ──────── */
+.block{border:1px solid var(--line-hi);border-radius:16px;padding:clamp(15px,1.8vw,26px);
+  background:linear-gradient(120deg,var(--tint),var(--tint-2));margin-top:clamp(10px,1.6vh,16px)}
+.steps{list-style:none;display:grid;gap:clamp(9px,1.3vh,14px)}
+.steps li{display:flex;gap:clamp(10px,1.2vw,16px);align-items:flex-start;
+  font-size:clamp(12.5px,1.2vw,17px);line-height:1.45;color:var(--cream)}
+.steps li .n{flex:none;width:clamp(21px,2vw,28px);height:clamp(21px,2vw,28px);border-radius:9px;
+  background:linear-gradient(140deg,var(--gold-fill),var(--gold));color:var(--on-gold);font-weight:900;
+  display:flex;align-items:center;justify-content:center;font-size:clamp(10px,1vw,14px);margin-top:2px}
+.steps li b{color:var(--white);font-weight:800}
+.steps.plain li .n{background:var(--tint-hi);color:var(--gold);border:1px solid var(--line-hi)}
+
+.note{margin-top:clamp(12px,2vh,20px);display:flex;gap:clamp(10px,1.2vw,15px);align-items:flex-start;
+  border:1px solid var(--line-hi);border-radius:14px;padding:clamp(12px,1.4vw,19px) clamp(13px,1.5vw,22px);
+  background:linear-gradient(120deg,var(--tint),var(--tint-2));
+  font-size:clamp(12px,1.12vw,16px);line-height:1.5;color:var(--cream)}
+.note .k{flex:none;color:var(--gold);font-weight:900}
+
+a.lnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:var(--cream);
+  border:1px solid var(--line-hi);border-radius:100px;padding:8px 16px;margin-top:10px;margin-right:8px;
+  background:linear-gradient(110deg,var(--tint),var(--tint-2));
+  font-size:clamp(11px,1.05vw,14.5px);font-weight:750;transition:all .32s}
+a.lnk:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:var(--shadow-card)}
+a.lnk .ic{flex:none;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--gold-fill);color:var(--on-gold);font-size:11px;font-weight:900}
+
+/* ── owner-only draft banner ─────────────────── */
+.owner{border:1.5px dashed var(--line-hi);border-radius:16px;padding:clamp(14px,1.7vw,24px);
+  background:var(--tint-2);margin-top:clamp(20px,3vh,34px)}
+.owner .oh{font-size:clamp(10px,.95vw,13px);letter-spacing:.24em;text-transform:uppercase;
+  font-weight:900;color:var(--gold);margin-bottom:10px}
+.owner ul{list-style:none;display:grid;gap:8px}
+.owner li{font-size:clamp(12px,1.12vw,15.5px);line-height:1.5;color:var(--mute);
+  padding-left:20px;position:relative}
+.owner li::before{content:"◆";position:absolute;left:0;color:var(--gold);font-size:9px;top:5px}
+.owner li b{color:var(--cream);font-weight:750}
+.tbd{border-bottom:2px dotted var(--gold);color:var(--gold);font-weight:800;padding-bottom:1px}
+.hidden{display:none!important}
+
+.empty{padding:40px 10px;text-align:center;color:var(--mute);font-size:15px;font-weight:600}
+
+.foot{margin-top:clamp(40px,7vh,80px);padding-top:clamp(16px,2.4vh,26px);border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font-size:clamp(10px,.95vw,13px);color:var(--mute)}
+.foot .mark{letter-spacing:.24em;text-transform:uppercase;font-weight:800;color:var(--gold);opacity:.85}
+
+@media (max-width:760px){
+  .key{grid-template-columns:1fr}
+  .controls{top:clamp(46px,6vh,60px)}
+  .sec{scroll-margin-top:200px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── print: clean handout ────────────────────── */
+@media print{
+  .field,.bar,.controls,.owner,.foot .mark{display:none!important}
+  html,body{background:#fff!important;color:#111!important}
+  .wrap{max-width:none;padding:0}
+  .rule,.keycard,.block,.note{break-inside:avoid;box-shadow:none!important;background:#fff!important;border-color:#bbb!important}
+  .sec{margin-top:22px;break-inside:auto}
+  h1{font-size:30px} h2{font-size:19px} .lede{font-size:12px}
+  .rule h3{font-size:13px;color:#000!important} .rule p{font-size:11px;color:#333!important}
+  .rules{grid-template-columns:1fr 1fr;gap:8px}
+  .why{font-size:9px}
+  .keycard p,.sec-sub{color:#333!important}
+  h1 .sh{color:#111!important;-webkit-text-fill-color:#111}
+}
+</style>
+</head>
+<body>
+
+<div class="field"><div class="orb o1"></div><div class="orb o2"></div><div class="grain"></div></div>
+
+<div class="wrap">
+
+  <div class="bar">
+    <div class="id">Cut Creaters Salon Suites</div>
+    <div class="tools">
+      <button class="nb" id="owner" title="Show the items you still need to fill in">Owner notes</button>
+      <button class="nb" id="print" title="Print or save as PDF">Print</button>
+      <button class="nb" id="theme" aria-label="Switch light and dark">☾</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="eyebrow">Decatur, Georgia · Suite Owner Handbook</div>
+    <h1>Your Room, Your Business<span class="sh">Here's What You Can Touch</span></h1>
+    <p class="lede">You rent the room. You run your own business inside it. But the building is licensed, inspected,
+      and insured as one property — so a few things are yours to change, a few need a yes in writing, and a few can
+      never happen. This page is the whole list.</p>
+
+    <div class="key">
+      <div class="keycard k-yes"><div class="lbl">✓ Yours</div><p>Do it. No permission needed. If it's freestanding, removable, and stays inside your four walls, it's your call.</p></div>
+      <div class="keycard k-ask"><div class="lbl">◇ Ask first</div><p>Might be a yes — but it needs written approval before you start. Verbal doesn't count, and neither does "someone said it was fine."</p></div>
+      <div class="keycard k-no"><div class="lbl">✕ Never</div><p>Not a preference. These are fire code, county code, the building's lease, or the insurance policy. They fail inspections and they end agreements.</p></div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="search"><span class="mag">⌕</span><input id="q" type="search" placeholder="Search a rule — paint, drill, music, sublease, camera…" autocomplete="off"></div>
+    <div class="chips">
+      <button class="chip on" data-f="all">All</button>
+      <button class="chip c-yes" data-f="yes">✓ Yours</button>
+      <button class="chip c-ask" data-f="ask">◇ Ask first</button>
+      <button class="chip c-no" data-f="no">✕ Never</button>
+    </div>
+  </div>
+
+  <main id="out"></main>
+
+  <div class="owner hidden" id="ownerbox">
+    <div class="oh">Owner notes — fill these in before you hand this out</div>
+    <ul id="ownerlist"></ul>
+  </div>
+
+  <div class="foot">
+    <div class="mark">Cut Creaters Salon Suites · Decatur, GA</div>
+    <div>House rules — they sit on top of your signed license agreement, not in place of it. Where the two ever disagree, the signed agreement wins.</div>
+  </div>
+
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   EDIT HERE. Everything below drives the page.
+   CONFIG = the numbers and specifics only you can set.
+   Anything still reading "SET THIS" shows up in Owner notes.
+   ───────────────────────────────────────────────────────────── */
+var CONFIG = {
+  buildingHours : "SET THIS",   // e.g. "24/7 with your fob" or "Mon–Sat 7a–9p"
+  noticeDays    : "SET THIS",   // move-out notice, e.g. "30 days written"
+  depositReturn : "SET THIS",   // e.g. "within 30 days of final walk-through"
+  altFee        : "SET THIS",   // charge for unapproved alterations, e.g. "cost of repair + $150"
+  keyFee        : "SET THIS",   // lost key/fob replacement
+  rentDue       : "SET THIS",   // e.g. "1st of the month, late after the 5th"
+  insurance     : "SET THIS",   // e.g. "$1M professional liability, Cut Creaters named additional insured"
+  paint         : "SET THIS",   // approved paint colors, or "any color, restored at move-out"
+  office        : "SET THIS",   // how to reach the office — name, number, email
+  requestHow    : "SET THIS"    // where approval requests go — text, email, or form
+};
+
+var TBD = function(k){
+  var v = CONFIG[k];
+  return (!v || v === "SET THIS")
+    ? '<span class="tbd" data-tbd="'+k+'">[' + k + ' — set this]</span>'
+    : '<b>' + v + '</b>';
+};
+
+var SECTIONS = [
+{
+  id:"yours", n:"01", h:"Your room, your call",
+  sub:"Freestanding, removable, inside your door. None of this needs a conversation — it's what you're paying for.",
+  rules:[
+    {v:"yes",t:"Bring your own furniture",d:"Styling chair, cart, cabinet, retail shelf, mirror, waiting chair, side table. If it stands on the floor on its own, bring it. It's yours and it leaves with you.",why:"It's your suite"},
+    {v:"yes",t:"Rearrange the room however you want",d:"Move everything, flip the layout, face the chair the other way. As long as nothing gets attached to the building and the door still opens clear.",why:"It's your suite"},
+    {v:"yes",t:"Decorate with removable hangers",d:"Command strips, adhesive hooks, over-door hangers, leaning frames, plants, a rug. Read the weight rating and follow the removal instructions — <b>anything that puts a hole in the wall moves to the Ask First column.</b>",why:"Damage-free = no restoration cost"},
+    {v:"yes",t:"Plug-in lighting",d:"Ring lights, floor and table lamps, peel-off LED strips, a lighted mirror that plugs in. Nothing hardwired, nothing that replaces a ceiling fixture.",why:"No electrical work involved"},
+    {v:"yes",t:"Play your own music",d:"Your playlist, your vibe. Keep it at a level that stops at your door — your neighbor is doing a consultation on the other side of that wall.",why:"House rule"},
+    {v:"yes",t:"Set your own hours",d:"Open when you want inside building access hours (" + "{{buildingHours}}" + "). Early client, late client, off on Mondays — that's your business to run.",why:"You're independent, not staff"},
+    {v:"yes",t:"Set your own prices and take your own money",d:"Your menu, your rates, your payment processor, <b>100% of your service and retail revenue.</b> You pay rent; you don't pay commission.",why:"You're independent, not staff"},
+    {v:"yes",t:"Sell your own retail",d:"Stock your shelf with whatever you carry and keep the margin. Georgia sales tax on retail is yours to collect and file.",why:"Your business, your books"},
+    {v:"yes",t:"Book clients your own way",d:"Your booking software, your calendar, your deposit policy, your cancellation rules. Nobody routes clients through the office.",why:"Your business, your books"},
+    {v:"yes",t:"Name on your door",d:"Your business name and logo go in the suite sign plate. Anything larger, lit, or outside your door frame is in the Ask First column.",why:"Standard sign spec"},
+    {v:"yes",t:"Small appliances that plug in",d:"Mini fridge, sterilizer, towel warmer, steamer, kettle. Keep the total draw inside what your outlets carry — if a breaker trips, you're over. Tell the office instead of resetting it and hoping.",why:"Electrical load limits"},
+    {v:"yes",t:"Lock your door and hold your own key",d:"Your suite is yours when you're not in it. Management keeps a master for emergencies only — fire, water, and county or Board inspection.",why:"Lease + fire access"},
+    {v:"yes",t:"Film content in your suite",d:"Shoot all the reels you want. Just make sure no other suite owner, no other suite's client, and no hallway traffic ends up in frame without them saying yes.",why:"Privacy — theirs and yours"},
+    {v:"yes",t:"Deep-clean your own room your way",d:"Your products, your routine — as long as the room meets State Board standard at all times, not just on inspection day.",why:"Board standard is the floor"}
+  ]
+},
+{
+  id:"ask", n:"02", h:"Ask first — and get it in writing",
+  sub:"These are usually a yes. They just can't start before the yes exists on paper, because every one of them either touches the building itself or touches somebody else's business.",
+  rules:[
+    {v:"ask",t:"Paint",d:"Accent wall or the whole room. Approved colors are " + "{{paint}}" + ". Proper prep, proper edges, and either restored to original at move-out or approved in writing to stay.",why:"Restoration cost + building standard"},
+    {v:"ask",t:"Anything anchored into the wall",d:"TV mount, floating shelf, heavy mirror, coat rail, backbar. Studs and drywall anchors are fine <b>with approval</b> — then patched, sanded, and painted when you leave.",why:"Wall damage + move-out condition"},
+    {v:"ask",t:"Wallpaper, wall decals, peel-and-stick tile",d:"\"Removable\" is a marketing word — most of it pulls paint and paper off the drywall when it comes down. Bring the product, get it approved, and you own the removal.",why:"Drywall damage"},
+    {v:"ask",t:"Flooring",d:"A rug is free. Anything glued, nailed, taped down, or floated over the existing floor needs approval first — and comes back up at your cost.",why:"Floor is the building's"},
+    {v:"ask",t:"Changing a light fixture",d:"Swapping a hardwired fixture is electrician work, not a Saturday project. Approval, then a licensed electrician — or the office handles it.",why:"Electrical code"},
+    {v:"ask",t:"Adding a shampoo bowl, sink, or any plumbing",d:"This is the biggest one people try to do quietly. Water lines and drains mean a <b>licensed plumber</b>, a permit where the county requires one, and written approval before anybody opens a wall.",why:"Plumbing code + water damage"},
+    {v:"ask",t:"Extra electrical load",d:"Autoclave, multiple dryers, high-draw equipment. The circuit has a limit and you can't see it from the outside. Ask before you buy it, not after it's sitting in the room.",why:"Circuit capacity + fire risk"},
+    {v:"ask",t:"Window vinyl or any sign outside your door",d:"Exterior windows, the building face, hallway signage, sandwich boards out front. The landlord and DeKalb County both have a say in what goes on the outside of this building.",why:"Landlord + county sign rules"},
+    {v:"ask",t:"A second set of hands in your suite",d:"Assistant, apprentice, or another licensed pro working alongside you. They need their own license, their own coverage, and their name on the agreement. Without that it reads as subleasing.",why:"Licensing + insurance + agreement"},
+    {v:"ask",t:"Classes, events, photoshoots, after-hours anything",d:"Bringing ten people into the building after close is an access and insurance question. Ask, and it's usually workable with notice.",why:"Insurance + building access"},
+    {v:"ask",t:"Selling food or drinks",d:"Bottled water for your client is fine. Selling anything edible puts you in health-department territory — different license entirely.",why:"Health department"},
+    {v:"ask",t:"Your own camera in the suite",d:"A camera pointed at your own space and your own station is reasonable. It can never see the hallway, another suite's door, or anyone who didn't walk into your room. Get it approved and tell the office where it points.",why:"Privacy of other tenants"},
+    {v:"ask",t:"Services outside the standard menu",d:"Injectables, teeth whitening, microblading and permanent makeup, body piercing, tattoo, IV therapy, deep chemical peels. Case by case — and only with the right license, the right insurance, and confirmation the building's Certificate of Occupancy actually covers it.",why:"C.O. scope + state licensing"},
+    {v:"ask",t:"Subletting your chair for a day",d:"Guest artist, a friend covering while you're out, renting your room out on your off-days. All of it needs approval first. See the Never column for what happens when it isn't asked.",why:"Agreement + insurance"}
+  ]
+},
+{
+  id:"never", n:"03", h:"Never — structure, water, power, fire",
+  sub:"None of this is preference. Every line here traces back to fire code, county code, the building's lease, or the insurance policy. These are the ones that fail an inspection, void coverage, or end an agreement.",
+  rules:[
+    {v:"no",t:"No cutting, drilling through, or removing walls",d:"Walls, ceilings, doors, door frames, floors. Taking out a wall between suites, cutting a pass-through, removing a door — that's structural work requiring the landlord and a county permit.",why:"Structural + permits"},
+    {v:"no",t:"No electrical work of any kind",d:"No new outlets, no rewiring, no swapping a breaker, no hardwiring anything, and <b>no extension cord or power strip used as permanent wiring.</b> This is the #1 cause of commercial fires that started as \"just a quick fix.\"",why:"Fire code"},
+    {v:"no",t:"No DIY plumbing",d:"No new water lines, no moving a bowl, no cutting a drain, no \"my cousin does plumbing.\" One bad joint behind a wall floods the suites downstream and that bill lands on you.",why:"Plumbing code + water damage"},
+    {v:"no",t:"Nothing hung from the ceiling grid",d:"No plants, lights, drapes, signs, or décor attached to ceiling tiles or the grid. And <b>nothing within 18 inches of a sprinkler head</b> — not shelving, not storage stacked high, not a hanging light.",why:"Fire code — sprinkler clearance"},
+    {v:"no",t:"Never touch a smoke detector",d:"Don't cover it, bag it, unplug it, or pull the battery — including \"just while I use the flat iron.\" Nuisance alarms get reported to the office, not solved with tape.",why:"Fire code — criminal in some cases"},
+    {v:"no",t:"No changing the lock or adding a deadbolt",d:"No re-keying, no smart lock, no second lock, no chain. Management keeps emergency access for fire, water, and inspection. A door nobody can open in an emergency gets opened the expensive way.",why:"Lease + emergency access"},
+    {v:"no",t:"No blocking a door, hallway, or exit",d:"No product boxes in the hall, no extra chair by the fire door, no storage in front of a panel or extinguisher. The egress path stays clear at all times — a marshal walks it and doesn't take explanations.",why:"Fire code — egress"},
+    {v:"no",t:"No propping exterior doors, no sharing the door code",d:"The code is yours, not your client's, not your cousin's, not the delivery guy's. A propped back door is how the building gets walked into.",why:"Security"},
+    {v:"no",t:"No space heaters, open flame, or lit candles",d:"No portable heaters, no wick candles, no incense, no burners. Flameless diffusers and warmers are fine. If the room is cold, tell the office — that's an HVAC fix, not a heater fix.",why:"Fire code + insurance"},
+    {v:"no",t:"No touching the HVAC or common thermostats",d:"Don't adjust a hallway thermostat, close somebody else's vent, or reroute air into your room. One suite's fix is the next suite's problem — it goes through the office.",why:"Shared system"},
+    {v:"no",t:"No living, sleeping, or staying overnight",d:"Not after a long day, not \"just this once,\" not a friend between places. This is commercial space — it's a code violation and it voids coverage instantly.",why:"Zoning + insurance"},
+    {v:"no",t:"No subleasing or sharing your suite",d:"Not by the day, not by the chair, not \"she just uses it Tuesdays.\" Your name is on the agreement; unapproved people working out of your room are unlicensed to the county and uninsured to us.",why:"Agreement + insurance"},
+    {v:"no",t:"No working on a lapsed license",d:"Your State Board license and your county business license stay current and stay posted where a client and an inspector can both see them. A lapsed license is a fine for you and a problem for the building.",why:"State Board + DeKalb County"},
+    {v:"no",t:"No chemicals down the wrong drain",d:"Color, bleach, developer, acetone, and peels don't go in the restroom, break room, or mop sink. Designated sink only, follow the product label, and never pour bulk product down any drain.",why:"Plumbing + environmental"},
+    {v:"no",t:"Nothing left running when you walk out",d:"Flat irons, dryers, wax warmers, sterilizers, steamers, heat lamps. Unplugged before the door locks — every single time, even for a 10-minute run to the car.",why:"Fire code + insurance"},
+    {v:"no",t:"No smoking, vaping, or cannabis inside",d:"Anywhere in the building, your own suite included. Georgia's Smokefree Air Act covers it, and the smell travels into every suite on the hall.",why:"State law"},
+    {v:"no",t:"No serving or selling alcohol without approval",d:"The mimosa is a liability question, not a vibe question. It takes approval and, when it's sold, a permit.",why:"Liquor law + liability"},
+    {v:"no",t:"No pets",d:"Service animals are the exception, as the law requires. Emotional-support animals and \"she's really quiet\" are not the same thing.",why:"Health code + allergies"},
+    {v:"no",t:"No bulk flammables stored in the suite",d:"Working quantities only. Gallon jugs of acetone, cases of aerosol, and bulk alcohol stacked in a cabinet are exactly what a fire inspector writes up.",why:"Fire code — storage limits"},
+    {v:"no",t:"No poaching",d:"Don't market to another suite's clients, don't work the hallway, don't undercut a neighbor to their own client's face. Everybody here is building something.",why:"House rule"},
+    {v:"no",t:"No noise that leaves your room",d:"Music, speakerphone, arguments, a full waiting room in the hall. If it can be heard through the wall or down the hallway, it's too loud.",why:"House rule"},
+    {v:"no",t:"No unattended kids and no crowd in the hall",d:"Your client's children stay in your suite with your client, not roaming the building or waiting in the hallway. Guests in your suite are yours to keep inside it.",why:"Liability"},
+    {v:"no",t:"No trash or bulk items in shared areas",d:"Hair and salon waste in your own bagged trash, not the hallway. No furniture, no fixtures, no renovation debris in the shared dumpster.",why:"Dumpster contract"},
+    {v:"no",t:"Don't alter anything in the common areas",d:"Hallway décor, signage, mirrors, lighting, the front desk area, the restroom. Great ideas welcome — bring them to the office instead of installing them.",why:"Shared space"}
+  ]
+},
+{
+  id:"sanitation", n:"04", h:"Sanitation — the Board inspects you, not us",
+  sub:"A Georgia State Board inspector can walk in unannounced and go straight to your suite. What they find is on your license and your record, not the building's. The office can't fix this one for you.",
+  rules:[
+    {v:"no",t:"No dirty implements between clients",d:"Clean, then disinfect with an EPA-registered hospital-grade disinfectant, then store in a covered, labeled container. Dated solution, changed on schedule.",why:"State Board"},
+    {v:"yes",t:"Post your license where it's visible",d:"Current State Board license and current DeKalb County business license, both posted in your suite where a client and an inspector can read them.",why:"State Board + county"},
+    {v:"no",t:"No double-dipping and no reusing single-use items",d:"Wax sticks, files, buffers, applicators, neck strips. If it can't be disinfected, it goes in the trash after one client.",why:"State Board"},
+    {v:"no",t:"No credo blades or callus shavers",d:"Georgia prohibits razor-type callus removers. Files and non-cutting tools only.",why:"State Board rule"},
+    {v:"no",t:"No MMA monomer",d:"Methyl methacrylate has been an FDA-flagged, industry-banned product for decades. Don't have it in the building.",why:"FDA + Board"},
+    {v:"yes",t:"Sweep after every client",d:"Hair off the floor between clients, not at the end of the day. Covered trash, clean towels stored separately from used ones, hands washed.",why:"State Board"},
+    {v:"yes",t:"Keep your own log",d:"Dated disinfectant, sanitation records, product labels kept. When an inspector asks, paper is the difference between a note and a fine.",why:"State Board"}
+  ]
+},
+{
+  id:"money", n:"05", h:"Rent, insurance, and what each side covers",
+  sub:"The clean version of who's responsible for what — so nobody's guessing when something breaks.",
+  rules:[
+    {v:"yes",t:"What Cut Creaters covers",d:"The building's Certificate of Occupancy, the structure, common area cleaning, restrooms, exterior, HVAC and the shared systems, dumpster, and building insurance <b>on the building</b>.",why:"Landlord side"},
+    {v:"yes",t:"What you cover",d:"Your business license, your State Board license, your liability insurance, your suite's cleanliness, your supplies, your equipment, your taxes, and any damage that starts in your room.",why:"Tenant side"},
+    {v:"no",t:"No coverage on your stuff under our policy",d:"The building's insurance covers the building. Your chair, your tools, your retail stock, and your income are covered only by <b>your</b> policy. Carry " + "{{insurance}}" + ".",why:"Insurance"},
+    {v:"yes",t:"Rent",d:"Due " + "{{rentDue}}" + ". A suite that pays on time and keeps its room right has a lot of room to ask for things.",why:"Agreement"},
+    {v:"yes",t:"Keys and fobs",d:"Lost key or fob replacement is " + "{{keyFee}}" + ". Report a lost fob the day it goes missing — that's a building security issue, not just yours.",why:"Security"}
+  ]
+},
+{
+  id:"moveout", n:"06", h:"Moving out — the condition standard",
+  sub:"The room goes back the way it came, minus honest wear. Knowing the standard up front is what keeps a deposit whole.",
+  rules:[
+    {v:"yes",t:"Give notice in writing",d:"" + "{{noticeDays}}" + " notice, in writing, not a text at 11pm on the 30th. Written notice starts the clock and protects both sides.",why:"Agreement"},
+    {v:"yes",t:"Photograph the room on day one",d:"Date-stamped photos of every wall, the floor, and the fixtures the day you move in. Do the same the day you move out. This protects you more than it protects us.",why:"Both sides"},
+    {v:"no",t:"Nothing left behind",d:"All furniture, product, retail, décor, and trash out. Anything still in the room after your last day is treated as abandoned and disposed of at your cost.",why:"Turnover"},
+    {v:"no",t:"No holes, no leftover adhesive, no unapproved color",d:"Anchors pulled and patched, walls sanded and painted back, hooks and residue off, floor clean. If you painted with approval, restore it unless you have written approval to leave it.",why:"Condition standard"},
+    {v:"yes",t:"Walk-through before the keys go back",d:"Final walk-through with management, then keys and fobs returned. Deposit released " + "{{depositReturn}}" + ", less any damage beyond normal wear.",why:"Deposit release"},
+    {v:"yes",t:"Normal wear is expected",d:"Scuffs on a baseboard, small marks, faded paint, a worn spot where the chair sits — that's use, not damage. Holes, chemical stains, burns, broken fixtures, and unapproved changes are damage.",why:"Fair standard"}
+  ]
+}
+];
+
+var ENFORCE = [
+  {n:"1",t:"A conversation.",d:"Almost everything ends here. Somebody didn't know, now they do, it gets fixed."},
+  {n:"2",t:"Written notice with a date to fix it.",d:"In writing, with a clear deadline, so there's no version where we remember it differently."},
+  {n:"3",t:"You get billed.",d:"Anything changed without approval gets restored at " + "{{altFee}}" + ". Damage from your suite — water, fire, chemical — is billed at cost."},
+  {n:"4",t:"The agreement ends.",d:"For repeat violations, or on the first one when it's serious enough."}
+];
+
+var STRAIGHT_TO_4 = "Tampering with a sprinkler head or smoke detector · working on a lapsed or nonexistent license · subleasing your suite · anyone living or sleeping in the building · DIY electrical or plumbing behind a wall. These skip the ladder.";
+
+/* ── render ─────────────────────────────────── */
+function fill(s){
+  return String(s).replace(/\{\{(\w+)\}\}/g, function(_,k){ return TBD(k); });
+}
+var VLABEL = {yes:"✓ Yours",ask:"◇ Ask first",no:"✕ Never"};
+
+function render(filter,query){
+  var out=document.getElementById('out'), html='', shown=0;
+  query=(query||'').trim().toLowerCase();
+
+  SECTIONS.forEach(function(sec){
+    var rules=sec.rules.filter(function(r){
+      if(filter!=='all' && r.v!==filter) return false;
+      if(query && (r.t+' '+r.d+' '+r.why).toLowerCase().indexOf(query)<0) return false;
+      return true;
+    });
+    if(!rules.length) return;
+    shown+=rules.length;
+    html+='<section class="sec" id="'+sec.id+'">'
+      + '<div class="sec-head"><span class="sec-n">'+sec.n+'</span><h2>'+sec.h+'</h2></div>'
+      + '<p class="sec-sub">'+sec.sub+'</p><div class="rules">';
+    rules.forEach(function(r){
+      html+='<article class="rule r-'+r.v+'">'
+        + '<span class="vtag">'+VLABEL[r.v]+'</span>'
+        + '<h3>'+r.t+'</h3><p>'+fill(r.d)+'</p>'
+        + '<div class="why">Why:&nbsp;<span>'+r.why+'</span></div></article>';
+    });
+    html+='</div></section>';
+  });
+
+  if(!shown){
+    html='<div class="empty">Nothing matches that. Try a different word — or ask the office, because if it isn\'t on this page it probably needs a yes in writing.</div>';
+    out.innerHTML=html; return;
+  }
+
+  /* tail sections only show on the unfiltered view */
+  if(filter==='all' && !query){
+    html+='<section class="sec" id="how"><div class="sec-head"><span class="sec-n">07</span><h2>How to ask for a yes</h2></div>'
+      + '<p class="sec-sub">Every "ask first" item runs through the same four lines. Send it '+TBD('requestHow')+' and you get an answer in writing.</p>'
+      + '<div class="block"><ul class="steps">'
+      + '<li><span class="n">1</span><span><b>Your suite number</b> and your name.</span></li>'
+      + '<li><span class="n">2</span><span><b>What you want to do</b> — in one or two plain sentences.</span></li>'
+      + '<li><span class="n">3</span><span><b>A photo or a rough sketch</b> of where it goes. A phone photo with your finger pointing at the wall is enough.</span></li>'
+      + '<li><span class="n">4</span><span><b>Who\'s doing the work</b> — you, or a contractor. If it\'s a contractor touching water or power, their license and insurance come with the request.</span></li>'
+      + '</ul></div>'
+      + '<div class="note"><span class="k">The rule about the rule:</span><span>Approval comes back <b>in writing</b>. If it isn\'t in writing, it didn\'t happen — that protects you as much as it protects the building, because the person who approved it verbally may not be the person standing there at move-out.</span></div>'
+      + '<div class="note"><span class="k">Office:</span><span>'+TBD('office')+'</span></div>'
+      + '</section>';
+
+    html+='<section class="sec" id="enforce"><div class="sec-head"><span class="sec-n">08</span><h2>If a rule gets broken</h2></div>'
+      + '<p class="sec-sub">Nothing here is designed to catch anybody out. It escalates in order, and most things never leave step one.</p>'
+      + '<div class="block"><ul class="steps">';
+    ENFORCE.forEach(function(e){
+      html+='<li><span class="n">'+e.n+'</span><span><b>'+e.t+'</b> '+fill(e.d)+'</span></li>';
+    });
+    html+='</ul></div>'
+      + '<div class="note"><span class="k">Straight to the end:</span><span>'+STRAIGHT_TO_4+'</span></div>'
+      + '</section>';
+
+    html+='<section class="sec" id="links"><div class="sec-head"><span class="sec-n">09</span><h2>The official sources</h2></div>'
+      + '<p class="sec-sub">When you want to read it yourself instead of taking our word for it — and you should.</p><div>'
+      + '<a class="lnk" href="https://sos.ga.gov/georgia-state-board-cosmetology-and-barbers" target="_blank" rel="noopener"><span class="ic">↗</span>GA State Board of Cosmetology &amp; Barbers</a>'
+      + '<a class="lnk" href="https://rules.sos.ga.gov/gac/240" target="_blank" rel="noopener"><span class="ic">↗</span>Board rules — sanitation &amp; practice (Chapter 240)</a>'
+      + '<a class="lnk" href="https://www.dekalbcountyga.gov/finance/business-license" target="_blank" rel="noopener"><span class="ic">↗</span>DeKalb County — Business License</a>'
+      + '<a class="lnk" href="https://www.dekalbcountyga.gov/planning-sustainability/certificate-occupancy" target="_blank" rel="noopener"><span class="ic">↗</span>DeKalb County — Certificate of Occupancy</a>'
+      + '<a class="lnk" href="./../cut-creaters-licensing/" target="_blank" rel="noopener"><span class="ic">→</span>Cut Creaters — Licensing &amp; Compliance briefing</a>'
+      + '</div></section>';
+  }
+
+  out.innerHTML=html;
+}
+
+/* ── owner notes ────────────────────────────── */
+var OWNER_LABELS = {
+  buildingHours:"Building access hours — when suite owners can get in",
+  noticeDays:"Move-out notice period (e.g. 30 days written)",
+  depositReturn:"When the deposit gets released after walk-through",
+  altFee:"What an unapproved alteration costs — repair at cost, plus a fee?",
+  keyFee:"Lost key / fob replacement charge",
+  rentDue:"Rent due date and when it's late",
+  insurance:"Insurance you require — amount, and whether Cut Creaters is named additional insured",
+  paint:"Approved paint colors — or 'any color, restored at move-out'",
+  office:"Office contact — name, number, email",
+  requestHow:"Where approval requests go — text, email, or a form"
+};
+function buildOwner(){
+  var ul=document.getElementById('ownerlist'),h='';
+  Object.keys(OWNER_LABELS).forEach(function(k){
+    var set = CONFIG[k] && CONFIG[k]!=="SET THIS";
+    h+='<li><b>'+(set?'✓ ':'')+k+'</b> — '+OWNER_LABELS[k]+(set?' <i>('+CONFIG[k]+')</i>':' <span class="tbd">still blank</span>')+'</li>';
+  });
+  h+='<li><b>Verify before you hand this out</b> — the Board rules (credo blades, MMA, disinfectant) and the DeKalb sign rules do change. The links in section 09 are the current sources. Everything on this page sits on top of your signed license agreement; where the two disagree, the agreement wins. Worth one read by whoever wrote that agreement.</li>';
+  h+='<li><b>To edit any rule</b> — open this file and edit the <code>SECTIONS</code> array near the bottom. Each rule is one line: verdict (<code>yes</code>/<code>ask</code>/<code>no</code>), title, detail, and the "why". Numbers live in <code>CONFIG</code> at the top.</li>';
+  ul.innerHTML=h;
+}
+
+/* ── wiring ─────────────────────────────────── */
+var filter='all', q='';
+document.querySelectorAll('.chip').forEach(function(c){
+  c.onclick=function(){
+    document.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});
+    c.classList.add('on'); filter=c.dataset.f; render(filter,q);
+  };
+});
+document.getElementById('q').addEventListener('input',function(e){ q=e.target.value; render(filter,q); });
+
+var root=document.documentElement, tb=document.getElementById('theme');
+function setTheme(t){ root.setAttribute('data-theme',t); tb.textContent = t==='dark' ? '☀' : '☾';
+  try{ localStorage.setItem('cc_rules_theme',t); }catch(e){} }
+try{ setTheme(localStorage.getItem('cc_rules_theme')||'light'); }catch(e){ setTheme('light'); }
+tb.onclick=function(){ setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark'); };
+
+document.getElementById('print').onclick=function(){
+  document.querySelectorAll('.chip').forEach(function(x){x.classList.remove('on')});
+  document.querySelector('.chip[data-f="all"]').classList.add('on');
+  filter='all'; q=''; document.getElementById('q').value='';
+  render('all','');
+  setTimeout(function(){ window.print(); }, 60);
+};
+
+var ob=document.getElementById('ownerbox');
+document.getElementById('owner').onclick=function(){
+  ob.classList.toggle('hidden');
+  if(!ob.classList.contains('hidden')) ob.scrollIntoView({behavior:'smooth',block:'start'});
+};
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='/' && document.activeElement.id!=='q'){ e.preventDefault(); document.getElementById('q').focus(); }
+  if(e.key==='Escape'){ var i=document.getElementById('q'); i.value=''; q=''; render(filter,q); i.blur(); }
+});
+
+buildOwner();
+render('all','');
+</script>
+</body>
+</html>
