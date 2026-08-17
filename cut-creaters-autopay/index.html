@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cut Creaters — Set Up Auto-Pay</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fdfcf9;--ink:#191713;--dim:#7d766a;--gold:#a8874f;--green:#5e7a5c;--line:#dcd6c9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(90% 60% at 8% 0%,#fbfaf6 0%,transparent 60%),radial-gradient(70% 50% at 95% 8%,#f1ede3 0%,transparent 55%),var(--bg);color:var(--ink);font:16px/1.55 Inter,-apple-system,system-ui,sans-serif;padding:28px 18px 60px;max-width:540px;margin:0 auto;min-height:100vh}
+.eyebrow{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.8rem,6vw,2.5rem);font-weight:700;line-height:1.05}
+h1 .g{color:var(--gold);font-style:italic;font-weight:500}
+.lede{color:#4a4438;font-size:.98rem;margin:12px 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;margin:20px 0;box-shadow:0 24px 50px -38px rgba(60,50,30,.3)}
+label{display:block;font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:14px 0 6px}
+input{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 15px;font:inherit;font-size:1rem;color:var(--ink);outline:none}
+input:focus{border-color:var(--gold)}
+.auth{background:#fbf6ec;border:1.5px solid var(--gold);border-radius:14px;padding:16px 18px;margin:20px 0;font-size:.9rem;line-height:1.6}
+.auth b{color:var(--ink)}
+.consent{display:flex;gap:12px;align-items:flex-start;margin-top:14px;cursor:pointer}
+.consent input{width:22px;height:22px;flex-shrink:0;margin-top:1px}
+.consent span{font-size:.9rem}
+.safe{display:flex;gap:10px;align-items:center;background:#eef0e9;border-radius:12px;padding:12px 14px;margin-top:16px;font-size:.82rem;color:#41403a}
+.go{width:100%;margin-top:22px;background:var(--ink);color:#f6f3ec;border:none;border-radius:14px;padding:16px;font:inherit;font-weight:800;font-size:1.05rem;letter-spacing:.03em;cursor:pointer}
+.go:disabled{opacity:.4}
+.done{text-align:center;padding:20px 0}.done .check{font-size:3rem}
+.done h2{font-family:'Playfair Display',Georgia,serif;font-size:1.7rem;margin:8px 0}
+.foot{color:var(--dim);font-size:.75rem;text-align:center;margin-top:24px;font-style:italic}
+.hide{display:none}
+</style></head><body>
+<div class="eyebrow">Cut Creaters Salon Suites · Decatur</div>
+<h1>Set up <span class="g">auto-pay</span></h1>
+<p class="lede">Never think about rent again. Your weekly rent comes out automatically <b>every Friday</b> — you get a receipt every time, and you're always in good standing. Takes 2 minutes.</p>
+
+<div id="form" class="card">
+  <label>Your name</label>
+  <input id="name" placeholder="First and last" autocomplete="name">
+  <label>Your suite / room number</label>
+  <input id="room" placeholder="Your room" autocomplete="off">
+  <label>Weekly rent</label>
+  <input id="amt" placeholder="$ per week" inputmode="numeric" autocomplete="off">
+  <label>Email (for your receipts)</label>
+  <input id="email" placeholder="you@email.com" type="email" autocomplete="email">
+  <label>Cell phone</label>
+  <input id="phone" placeholder="(xxx) xxx-xxxx" type="tel" autocomplete="tel">
+
+  <div class="auth">
+    <b>Auto-pay authorization</b><br>
+    I authorize <b>Cut Creaters Salon Suites</b> to automatically collect my weekly suite rent — the amount above — from my bank account <b>every Friday</b>, processed securely through Square. I understand I can cancel anytime with written notice, and I'll get a receipt for every payment.
+    <label class="consent"><input type="checkbox" id="agree"><span>I have read and I authorize this weekly auto-pay.</span></label>
+  </div>
+
+  <div class="safe">🔒 Next you'll add your bank on <b>Square's secure page</b> — Cut Creaters never sees or stores your bank numbers.</div>
+
+  <button class="go" id="go" disabled>Continue to secure bank setup →</button>
+</div>
+
+<div id="thanks" class="card hide">
+  <div class="done">
+    <div class="check">✅</div>
+    <h2>You're enrolled.</h2>
+    <p class="lede" id="thankmsg" style="text-align:center"></p>
+    <p class="foot">Khyree will send your secure Square link to finish linking your bank. From then on, rent's handled — every Friday, receipt every time.</p>
+  </div>
+</div>
+
+<div class="foot">Cut Creaters Salon Suites · 2962 Ember Dr, Decatur GA · private</div>
+
+<script>
+const NOTIFY="https://kc-notify.towneskhyree.workers.dev";
+const NTFY="https://ntfy.sh/cutcreaters-autopay-9d2f4";
+// >>> Khyree: paste your Square secure ACH/checkout link here to auto-forward tenants. Leave blank = Khyree sends it manually. <<<
+const SQUARE_LINK="";
+function check(){
+  const ok=['name','room','amt','email','phone'].every(i=>document.getElementById(i).value.trim())&&document.getElementById('agree').checked;
+  document.getElementById('go').disabled=!ok;
+}
+['name','room','amt','email','phone'].forEach(i=>document.getElementById(i).addEventListener('input',check));
+document.getElementById('agree').addEventListener('change',check);
+document.getElementById('go').onclick=async()=>{
+  const g=id=>document.getElementById(id).value.trim();
+  const name=g('name'),room=g('room'),amt=g('amt'),email=g('email'),phone=g('phone');
+  const btn=document.getElementById('go');btn.disabled=true;btn.textContent="Enrolling…";
+  const text=`💳 CUT CREATERS · AUTO-PAY ENROLLMENT\n${name} — Room ${room}\n$${amt}/wk · Friday\n${email} · ${phone}\n→ SEND THEM THE SQUARE BANK LINK`;
+  try{await fetch(NOTIFY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});}catch(e){}
+  try{await fetch(NTFY,{method:'POST',headers:{'Title':'Cut Creaters Auto-Pay','Tags':'credit_card','Priority':'high'},body:`${name} · Room ${room} · $${amt}/wk`});}catch(e){}
+  if(SQUARE_LINK){window.location.href=SQUARE_LINK;return;}
+  document.getElementById('form').classList.add('hide');
+  document.getElementById('thankmsg').textContent=`Room ${room} · $${amt} every Friday.`;
+  document.getElementById('thanks').classList.remove('hide');
+  window.scrollTo(0,0);
+};
+</script>
+</body></html>
