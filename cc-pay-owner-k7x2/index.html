@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>CC Auto-Pay — Team Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Inter:wght@400;500;650;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#fdfcf9;--ink:#191713;--dim:#7d766a;--gold:#a8874f;--green:#5e7a5c;--red:#a24e36;--line:#dcd6c9}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(90% 55% at 10% 0%,#fbfaf6 0%,transparent 60%),var(--bg);color:var(--ink);font:15.5px/1.6 Inter,-apple-system,system-ui,sans-serif;padding:28px 20px 70px;max-width:640px;margin:0 auto}
+.brand{font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:10px}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1.7rem,5vw,2.3rem);font-weight:700;line-height:1.05}
+.g{color:var(--gold);font-style:italic;font-weight:500}
+.sub{color:var(--dim);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;margin:8px 0 20px}
+h2{font-family:'Playfair Display',Georgia,serif;font-size:1.2rem;margin:26px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:10px 0;box-shadow:0 18px 36px -34px rgba(60,50,30,.3)}
+.flow{font-size:.95rem;text-align:center;font-weight:650;line-height:2}
+.flow span{color:var(--gold)}
+.step{display:flex;gap:13px;padding:10px 0;border-top:1px solid var(--line);align-items:flex-start}
+.step:first-child{border-top:none}
+.num{font-family:'Playfair Display',Georgia,serif;font-size:1.35rem;font-weight:700;color:var(--gold);min-width:26px}
+.step b{font-weight:650}.d{color:var(--dim);font-size:.86rem}
+.callout{border-left:3px solid var(--gold);padding:10px 14px;background:#faf7f0;border-radius:0 12px 12px 0;margin:12px 0;font-size:.9rem}
+.warn{color:var(--red);font-weight:650}
+a{color:var(--gold);word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
+td,th{padding:8px 6px;border-top:1px solid var(--line);text-align:left}
+th{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border-top:none}
+.foot{color:var(--dim);font-size:.72rem;margin-top:24px;font-style:italic;text-align:center}
+</style></head><body>
+<div class="brand">Cut Creaters · Team Only</div>
+<h1>Auto-Pay <span class="g">— how the machine runs</span></h1>
+<div class="sub">Private team guide · Khyree · Omar · Ang · do not forward outside the team</div>
+
+<div class="card"><div class="flow">
+Tenant signs up on our page<br><span>↓</span><br>
+Square's secure page — THEY link their own bank<br><span>↓</span><br>
+Square pulls rent <b>every Friday</b> automatically<br><span>↓</span><br>
+Money lands in <b>PNC</b> · tenant gets a receipt · we see everything in Square<br><span>↓</span><br>
+Nobody chases anybody. Ever.
+</div></div>
+
+<h2>The links</h2>
+<div class="card">
+<div class="step"><div class="num">→</div><div><b>Tenant signup page</b> (send this / QR it / group chat it):<br><a href="https://towneskhyree-cloud.github.io/khyree-dashboards/cut-creaters-autopay/">towneskhyree-cloud.github.io/khyree-dashboards/cut-creaters-autopay/</a></div></div>
+<div class="step"><div class="num">→</div><div><b>Where we see everything:</b> the <b>Square app / squareup.com</b> — every payment, every Friday, every receipt, and the deposits into PNC. That's the owner window.</div></div>
+</div>
+
+<h2>One-time setup (Khyree, ~15 min in Square)</h2>
+<div class="card">
+<div class="step"><div class="num">1</div><div><b>Confirm PNC is the deposit account.</b> <span class="d">Square → Settings → Bank Accounts.</span></div></div>
+<div class="step"><div class="num">2</div><div><b>Turn on ACH bank payments.</b> <span class="d">Square → Settings → Payments → enable ACH (1% fee — much cheaper than card).</span></div></div>
+<div class="step"><div class="num">3</div><div><b>Create one Subscription Plan per rent tier.</b> <span class="d">Square → Payments → Subscriptions → Create plan: "Suite Rent $175/wk" → weekly billing. Repeat for each tier ($150, $175, $200, $250…). Square gives each plan a checkout link.</span></div></div>
+<div class="step"><div class="num">4</div><div><b>Give Claude the plan links</b> → they get pasted into the signup page so tenants flow straight from signup → Square bank setup with zero waiting.</div></div>
+</div>
+
+<h2>Per tenant (the whole job after setup)</h2>
+<div class="card">
+<div class="step"><div class="num">1</div><div><b>They sign up</b> on our page → team gets a phone ping instantly.</div></div>
+<div class="step"><div class="num">2</div><div><b>They land on Square's secure page</b> and link their bank themselves. <span class="warn">We NEVER touch or type anyone's bank numbers.</span> <span class="d">Bank verifies once (instant login or 1–2 day micro-deposits).</span></div></div>
+<div class="step"><div class="num">3</div><div><b>Done forever.</b> Friday pull · auto-receipt to them · payment visible to us · money in PNC.</div></div>
+</div>
+
+<div class="callout"><b>If someone's bank is slow to verify</b> and we want them live THIS Friday → put that one on <b>card on file</b> instead (instant, slightly higher fee), switch to bank later. · <b>Truth about timing:</b> the pull happens every Friday, but Square picks the exact hour (batch processing) — "Friday" is guaranteed, "6:00 PM sharp" is not.</div>
+
+<h2>The pilot — 7 people + us first</h2>
+<div class="card">
+<table>
+<tr><th>#</th><th>Name</th><th>Room</th><th>$/wk</th><th>Signed up</th><th>Bank linked</th><th>1st Friday hit</th></tr>
+<tr><td>0</td><td>Khyree (test $1–5)</td><td>—</td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>1</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>3</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>4</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>5</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>6</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<tr><td>7</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+</table>
+<p class="d" style="margin-top:8px">Rule: all three boxes checked on row 0 (Khyree's own test) before anyone else gets the link.</p>
+</div>
+
+<h2>Protection — every party covered</h2>
+<div class="card">
+<div class="step"><div class="num">✓</div><div><b>Tenant:</b> written authorization they check themselves · cancel anytime with notice · receipt on every charge · bank info only ever entered on Square's secure page.</div></div>
+<div class="step"><div class="num">✓</div><div><b>Cut Creaters:</b> signed consent on record · automatic Friday collection · every payment logged in Square · deposits traceable into PNC — the clean money trail the business never had.</div></div>
+<div class="step"><div class="num">✓</div><div><b>The team:</b> instant ping on every signup · everything visible in one Square login · no cash, no chasing, no he-said-she-said.</div></div>
+</div>
+
+<div class="foot">Rule of the machine: nobody pays through RentRoom, nobody pays cash for weekly rent once enrolled. One rail: our page → Square → PNC.</div>
+</body></html>
