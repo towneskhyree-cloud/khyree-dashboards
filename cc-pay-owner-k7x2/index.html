@@ -26,10 +26,65 @@ table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:8px}
 td,th{padding:8px 6px;border-top:1px solid var(--line);text-align:left}
 th{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);border-top:none}
 .foot{color:var(--dim);font-size:.72rem;margin-top:24px;font-style:italic;text-align:center}
+/* ── AI voice assistant ── */
+.ai{background:linear-gradient(140deg,#1d1a14,#2a2317);color:#f1ead9;border:1px solid #3d3423;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 22px 44px -30px rgba(30,24,10,.6)}
+.ai h2{color:#e8c987;margin:0 0 4px;font-size:1.25rem}
+.ai .d{color:#b7ac93}
+.microw{display:flex;gap:12px;align-items:center;margin:14px 0 10px}
+.mic{width:64px;height:64px;border-radius:50%;border:none;background:radial-gradient(circle at 35% 30%,#e8c987,#a8874f);color:#241c0c;font-size:1.7rem;cursor:pointer;flex-shrink:0;box-shadow:0 10px 24px -10px rgba(232,201,135,.7);transition:transform .15s}
+.mic:active{transform:scale(.94)}
+.mic.live{animation:pulse 1.2s infinite;background:radial-gradient(circle at 35% 30%,#e88787,#a24e36);color:#fff}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(226,110,90,.55)}50%{box-shadow:0 0 0 16px rgba(226,110,90,0)}}
+.micstat{font-size:.86rem;line-height:1.45}
+.micstat b{color:#e8c987}
+.heard{min-height:22px;font-style:italic;color:#cfc4a8;font-size:.9rem;margin:4px 0}
+.ailog{background:rgba(0,0,0,.28);border:1px solid #3d3423;border-radius:12px;padding:10px 12px;font-size:.86rem;max-height:200px;overflow-y:auto;margin-top:8px}
+.ailog p{padding:4px 0;border-top:1px solid rgba(255,255,255,.06)}
+.ailog p:first-child{border-top:none}
+.ailog .me{color:#cfc4a8}.ailog .bot{color:#f1ead9}.ailog .bot b{color:#e8c987}
+.typebar{display:flex;gap:8px;margin-top:10px}
+.typebar input{flex:1;border:1px solid #3d3423;background:rgba(0,0,0,.25);border-radius:10px;padding:11px 13px;font:inherit;font-size:.9rem;color:#f1ead9;outline:none}
+.typebar input::placeholder{color:#8c8163}
+.typebar button{border:none;background:#a8874f;color:#241c0c;border-radius:10px;padding:0 16px;font:inherit;font-weight:800;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.72rem;background:rgba(232,201,135,.12);border:1px solid #4a3f28;color:#d9cba6;border-radius:100px;padding:5px 11px;cursor:pointer}
+.chip:hover{background:rgba(232,201,135,.22)}
+.rbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 8px;font:inherit;font-size:.78rem;cursor:pointer;color:var(--dim)}
+.rbtn.onn{background:var(--green);border-color:var(--green);color:#fff}
+.del{border:none;background:none;color:var(--red);cursor:pointer;font-size:.9rem}
+.voicesel{margin-top:10px;font-size:.72rem;color:#8c8163;display:flex;align-items:center;gap:8px}
+.voicesel input{width:16px;height:16px}
 </style></head><body>
 <div class="brand">Cut Creaters · Team Only</div>
 <h1>Auto-Pay <span class="g">— how the machine runs</span></h1>
 <div class="sub">Private team guide · Khyree · Omar · Ang · do not forward outside the team</div>
+
+<!-- ── AI VOICE ASSISTANT (admin only) ── -->
+<div class="ai">
+  <h2>🎙️ Voice Assistant</h2>
+  <p class="d" style="font-size:.84rem">Tap the mic and just talk. Add people, update the roster, ask who's behind — hands free.</p>
+  <div class="microw">
+    <button class="mic" id="mic" aria-label="Talk">🎙️</button>
+    <div class="micstat" id="micstat"><b>Tap the mic</b> and say something like<br>"Add Marcus, room 4, 175 a week."</div>
+  </div>
+  <div class="heard" id="heard"></div>
+  <div class="ailog" id="ailog"><p class="bot"><b>Assistant:</b> Ready when you are. I run right on this phone — nothing leaves the device.</p></div>
+  <div class="typebar">
+    <input id="cmd" placeholder="…or type a command" autocomplete="off">
+    <button id="cmdgo">Go</button>
+  </div>
+  <div class="chips">
+    <span class="chip" data-c="add Marcus room 4 at 175 a week">+ add someone</span>
+    <span class="chip" data-c="mark Marcus signed up">mark signed up</span>
+    <span class="chip" data-c="mark Marcus bank linked">mark bank linked</span>
+    <span class="chip" data-c="mark Marcus paid">mark first Friday paid</span>
+    <span class="chip" data-c="who's not done">who's not done</span>
+    <span class="chip" data-c="read the roster">read roster</span>
+    <span class="chip" data-c="remove Marcus">remove someone</span>
+    <span class="chip" data-c="help">help</span>
+  </div>
+  <label class="voicesel"><input type="checkbox" id="speakback" checked> Talk back to me out loud</label>
+</div>
 
 <div class="card"><div class="flow">
 Tenant signs up on our page<br><span>↓</span><br>
@@ -62,20 +117,12 @@ Nobody chases anybody. Ever.
 
 <div class="callout"><b>If someone's bank is slow to verify</b> and we want them live THIS Friday → put that one on <b>card on file</b> instead (instant, slightly higher fee), switch to bank later. · <b>Truth about timing:</b> the pull happens every Friday, but Square picks the exact hour (batch processing) — "Friday" is guaranteed, "6:00 PM sharp" is not.</div>
 
-<h2>The pilot — 7 people + us first</h2>
+<h2>The pilot — live roster</h2>
 <div class="card">
-<table>
-<tr><th>#</th><th>Name</th><th>Room</th><th>$/wk</th><th>Signed up</th><th>Bank linked</th><th>1st Friday hit</th></tr>
-<tr><td>0</td><td>Khyree (test $1–5)</td><td>—</td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>1</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>2</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>3</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>4</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>5</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>6</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
-<tr><td>7</td><td></td><td></td><td></td><td>☐</td><td>☐</td><td>☐</td></tr>
+<table id="roster">
+<tr><th>Name</th><th>Room</th><th>$/wk</th><th>Signed up</th><th>Bank linked</th><th>1st Friday</th><th></th></tr>
 </table>
-<p class="d" style="margin-top:8px">Rule: all three boxes checked on row 0 (Khyree's own test) before anyone else gets the link.</p>
+<p class="d" style="margin-top:8px">Add people with the voice assistant above (or tap the checks by hand). Saved on this phone. Rule: all three checked on Khyree's own test row before anyone else gets the link.</p>
 </div>
 
 <h2>Protection — every party covered</h2>
@@ -86,4 +133,191 @@ Nobody chases anybody. Ever.
 </div>
 
 <div class="foot">Rule of the machine: nobody pays through RentRoom, nobody pays cash for weekly rent once enrolled. One rail: our page → Square → PNC.</div>
+
+<script>
+/* ═══════════ AI VOICE ASSISTANT — runs 100% in the browser, no keys, no server ═══════════ */
+const KEY='cc_roster_v1';
+const FLAGS=['signed','bank','paid'];
+const FLAGNAMES={signed:'signed up',bank:'bank linked',paid:'first Friday paid'};
+
+function seedRow(){return {name:'Khyree (test $1–5)',room:'—',amt:'',signed:false,bank:false,paid:false};}
+function load(){
+  try{const r=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(r))return r;}catch(e){}
+  return [seedRow()];
+}
+let roster=load();
+const save=()=>localStorage.setItem(KEY,JSON.stringify(roster));
+
+function render(){
+  const t=document.getElementById('roster');
+  t.querySelectorAll('tr:not(:first-child)').forEach(r=>r.remove());
+  roster.forEach((p,i)=>{
+    const tr=document.createElement('tr');
+    const td=h=>{const c=document.createElement('td');c.innerHTML=h;return c;};
+    tr.appendChild(td('<b>'+esc(p.name)+'</b>'));
+    tr.appendChild(td(esc(p.room||'')));
+    tr.appendChild(td(p.amt?('$'+esc(String(p.amt))):''));
+    FLAGS.forEach(f=>{
+      const c=document.createElement('td');
+      const b=document.createElement('button');
+      b.className='rbtn'+(p[f]?' onn':'');b.textContent=p[f]?'✓':'—';
+      b.onclick=()=>{p[f]=!p[f];save();render();};
+      c.appendChild(b);tr.appendChild(c);
+    });
+    const c=document.createElement('td');
+    const x=document.createElement('button');x.className='del';x.textContent='✕';
+    x.onclick=()=>{if(confirm('Remove '+p.name+'?')){roster.splice(i,1);save();render();}};
+    c.appendChild(x);tr.appendChild(c);
+    t.appendChild(tr);
+  });
+}
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+/* ── talk back ── */
+function speak(txt){
+  if(!document.getElementById('speakback').checked)return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(txt);u.rate=1.04;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function log(who,txt){
+  const l=document.getElementById('ailog');
+  const p=document.createElement('p');
+  p.className=who;
+  p.innerHTML=(who==='bot'?'<b>Assistant:</b> ':'<b>You:</b> ')+esc(txt);
+  l.appendChild(p);l.scrollTop=l.scrollHeight;
+}
+function reply(txt){log('bot',txt);speak(txt);}
+
+/* ── find a person by fuzzy name ── */
+function findPerson(str){
+  const q=str.toLowerCase().trim();
+  if(!q)return null;
+  return roster.find(p=>p.name.toLowerCase()===q)
+      || roster.find(p=>p.name.toLowerCase().startsWith(q))
+      || roster.find(p=>p.name.toLowerCase().includes(q))
+      || roster.find(p=>q.includes(p.name.toLowerCase().split(' ')[0]));
+}
+
+/* ── the command brain ── */
+function handle(raw){
+  const s=raw.toLowerCase().replace(/[.!?]+$/,'').trim();
+  if(!s)return;
+  log('me',raw);
+
+  /* help */
+  if(/^(help|what can you do|commands?)$/.test(s)){
+    reply('You can say: "Add Marcus, room 4, 175 a week" · "Mark Marcus signed up, bank linked, or paid" · "Who\'s not done" · "Read the roster" · "How many people" · "Set Marcus rent to 200" · "Remove Marcus".');
+    return;
+  }
+
+  /* add person: "add marcus room 4 at 175 a week" */
+  let m=s.match(/^(?:add|new|sign up|put)\s+(?:tenant\s+|person\s+)?(.+?)(?:\s*,?\s*(?:in\s+)?(?:room|suite)\s*(?:number\s*)?([\w-]+))?(?:\s*,?\s*(?:at|for|paying)?\s*\$?(\d{2,4})(?:\s*(?:a week|per week|weekly|dollars))?)?$/);
+  if(m&&/^(add|new|sign|put)/.test(s)){
+    let name=m[1].replace(/[,]+$/,'').replace(/\b(at|for|paying)\s*$/,'').trim();
+    const room=m[2]||'',amt=m[3]||'';
+    if(!name){reply("I didn't catch the name. Try: add Marcus, room 4, 175 a week.");return;}
+    name=name.replace(/\b\w/g,c=>c.toUpperCase());
+    if(findPerson(name)){reply(name+" is already on the roster.");return;}
+    roster.push({name,room,amt,signed:false,bank:false,paid:false});
+    save();render();
+    reply('Added '+name+(room?', room '+room:'')+(amt?', $'+amt+' a week':'')+'. '+roster.length+' on the roster. Send them the signup link when ready.');
+    return;
+  }
+
+  /* remove */
+  m=s.match(/^(?:remove|delete|take off|drop)\s+(.+)$/);
+  if(m){
+    const p=findPerson(m[1]);
+    if(!p){reply("I don't see "+m[1]+" on the roster.");return;}
+    roster=roster.filter(x=>x!==p);save();render();
+    reply('Removed '+p.name+'.');
+    return;
+  }
+
+  /* mark flags: "mark marcus bank linked" / "marcus signed up" / "marcus paid" */
+  m=s.match(/^(?:mark|check|set)?\s*(.+?)\s+(?:as\s+)?(signed(?:\s*up)?|bank(?:\s*linked)?|linked(?:\s+(?:his|her|their))?\s*bank|paid|hit|first friday(?:\s*(?:hit|paid|done))?|all done|done|complete)$/);
+  if(m){
+    const p=findPerson(m[1]);
+    if(p){
+      const w=m[2];
+      let f = /done|complete/.test(w)?'all' : /sign/.test(w)?'signed' : /bank|link/.test(w)?'bank' : 'paid';
+      if(f==='all'){FLAGS.forEach(k=>p[k]=true);}else{p[f]=true;}
+      save();render();
+      const left=FLAGS.filter(k=>!p[k]).map(k=>FLAGNAMES[k]);
+      reply(p.name+': '+(f==='all'?'all three checked':FLAGNAMES[f]+' checked')+'. '+(left.length?('Still needs: '+left.join(', ')+'.'):'Fully done — the machine runs itself now.'));
+      return;
+    }
+  }
+
+  /* set rent / room */
+  m=s.match(/^(?:set|change|update)?\s*(.+?)(?:'s)?\s+(?:rent|amount)\s*(?:to|is)?\s*\$?(\d{2,4})/);
+  if(m){const p=findPerson(m[1]);if(p){p.amt=m[2];save();render();reply(p.name+' set to $'+m[2]+' a week.');return;}}
+  m=s.match(/^(?:set|move|put)?\s*(.+?)\s+(?:is\s+)?(?:in|to)\s+(?:room|suite)\s*([\w-]+)/);
+  if(m){const p=findPerson(m[1]);if(p){p.room=m[2];save();render();reply(p.name+' moved to room '+m[2]+'.');return;}}
+
+  /* status queries */
+  if(/(who(?:'s| is| has)?\s*(not|n't|hasn|isn|behind|left|missing|outstanding))|not done|status|where (are we|we at)/.test(s)){
+    const pend=roster.filter(p=>!FLAGS.every(k=>p[k]));
+    if(!pend.length){reply('Everybody is fully set up. Nothing outstanding.');return;}
+    reply(pend.length+' still open: '+pend.map(p=>p.name+' (needs '+FLAGS.filter(k=>!p[k]).map(k=>FLAGNAMES[k]).join(', ')+')').join(' · '));
+    return;
+  }
+  if(/how many|count/.test(s)){
+    const done=roster.filter(p=>FLAGS.every(k=>p[k])).length;
+    reply(roster.length+' on the roster. '+done+' fully done, '+(roster.length-done)+' in progress.');
+    return;
+  }
+  if(/read|list|roster|who('s| is) (on|signed)/.test(s)){
+    if(!roster.length){reply('Roster is empty. Say "add" plus a name to start.');return;}
+    reply(roster.map(p=>p.name+(p.room&&p.room!=='—'?', room '+p.room:'')+(p.amt?', $'+p.amt:'')+' — '+(FLAGS.every(k=>p[k])?'done':FLAGS.filter(k=>p[k]).length+' of 3 steps')).join(' · '));
+    return;
+  }
+  if(/^(clear|reset|wipe)( the)? roster$/.test(s)){
+    if(confirm('Clear the whole roster?')){roster=[seedRow()];save();render();reply('Roster cleared back to just the test row.');}
+    return;
+  }
+
+  reply('Didn\'t catch a command in that. Say "help" to hear what I can do — like "Add Marcus, room 4, 175 a week."');
+}
+
+/* ── microphone ── */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const mic=document.getElementById('mic'),micstat=document.getElementById('micstat'),heard=document.getElementById('heard');
+let rec=null,listening=false;
+if(SR){
+  rec=new SR();rec.lang='en-US';rec.interimResults=true;rec.maxAlternatives=1;
+  rec.onresult=e=>{
+    let interim='',final='';
+    for(const r of e.results){(r.isFinal?final+=r[0].transcript:interim+=r[0].transcript);}
+    heard.textContent=interim||final;
+    if(final){handle(final);heard.textContent='';}
+  };
+  rec.onend=()=>{listening=false;mic.classList.remove('live');micstat.innerHTML='<b>Tap the mic</b> to talk again.';};
+  rec.onerror=e=>{
+    listening=false;mic.classList.remove('live');
+    micstat.innerHTML=e.error==='not-allowed'
+      ?'<b>Mic blocked.</b> Allow microphone access for this site in your browser settings.'
+      :'<b>Mic hiccup</b> ('+e.error+'). Tap to try again, or type below.';
+  };
+  mic.onclick=()=>{
+    if(listening){rec.stop();return;}
+    try{rec.start();listening=true;mic.classList.add('live');micstat.innerHTML='<b>Listening…</b> go ahead.';heard.textContent='';}catch(e){}
+  };
+}else{
+  mic.style.opacity=.4;
+  micstat.innerHTML='<b>Voice not supported</b> in this browser — use Chrome or Safari. Typing below works everywhere.';
+  mic.onclick=()=>reply('This browser can\'t do voice — open the page in Chrome or Safari, or type your command below.');
+}
+
+/* typed fallback + chips */
+const cmd=document.getElementById('cmd');
+document.getElementById('cmdgo').onclick=()=>{if(cmd.value.trim()){handle(cmd.value);cmd.value='';}};
+cmd.addEventListener('keydown',e=>{if(e.key==='Enter'&&cmd.value.trim()){handle(cmd.value);cmd.value='';}});
+document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{cmd.value=c.dataset.c;cmd.focus();});
+
+render();
+</script>
 </body></html>
