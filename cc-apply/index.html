@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cut Creaters — Suite Application</title>
+<style>
+:root{--bg:#0e1116;--card:#fffdf8;--ink:#20242b;--sub:#6b7178;--gold:#9a7d3f;--ink2:#0e1014;--line:#e7ddc9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:0 auto;background:var(--card);min-height:100vh}
+.hero{background:#0e1014;color:#fff;text-align:center;padding:34px 24px 30px}
+.hero .kick{letter-spacing:.28em;font-size:11px;color:#c9a24a;font-weight:700;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif}
+.hero h1{font-size:27px;margin:12px 0 6px;font-weight:400}
+.hero p{color:#c8cdd4;font-size:15px;margin:6px 0 0;line-height:1.5}
+form{padding:24px 26px 40px}
+label{display:block;font-family:Helvetica,Arial,sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:700;margin:16px 0 6px}
+input,select{width:100%;padding:14px 14px;border:1px solid var(--line);border-radius:11px;font-size:16px;font-family:Georgia,serif;background:#fff;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:#0e1014}
+button{width:100%;margin-top:24px;background:#0e1014;color:#fff;border:0;border-radius:12px;padding:17px;font-family:Helvetica,Arial,sans-serif;font-weight:700;font-size:16px;cursor:pointer}
+button:disabled{opacity:.6}
+.foot{color:var(--sub);font-size:12px;text-align:center;padding:0 26px 30px;font-family:Helvetica,Arial,sans-serif}
+.done{display:none;padding:60px 30px;text-align:center}
+.done h2{font-size:26px;font-weight:400;margin:0 0 10px}
+.done p{color:var(--sub);font-size:16px;line-height:1.6}
+.done .mark{width:64px;height:64px;border-radius:50%;background:#0e1014;color:#c9a24a;font-size:30px;line-height:64px;margin:0 auto 18px}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div class="kick">Cut Creaters Salon Suites</div>
+    <h1>Apply for your suite</h1>
+    <p>A private loft for your own business, in Decatur. Tell us a little about you — we'll reach out with your welcome.</p>
+  </div>
+  <form id="f">
+    <label>Full name</label>
+    <input name="name" required autocomplete="name" placeholder="First and last">
+    <label>Cell phone</label>
+    <input name="cell" required type="tel" autocomplete="tel" placeholder="(___) ___-____">
+    <label>Email</label>
+    <input name="email" required type="email" autocomplete="email" placeholder="you@email.com">
+    <label>What do you do?</label>
+    <select name="service" required>
+      <option value="">Select…</option>
+      <option>Barber</option><option>Stylist</option><option>Nail tech</option>
+      <option>Esthetician</option><option>Braider / loc tech</option><option>Other</option>
+    </select>
+    <label>Suite you're interested in (if you know)</label>
+    <input name="suite" autocomplete="off" placeholder="Optional — e.g. Suite 12">
+    <label>When would you like to start?</label>
+    <input name="start" type="text" placeholder="e.g. this month / next month">
+    <button id="b" type="submit">Send my application →</button>
+  </form>
+  <div class="foot">Cut Creaters Salon Suites · 2962–2964 Ember Dr, Decatur, GA 30034</div>
+  <div class="done" id="done">
+    <div class="mark">✓</div>
+    <h2>Appreciate you.</h2>
+    <p>Your application is in. Keep an eye on your phone and email — your welcome is on the way.</p>
+  </div>
+</div>
+<script>
+document.getElementById('f').addEventListener('submit', async function(e){
+  e.preventDefault();
+  var b=document.getElementById('b'); b.disabled=true; b.textContent='Sending…';
+  var d=Object.fromEntries(new FormData(e.target).entries());
+  var msg="🆕 NEW CUT CREATERS APPLICATION\n\n"+
+    "👤 "+d.name+"\n📱 "+d.cell+"\n✉️ "+d.email+"\n💈 "+d.service+
+    (d.suite?("\n🚪 Suite: "+d.suite):"")+
+    (d.start?("\n📅 Start: "+d.start):"")+
+    "\n\n(Reply here to onboard — send welcome + lease + autopay.)";
+  try{
+    await fetch("https://kc-notify.towneskhyree.workers.dev",{
+      method:"POST", mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({text: msg})
+    });
+  }catch(err){}
+  document.getElementById('f').style.display='none';
+  document.getElementById('done').style.display='block';
+  window.scrollTo(0,0);
+});
+</script>
+</body></html>
